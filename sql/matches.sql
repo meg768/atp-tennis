@@ -1,7 +1,7 @@
 TRUNCATE TABLE matches;
 
 INSERT INTO
-    matches (date, tournament, level, surface, draw, winner, loser, score, round, WRK, LRK, WACE, LACE, WDF, LDF)
+    matches (date, tournament, level, surface, draw, winner, loser, score, round, WIOC, LIOC, WRK, LRK, WACE, LACE, WDF, LDF)
 SELECT
     CAST(import.tourney_date AS DATE) AS `date`,
     import.tourney_name AS tournament,
@@ -50,6 +50,26 @@ SELECT
     import.loser_name AS loser,
     import.score AS score,
     import.round AS round,
+    /* WIOC */
+    (
+        SELECT
+            (
+                CASE (import.winner_ioc)
+                    WHEN '' THEN NULL
+                    ELSE import.winner_ioc
+                END
+            )
+    ) AS WIOC,
+    /* LIOC */
+    (
+        SELECT
+            (
+                CASE (import.loser_ioc)
+                    WHEN '' THEN NULL
+                    ELSE import.loser_ioc
+                END
+            )
+    ) AS LIOC,
     /* WRK */
     (
         SELECT

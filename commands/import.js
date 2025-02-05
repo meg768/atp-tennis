@@ -11,7 +11,12 @@ class Import {
 	}
 
 	arguments(args) {
-		args.option('loop', { alias: 'l', describe: 'Run again after specified number of days', type: 'number', default: 3 });
+		args.option('loop', {
+			alias: 'l',
+			describe: 'Run again after specified number of days',
+			type: 'number',
+			default: 3
+		});
 		args.option('from', {
 			alias: 'f',
 			describe: 'Import from year to current date',
