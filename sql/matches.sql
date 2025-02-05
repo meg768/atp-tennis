@@ -2,7 +2,7 @@
 
 TRUNCATE TABLE matches;
 
-INSERT INTO matches (date, tournament, level, surface, draw, winner, loser, score, round, WRK, LRK, WACE, LACE, WDF, LDF)
+INSERT INTO matches (date, tournament, level, surface, draw, winner, loser, score, round, WIOC, LIOC, WRK, LRK, WACE, LACE, WDF, LDF)
 
 SELECT 
 
@@ -17,8 +17,8 @@ SELECT
                 WHEN 'O' THEN 'Olympics' 
                 WHEN 'F' THEN 'Finals' 
                 WHEN 'D' THEN 'Davis Cup'
-                WHEN 'G' THEN 'ATP-2000' 
-                WHEN 'M' THEN 'ATP-1000' 
+                WHEN 'G' THEN 'Grand Slam' 
+                WHEN 'M' THEN 'Masters' 
                 WHEN 'A' THEN CASE import.draw_size
                     WHEN '32' THEN 'ATP-250'
                     WHEN '28' THEN 'ATP-250'
@@ -60,6 +60,28 @@ SELECT
 	import.score AS score,
 
     import.round AS round,
+
+	/* WIOC */
+    (
+        SELECT (
+        	CASE(import.winner_ioc)
+        		WHEN '' THEN NULL
+        		ELSE import.winner_ioc
+        	END
+        )
+    ) AS WIOC,
+
+
+	/* LIOC */
+    (
+        SELECT (
+        	CASE(import.loser_ioc)
+        		WHEN '' THEN NULL
+        		ELSE import.loser_ioc
+        	END
+        )
+    ) AS LIOC,
+
 
 	/* WRK */
     (
