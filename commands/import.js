@@ -1,12 +1,10 @@
 let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
+let Command = require('../src/command.js')
 
-class Import {
+class Import extends Command {
 	constructor() {
-		this.command = 'import [options]';
-		this.describe = 'Import matches';
-		this.builder = this.arguments.bind(this);
-		this.handler = this.run.bind(this);
+		super({command:'import [options]', description: 'Import matches'});
 		this.mysql = new MySQL();
 	}
 
