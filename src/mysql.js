@@ -1,9 +1,9 @@
-var isString = require("yow/isString");
-var mysql = require("mysql");
+var isString = require('yow/isString');
+var mysql = require('mysql');
 
 class MySQL {
     constructor(options) {
-        let log = {options};
+        let log = { options };
         this.connection = undefined;
     }
 
@@ -25,7 +25,7 @@ class MySQL {
         options.multipleStatements = true;
 
         if (!isString(options.host) || !isString(options.user) || !isString(options.password) || !isString(options.database)) {
-            throw new Error("MySQL credentials/database not specified.");
+            throw new Error('MySQL credentials/database not specified.');
         }
 
         this.disconnect();
@@ -46,8 +46,8 @@ class MySQL {
     }
 
     async execute(file) {
-        const fs = require("node:fs/promises");
-        const data = await fs.readFile(file, { encoding: "utf8" });
+        const fs = require('node:fs/promises');
+        const data = await fs.readFile(file, { encoding: 'utf8' });
 
         await this.query(data);
     }
@@ -60,8 +60,9 @@ class MySQL {
                 }
 
                 this.connection.query(options, function (error, results) {
-                    if (error) reject(error);
-                    else resolve(results);
+                    if (error) {
+                        reject(error);
+                    } else resolve(results);
                 });
             } catch (error) {
                 reject(error);
@@ -78,16 +79,16 @@ class MySQL {
             values.push(row[column]);
         });
 
-        let sql = "";
+        let sql = '';
 
-        sql += this.format("INSERT INTO ?? (??) VALUES (?) ", [table, columns, values]);
-        sql += this.format("ON DUPLICATE KEY UPDATE ");
+        sql += this.format('INSERT INTO ?? (??) VALUES (?) ', [table, columns, values]);
+        sql += this.format('ON DUPLICATE KEY UPDATE ');
 
         sql += columns
             .map((column) => {
-                return this.format("?? = VALUES(??)", [column, column]);
+                return this.format('?? = VALUES(??)', [column, column]);
             })
-            .join(",");
+            .join(',');
 
         return this.query(sql);
     }

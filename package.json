@@ -14,5 +14,10 @@
         "mysql": "^2.18.1",
         "yargs": "^17.7.2",
         "yow": "^1.0.118"
+    },
+    "devDependencies": {
+        "eslint": "^9.19.0",
+        "prettier": "^3.4.2",
+        "prettier-plugin-sql": "^0.18.1"
     }
 }
