@@ -1,10 +1,10 @@
 let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
-let Command = require('../src/command.js')
+let Command = require('../src/command.js');
 
 class Import extends Command {
 	constructor() {
-		super({command:'import [options]', description: 'Import matches'});
+		super({ command: 'import [options]', description: 'Import matches' });
 		this.mysql = new MySQL();
 	}
 
@@ -84,6 +84,50 @@ class Import extends Command {
 		let lines = text.split('\n');
 		let columns = lines[0].split(',');
 
+		let transform = (row) => {
+			let { tourney_date, tourney_name, tourney_level, round, winner_name, loser_name, surface, score, draw_size, winner_ioc, loser_ioc, winner_rank, loser_rank, w_svpt, l_svpt, w_ace, l_ace, w_df, l_df } = row;
+
+			let toInt = (value) => {
+				value = parseInt(value);
+				return Number.isNaN(value) ? undefined : value;
+			};
+
+			w_svpt = toInt(w_svpt);
+			l_svpt = toInt(l_svpt);
+			w_ace = toInt(w_ace);
+			l_ace = toInt(l_ace);
+			w_df = toInt(w_df);
+			l_df = toInt(l_df);
+
+			draw_size = toInt(draw_size);
+
+			let data = {};
+			data.date = tourney_date;
+			data.tournament = tourney_name;
+			data.level = tourney_level;
+			data.draw = toInt(draw_size);
+			data.surface = surface;
+
+			data.round = round;
+
+			data.winner = winner_name;
+			data.loser = loser_name;
+			data.score = score;
+
+			data.WIOC = winner_ioc;
+			data.LIOC = loser_ioc;
+			data.WRK = toInt(winner_rank);
+			data.LRK = toInt(loser_rank);
+
+			data.WACE = w_svpt > 0 ? Math.round((1000 * w_ace) / w_svpt) / 10 : undefined;
+			data.LACE = l_svpt > 0 ? Math.round((1000 * l_ace) / l_svpt) / 10 : undefined;
+
+			data.WDF = w_svpt > 0 ? Math.round((1000 * w_df) / w_svpt) / 10 : undefined;
+			data.LDF = l_svpt > 0 ? Math.round((1000 * l_df) / l_svpt) / 10 : undefined;
+
+			return data;
+		};
+
 		for (let index = 1; index < lines.length; index++) {
 			let row = {};
 			let values = lines[index].split(',');
@@ -94,7 +138,10 @@ class Import extends Command {
 					row[columns[i]] = value;
 				}
 
-				await this.mysql.upsert('import', row);
+				let data = transform(row);
+				console.log(row);
+				console.log(data);
+				await this.mysql.upsert('matches', data);
 			}
 		}
 
@@ -134,7 +181,7 @@ class Import extends Command {
 				}
 
 				await this.import('ongoing_tourneys.csv');
-				await this.execute('./sql/matches.sql');
+				//await this.execute('./sql/matches.sql');
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
 				await this.log(error.message);
