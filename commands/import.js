@@ -85,45 +85,86 @@ class Import extends Command {
 		let columns = lines[0].split(',');
 
 		let transform = (row) => {
-			let { tourney_date, tourney_name, tourney_level, round, winner_name, loser_name, surface, score, draw_size, winner_ioc, loser_ioc, winner_rank, loser_rank, w_svpt, l_svpt, w_ace, l_ace, w_df, l_df } = row;
-
 			let toInt = (value) => {
 				value = parseInt(value);
 				return Number.isNaN(value) ? undefined : value;
 			};
 
-			w_svpt = toInt(w_svpt);
-			l_svpt = toInt(l_svpt);
-			w_ace = toInt(w_ace);
-			l_ace = toInt(l_ace);
-			w_df = toInt(w_df);
-			l_df = toInt(l_df);
+			row.minutes = toInt(row.minutes);
+			row.draw_size = toInt(row.draw_size);
 
-			draw_size = toInt(draw_size);
+			// Convert to integers
+			row.w_svpt = toInt(row.w_svpt);
+			row.l_svpt = toInt(row.l_svpt);
+
+			row.w_ace = toInt(row.w_ace);
+			row.l_ace = toInt(row.l_ace);
+
+			row.w_df = toInt(row.w_df);
+			row.l_df = toInt(row.l_df);
+
+			row.w_1stIn = toInt(row.w_1stIn);
+			row.l_1stIn = toInt(row.l_1stIn);
+
+			row.winner_rank = toInt(row.winner_rank);
+			row.loser_rank = toInt(row.loser_rank);
+
+			row.w_SvGms = toInt(row.w_SvGms);
+			row.l_SvGms = toInt(row.l_SvGms);
 
 			let data = {};
-			data.date = tourney_date;
-			data.tournament = tourney_name;
-			data.level = tourney_level;
-			data.draw = toInt(draw_size);
-			data.surface = surface;
+			data.date = row.tourney_date;
+			data.tournament = row.tourney_name;
+			data.level = row.tourney_level;
+			data.draw = row.draw_size;
+			data.surface = row.surface;
 
-			data.round = round;
+			switch (row.tourney_level) {
+				case 'G': {
+					data.level = 'Grand Slam';
+					break;
+				}
+				case 'M': {
+					data.level = 'Masters';
+					break;
+				}
+				case 'D': {
+					data.level = 'Davis Cup';
+					break;
+				}
+				case 'A': {
+					data.level = 'ATP-Tour';
+					break;
+				}
+				case 'O': {
+					data.level = 'Olympics';
+					break;
+				}
+			}
 
-			data.winner = winner_name;
-			data.loser = loser_name;
-			data.score = score;
+			data.round = row.round;
+			data.winner = row.winner_name;
+			data.loser = row.loser_name;
+			data.score = row.score;
+			data.duration = row.minutes;
 
-			data.WIOC = winner_ioc;
-			data.LIOC = loser_ioc;
-			data.WRK = toInt(winner_rank);
-			data.LRK = toInt(loser_rank);
+			data.WIOC = row.winner_ioc;
+			data.LIOC = row.loser_ioc;
 
-			data.WACE = w_svpt > 0 ? Math.round((1000 * w_ace) / w_svpt) / 10 : undefined;
-			data.LACE = l_svpt > 0 ? Math.round((1000 * l_ace) / l_svpt) / 10 : undefined;
+			data.WRK = row.winner_rank;
+			data.LRK = row.loser_rank;
 
-			data.WDF = w_svpt > 0 ? Math.round((1000 * w_df) / w_svpt) / 10 : undefined;
-			data.LDF = l_svpt > 0 ? Math.round((1000 * l_df) / l_svpt) / 10 : undefined;
+			data.WSG = row.w_SvGms;
+			data.LSG = row.l_SvGms;
+
+			data.WACE = row.w_svpt > 0 ? Math.round((1000 * row.w_ace) / row.w_svpt) / 10 : undefined;
+			data.LACE = row.l_svpt > 0 ? Math.round((1000 * row.l_ace) / row.l_svpt) / 10 : undefined;
+
+			data.WDF = row.w_svpt > 0 ? Math.round((1000 * row.w_df) / row.w_svpt) / 10 : undefined;
+			data.LDF = row.l_svpt > 0 ? Math.round((1000 * row.l_df) / row.l_svpt) / 10 : undefined;
+
+			data.WFSI = row.w_svpt > 0 ? Math.round((1000 * row.w_1stIn) / row.w_svpt) / 10 : undefined;
+			data.LFSI = row.l_svpt > 0 ? Math.round((1000 * row.l_1stIn) / row.l_svpt) / 10 : undefined;
 
 			return data;
 		};
@@ -139,6 +180,7 @@ class Import extends Command {
 				}
 
 				let data = transform(row);
+				//await this.mysql.upsert('import', row);
 				await this.mysql.upsert('matches', data);
 			}
 		}
@@ -169,7 +211,7 @@ class Import extends Command {
 				await this.log(`Starting import...`);
 
 				if (argv.clean) {
-					await this.mysql.query('TRUNCATE TABLE import');
+					await this.mysql.query('TRUNCATE TABLE matches');
 				}
 
 				let from = argv.from;
