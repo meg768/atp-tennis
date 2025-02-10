@@ -139,8 +139,6 @@ class Import extends Command {
 				}
 
 				let data = transform(row);
-				console.log(row);
-				console.log(data);
 				await this.mysql.upsert('matches', data);
 			}
 		}
