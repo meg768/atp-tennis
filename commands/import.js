@@ -166,6 +166,9 @@ class Import extends Command {
 			data.WFSI = row.w_svpt > 0 ? Math.round((1000 * row.w_1stIn) / row.w_svpt) / 10 : undefined;
 			data.LFSI = row.l_svpt > 0 ? Math.round((1000 * row.l_1stIn) / row.l_svpt) / 10 : undefined;
 
+			data.wid = row.winner_id;
+			data.lid = row.loser_id;
+
 			return data;
 		};
 
@@ -180,12 +183,39 @@ class Import extends Command {
 				}
 
 				let data = transform(row);
-				//await this.mysql.upsert('import', row);
+
+				let winner = {};
+				winner.id = row.winner_id;
+				winner.name = row.winner_name;
+				winner.country = row.winner_ioc;
+				winner.style = row.winner_hand == '' ? undefined : row.winner_hand;
+
+				let loser = {};
+				loser.id = row.loser_id;
+				loser.name = row.loser_name;
+				loser.country = row.loser_ioc;
+				loser.style = row.loser_hand == '' ? undefined : row.loser_hand;
+
 				await this.mysql.upsert('matches', data);
+				await this.mysql.upsert('players', winner);
+				await this.mysql.upsert('players', loser);
 			}
 		}
 
 		return lines.length - 1;
+	}
+
+	async importCSV(src) {
+		let probe = new Probe();
+		let dst = `./downloads/download.csv`;
+
+		await this.log(`Importing ${src}...`);
+
+		await this.downloadFile(src, dst);
+
+		let matchCount = await this.upsertFile(dst);
+
+		await this.log(`Imported ${matchCount} matches from ${src} completed in ${probe.toString()}.`);
 	}
 
 	async import(file) {
@@ -212,6 +242,7 @@ class Import extends Command {
 
 				if (argv.clean) {
 					await this.mysql.query('TRUNCATE TABLE matches');
+					await this.mysql.query('TRUNCATE TABLE players');
 				}
 
 				let from = argv.from;
@@ -221,7 +252,7 @@ class Import extends Command {
 				}
 
 				await this.import('ongoing_tourneys.csv');
-				//await this.execute('./sql/matches.sql');
+
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
 				await this.log(error.message);
