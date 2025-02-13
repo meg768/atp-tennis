@@ -72,6 +72,121 @@ class Import extends Command {
 		});
 	}
 
+	transformRow(row) {
+		let { tourney_date, tourney_name, tourney_level, surface, draw_size } = row;
+		let { minutes, round, score } = row;
+		let { winner_name, winner_ioc, winner_id, winner_rank, winner_hand } = row;
+		let { loser_name, loser_ioc, loser_id, loser_rank, loser_hand } = row;
+		let { w_svpt, w_ace, w_df, w_1stIn, w_SvGms } = row;
+		let { l_svpt, l_ace, l_df, l_1stIn, l_SvGms } = row;
+
+		let toInt = (value) => {
+			value = parseInt(value);
+			return Number.isNaN(value) ? undefined : value;
+		};
+
+		let toPlayerStyle = (value) => {
+			switch (value) {
+				case 'L':
+					return 'Left';
+				case 'R':
+					return 'Right';
+			}
+			return undefined;
+		};
+
+		let toTournamentLevel = (value) => {
+			switch (value) {
+				case 'G': {
+					return 'Grand Slam';
+				}
+				case 'M': {
+					return 'Masters';
+				}
+				case 'D': {
+					return 'Davis Cup';
+				}
+				case 'A': {
+					return 'ATP-Tour';
+				}
+				case 'O': {
+					return 'Olympics';
+				}
+			}
+			return value;
+		};
+
+		let toPercentage = (value, max) => {
+			return max > 0 ? Math.round((1000 * value) / max) / 10 : undefined;
+		};
+
+		minutes = toInt(minutes);
+		draw_size = toInt(draw_size);
+
+		// Convert to integers
+		w_svpt = toInt(w_svpt);
+		l_svpt = toInt(l_svpt);
+
+		w_ace = toInt(w_ace);
+		l_ace = toInt(l_ace);
+
+		w_df = toInt(w_df);
+		l_df = toInt(l_df);
+
+		w_1stIn = toInt(w_1stIn);
+		l_1stIn = toInt(l_1stIn);
+
+		winner_rank = toInt(winner_rank);
+		loser_rank = toInt(loser_rank);
+
+		w_SvGms = toInt(w_SvGms);
+		l_SvGms = toInt(l_SvGms);
+
+		let match = {};
+
+		match.date = tourney_date;
+		match.tournament = tourney_name;
+		match.level = tourney_level;
+		match.draw = draw_size;
+		match.surface = surface;
+		match.level = toTournamentLevel(tourney_level);
+
+		match.round = round;
+		match.winner = winner_name;
+		match.loser = loser_name;
+		match.score = score;
+		match.duration = minutes;
+
+		match.wioc = winner_ioc;
+		match.lioc = loser_ioc;
+
+		match.wrk = winner_rank;
+		match.lrk = loser_rank;
+
+		match.wsg = w_SvGms;
+		match.lsg = l_SvGms;
+
+		match.wace = toPercentage(w_ace, w_svpt);
+		match.lace = toPercentage(l_ace, l_svpt);
+
+		match.wdf = toPercentage(w_df, w_svpt);
+		match.ldf = toPercentage(l_df, l_svpt);
+
+		match.wfsi = toPercentage(w_1stIn, w_svpt);
+		match.lfsi = toPercentage(l_1stIn, l_svpt);
+
+		match.watpid = winner_id;
+		match.latpid = loser_id;
+
+		match.wstyle = toPlayerStyle(winner_hand);
+		match.lstyle = toPlayerStyle(loser_hand);
+
+		match.wsp = w_svpt;
+		match.lsp = l_svpt;
+
+		return match;
+	}
+
 	async upsertFile(file) {
 		const fs = require('node:fs/promises');
 
@@ -82,127 +197,37 @@ class Import extends Command {
 		text = text.replace('\r', '\n');
 
 		let lines = text.split('\n');
-		let columns = lines[0].split(',');
+		let columns = lines.shift().split(',');
 
-		let transform = (row) => {
-			let toInt = (value) => {
-				value = parseInt(value);
-				return Number.isNaN(value) ? undefined : value;
-			};
-
-			row.minutes = toInt(row.minutes);
-			row.draw_size = toInt(row.draw_size);
-
-			// Convert to integers
-			row.w_svpt = toInt(row.w_svpt);
-			row.l_svpt = toInt(row.l_svpt);
-
-			row.w_ace = toInt(row.w_ace);
-			row.l_ace = toInt(row.l_ace);
-
-			row.w_df = toInt(row.w_df);
-			row.l_df = toInt(row.l_df);
-
-			row.w_1stIn = toInt(row.w_1stIn);
-			row.l_1stIn = toInt(row.l_1stIn);
-
-			row.winner_rank = toInt(row.winner_rank);
-			row.loser_rank = toInt(row.loser_rank);
-
-			row.w_SvGms = toInt(row.w_SvGms);
-			row.l_SvGms = toInt(row.l_SvGms);
-
-			let data = {};
-			data.date = row.tourney_date;
-			data.tournament = row.tourney_name;
-			data.level = row.tourney_level;
-			data.draw = row.draw_size;
-			data.surface = row.surface;
-
-			switch (row.tourney_level) {
-				case 'G': {
-					data.level = 'Grand Slam';
-					break;
-				}
-				case 'M': {
-					data.level = 'Masters';
-					break;
-				}
-				case 'D': {
-					data.level = 'Davis Cup';
-					break;
-				}
-				case 'A': {
-					data.level = 'ATP-Tour';
-					break;
-				}
-				case 'O': {
-					data.level = 'Olympics';
-					break;
-				}
-			}
-
-			data.round = row.round;
-			data.winner = row.winner_name;
-			data.loser = row.loser_name;
-			data.score = row.score;
-			data.duration = row.minutes;
-
-			data.WIOC = row.winner_ioc;
-			data.LIOC = row.loser_ioc;
-
-			data.WRK = row.winner_rank;
-			data.LRK = row.loser_rank;
-
-			data.WSG = row.w_SvGms;
-			data.LSG = row.l_SvGms;
-
-			data.WACE = row.w_svpt > 0 ? Math.round((1000 * row.w_ace) / row.w_svpt) / 10 : undefined;
-			data.LACE = row.l_svpt > 0 ? Math.round((1000 * row.l_ace) / row.l_svpt) / 10 : undefined;
-
-			data.WDF = row.w_svpt > 0 ? Math.round((1000 * row.w_df) / row.w_svpt) / 10 : undefined;
-			data.LDF = row.l_svpt > 0 ? Math.round((1000 * row.l_df) / row.l_svpt) / 10 : undefined;
-
-			data.WFSI = row.w_svpt > 0 ? Math.round((1000 * row.w_1stIn) / row.w_svpt) / 10 : undefined;
-			data.LFSI = row.l_svpt > 0 ? Math.round((1000 * row.l_1stIn) / row.l_svpt) / 10 : undefined;
-
-			data.wid = row.winner_id;
-			data.lid = row.loser_id;
-
-			return data;
-		};
-
-		for (let index = 1; index < lines.length; index++) {
+		for (let line of lines) {
 			let row = {};
-			let values = lines[index].split(',');
+			let values = line.split(',');
 
 			if (values.length == columns.length) {
-				for (let i = 0; i < columns.length; i++) {
-					let value = values[i].replace('\r', '');
-					row[columns[i]] = value;
+				for (let index = 0; index < columns.length; index++) {
+					row[columns[index]] = values[index].replace('\r', '').trim();
 				}
 
-				let data = transform(row);
+				let match = this.transformRow(row);
 
-				let winner = {};
-				winner.id = row.winner_id;
-				winner.name = row.winner_name;
-				winner.country = row.winner_ioc;
-				winner.style = row.winner_hand == '' ? undefined : row.winner_hand;
+				await this.mysql.upsert('matches', match);
 
-				let loser = {};
-				loser.id = row.loser_id;
-				loser.name = row.loser_name;
-				loser.country = row.loser_ioc;
-				loser.style = row.loser_hand == '' ? undefined : row.loser_hand;
-
-				await this.mysql.upsert('matches', data);
-				await this.mysql.upsert('players', winner);
-				await this.mysql.upsert('players', loser);
+				await this.mysql.upsert('players', {
+					name: match.winner,
+					country: match.wioc,
+					style: match.wstyle,
+					atpid: match.watpid
+				});
+				await this.mysql.upsert('players', {
+					name: match.loser,
+					country: match.lioc,
+					style: match.lstyle,
+					atpid: match.latpid
+				});
 			}
 		}
 
-		return lines.length - 1;
+		return lines.length;
 	}
 
 	async importCSV(src) {
