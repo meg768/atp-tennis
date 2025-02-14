@@ -21,6 +21,12 @@ class Import extends Command {
 			type: 'number',
 			default: 2020
 		});
+		args.option('year', {
+			alias: 'y',
+			describe: 'Import from year',
+			type: 'number',
+			default: undefined
+		});
 		args.option('clean', {
 			alias: 'c',
 			describe: 'Remove previous imports',
@@ -108,6 +114,9 @@ class Import extends Command {
 				}
 				case 'A': {
 					return 'ATP-Tour';
+				}
+				case 'F': {
+					return 'Finals';
 				}
 				case 'O': {
 					return 'Olympics';
@@ -224,6 +233,13 @@ class Import extends Command {
 					style: match.lstyle,
 					atpid: match.latpid
 				});
+				await this.mysql.upsert('tournaments', {
+					date: match.date,
+					name: match.tournament,
+					surface: match.surface,
+					level: match.level,
+					draw: match.draw
+				});
 			}
 		}
 
@@ -268,15 +284,22 @@ class Import extends Command {
 				if (argv.clean) {
 					await this.mysql.query('TRUNCATE TABLE matches');
 					await this.mysql.query('TRUNCATE TABLE players');
+					await this.mysql.query('TRUNCATE TABLE tournaments');
 				}
 
-				let from = argv.from;
-
-				for (let year = from; year <= 2025; year++) {
-					await this.import(`${year}.csv`);
+				if (argv.year) {
+					await this.import(`${argv.year}.csv`);
 				}
+				else if (argv.from) {
+					let from = argv.from;
 
-				await this.import('ongoing_tourneys.csv');
+					for (let year = from; year <= 2025; year++) {
+						await this.import(`${year}.csv`);
+					}
+
+					await this.import('ongoing_tourneys.csv');
+
+				}
 
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
