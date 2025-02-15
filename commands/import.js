@@ -13,13 +13,13 @@ class Import extends Command {
 			alias: 'l',
 			describe: 'Run again after specified number of days',
 			type: 'number',
-			default: 3
+			default: 7
 		});
 		args.option('from', {
 			alias: 'f',
 			describe: 'Import from year to current date',
 			type: 'number',
-			default: 2020
+			default: 1968
 		});
 		args.option('year', {
 			alias: 'y',
@@ -217,29 +217,34 @@ class Import extends Command {
 					row[columns[index]] = values[index].replace('\r', '').trim();
 				}
 
-				let match = this.transformRow(row);
+				try {
+					let match = this.transformRow(row);
 
-				await this.mysql.upsert('matches', match);
+					await this.mysql.upsert('matches', match);
 
-				await this.mysql.upsert('players', {
-					name: match.winner,
-					country: match.wioc,
-					style: match.wstyle,
-					atpid: match.watpid
-				});
-				await this.mysql.upsert('players', {
-					name: match.loser,
-					country: match.lioc,
-					style: match.lstyle,
-					atpid: match.latpid
-				});
-				await this.mysql.upsert('tournaments', {
-					date: match.date,
-					name: match.tournament,
-					surface: match.surface,
-					level: match.level,
-					draw: match.draw
-				});
+					await this.mysql.upsert('players', {
+						name: match.winner,
+						country: match.wioc,
+						style: match.wstyle,
+						atpid: match.watpid
+					});
+					await this.mysql.upsert('players', {
+						name: match.loser,
+						country: match.lioc,
+						style: match.lstyle,
+						atpid: match.latpid
+					});
+					await this.mysql.upsert('tournaments', {
+						date: match.date,
+						name: match.tournament,
+						surface: match.surface,
+						level: match.level,
+						draw: match.draw
+					});
+				} catch (error) {
+					await this.log(error.message);
+
+				}
 			}
 		}
 
@@ -289,8 +294,7 @@ class Import extends Command {
 
 				if (argv.year) {
 					await this.import(`${argv.year}.csv`);
-				}
-				else if (argv.from) {
+				} else if (argv.from) {
 					let from = argv.from;
 
 					for (let year = from; year <= 2025; year++) {
@@ -298,7 +302,6 @@ class Import extends Command {
 					}
 
 					await this.import('ongoing_tourneys.csv');
-
 				}
 
 				await this.log(`Import finished in ${probe.toString()}.`);
