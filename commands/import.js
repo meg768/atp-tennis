@@ -113,7 +113,7 @@ class Import extends Command {
 					return 'Davis Cup';
 				}
 				case 'A': {
-					return 'ATP-Tour';
+					return 'Tour';
 				}
 				case 'F': {
 					return 'Finals';
@@ -242,7 +242,8 @@ class Import extends Command {
 						draw: match.draw
 					});
 				} catch (error) {
-					await this.log(error.message);
+					let message = `${error.message}. Could not parse ${JSON.stringify(row)}`;
+					await this.log(message);
 
 				}
 			}
