@@ -113,7 +113,18 @@ class Import extends Command {
 					return 'Davis Cup';
 				}
 				case 'A': {
-					return 'Tour';
+					let year = new Date(tourney_date).getFullYear();
+					let fives = ['Basel', 'Beijing', 'Tokyo', 'London', 'Munich', 'Barcelona', 'Acapulco', 'Doha', 'Washington', 'Rio De Janeiro', 'Hamburg', 'Vienna', 'Dubai', 'Dallas', 'Rotterdam'];
+
+					if (year < 2000) {
+						return 'Tour';
+					}
+
+					if (fives.indexOf(tourney_name) >= 0) {
+						return 'ATP-500';
+					}
+
+					return 'ATP-250';
 				}
 				case 'F': {
 					return 'Finals';
@@ -244,7 +255,6 @@ class Import extends Command {
 				} catch (error) {
 					let message = `${error.message}. Could not parse ${JSON.stringify(row)}`;
 					await this.log(message);
-
 				}
 			}
 		}
