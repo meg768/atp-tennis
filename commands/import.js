@@ -113,10 +113,7 @@ class Import extends Command {
 					return 'Davis Cup';
 				}
 				case 'A': {
-					if (draw_size >= 32) {
-						return 'ATP-500';
-					}
-					return 'ATP-250';
+					return 'Tour';
 				}
 				case 'F': {
 					return 'Finals';
