@@ -114,7 +114,7 @@ class Import extends Command {
 				}
 				case 'A': {
 					let year = new Date(tourney_date).getFullYear();
-					let fives = ['Basel', 'Beijing', 'Tokyo', 'London', 'Munich', 'Barcelona', 'Acapulco', 'Doha', 'Washington', 'Rio De Janeiro', 'Hamburg', 'Vienna', 'Dubai', 'Dallas', 'Rotterdam'];
+					let fives = ['Halle', 'Basel', 'Beijing', 'Tokyo', 'London', 'Munich', 'Barcelona', 'Acapulco', 'Doha', 'Washington', 'Rio De Janeiro', 'Hamburg', 'Vienna', 'Dubai', 'Dallas', 'Rotterdam'];
 
 					if (year < 2000) {
 						return 'Tour';
