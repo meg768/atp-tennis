@@ -13,6 +13,7 @@ var App = function () {
             args.usage("Usage: $0 <command> [options]");
 
             args.command(require("./commands/import.js"));
+            args.command(require('./commands/events.js'));
 
             args.help();
             args.wrap(null);

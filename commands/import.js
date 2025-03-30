@@ -50,243 +50,95 @@ class Import extends Command {
 		await this.mysql.execute(file);
 	}
 
-	async downloadFile(fileURL, file) {
-		return new Promise((resolve, reject) => {
-			const http = require('https');
-			const fs = require('fs');
+	async fetchEvent(year, eventID) {
+		try {
+			const response = await fetch(`https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${year}&eventid=${eventID}`);
 
-			http.get(fileURL, (response) => {
-				if (response.statusCode == 200) {
-					let stream = fs.createWriteStream(file);
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
 
-					response.pipe(stream);
-
-					stream.on('finish', () => {
-						stream.close(() => {
-							resolve();
-						});
-					});
-				} else {
-					response.resume();
-					reject(new Error(response.statusMessage));
-				}
-			}).on('error', (error) => {
-				fs.unlink(file, () => {
-					reject(error);
-				});
-			});
-		});
+			let data = await response.json();
+			data = data['Data'];
+			data = data[0];
+			return data;
+		} catch (error) {
+			console.error('Error fetching ATP Tour data:', error);
+			return null;
+		}
 	}
 
-	transformRow(row) {
-		let { tourney_date, tourney_name, tourney_level, surface, draw_size } = row;
-		let { minutes, round, score } = row;
-		let { winner_name, winner_ioc, winner_id, winner_rank, winner_hand } = row;
-		let { loser_name, loser_ioc, loser_id, loser_rank, loser_hand } = row;
-		let { w_svpt, w_ace, w_df, w_1stIn, w_SvGms } = row;
-		let { l_svpt, l_ace, l_df, l_1stIn, l_SvGms } = row;
+	parseMatch(match) {
+		let result = {};
 
-		let toInt = (value) => {
-			value = parseInt(value);
-			return Number.isNaN(value) ? undefined : value;
-		};
+		if (match['IsDoubles']) {
+			return;
+		}
+		if (match['IsQualifier']) {
+			return;
+		}
+		let winnerTeam = match['Winner'] == '2' ? 'PlayerTeam1' : 'PlayerTeam2';
+		let loserTeam = match['Winner'] == '2' ? 'PlayerTeam2' : 'PlayerTeam1';
 
-		let toPlayerStyle = (value) => {
-			switch (value) {
-				case 'L':
-					return 'Left';
-				case 'R':
-					return 'Right';
-			}
-			return undefined;
-		};
+		result.round = match['Round']?.['ShortName'];
+		result.winner = match[winnerTeam]['PlayerFirstNameFull'] + ' ' + match[winnerTeam]['PlayerLastName'];
+		result.loser = match[loserTeam]['PlayerFirstNameFull'] + ' ' + match[loserTeam]['PlayerLastName'];
 
-		let toTournamentLevel = (value) => {
-			switch (value) {
-				case 'G': {
-					return 'Grand Slam';
-				}
-				case 'M': {
-					return 'Masters';
-				}
-				case 'D': {
-					return 'Davis Cup';
-				}
-				case 'A': {
-					let year = new Date(tourney_date).getFullYear();
-					let fives = ['Halle', 'Basel', 'Beijing', 'Tokyo', 'London', 'Munich', 'Barcelona', 'Acapulco', 'Doha', 'Washington', 'Rio De Janeiro', 'Hamburg', 'Vienna', 'Dubai', 'Dallas', 'Rotterdam'];
+		result.watpid = match[winnerTeam]['PlayerId'];
+		result.latpid = match[loserTeam]['PlayerId'];
 
-					if (year < 2000) {
-						return 'Tour';
-					}
+		/*
+	result.wseed = match[winnerTeam]['SeedPlayerTeam'] ? parseInt(match[winnerTeam]['SeedPlayerTeam']) : undefined;
+	result.lseed = match[loserTeam]['SeedPlayerTeam'] ? parseInt(match[loserTeam]['SeedPlayerTeam']) : undefined;
+*/
+		result.wioc = match[winnerTeam]['PlayerCountryCode'];
+		result.lioc = match[loserTeam]['PlayerCountryCode'];
+		result.duration = match['MatchTime'];
+		result.score = match['ResultString'];
 
-					if (fives.indexOf(tourney_name) >= 0) {
-						return 'ATP-500';
-					}
-
-					return 'ATP-250';
-				}
-				case 'F': {
-					return 'Finals';
-				}
-				case 'O': {
-					return 'Olympics';
-				}
-			}
-			return value;
-		};
-
-		let toPercentage = (value, max) => {
-			return max > 0 ? Math.round((1000 * value) / max) / 10 : undefined;
-		};
-
-		minutes = toInt(minutes);
-		draw_size = toInt(draw_size);
-
-		// Convert to integers
-		w_svpt = toInt(w_svpt);
-		l_svpt = toInt(l_svpt);
-
-		w_ace = toInt(w_ace);
-		l_ace = toInt(l_ace);
-
-		w_df = toInt(w_df);
-		l_df = toInt(l_df);
-
-		w_1stIn = toInt(w_1stIn);
-		l_1stIn = toInt(l_1stIn);
-
-		winner_rank = toInt(winner_rank);
-		loser_rank = toInt(loser_rank);
-
-		w_SvGms = toInt(w_SvGms);
-		l_SvGms = toInt(l_SvGms);
-
-		let match = {};
-
-		match.date = tourney_date;
-		match.tournament = tourney_name;
-		match.level = tourney_level;
-		match.draw = draw_size;
-		match.surface = surface;
-		match.level = toTournamentLevel(tourney_level);
-
-		match.round = round;
-		match.winner = winner_name;
-		match.loser = loser_name;
-		match.score = score;
-		match.duration = minutes;
-
-		match.wioc = winner_ioc;
-		match.lioc = loser_ioc;
-
-		match.wrk = winner_rank;
-		match.lrk = loser_rank;
-
-		match.wsg = w_SvGms;
-		match.lsg = l_SvGms;
-
-		match.wace = toPercentage(w_ace, w_svpt);
-		match.lace = toPercentage(l_ace, l_svpt);
-
-		match.wdf = toPercentage(w_df, w_svpt);
-		match.ldf = toPercentage(l_df, l_svpt);
-
-		match.wfsi = toPercentage(w_1stIn, w_svpt);
-		match.lfsi = toPercentage(l_1stIn, l_svpt);
-
-		match.watpid = winner_id;
-		match.latpid = loser_id;
-
-		match.wstyle = toPlayerStyle(winner_hand);
-		match.lstyle = toPlayerStyle(loser_hand);
-
-		match.wsp = w_svpt;
-		match.lsp = l_svpt;
-
-		return match;
+		return result;
 	}
 
-	async upsertFile(file) {
-		const fs = require('node:fs/promises');
+	async import(year) {
+		for (let eventID = 1; eventID <= 999; eventID++) {
+			let data = await this.fetchEvent(year, eventID);
 
-		let content = await fs.readFile(file);
-		let text = content.toString();
+			if (!data) {
+				continue;
+			}
 
-		text = text.replace('\r\n', '\n');
-		text = text.replace('\r', '\n');
+			let { EventDisplayName: tournament, PlayStartDate: date, EventLevel: level, EventType: type, Matches: matches } = data;
 
-		let lines = text.split('\n');
-		let columns = lines.shift().split(',');
+			if (level == 'CH' || level == 'ITF') {
+				continue;
+			}
 
-		for (let line of lines) {
-			let row = {};
-			let values = line.split(',');
+			date = new Date(date).toLocaleDateString('sv-SE');
 
-			if (values.length == columns.length) {
-				for (let index = 0; index < columns.length; index++) {
-					row[columns[index]] = values[index].replace('\r', '').trim();
-				}
+			for (let match of matches) {
+				let matchResult = this.parseMatch(match);
+				if (matchResult) {
+					matchResult = { date, tournament, level, type, ...matchResult };
+					console.log(matchResult);
+					await this.mysql.upsert('matches', matchResult);
 
-				try {
-					let match = this.transformRow(row);
+					let winner = {};
+					winner.name = matchResult.winner;
+					winner.country = matchResult.wioc;
+					winner.atpid = matchResult.watpid;
+					await this.mysql.upsert('players', winner);
 
-					await this.mysql.upsert('matches', match);
+					let loser = {};
+					loser.name = matchResult.loser;
+					loser.country = matchResult.lioc;
+					loser.atpid = matchResult.latpid;
+					await this.mysql.upsert('players', loser);
 
-					await this.mysql.upsert('players', {
-						name: match.winner,
-						country: match.wioc,
-						style: match.wstyle,
-						atpid: match.watpid
-					});
-					await this.mysql.upsert('players', {
-						name: match.loser,
-						country: match.lioc,
-						style: match.lstyle,
-						atpid: match.latpid
-					});
-					await this.mysql.upsert('tournaments', {
-						date: match.date,
-						name: match.tournament,
-						surface: match.surface,
-						level: match.level,
-						draw: match.draw
-					});
-				} catch (error) {
-					let message = `${error.message}. Could not parse ${JSON.stringify(row)}`;
-					await this.log(message);
+					let tourney = {date, name:tournament, level, type};
+					await this.mysql.upsert('tournaments', tourney);
 				}
 			}
 		}
-
-		return lines.length;
-	}
-
-	async importCSV(src) {
-		let probe = new Probe();
-		let dst = `./downloads/download.csv`;
-
-		await this.log(`Importing ${src}...`);
-
-		await this.downloadFile(src, dst);
-
-		let matchCount = await this.upsertFile(dst);
-
-		await this.log(`Imported ${matchCount} matches from ${src} completed in ${probe.toString()}.`);
-	}
-
-	async import(file) {
-		let probe = new Probe();
-		let src = `https://raw.githubusercontent.com/Tennismylife/TML-Database/refs/heads/master/${file}`;
-		let dst = `./downloads/${file}`;
-
-		await this.log(`Importing ${file}...`);
-
-		await this.downloadFile(src, dst);
-
-		let matchCount = await this.upsertFile(dst);
-
-		await this.log(`Imported ${matchCount} matches from ${file} completed in ${probe.toString()}.`);
 	}
 
 	async run(argv) {
@@ -304,15 +156,13 @@ class Import extends Command {
 				}
 
 				if (argv.year) {
-					await this.import(`${argv.year}.csv`);
+					await this.import(argv.year);
 				} else if (argv.from) {
 					let from = argv.from;
 
 					for (let year = from; year <= 2025; year++) {
-						await this.import(`${year}.csv`);
+						await this.import(year);
 					}
-
-					await this.import('ongoing_tourneys.csv');
 				}
 
 				await this.log(`Import finished in ${probe.toString()}.`);
