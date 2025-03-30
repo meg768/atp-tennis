@@ -19,7 +19,7 @@ class Import extends Command {
 			alias: 'f',
 			describe: 'Import from year to current date',
 			type: 'number',
-			default: 1968
+			default: 2000
 		});
 		args.option('year', {
 			alias: 'y',
