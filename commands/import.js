@@ -53,7 +53,6 @@ class Import extends Command {
 	async fetchEvent(year, eventID) {
 		try {
 
-			await this.log(`Fetching ATP Tour data for year ${year} and event ID ${eventID}`);
 			const response = await fetch(`https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${year}&eventid=${eventID}`);
 
 			if (!response.ok) {
