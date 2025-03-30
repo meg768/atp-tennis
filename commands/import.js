@@ -101,6 +101,9 @@ class Import extends Command {
 	}
 
 	async import(year) {
+
+		await this.log(`Importing year ${year}...`);
+
 		for (let eventID = 1; eventID <= 999; eventID++) {
 			let data = await this.fetchEvent(year, eventID);
 
