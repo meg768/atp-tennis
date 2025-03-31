@@ -139,6 +139,10 @@ class Import extends Command {
 					type = '2000';
 					break;
 				}
+				case 'DC': {
+					type = 'Davis Cup';
+					break;
+				}
 				case 'CS': {
 					type = '500';
 					break;
