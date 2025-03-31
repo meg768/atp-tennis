@@ -52,7 +52,6 @@ class Import extends Command {
 
 	async fetchEvent(year, eventID) {
 		try {
-
 			const response = await fetch(`https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${year}&eventid=${eventID}`);
 
 			if (!response.ok) {
@@ -78,22 +77,34 @@ class Import extends Command {
 		if (match['IsQualifier']) {
 			return;
 		}
-		let winnerTeam = match['Winner'] == '1' ? 'PlayerTeam1' : 'PlayerTeam2';
-		let loserTeam = match['Winner'] == '1' ? 'PlayerTeam2' : 'PlayerTeam1';
+
+		let winner = undefined;
+		let loser = undefined;
+
+
+		if (match['WinningPlayerId'] == match['PlayerTeam1']['PlayerId']) {
+			winner = match['PlayerTeam1'];
+			loser = match['PlayerTeam2'];
+		}
+		else {
+			winner = match['PlayerTeam2'];
+			loser = match['PlayerTeam1'];
+		}
+
 
 		result.round = match['Round']?.['ShortName'];
-		result.winner = match[winnerTeam]['PlayerFirstNameFull'] + ' ' + match[winnerTeam]['PlayerLastName'];
-		result.loser = match[loserTeam]['PlayerFirstNameFull'] + ' ' + match[loserTeam]['PlayerLastName'];
+		result.winner = winner['PlayerFirstNameFull'] + ' ' + winner['PlayerLastName'];
+		result.loser = loser['PlayerFirstNameFull'] + ' ' + loser['PlayerLastName'];
 
-		result.watpid = match[winnerTeam]['PlayerId'];
-		result.latpid = match[loserTeam]['PlayerId'];
+		result.watpid = winner['PlayerId'];
+		result.latpid = loser['PlayerId'];
 
 		/*
 	result.wseed = match[winnerTeam]['SeedPlayerTeam'] ? parseInt(match[winnerTeam]['SeedPlayerTeam']) : undefined;
 	result.lseed = match[loserTeam]['SeedPlayerTeam'] ? parseInt(match[loserTeam]['SeedPlayerTeam']) : undefined;
 */
-		result.wioc = match[winnerTeam]['PlayerCountryCode'];
-		result.lioc = match[loserTeam]['PlayerCountryCode'];
+		result.wioc = winner['PlayerCountryCode'];
+		result.lioc = loser['PlayerCountryCode'];
 		result.duration = match['MatchTime'];
 		result.score = match['ResultString'];
 
@@ -101,7 +112,6 @@ class Import extends Command {
 	}
 
 	async import(year) {
-
 		await this.log(`Importing year ${year}...`);
 
 		for (let eventID = 1; eventID <= 999; eventID++) {
@@ -138,7 +148,7 @@ class Import extends Command {
 					loser.atpid = matchResult.latpid;
 					await this.mysql.upsert('players', loser);
 
-					let tourney = {date, name:tournament, level, type};
+					let tourney = { date, name: tournament, level, type };
 					await this.mysql.upsert('tournaments', tourney);
 				}
 			}

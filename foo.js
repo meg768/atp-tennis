@@ -93,6 +93,10 @@ class App {
 		if (match['IsQualifier']) {
 			return;
 		}
+
+		let winnerID = match['WinningPlayerId'];
+
+		
 		let winnerTeam = match['Winner'] == '2' ? 'PlayerTeam1' : 'PlayerTeam2';
 		let loserTeam = match['Winner'] == '2' ? 'PlayerTeam2' : 'PlayerTeam1';
 
