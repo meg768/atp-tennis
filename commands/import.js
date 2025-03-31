@@ -178,7 +178,7 @@ class Import extends Command {
 					loser.atpid = matchResult.latpid;
 					await this.mysql.upsert('players', loser);
 
-					let tourney = { date, name: tournament, level, type };
+					let tourney = { date, name: tournament, id:eventID, level, type };
 					await this.mysql.upsert('tournaments', tourney);
 				}
 			}
