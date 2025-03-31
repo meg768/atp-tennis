@@ -135,27 +135,27 @@ class Import extends Command {
 
 			switch (type) {
 				case 'OL': {
-					type = 'Olympics';
+					level = 'Olympics';
 					break;
 				}
 				case 'GS': {
-					type = 'ATP-2000';
+					level = 'Grand Slam';
 					break;
 				}
 				case 'DC': {
-					type = 'Davis Cup';
+					level = 'Davis Cup';
 					break;
 				}
 				case 'CS': {
-					type = 'ATP-500';
+					level = 'ATP-500';
 					break;
 				}
 				case 'WS': {
-					type = 'ATP-250';
+					level = 'ATP-250';
 					break;
 				}
 				case 'WT': {
-					type = 'ATP-250';
+					level = 'ATP-250';
 					break;
 				}
 			}
@@ -167,7 +167,7 @@ class Import extends Command {
 
 				// Skip matches with 3 sets in Grand Slam (indicates WTA)
 				// I am not sure if this is correct, but it seems to be the case
-				if (level == 'GS' && numberOfSets == 3) {
+				if (level == 'Grand Slam' && numberOfSets == 3) {
 					continue;
 				}		
 
@@ -190,7 +190,7 @@ class Import extends Command {
 					loser.atpid = matchResult.latpid;
 					await this.mysql.upsert('players', loser);
 
-					let tourney = { date, name: tournament, url, level, type };
+					let tourney = { date, name: tournament, url, level, type:null };
 					await this.mysql.upsert('tournaments', tourney);
 				}
 			}
