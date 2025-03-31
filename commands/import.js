@@ -134,6 +134,18 @@ class Import extends Command {
 			}
 
 			switch (type) {
+				case '250': {
+					level = 'ATP-250';
+					break;
+				}
+				case '500': {
+					level = 'ATP-500';
+					break;
+				}
+				case '1000': {
+					level = 'ATP-1000';
+					break;
+				}
 				case 'OL': {
 					level = 'Olympics';
 					break;
