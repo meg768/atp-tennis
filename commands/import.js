@@ -121,10 +121,36 @@ class Import extends Command {
 				continue;
 			}
 
+			console.log(`Processing event ${eventID}...`);
+
 			let { EventDisplayName: tournament, PlayStartDate: date, EventLevel: level, EventType: type, Matches: matches } = data;
 
-			if (level == 'CH' || level == 'ITF') {
+			if (level == 'CH' || level == 'ITF' || level == 'WTA 1000' || level == 'WTA 500' || level == 'WTA 250') {
+				// Skip these events
 				continue;
+			}
+
+			switch (type) {
+				case 'OL': {
+					type = 'Olympics';
+					break;
+				}
+				case 'GS': {
+					type = '2000';
+					break;
+				}
+				case 'CS': {
+					type = '500';
+					break;
+				}
+				case 'WS': {
+					type = '250';
+					break;
+				}
+				case 'WT': {
+					type = '250';
+					break;
+				}
 			}
 
 			date = new Date(date).toLocaleDateString('sv-SE');
