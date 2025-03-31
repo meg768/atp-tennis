@@ -78,8 +78,8 @@ class Import extends Command {
 		if (match['IsQualifier']) {
 			return;
 		}
-		let winnerTeam = match['Winner'] == '2' ? 'PlayerTeam1' : 'PlayerTeam2';
-		let loserTeam = match['Winner'] == '2' ? 'PlayerTeam2' : 'PlayerTeam1';
+		let winnerTeam = match['Winner'] == '1' ? 'PlayerTeam1' : 'PlayerTeam2';
+		let loserTeam = match['Winner'] == '1' ? 'PlayerTeam2' : 'PlayerTeam1';
 
 		result.round = match['Round']?.['ShortName'];
 		result.winner = match[winnerTeam]['PlayerFirstNameFull'] + ' ' + match[winnerTeam]['PlayerLastName'];
