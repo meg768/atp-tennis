@@ -124,10 +124,15 @@ class Import extends Command {
 
 			console.log(`Processing event ${eventID}...`);
 
-			let { EventDisplayName: tournament, PlayStartDate: date, EventLevel: level, EventType: type, Matches: matches } = data;
+			let { EventDisplayName: tournament, NumberOfSets: numberOfSets, PlayStartDate: date, EventLevel: level, EventType: type, Matches: matches } = data;
 
+			// If Grand Slam and 3 sets, skip (this indicates WTA)
+			if (numberOfSets == 3 && level == 'GS') {
+				continue;
+			}
+
+			// Skip Challenger, ITF, WTA 1000, WTA 500, WTA 250
 			if (level == 'CH' || level == 'ITF' || level == 'WTA 1000' || level == 'WTA 500' || level == 'WTA 250') {
-				// Skip these events
 				continue;
 			}
 
