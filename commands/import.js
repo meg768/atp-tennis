@@ -81,16 +81,13 @@ class Import extends Command {
 		let winner = undefined;
 		let loser = undefined;
 
-
 		if (match['WinningPlayerId'] == match['PlayerTeam1']['PlayerId']) {
 			winner = match['PlayerTeam1'];
 			loser = match['PlayerTeam2'];
-		}
-		else {
+		} else {
 			winner = match['PlayerTeam2'];
 			loser = match['PlayerTeam1'];
 		}
-
 
 		result.round = match['Round']?.['ShortName'];
 		result.winner = winner['PlayerFirstNameFull'] + ' ' + winner['PlayerLastName'];
@@ -124,12 +121,7 @@ class Import extends Command {
 
 			console.log(`Processing event ${eventID}...`);
 
-			let { EventDisplayName: tournament, NumberOfSets: numberOfSets, PlayStartDate: date, EventLevel: level, EventType: type, Matches: matches } = data;
-
-			// If Grand Slam and 3 sets, skip (this indicates WTA)
-			if (numberOfSets == 3 && level == 'GS') {
-				continue;
-			}
+			let { EventDisplayName: tournament, PlayStartDate: date, EventLevel: level, EventType: type, Matches: matches } = data;
 
 			// Skip Challenger, ITF, WTA 1000, WTA 500, WTA 250
 			if (level == 'CH' || level == 'ITF' || level == 'WTA 1000' || level == 'WTA 500' || level == 'WTA 250') {
@@ -166,7 +158,15 @@ class Import extends Command {
 			date = new Date(date).toLocaleDateString('sv-SE');
 
 			for (let match of matches) {
+				let { NumberOfSets: numberOfSets } = match;
+
+				// Skip matches with 3 sets in Grand Slam
+				if (level == 'GS' && numberOfSets == 3) {
+					continue;
+				}		
+
 				let matchResult = this.parseMatch(match);
+
 				if (matchResult) {
 					matchResult = { date, tournament, level, type, ...matchResult };
 					console.log(matchResult);
