@@ -50,9 +50,9 @@ class Import extends Command {
 		await this.mysql.execute(file);
 	}
 
-	async fetchEvent(year, eventID) {
+	async fetchEvent(url) {
 		try {
-			const response = await fetch(`https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${year}&eventid=${eventID}`);
+			const response = await fetch(url);
 
 			if (!response.ok) {
 				throw new Error(`HTTP error! Status: ${response.status}`);
@@ -115,7 +115,8 @@ class Import extends Command {
 		await this.log(`Importing year ${year}...`);
 
 		for (let eventID = 1; eventID <= 999; eventID++) {
-			let data = await this.fetchEvent(year, eventID);
+			let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${year}&eventid=${eventID}`;
+			let data = await this.fetchEvent(url);
 
 			if (!data) {
 				continue;
@@ -178,7 +179,7 @@ class Import extends Command {
 					loser.atpid = matchResult.latpid;
 					await this.mysql.upsert('players', loser);
 
-					let tourney = { date, name: tournament, id:eventID, level, type };
+					let tourney = { date, name: tournament, url, level, type };
 					await this.mysql.upsert('tournaments', tourney);
 				}
 			}
