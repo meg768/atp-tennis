@@ -105,6 +105,11 @@ class Import extends Command {
 		result.duration = match['MatchTime'];
 		result.score = match['ResultString'];
 
+		// Replace "Ret'd" with "RET"
+		// This is a workaround for the ATP API, which returns "Ret'd" instead of "RET"
+		// in some cases
+		result.score = result.score.replace("Ret'd", "RET");
+
 		return result;
 	}
 
