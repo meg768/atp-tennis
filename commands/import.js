@@ -139,7 +139,7 @@ class Import extends Command {
 					break;
 				}
 				case 'GS': {
-					type = '2000';
+					type = 'ATP-2000';
 					break;
 				}
 				case 'DC': {
@@ -147,15 +147,15 @@ class Import extends Command {
 					break;
 				}
 				case 'CS': {
-					type = '500';
+					type = 'ATP-500';
 					break;
 				}
 				case 'WS': {
-					type = '250';
+					type = 'ATP-250';
 					break;
 				}
 				case 'WT': {
-					type = '250';
+					type = 'ATP-250';
 					break;
 				}
 			}
