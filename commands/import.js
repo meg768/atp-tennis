@@ -160,7 +160,8 @@ class Import extends Command {
 			for (let match of matches) {
 				let { NumberOfSets: numberOfSets } = match;
 
-				// Skip matches with 3 sets in Grand Slam
+				// Skip matches with 3 sets in Grand Slam (indicates WTA)
+				// I am not sure if this is correct, but it seems to be the case
 				if (level == 'GS' && numberOfSets == 3) {
 					continue;
 				}		
