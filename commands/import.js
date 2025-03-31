@@ -143,7 +143,7 @@ class Import extends Command {
 					break;
 				}
 				case '1000': {
-					level = 'ATP-1000';
+					level = 'Masters';
 					break;
 				}
 				case 'OL': {
