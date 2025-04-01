@@ -116,7 +116,7 @@ class Import extends Command {
 	async import(year) {
 		await this.log(`Importing year ${year}...`);
 
-		for (let eventID = 1; eventID <= 999; eventID++) {
+		for (let eventID = 1; eventID <= 9999; eventID++) {
 			let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${year}&eventid=${eventID}`;
 			let data = await this.fetchEvent(url);
 
