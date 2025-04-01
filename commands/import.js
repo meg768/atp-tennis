@@ -116,7 +116,8 @@ class Import extends Command {
 	async import(year) {
 		await this.log(`Importing year ${year}...`);
 
-		for (let eventID = 0; eventID < 2000; eventID++) {
+		for (let eventID = 0; eventID < 1000; eventID++) {
+
 			let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${year}&eventid=${eventID}`;
 			let data = await this.fetchEvent(url);
 
@@ -124,7 +125,6 @@ class Import extends Command {
 				continue;
 			}
 
-			console.log(`Processing event ${eventID}...`);
 
 			let { EventDisplayName: tournament, PlayStartDate: date, EventLevel: level, EventType: type, Matches: matches } = data;
 
@@ -133,6 +133,7 @@ class Import extends Command {
 				continue;
 			}
 
+			
 			switch (type) {
 				case '250': {
 					level = 'ATP-250';
