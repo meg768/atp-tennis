@@ -161,36 +161,35 @@ class Import extends Command {
 					await this.log('Cleaned events table.');
 				}
 
-				// 19768
 
 				// Djokovic
-				//await this.importEx({ playerID: 'D643' });
+				await this.importEx({ playerID: 'D643' });
 
 				// Björn borg
-				//await this.importEx({ playerID: 'B058' });
+				await this.importEx({ playerID: 'B058' });
 
 				// Ivan Ledl
-				//await this.importEx({ playerID: 'L018' });
+				await this.importEx({ playerID: 'L018' });
 
 				// Manuel Orantes;
-				//await this.importEx({ playerID: 'o017' });
+				await this.importEx({ playerID: 'o017' });
 
 				// Jimmy Connors
-				//await this.importEx({ playerID: 'CO44' });
+				await this.importEx({ playerID: 'CO44' });
 
 				// Rod Lavor
-				//await this.importEx({ playerID: 'L058' });
+				await this.importEx({ playerID: 'L058' });
 
 				// Stan Smith
-				//await this.importEx({ playerID: 'S060' });
+				await this.importEx({ playerID: 'S060' });
 
 				// Bill Tilden
-				//await this.importEx({ playerID: 'TE54' });
+				await this.importEx({ playerID: 'TE54' });
 
 				// William Larned
-				//await this.importEx({ playerID: 'LG45' });
-				//await this.importEx({ playerID: 'DG02' });
-				//await this.importEx({ playerID: 'CM34' });
+				await this.importEx({ playerID: 'LG45' });
+				await this.importEx({ playerID: 'DG02' });
+				await this.importEx({ playerID: 'CM34' });
 				await this.importEx({ playerID: 'SX07' });
 				
 				
