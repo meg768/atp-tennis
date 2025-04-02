@@ -14,6 +14,8 @@ var App = function () {
 
             args.command(require("./commands/import.js"));
             args.command(require('./commands/events.js'));
+            args.command(require('./commands/importx.js'));
+            args.command(require('./commands/test.js'));
 
             args.help();
             args.wrap(null);

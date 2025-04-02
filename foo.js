@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 /*
 
+https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=2018&eventid=6498
+https://www.atptour.com/en/-/www/activity/last/s0ag
+https://www.atptour.com/en/-/www/players/hero/s0ag
+
+
+
 EventID 96: Tournament: Paris, Level: Tour, Type: OL
 EventID 301: Tournament: Auckland, Level: Tour, Type: 250
 EventID 308: Tournament: Munich, Level: Tour, Type: 250
