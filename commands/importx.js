@@ -125,11 +125,13 @@ class Import extends Command {
 
 				let { EventDate: date, Matches: matches, ScDisplayName: name, Surface: surface, EventType: type } = tournament;
 
+				/*
 				type = translateType(type);
 
 				if (type === undefined) {
 					continue;
 				}
+					*/
 				await this.mysql.upsert('events', { id, name, surface, date, type });
 
 				for (let match of matches) {
