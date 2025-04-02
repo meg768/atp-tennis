@@ -162,10 +162,9 @@ class Import extends Command {
 				}
 
 				// Djokovic
-				await this.importEx({ playerID: 'D643' });
+				//await this.importEx({ playerID: 'D643' });
 
-				// Ivan Lendl
-				await this.importEx({ playerID: 'L018' });
+				await this.importEx({ playerID: 'b058' });
 
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
