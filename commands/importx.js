@@ -119,9 +119,7 @@ class Import extends Command {
 		for (let activity of activities) {
 			let { EventYear: eventYear, Tournaments: tournaments } = activity;
 
-			if (eventYear < this.argv.from) {
-				continue;
-			}
+
 			for (let tournament of tournaments) {
 				let id = `${eventYear}-${tournament['EventId']}`;
 
