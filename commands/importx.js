@@ -190,7 +190,9 @@ class Import extends Command {
 				// William Larned
 				//await this.importEx({ playerID: 'LG45' });
 				//await this.importEx({ playerID: 'DG02' });
-				await this.importEx({ playerID: 'CM34' });
+				//await this.importEx({ playerID: 'CM34' });
+				await this.importEx({ playerID: 'SX07' });
+				
 				
 
 				await this.log(`Import finished in ${probe.toString()}.`);
