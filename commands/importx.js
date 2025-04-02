@@ -168,7 +168,10 @@ class Import extends Command {
 				//await this.importEx({ playerID: 'B058' });
 
 				// Ivan Ledl
-				await this.importEx({ playerID: 'l018' });
+				//await this.importEx({ playerID: 'L018' });
+
+				// Manuel Orantes;
+				//await this.importEx({ playerID: 'o017' });
 
 				// Jimmy Connors
 				//await this.importEx({ playerID: 'CO44' });
@@ -176,6 +179,10 @@ class Import extends Command {
 				// Rod Lavor
 				//await this.importEx({ playerID: 'L058' });
 
+				// Stan Smith
+				await this.importEx({ playerID: 's060' });
+
+				
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
 				await this.log(error.message);
