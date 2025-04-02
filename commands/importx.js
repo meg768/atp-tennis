@@ -161,6 +161,8 @@ class Import extends Command {
 					await this.log('Cleaned events table.');
 				}
 
+				// 19768
+
 				// Djokovic
 				//await this.importEx({ playerID: 'D643' });
 
@@ -180,9 +182,11 @@ class Import extends Command {
 				//await this.importEx({ playerID: 'L058' });
 
 				// Stan Smith
-				await this.importEx({ playerID: 's060' });
+				//await this.importEx({ playerID: 'S060' });
 
-				
+				// Bill Tilden
+				await this.importEx({ playerID: 'TE54' });
+
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
 				await this.log(error.message);
