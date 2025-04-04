@@ -32,13 +32,22 @@ class Module extends Fetcher {
 
 		events = events.sort();
 
-		events = events.map(async (event) => {
-			return await eventFetcher.fetch({ event });
-		});
+		let results = [];
 
-		return Promise.all(events).then((results) => {
-			return results;
-		});
+		for (let event of events) {
+			let result = await eventFetcher.fetch({ event: event });
+
+			if (!result) {
+				continue;
+			}
+
+			if (result.type == 'CH' || result.type == 'FU' || result.level == 'ITF') {
+				continue;
+			}
+
+			results.push(result);
+		}
+		return results;
 	}
 }
 
