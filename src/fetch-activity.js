@@ -8,7 +8,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ player, since = year - 5}) {
+	async fetch({ player, since = year - 10}) {
 		let results = [];
 
 		if (!player) {
@@ -40,6 +40,11 @@ class Module extends Fetcher {
 				result.type = tournament.EventType;
 				result.rank = tournament.PlayerRank == 0 ? null : tournament.PlayerRank;
 				result.matches = [];
+
+				// Skip if the tournament is a challenger
+				if (result.type == 'CH') {
+					continue;
+				}
 
 				result.matches = tournament.Matches.map((match) => {
 
