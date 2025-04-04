@@ -5,7 +5,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ player }) {
+	async fetch({ player, since = 2015}) {
 		let results = [];
 
 		if (!player) {
@@ -20,6 +20,10 @@ class Module extends Fetcher {
 		}
 
 		for (let activity of response.Activity) {
+
+			if (since != undefined && activity.EventYear < since) {
+				continue;
+			}
 
 			for (let tournament of activity.Tournaments) {
 				let result = {};
