@@ -8,9 +8,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ top = 10 }) {
-		console.log(`Fetching events for top ${top} players...`);
-
+	async fetch({ top }) {
 		let events = [];
 
 		let rankingsFetcher = new RankingsFetcher();
@@ -41,7 +39,6 @@ class Module extends Fetcher {
 		return Promise.all(events).then((results) => {
 			return results;
 		});
-
 	}
 }
 

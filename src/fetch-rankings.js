@@ -5,7 +5,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ top = 100}) {
+	async fetch({ top = 50}) {
 		let results = {};
 
 		if (!top) {
