@@ -1,11 +1,14 @@
 const Fetcher = require('./fetcher');
 
+let now = new Date();
+let year = now.getFullYear();
+
 class Module extends Fetcher {
 	constructor(options) {
 		super(options);
 	}
 
-	async fetch({ player, since = 2020}) {
+	async fetch({ player, since = year - 5}) {
 		let results = [];
 
 		if (!player) {
