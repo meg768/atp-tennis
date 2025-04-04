@@ -27,7 +27,7 @@ class Module extends Fetcher {
 				points: player.Points
 			};
 		});
-		result.raw = response;
+		//result.raw = response;
 
 		if (!response) {
 			return results;

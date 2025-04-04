@@ -46,7 +46,7 @@ class Module extends Fetcher {
 		result.matches.career.wins = response.SglCareerWon;
 		result.matches.career.losses = response.SglCareerLost;
 
-		result.raw = response;
+		//result.raw = response;
 
 		if (!response) {
 			return results;

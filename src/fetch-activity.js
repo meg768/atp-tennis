@@ -8,7 +8,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ player, since = year - 5}) {
+	async fetch({ player, since = year - 10}) {
 		let results = [];
 
 		if (!player) {
