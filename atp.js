@@ -15,7 +15,11 @@ var App = function () {
             args.command(require("./commands/import.js"));
             args.command(require('./commands/events.js'));
             args.command(require('./commands/importx.js'));
-            args.command(require('./commands/test.js'));
+            args.command(require('./commands/fetch-event.js'));
+            args.command(require('./commands/fetch-events.js'));
+            args.command(require('./commands/fetch-player.js'));
+            args.command(require('./commands/fetch-activity.js'));
+            args.command(require('./commands/fetch-rankings.js'));
 
             args.help();
             args.wrap(null);

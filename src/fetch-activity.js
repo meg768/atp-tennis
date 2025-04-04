@@ -1,105 +1,78 @@
-class Module {
-	constructor() {}
+const Fetcher = require('./fetcher');
 
-	async fetchPlayerActivity(url) {
-		try {
-			const response = await fetch(url);
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-
-			return await response.json();
-		} catch (error) {
-			console.error('Error fetching ATP Tour data:', error);
-			return null;
-		}
+class Module extends Fetcher {
+	constructor(options) {
+		super(options);
 	}
 
-	async importEx({ playerID }) {
-		let opponents = await this.import({ playerID });
+	async fetch({ player }) {
+		let results = [];
 
-		if (opponents) {
-			for (let opponentID of opponents) {
-				await this.import({ playerID: opponentID });
-			}
-		}
-	}
-
-	async fetch(playerID) {
-		let results = {};
-
-		function translateType(type) {
-			switch (type) {
-				case 'AS':
-					return undefined;
-				case 'Q':
-					return undefined;
-				case 'PZ':
-					return undefined;
-				case 'CH':
-					return undefined;
-				case 'FU':
-					return undefined;
-				case 'DC':
-					return 'Davis Cup';
-				case 'GS':
-					return 'Grand Slam';
-				case '1000':
-					return 'Masters';
-				case '500':
-					return 'ATP-500';
-				case 'WS':
-					return 'ATP-250';
-				case '250':
-					return 'ATP-250';
-				case 'F':
-					return 'ATP Finals';
-				case 'OL':
-					return 'Olympics';
-				default:
-					return type;
-			}
+		if (!player) {
+			throw new Error('Player ID is required');
 		}
 
-		console.log(`Fetching player ${playerID}...`);
+		let url = `https://www.atptour.com/en/-/www/activity/last/${player}`;
+		let response = await this.fetchURL(url);
 
-		let url = `https://www.atptour.com/en/-/www/activity/last/${playerID}`;
-		let data = await this.fetchPlayerActivity(url);
-
-		if (data === null) {
-			return;
+		if (!response) {
+			return null
 		}
 
-		let { Activity: activities } = data;
-		let opponents = [];
+		for (let activity of response.Activity) {
 
-		for (let activity of activities) {
-			let { EventYear: eventYear, Tournaments: tournaments } = activity;
+			for (let tournament of activity.Tournaments) {
+				let result = {};
 
-			for (let tournament of tournaments) {
-				let id = `${eventYear}-${tournament['EventId']}`;
+				result.event = `${activity.EventYear}-${tournament.EventId}`;
+				result.url = `http://atptour.com${tournament.TournamentUrl}`;
+				result.date = new Date(tournament.EventDate);
+				result.name = tournament.ScDisplayName;
+				result.location = tournament.Location?.EventLocation;
+				result.surface = tournament.Surface;
+				result.type = tournament.EventType;
+				result.rank = tournament.PlayerRank == 0 ? null : tournament.PlayerRank;
+				result.matches = [];
 
-				let { EventDate: date, Matches: matches, ScDisplayName: name, Surface: surface, EventType: type } = tournament;
+				result.matches = tournament.Matches.map((match) => {
 
-				type = translateType(type);
-
-				if (type === undefined) {
-					continue;
-				}
-				await this.mysql.upsert('events', { id, name, surface, date, type });
-
-				for (let match of matches) {
-					let { OpponentId: opponentID } = match;
-
-					if (opponents.indexOf(opponentID) < 0) {
-						opponents.push(opponentID);
+					// Skip if the match is a bye
+					if (match.isBye || match.OpponentId == 0) {
+						return;
 					}
+
+					// Skip doubles matches
+					if (match.ParnerId) {
+						return;
+					}
+
+					let entry = {};
+					entry.round = match.Round?.ShortName;
+					entry.opponent = {};
+					entry.opponent.id = match.OpponentId;
+					entry.opponent.name = `${match.OpponentFirstName} ${match.OpponentLastName}`;
+					entry.opponent.country = match.OpponentNatlId;
+					entry.opponent.rank = match.OpponentRank;
+
+
+
+					return entry;
+				});
+
+				if (result.matches.length > 0) {
+					results.push(result);
 				}
 			}
 		}
 
-		return opponents;
+		return {
+			player:player.toUpperCase(),
+			wins:response.Won,
+			losses:response.Lost,
+			titles:response.Titles,
+			prize: response.Prize,
+			tournaments: results
+		};
 	}
 }
 

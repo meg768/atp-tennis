@@ -1,0 +1,1009 @@
+{
+	"event": "2025-9900",
+	"date": "2024-12-27T00:00:00",
+	"name": "Perth-Sydney",
+	"type": "UC",
+	"level": "Tour",
+	"matches": [
+		{
+			"event": "2025-9900",
+			"round": "F",
+			"score": "64 57 76(4)",
+			"duration": "02:18:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Mohamed Lahyani",
+			"sets": 3,
+			"message": "Game Set and Match Taylor Fritz. \r\n Taylor Fritz wins the match  6-4  5-7  7-6(4).",
+			"winner": {
+				"id": "FB98",
+				"name": "Taylor Fritz",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "HB71",
+				"name": "Hubert Hurkacz",
+				"country": "POL"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "F",
+			"score": "64 64",
+			"duration": "01:52:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Miriam Bley",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "328560",
+				"name": "Coco Gauff",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "326408",
+				"name": "Iga Swiatek",
+				"country": "POL"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "SF",
+			"score": "67(4) 65 Ret'd",
+			"duration": "01:51:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Damien Dumusois",
+			"sets": 3,
+			"message": "Game Set and Match Taylor Fritz. \r\n Taylor Fritz wins the match 7-6(4) 6-5 RET.",
+			"winner": {
+				"id": "FB98",
+				"name": "Taylor Fritz",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "M0FH",
+				"name": "Tomas Machac",
+				"country": "CZE"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "SF",
+			"score": "61 64",
+			"duration": "01:26:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Marija Cicak",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "328560",
+				"name": "Coco Gauff",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "322191",
+				"name": "Karolina Muchova",
+				"country": "CZE"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "SF",
+			"score": "63 62",
+			"duration": "00:58:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Mohamed Lahyani",
+			"sets": 3,
+			"message": "Game Set and Match Hubert Hurkacz. \r\n Hubert Hurkacz wins the match  6-3  6-2 .",
+			"winner": {
+				"id": "HB71",
+				"name": "Hubert Hurkacz",
+				"country": "POL"
+			},
+			"loser": {
+				"id": "S0H2",
+				"name": "Alexander Shevchenko",
+				"country": "KAZ"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "SF",
+			"score": "76(5) 64",
+			"duration": "02:04:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Miriam Bley",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "326408",
+				"name": "Iga Swiatek",
+				"country": "POL"
+			},
+			"loser": {
+				"id": "324166",
+				"name": "Elena Rybakina",
+				"country": "KAZ"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "QF",
+			"score": "64 64",
+			"duration": "01:19:00",
+			"court": "RAC Arena",
+			"umpire": "Adel Nour",
+			"sets": 3,
+			"message": "Game Set and Match Taylor Fritz. \r\n Taylor Fritz wins the match  6-4  6-4 .",
+			"winner": {
+				"id": "FB98",
+				"name": "Taylor Fritz",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "Z371",
+				"name": "Zhizhen Zhang",
+				"country": "CHN"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "QF",
+			"score": "76(4) 62",
+			"duration": "01:34:00",
+			"court": "RAC Arena",
+			"umpire": "Thomas Sweeney",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "328560",
+				"name": "Coco Gauff",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "311779",
+				"name": "Shuai Zhang",
+				"country": "CHN"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "QF",
+			"score": "76(3) 75",
+			"duration": "01:45:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Damien Dumusois",
+			"sets": 3,
+			"message": "Game Set and Match Hubert Hurkacz. \r\n Hubert Hurkacz wins the match  7-6(3) 7-5 .",
+			"winner": {
+				"id": "HB71",
+				"name": "Hubert Hurkacz",
+				"country": "POL"
+			},
+			"loser": {
+				"id": "HD68",
+				"name": "Billy Harris",
+				"country": "GBR"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "QF",
+			"score": "67(4) 61 64",
+			"duration": "02:57:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Marija Cicak",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "326408",
+				"name": "Iga Swiatek",
+				"country": "POL"
+			},
+			"loser": {
+				"id": "319125",
+				"name": "Katie Boulter",
+				"country": "GBR"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "QF",
+			"score": "61 62",
+			"duration": "00:54:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Damien Dumusois",
+			"sets": 3,
+			"message": "Game Set and Match Tomas Machac. \r\n Tomas Machac wins the match  6-1  6-2 .",
+			"winner": {
+				"id": "M0FH",
+				"name": "Tomas Machac",
+				"country": "CZE"
+			},
+			"loser": {
+				"id": "C0E9",
+				"name": "Flavio Cobolli",
+				"country": "ITA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "QF",
+			"score": "62 62",
+			"duration": "01:42:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Miriam Bley",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "322191",
+				"name": "Karolina Muchova",
+				"country": "CZE"
+			},
+			"loser": {
+				"id": "319280",
+				"name": "Jasmine Paolini",
+				"country": "ITA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "QF",
+			"score": "63 61",
+			"duration": "01:05:00",
+			"court": "RAC Arena",
+			"umpire": "Julie Kjendlie",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "324166",
+				"name": "Elena Rybakina",
+				"country": "KAZ"
+			},
+			"loser": {
+				"id": "310926",
+				"name": "Laura Siegemund",
+				"country": "GER"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "QF",
+			"score": "67(5) 62 62",
+			"duration": "02:13:00",
+			"court": "RAC Arena",
+			"umpire": "Richard Haigh",
+			"sets": 3,
+			"message": "Game Set and Match Alexander Shevchenko. \r\n Alexander Shevchenko wins the match  6-7(5) 6-2  6-2 .",
+			"winner": {
+				"id": "S0H2",
+				"name": "Alexander Shevchenko",
+				"country": "KAZ"
+			},
+			"loser": {
+				"id": "MN20",
+				"name": "Daniel Masur",
+				"country": "GER"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR6",
+			"score": "75 36 64",
+			"duration": "01:55:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Damien Dumusois",
+			"sets": 3,
+			"message": "Game Set and Match Tomas Machac. \r\n Tomas Machac wins the match  7-5  3-6  6-4 .",
+			"winner": {
+				"id": "M0FH",
+				"name": "Tomas Machac",
+				"country": "CZE"
+			},
+			"loser": {
+				"id": "HB71",
+				"name": "Hubert Hurkacz",
+				"country": "POL"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR6",
+			"score": "63 64",
+			"duration": "01:56:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Marija Cicak",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "326408",
+				"name": "Iga Swiatek",
+				"country": "POL"
+			},
+			"loser": {
+				"id": "322191",
+				"name": "Karolina Muchova",
+				"country": "CZE"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR6",
+			"score": "62 61",
+			"duration": "01:10:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Miriam Bley",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "319125",
+				"name": "Katie Boulter",
+				"country": "GBR"
+			},
+			"loser": {
+				"id": "326653",
+				"name": "Olivia Gadecki",
+				"country": "AUS"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR6",
+			"score": "62 61",
+			"duration": "01:16:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Mohamed Lahyani",
+			"sets": 3,
+			"message": "Game Set and Match Alex de Minaur. \r\n Alex de Minaur wins the match  6-2  6-1 .",
+			"winner": {
+				"id": "DH58",
+				"name": "Alex de Minaur",
+				"country": "AUS"
+			},
+			"loser": {
+				"id": "HD68",
+				"name": "Billy Harris",
+				"country": "GBR"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR5",
+			"score": "63 62",
+			"duration": "01:31:00",
+			"court": "RAC Arena",
+			"umpire": "Julie Kjendlie",
+			"sets": 3,
+			"message": "Game Set and Match Taylor Fritz. \r\n Taylor Fritz wins the match  6-3  6-2 .",
+			"winner": {
+				"id": "FB98",
+				"name": "Taylor Fritz",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "CG80",
+				"name": "Borna Coric",
+				"country": "CRO"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR5",
+			"score": "64 62",
+			"duration": "01:29:00",
+			"court": "RAC Arena",
+			"umpire": "Adel Nour",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "328560",
+				"name": "Coco Gauff",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "318516",
+				"name": "Donna Vekic",
+				"country": "CRO"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR5",
+			"score": "36 76(8) 62",
+			"duration": "02:06:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Mohamed Lahyani",
+			"sets": 3,
+			"message": "Game Set and Match Flavio Cobolli. \r\n Flavio Cobolli wins the match  3-6  7-6(8) 6-2 .",
+			"winner": {
+				"id": "C0E9",
+				"name": "Flavio Cobolli",
+				"country": "ITA"
+			},
+			"loser": {
+				"id": "HH26",
+				"name": "Ugo Humbert",
+				"country": "FRA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR5",
+			"score": "60 62",
+			"duration": "01:00:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Miriam Bley",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "319280",
+				"name": "Jasmine Paolini",
+				"country": "ITA"
+			},
+			"loser": {
+				"id": "318839",
+				"name": "Chloe Paquet",
+				"country": "FRA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR4",
+			"score": "75 63",
+			"duration": "01:23:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Damien Dumusois",
+			"sets": 3,
+			"message": "Game Set and Match Casper Ruud. \r\n Casper Ruud wins the match  7-5  6-3 .",
+			"winner": {
+				"id": "RH16",
+				"name": "Casper Ruud",
+				"country": "NOR"
+			},
+			"loser": {
+				"id": "HB71",
+				"name": "Hubert Hurkacz",
+				"country": "POL"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR4",
+			"score": "61 60",
+			"duration": "01:02:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Miriam Bley",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "326408",
+				"name": "Iga Swiatek",
+				"country": "POL"
+			},
+			"loser": {
+				"id": "323055",
+				"name": "Malene Helgo",
+				"country": "NOR"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR4",
+			"score": "64 63",
+			"duration": "01:23:00",
+			"court": "RAC Arena",
+			"umpire": "Julie Kjendlie",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "324166",
+				"name": "Elena Rybakina",
+				"country": "KAZ"
+			},
+			"loser": {
+				"id": "318312",
+				"name": "Maria Sakkari",
+				"country": "GRE"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR4",
+			"score": "64 76(0)",
+			"duration": "01:52:00",
+			"court": "RAC Arena",
+			"umpire": "Richard Haigh",
+			"sets": 3,
+			"message": "Game Set and Match Alexander Shevchenko. \r\n Alexander Shevchenko wins the match  6-4  7-6(0).",
+			"winner": {
+				"id": "S0H2",
+				"name": "Alexander Shevchenko",
+				"country": "KAZ"
+			},
+			"loser": {
+				"id": "TE51",
+				"name": "Stefanos Tsitsipas",
+				"country": "GRE"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR4",
+			"score": "61 36 63",
+			"duration": "02:17:00",
+			"court": "RAC Arena",
+			"umpire": "Thomas Sweeney",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "322925",
+				"name": "Xinyu Gao",
+				"country": "CHN"
+			},
+			"loser": {
+				"id": "310926",
+				"name": "Laura Siegemund",
+				"country": "GER"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR4",
+			"score": "26 60 62",
+			"duration": "02:05:00",
+			"court": "RAC Arena",
+			"umpire": "Adel Nour",
+			"sets": 3,
+			"message": "Game Set and Match Alexander Zverev. \r\n Alexander Zverev wins the match  2-6  6-0  6-2 .",
+			"winner": {
+				"id": "Z355",
+				"name": "Alexander Zverev",
+				"country": "GER"
+			},
+			"loser": {
+				"id": "Z371",
+				"name": "Zhizhen Zhang",
+				"country": "CHN"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR4",
+			"score": "62 63",
+			"duration": "01:26:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Mohamed Lahyani",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "319125",
+				"name": "Katie Boulter",
+				"country": "GBR"
+			},
+			"loser": {
+				"id": "319112",
+				"name": "Nadia Podoroska",
+				"country": "ARG"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR4",
+			"score": "36 63 62",
+			"duration": "02:44:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Marija Cicak",
+			"sets": 3,
+			"message": "Game Set and Match Tomas Martin Etcheverry. \r\n Tomas Martin Etcheverry wins the match  3-6  6-3  6-2 .",
+			"winner": {
+				"id": "EA24",
+				"name": "Tomas Martin Etcheverry",
+				"country": "ARG"
+			},
+			"loser": {
+				"id": "HD68",
+				"name": "Billy Harris",
+				"country": "GBR"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR3",
+			"score": "46 75 63",
+			"duration": "02:19:00",
+			"court": "RAC Arena",
+			"umpire": "Richard Haigh",
+			"sets": 3,
+			"message": "Game Set and Match Felix Auger-Aliassime. \r\n Felix Auger-Aliassime wins the match  4-6  7-5  6-3 .",
+			"winner": {
+				"id": "AG37",
+				"name": "Felix Auger-Aliassime",
+				"country": "CAN"
+			},
+			"loser": {
+				"id": "FB98",
+				"name": "Taylor Fritz",
+				"country": "USA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR3",
+			"score": "63 62",
+			"duration": "01:36:00",
+			"court": "RAC Arena",
+			"umpire": "Julie Kjendlie",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "328560",
+				"name": "Coco Gauff",
+				"country": "USA"
+			},
+			"loser": {
+				"id": "326735",
+				"name": "Leylah Fernandez",
+				"country": "CAN"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR3",
+			"score": "63 76(2)",
+			"duration": "01:29:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Damien Dumusois",
+			"sets": 3,
+			"message": "Game Set and Match Flavio Cobolli. \r\n Flavio Cobolli wins the match  6-3  7-6(2).",
+			"winner": {
+				"id": "C0E9",
+				"name": "Flavio Cobolli",
+				"country": "ITA"
+			},
+			"loser": {
+				"id": "S0LA",
+				"name": "Dominic Stricker",
+				"country": "SUI"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR3",
+			"score": "61 61",
+			"duration": "00:58:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Marija Cicak",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "319280",
+				"name": "Jasmine Paolini",
+				"country": "ITA"
+			},
+			"loser": {
+				"id": "319001",
+				"name": "Belinda Bencic",
+				"country": "SUI"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR3",
+			"score": "62 62",
+			"duration": "01:17:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Miriam Bley",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "322191",
+				"name": "Karolina Muchova",
+				"country": "CZE"
+			},
+			"loser": {
+				"id": "323055",
+				"name": "Malene Helgo",
+				"country": "NOR"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR3",
+			"score": "76(6) 57 64",
+			"duration": "02:54:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Mohamed Lahyani",
+			"sets": 3,
+			"message": "Game Set and Match Casper Ruud. \r\n Casper Ruud wins the match  7-6(6) 5-7  6-4 .",
+			"winner": {
+				"id": "RH16",
+				"name": "Casper Ruud",
+				"country": "NOR"
+			},
+			"loser": {
+				"id": "M0FH",
+				"name": "Tomas Machac",
+				"country": "CZE"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR3",
+			"score": "63 16 64",
+			"duration": "02:33:00",
+			"court": "RAC Arena",
+			"umpire": "Thomas Sweeney",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "310926",
+				"name": "Laura Siegemund",
+				"country": "GER"
+			},
+			"loser": {
+				"id": "318176",
+				"name": "Beatriz Haddad Maia",
+				"country": "BRA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR3",
+			"score": "64 64",
+			"duration": "01:17:00",
+			"court": "RAC Arena",
+			"umpire": "Adel Nour",
+			"sets": 3,
+			"message": "Game Set and Match Alexander Zverev. \r\n Alexander Zverev wins the match  6-4  6-4 .",
+			"winner": {
+				"id": "Z355",
+				"name": "Alexander Zverev",
+				"country": "GER"
+			},
+			"loser": {
+				"id": "MJ08",
+				"name": "Thiago Monteiro",
+				"country": "BRA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR2",
+			"score": "62 61",
+			"duration": "01:12:00",
+			"court": "RAC Arena",
+			"umpire": "Thomas Sweeney",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "328139",
+				"name": "Jessica Bouzas Maneiro",
+				"country": "ESP"
+			},
+			"loser": {
+				"id": "318312",
+				"name": "Maria Sakkari",
+				"country": "GRE"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR2",
+			"score": "64 46 63",
+			"duration": "02:08:00",
+			"court": "RAC Arena",
+			"umpire": "Adel Nour",
+			"sets": 3,
+			"message": "Game Set and Match Stefanos Tsitsipas. \r\n Stefanos Tsitsipas wins the match  6-4  4-6  6-3 .",
+			"winner": {
+				"id": "TE51",
+				"name": "Stefanos Tsitsipas",
+				"country": "GRE"
+			},
+			"loser": {
+				"id": "CD85",
+				"name": "Pablo Carreno Busta",
+				"country": "ESP"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR2",
+			"score": "06 64 64",
+			"duration": "02:19:00",
+			"court": "RAC Arena",
+			"umpire": "Thomas Sweeney",
+			"sets": 3,
+			"message": "Game Set and Match Borna Coric. \r\n Borna Coric wins the match  0-6  6-4  6-4 .",
+			"winner": {
+				"id": "CG80",
+				"name": "Borna Coric",
+				"country": "CRO"
+			},
+			"loser": {
+				"id": "AG37",
+				"name": "Felix Auger-Aliassime",
+				"country": "CAN"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR2",
+			"score": "64 63",
+			"duration": "01:25:00",
+			"court": "RAC Arena",
+			"umpire": "Richard Haigh",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "326735",
+				"name": "Leylah Fernandez",
+				"country": "CAN"
+			},
+			"loser": {
+				"id": "318516",
+				"name": "Donna Vekic",
+				"country": "CRO"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR2",
+			"score": "63 61",
+			"duration": "01:27:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Mohamed Lahyani",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "319001",
+				"name": "Belinda Bencic",
+				"country": "SUI"
+			},
+			"loser": {
+				"id": "318839",
+				"name": "Chloe Paquet",
+				"country": "FRA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR2",
+			"score": "63 75",
+			"duration": "01:12:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Miriam Bley",
+			"sets": 3,
+			"message": "Game Set and Match Ugo Humbert. \r\n Ugo Humbert wins the match  6-3  7-5 .",
+			"winner": {
+				"id": "HH26",
+				"name": "Ugo Humbert",
+				"country": "FRA"
+			},
+			"loser": {
+				"id": "S0LA",
+				"name": "Dominic Stricker",
+				"country": "SUI"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR2",
+			"score": "61 64",
+			"duration": "01:16:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Damien Dumusois",
+			"sets": 3,
+			"message": "Game Set and Match Alex de Minaur. \r\n Alex de Minaur wins the match  6-1  6-4 .",
+			"winner": {
+				"id": "DH58",
+				"name": "Alex de Minaur",
+				"country": "AUS"
+			},
+			"loser": {
+				"id": "EA24",
+				"name": "Tomas Martin Etcheverry",
+				"country": "ARG"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR2",
+			"score": "62 64",
+			"duration": "01:28:00",
+			"court": "Ken Rosewall Arena",
+			"umpire": "Marija Cicak",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "319112",
+				"name": "Nadia Podoroska",
+				"country": "ARG"
+			},
+			"loser": {
+				"id": "326653",
+				"name": "Olivia Gadecki",
+				"country": "AUS"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR",
+			"score": "57 64 75",
+			"duration": "03:22:00",
+			"court": "RAC Arena",
+			"umpire": "Thomas Sweeney",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "322925",
+				"name": "Xinyu Gao",
+				"country": "CHN"
+			},
+			"loser": {
+				"id": "318176",
+				"name": "Beatriz Haddad Maia",
+				"country": "BRA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR",
+			"score": "63 60",
+			"duration": "00:54:00",
+			"court": "RAC Arena",
+			"umpire": "Richard Haigh",
+			"sets": 3,
+			"message": "Game Set and Match Zhizhen Zhang. \r\n Zhizhen Zhang wins the match  6-3  6-0 .",
+			"winner": {
+				"id": "Z371",
+				"name": "Zhizhen Zhang",
+				"country": "CHN"
+			},
+			"loser": {
+				"id": "MJ08",
+				"name": "Thiago Monteiro",
+				"country": "BRA"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR",
+			"score": "62 61",
+			"duration": "01:04:00",
+			"court": "RAC Arena",
+			"umpire": "Adel Nour",
+			"sets": 3,
+			"message": "Game Set and Match Pablo Carreno Busta. \r\n Pablo Carreno Busta wins the match  6-2  6-1 .",
+			"winner": {
+				"id": "CD85",
+				"name": "Pablo Carreno Busta",
+				"country": "ESP"
+			},
+			"loser": {
+				"id": "S0H2",
+				"name": "Alexander Shevchenko",
+				"country": "KAZ"
+			}
+		},
+		{
+			"event": "2025-9900",
+			"round": "RR",
+			"score": "62 63",
+			"duration": "01:18:00",
+			"court": "RAC Arena",
+			"umpire": "Julie Kjendlie",
+			"sets": 3,
+			"message": null,
+			"winner": {
+				"id": "324166",
+				"name": "Elena Rybakina",
+				"country": "KAZ"
+			},
+			"loser": {
+				"id": "328139",
+				"name": "Jessica Bouzas Maneiro",
+				"country": "ESP"
+			}
+		}
+	]
+}
