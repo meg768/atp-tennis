@@ -137,7 +137,7 @@ class Import extends Command {
 		let activityFetcher = new ActivityFetcher();
 		let eventFetcher = new EventFetcher();
 
-		let rankings = await rankingsFetcher.fetch({ top: 1 });
+		let rankings = await rankingsFetcher.fetch({ top: 100 });
 
 		let players = {};
 		let events = {};
