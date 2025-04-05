@@ -5,7 +5,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ top = 50}) {
+	async fetch({ top = 10}) {
 		let results = {};
 
 		if (!top) {
@@ -16,10 +16,10 @@ class Module extends Fetcher {
 		let response = await this.fetchURL(url);
 		let result = {};
 
-		result.date = response.Data.Rankings.RankDate;
 		result.players = response.Data.Rankings.Players.map((player) => {
 			return {
-				id: player.PlayerId,
+				date:response.Data.Rankings.RankDate,
+				player: player.PlayerId,
 				name: `${player.FirstName} ${player.LastName}`,
 				age: player.AgeAtRankDate,
 				country: player.NatlId,
@@ -27,7 +27,7 @@ class Module extends Fetcher {
 				points: player.Points
 			};
 		});
-		//result.raw = response;
+		result.raw = response;
 
 		if (!response) {
 			return results;

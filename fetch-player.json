@@ -1,107 +1,31 @@
 {
-	"player": "MP20",
-	"name": "Alexandre Muller",
-	"country": "FRA",
-	"age": 28,
-	"height": 183,
-	"weight": 75,
-	"url": "https://www.atptour.com/en/players/alexandre-muller/mp20/overview",
-	"pro": 2014,
+	"player": "S0AG",
+	"name": "Jannik Sinner",
+	"country": "ITA",
+	"age": 23,
+	"height": 191,
+	"weight": 77,
+	"url": "https://www.atptour.com/en/players/jannik-sinner/s0ag/overview",
+	"pro": 2018,
+	"coach": "Simone Vagnozzi, Darren Cahill",
 	"active": true,
 	"ranking": {
 		"current": {
-			"rank": 41
+			"rank": 1
 		},
-		"career": {
-			"rank": 41,
-			"date": "2025-02-24T00:00:00"
+		"highest": {
+			"rank": 1,
+			"date": "2024-06-10T00:00:00"
 		}
 	},
 	"matches": {
 		"career": {
-			"wins": 37,
-			"losses": 45
+			"wins": 270,
+			"losses": 80
 		},
 		"ytd": {
-			"wins": 10,
-			"losses": 6
+			"wins": 7,
+			"losses": 0
 		}
-	},
-	"raw": {
-		"LastName": "Muller",
-		"FirstName": "Alexandre",
-		"MidInitial": null,
-		"BirthCity": "Poissy, France",
-		"Residence": null,
-		"Coach": "Xavier Pujo",
-		"Pronunciation": null,
-		"BirthDate": "1997-02-01T00:00:00",
-		"Age": 28,
-		"NatlId": "FRA",
-		"Nationality": "France",
-		"HeightIn": 72,
-		"HeightFt": "6'0\"",
-		"HeightCm": 183,
-		"WeightLb": 165,
-		"WeightKg": 75,
-		"PlayHand": {
-			"Id": "R",
-			"Description": "Right-Handed"
-		},
-		"BackHand": {
-			"Id": "2",
-			"Description": "Two-Handed"
-		},
-		"ProYear": 2014,
-		"Active": {
-			"Id": "A",
-			"Description": "Active"
-		},
-		"DblSpecialist": false,
-		"SglRank": 41,
-		"SglHiRank": 41,
-		"SglRankMove": 0,
-		"SglRankTie": false,
-		"DblRank": 447,
-		"DblHiRank": 263,
-		"DblRankMove": -3,
-		"DblRankTie": false,
-		"ScRelativeUrlPlayerProfile": "/en/players/alexandre-muller/mp20/overview",
-		"ScRelativeUrlPlayerCountryFlag": "/en/~/media/images/flags/fra.svg",
-		"GladiatorImageUrl": null,
-		"SglCareerWon": 37,
-		"SglCareerLost": 45,
-		"SglYtdWon": 10,
-		"SglYtdLost": 6,
-		"SglCareerTitles": 1,
-		"SglYtdTitles": 1,
-		"SglYtdPrizeFormatted": "$528,955",
-		"CareerPrizeFormatted": "$2,798,402",
-		"DblCareerWon": 4,
-		"DblCareerLost": 14,
-		"DblYtdWon": 0,
-		"DblYtdLost": 3,
-		"DblCareerTitles": 0,
-		"DblYtdTitles": 0,
-		"DblYtdPrizeFormatted": "$19,278",
-		"IsCarbonTrackerEnabled": false,
-		"SocialLinks": [
-			{
-				"SocialId": "FB",
-				"SocialLink": "https://www.facebook.com/Alex2Mumu/"
-			},
-			{
-				"SocialId": "IG",
-				"SocialLink": "https://www.instagram.com/Alex2Mumu/"
-			},
-			{
-				"SocialId": "TW",
-				"SocialLink": "https://twitter.com/alex2mumu"
-			}
-		],
-		"CacheTags": null,
-		"TopCourtLink": "",
-		"SglHiRankDate": "2025-02-24T00:00:00",
-		"DblHiRankDate": "2024-11-25T00:00:00"
 	}
 }

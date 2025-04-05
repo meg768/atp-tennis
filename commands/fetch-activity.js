@@ -14,7 +14,14 @@ class Module extends Command {
 			alias: 'p',
 			describe: 'Player ID',
 			type: 'string',
-			default: 'S0AG'
+			default: 'R0DG'
+		});
+
+		args.option('since', {
+			alias: 's',
+			describe: 'Since year',
+			type: 'number',
+			default: '2020'
 		});
 
 		args.option('output', {
@@ -31,7 +38,7 @@ class Module extends Command {
 		this.argv = argv;
 
 		let fetcher = new Fetcher();
-		let json = await fetcher.fetch({ player: this.argv.player });
+		let json = await fetcher.fetch({ player: this.argv.player, since: this.argv.since });
 
 		fetcher.output({ fileName: this.argv.output, json });
 		console.log(JSON.stringify(json, null, 2));

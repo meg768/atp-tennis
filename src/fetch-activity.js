@@ -1,3 +1,4 @@
+const { raw } = require('mysql');
 const Fetcher = require('./fetcher');
 
 let now = new Date();
@@ -8,7 +9,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ player, since}) {
+	async fetch({ player, since }) {
 		let results = [];
 
 		if (!player) {
@@ -19,11 +20,10 @@ class Module extends Fetcher {
 		let response = await this.fetchURL(url);
 
 		if (!response) {
-			return null
+			return null;
 		}
 
 		for (let activity of response.Activity) {
-
 			if (since != undefined && activity.EventYear < since) {
 				continue;
 			}
@@ -38,16 +38,9 @@ class Module extends Fetcher {
 				result.location = tournament.Location?.EventLocation;
 				result.surface = tournament.Surface;
 				result.type = tournament.EventType;
-				result.rank = tournament.PlayerRank == 0 ? null : tournament.PlayerRank;
 				result.matches = [];
 
-				// Skip if the tournament is a challenger
-				if (result.type == 'CH') {
-					continue;
-				}
-
 				result.matches = tournament.Matches.map((match) => {
-
 					// Skip if the match is a bye
 					if (match.isBye || match.OpponentId == 0) {
 						return;
@@ -58,18 +51,34 @@ class Module extends Fetcher {
 						return;
 					}
 
+					let me = {};
+					me.player = player;
+					me.rank = tournament.PlayerRank == 0 ? null : tournament.PlayerRank;
+
+					let opponent = {};
+					opponent.player = match.OpponentId;
+					opponent.rank = match.OpponentRank;
+
 					let entry = {};
+					entry.match = `${activity.EventYear}-${tournament.EventId}-${match.MatchId}`;
 					entry.round = match.Round?.ShortName;
-					entry.opponent = {};
-					entry.opponent.id = match.OpponentId;
-					entry.opponent.name = `${match.OpponentFirstName} ${match.OpponentLastName}`;
-					entry.opponent.country = match.OpponentNatlId;
-					entry.opponent.rank = match.OpponentRank;
+					entry.opponent = opponent.player;
+					entry.winner = {};
+					entry.loser = {};
 
-
+					if (match.WinLoss == 'W') {
+						entry.winner = { ...me };
+						entry.loser = { ...opponent };
+					} else {
+						entry.loser = { ...me };
+						entry.winner = { ...opponent };
+					}
 
 					return entry;
 				});
+
+				// Remove undefined matches
+				result.matches = result.matches.filter((match) => match);
 
 				if (result.matches.length > 0) {
 					results.push(result);
@@ -78,12 +87,13 @@ class Module extends Fetcher {
 		}
 
 		return {
-			player:player.toUpperCase(),
-			wins:response.Won,
-			losses:response.Lost,
-			titles:response.Titles,
+			player: player.toUpperCase(),
+			wins: response.Won,
+			losses: response.Lost,
+			titles: response.Titles,
 			prize: response.Prize,
-			tournaments: results
+			events: results,
+			raw: response
 		};
 	}
 }

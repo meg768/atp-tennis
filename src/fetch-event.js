@@ -38,6 +38,7 @@ class Module extends Fetcher {
 
 			let item = {};
 			item.event = event;
+			item.match = match.MatchId;
 			item.round = match.Round?.ShortName;
 			item.score = match.ResultString;
 			item.duration = match.MatchTime == '00:00:00' ? null : match.MatchTime;

@@ -26,6 +26,7 @@ class Module extends Fetcher {
 		result.url = `https://www.atptour.com${response.ScRelativeUrlPlayerProfile}`;
 
 		result.pro = response.ProYear;
+		result.coach = response.Coach;
 		result.active = response.Active?.Description == 'Active';
 
 		result.ranking = {};
@@ -34,10 +35,10 @@ class Module extends Fetcher {
 		result.matches.ytd = {};
 
 		result.ranking.current = {};
-		result.ranking.career = {};
+		result.ranking.highest = {};
 		result.ranking.current.rank = response.SglRank;
-		result.ranking.career.rank = response.SglHiRank;
-		result.ranking.career.date = response.SglHiRankDate;
+		result.ranking.highest.rank = response.SglHiRank;
+		result.ranking.highest.date = response.SglHiRankDate;
 
 
 		result.matches.ytd.wins = response.SglYtdWon;

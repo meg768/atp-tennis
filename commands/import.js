@@ -2,6 +2,11 @@ let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 
+const ActivityFetcher = require('../src/fetch-activity');
+const RankingsFetcher = require('../src/fetch-rankings');
+const EventFetcher = require('../src/fetch-event');
+const PlayerFetcher = require('../src/fetch-player');
+
 class Import extends Command {
 	constructor() {
 		super({ command: 'import [options]', description: 'Import matches' });
@@ -13,25 +18,14 @@ class Import extends Command {
 			alias: 'l',
 			describe: 'Run again after specified number of days',
 			type: 'number',
-			default: 7
-		});
-		args.option('from', {
-			alias: 'f',
-			describe: 'Import from year to current date',
-			type: 'number',
-			default: 2000
-		});
-		args.option('year', {
-			alias: 'y',
-			describe: 'Import from year',
-			type: 'number',
 			default: undefined
 		});
+
 		args.option('clean', {
 			alias: 'c',
 			describe: 'Remove previous imports',
 			type: 'boolean',
-			default: false
+			default: true
 		});
 		args.help();
 	}
@@ -45,172 +39,119 @@ class Import extends Command {
 		}
 	}
 
-	async execute(file) {
-		await this.log(`Executing file ${file}`);
-		await this.mysql.execute(file);
-	}
+	async fetchPlayerActivity({ player, players, events, matches }) {
+		let opponents = [];
 
-	async fetchEvent(url) {
-		try {
-			const response = await fetch(url);
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-
-			let data = await response.json();
-			data = data['Data'];
-			data = data[0];
-			return data;
-		} catch (error) {
-			console.error('Error fetching ATP Tour data:', error);
-			return null;
-		}
-	}
-
-	parseMatch(match) {
-		let result = {};
-
-		if (match['IsDoubles']) {
+		if (players[player]) {
 			return;
 		}
-		if (match['IsQualifier']) {
-			return;
-		}
+		{
+			let playerFetcher = new PlayerFetcher();
 
-		let winner = undefined;
-		let loser = undefined;
+			if (true) {
+				let info = await playerFetcher.fetch({ player: player });
 
-		if (match['WinningPlayerId'] == match['PlayerTeam1']['PlayerId']) {
-			winner = match['PlayerTeam1'];
-			loser = match['PlayerTeam2'];
-		} else {
-			winner = match['PlayerTeam2'];
-			loser = match['PlayerTeam1'];
-		}
-
-		result.round = match['Round']?.['ShortName'];
-		result.winner = winner['PlayerFirstNameFull'] + ' ' + winner['PlayerLastName'];
-		result.loser = loser['PlayerFirstNameFull'] + ' ' + loser['PlayerLastName'];
-
-		result.watpid = winner['PlayerId'];
-		result.latpid = loser['PlayerId'];
-
-		/*
-	result.wseed = match[winnerTeam]['SeedPlayerTeam'] ? parseInt(match[winnerTeam]['SeedPlayerTeam']) : undefined;
-	result.lseed = match[loserTeam]['SeedPlayerTeam'] ? parseInt(match[loserTeam]['SeedPlayerTeam']) : undefined;
-*/
-		result.wioc = winner['PlayerCountryCode'];
-		result.lioc = loser['PlayerCountryCode'];
-		result.duration = match['MatchTime'];
-		result.score = match['ResultString'];
-
-		// Replace "Ret'd" with "RET"
-		// This is a workaround for the ATP API, which returns "Ret'd" instead of "RET"
-		// in some cases
-		result.score = result.score.replace("Ret'd", "RET");
-
-		return result;
-	}
-
-	async import(year) {
-		await this.log(`Importing year ${year}...`);
-
-		for (let eventID = 0; eventID < 1000; eventID++) {
-
-			let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${year}&eventid=${eventID}`;
-			let data = await this.fetchEvent(url);
-
-			if (!data) {
-				continue;
+				await this.mysql.upsert('players', {
+					id: player,
+					name: info.name,
+					country: info.country,
+					url: info.url,
+					crk: info.ranking.current.rank,
+					hrk: info.ranking.highest.rank,
+					hrkd: info.ranking.highest.date
+				});
 			}
 
+			let activityFetcher = new ActivityFetcher();
+			let activity = await activityFetcher.fetch({ player: player, since: 2025 });
 
-			let { EventDisplayName: tournament, PlayStartDate: date, EventLevel: level, EventType: type, Matches: matches } = data;
-
-			// Skip Challenger, ITF, WTA 1000, WTA 500, WTA 250
-			if (level == 'CH' || level == 'ITF' || level == 'WTA 1000' || level == 'WTA 500' || level == 'WTA 250') {
-				continue;
+			if (!activity || !activity.events) {
+				return;
 			}
 
-			
-			switch (type) {
-				case '250': {
-					level = 'ATP-250';
-					break;
-				}
-				case '500': {
-					level = 'ATP-500';
-					break;
-				}
-				case '1000': {
-					level = 'Masters';
-					break;
-				}
-				case 'OL': {
-					level = 'Olympics';
-					break;
-				}
-				case 'GS': {
-					level = 'Grand Slam';
-					break;
-				}
-				case 'DC': {
-					level = 'Davis Cup';
-					break;
-				}
-				case 'CS': {
-					level = 'ATP-500';
-					break;
-				}
-				case 'WS': {
-					level = 'ATP-250';
-					break;
-				}
-				case 'WT': {
-					level = 'ATP-250';
-					break;
-				}
-			}
+			players[player] = player;
 
-			date = new Date(date).toLocaleDateString('sv-SE');
-
-			for (let match of matches) {
-				let { NumberOfSets: numberOfSets } = match;
-
-				// Skip matches with 3 sets in Grand Slam (indicates WTA)
-				// I am not sure if this is correct, but it seems to be the case
-				if (level == 'Grand Slam' && numberOfSets == 3) {
+			for (let event of activity.events) {
+				if (events[event.event]) {
 					continue;
-				}		
+				}
 
-				let matchResult = this.parseMatch(match);
+				events[event.event] = event;
 
-				if (matchResult) {
-					matchResult = { date, tournament, level, type, ...matchResult };
-					console.log(matchResult);
-					await this.mysql.upsert('matches', matchResult);
+				await this.mysql.upsert('events', {
+					id: event.event,
+					name: event.name,
+					location: event.location,
+					type: event.type,
+					surface: event.surface,
+					date: event.date,
+					url: event.url
+				});
 
-					let winner = {};
-					winner.name = matchResult.winner;
-					winner.country = matchResult.wioc;
-					winner.atpid = matchResult.watpid;
-					await this.mysql.upsert('players', winner);
+				for (let match of event.matches) {
+					if (matches[match.match]) {
+						continue;
+					}
+					matches[match.match] = match;
 
-					let loser = {};
-					loser.name = matchResult.loser;
-					loser.country = matchResult.lioc;
-					loser.atpid = matchResult.latpid;
-					await this.mysql.upsert('players', loser);
+					await this.mysql.upsert('matches', {
+						id: match.match,
+						event: event.event,
+						round: match.round,
+						winner: match.winner.player,
+						loser: match.loser.player,
+						lrk: match.loser.rank,
+						wrk: match.winner.rank
+					});
 
-					let tourney = { date, name: tournament, url, level, type:null };
-					await this.mysql.upsert('tournaments', tourney);
+					if (match.opponent && !opponents.includes(match.opponent)) {
+						opponents.push(match.opponent);
+					}
 				}
 			}
+			let json = {
+				players: players,
+				events: events,
+				matches: matches
+			};
+			const fs = require('fs');
+			fs.writeFileSync('import.json', JSON.stringify(json, null, '\t'));
 		}
+		if (opponents.length > 0) {
+			for (let opponent of opponents) {
+				await this.fetchPlayerActivity({ player: opponent, players: players, events: events, matches: matches });
+			}
+		}
+
+		return opponents;
+	}
+	async import() {
+		let rankingsFetcher = new RankingsFetcher();
+		let activityFetcher = new ActivityFetcher();
+		let eventFetcher = new EventFetcher();
+
+		let rankings = await rankingsFetcher.fetch({ top: 1 });
+
+		let players = {};
+		let events = {};
+		let matches = {};
+
+		for (let player of rankings.players) {
+			await this.fetchPlayerActivity({ player: player.player, players: players, events: events, matches: matches });
+		}
+
+		let json = {
+			players: players,
+			events: events,
+			matches: matches
+		};
+
+		const fs = require('fs');
+		fs.writeFileSync('import.json', JSON.stringify(json, null, '\t'));
 	}
 
 	async run(argv) {
+		this.argv = argv;
 		let work = async () => {
 			try {
 				this.mysql.connect();
@@ -219,20 +160,13 @@ class Import extends Command {
 				await this.log(`Starting import...`);
 
 				if (argv.clean) {
-					await this.mysql.query('TRUNCATE TABLE matches');
+					await this.mysql.query('TRUNCATE TABLE events');
 					await this.mysql.query('TRUNCATE TABLE players');
-					await this.mysql.query('TRUNCATE TABLE tournaments');
+					await this.mysql.query('TRUNCATE TABLE matches');
+					await this.log('Cleaned events table.');
 				}
 
-				if (argv.year) {
-					await this.import(argv.year);
-				} else if (argv.from) {
-					let from = argv.from;
-
-					for (let year = from; year <= 2025; year++) {
-						await this.import(year);
-					}
-				}
+				await this.import();
 
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {

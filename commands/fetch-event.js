@@ -1,5 +1,3 @@
-let MySQL = require('../src/mysql.js');
-let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 let Fetcher = require('../src/fetch-event.js');
 
@@ -19,7 +17,7 @@ class Module extends Command {
 			alias: 'e',
 			describe: 'Event ID',
 			type: 'string',
-			default: '2025-404'
+			default: '2024-0339'
 		});
 		args.help();
 	}

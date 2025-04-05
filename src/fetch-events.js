@@ -20,12 +20,12 @@ class Module extends Fetcher {
 		for (let player of rankings.players) {
 			let activity = await activityFetcher.fetch({ player: player.id });
 
-			if (!activity || !activity.tournaments) {
+			if (!activity || !activity.events) {
 				continue;
 			}
-			for (let tournament of activity.tournaments) {
-				if (events.indexOf(tournament.event) === -1) {
-					events.push(tournament.event);
+			for (let event of activity.events) {
+				if (events.indexOf(event.event) === -1) {
+					events.push(event.event);
 				}
 			}
 		}
@@ -38,10 +38,6 @@ class Module extends Fetcher {
 			let result = await eventFetcher.fetch({ event: event });
 
 			if (!result) {
-				continue;
-			}
-
-			if (result.type == 'CH' || result.type == 'FU' || result.level == 'ITF') {
 				continue;
 			}
 
