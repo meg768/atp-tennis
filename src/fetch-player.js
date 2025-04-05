@@ -31,14 +31,20 @@ class Module extends Fetcher {
 
 		result.ranking = {};
 		result.matches = {};
+		result.titles = {};
 		result.matches.career = {};
 		result.matches.ytd = {};
+		result.titles.career = {};
+		result.titles.ytd = {};
 
 		result.ranking.current = {};
 		result.ranking.highest = {};
 		result.ranking.current.rank = response.SglRank;
 		result.ranking.highest.rank = response.SglHiRank;
 		result.ranking.highest.date = response.SglHiRankDate;
+
+		result.titles.ytd = response.SglYtdTitles;
+		result.titles.career = response.SglCareerTitles;
 
 
 		result.matches.ytd.wins = response.SglYtdWon;
@@ -47,7 +53,7 @@ class Module extends Fetcher {
 		result.matches.career.wins = response.SglCareerWon;
 		result.matches.career.losses = response.SglCareerLost;
 
-		//result.raw = response;
+		result.raw = response;
 
 		if (!response) {
 			return results;

@@ -39,7 +39,7 @@ class Import extends Command {
 		}
 	}
 
-	async fetchPlayerActivity({ player, players, events, matches }) {
+	async importPlayerActivity({ player, players, events, matches }) {
 		let opponents = [];
 
 		if (players[player]) {
@@ -51,14 +51,29 @@ class Import extends Command {
 			if (true) {
 				let info = await playerFetcher.fetch({ player: player });
 
+
+			
 				await this.mysql.upsert('players', {
 					id: player,
 					name: info.name,
 					country: info.country,
+					age: info.age,
+					height: info.height,
+					weight: info.weight,
+
+					ct: info.titles.career,
+					ytdt: info.titles.ytd,
+
+					cw: info.matches.career.wins,
+					cl: info.matches.career.losses,
+
+					ytdw: info.matches.ytd.wins,
+					ytdl: info.matches.ytd.losses,
+
 					url: info.url,
 					crk: info.ranking.current.rank,
 					hrk: info.ranking.highest.rank,
-					hrkd: info.ranking.highest.date
+					hrkd: info.ranking.highest.rank ? info.ranking.highest.date : null
 				});
 			}
 
@@ -109,22 +124,15 @@ class Import extends Command {
 					}
 				}
 			}
-			let json = {
-				players: players,
-				events: events,
-				matches: matches
-			};
-			const fs = require('fs');
-			fs.writeFileSync('import.json', JSON.stringify(json, null, '\t'));
 		}
 		if (opponents.length > 0) {
 			for (let opponent of opponents) {
-				await this.fetchPlayerActivity({ player: opponent, players: players, events: events, matches: matches });
+				await this.importPlayerActivity({ player: opponent, players: players, events: events, matches: matches });
 			}
 		}
 
-		return opponents;
 	}
+	
 	async import() {
 		let rankingsFetcher = new RankingsFetcher();
 		let activityFetcher = new ActivityFetcher();
@@ -137,17 +145,9 @@ class Import extends Command {
 		let matches = {};
 
 		for (let player of rankings.players) {
-			await this.fetchPlayerActivity({ player: player.player, players: players, events: events, matches: matches });
+			await this.importPlayerActivity({ player: player.player, players: players, events: events, matches: matches });
 		}
 
-		let json = {
-			players: players,
-			events: events,
-			matches: matches
-		};
-
-		const fs = require('fs');
-		fs.writeFileSync('import.json', JSON.stringify(json, null, '\t'));
 	}
 
 	async run(argv) {

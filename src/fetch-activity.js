@@ -32,7 +32,7 @@ class Module extends Fetcher {
 				let result = {};
 
 				result.event = `${activity.EventYear}-${tournament.EventId}`;
-				result.url = `http://atptour.com${tournament.TournamentUrl}`;
+				result.url = tournament.TournamentUrl ? `http://atptour.com${tournament.TournamentUrl}` : null;
 				result.date = new Date(tournament.EventDate);
 				result.name = tournament.ScDisplayName;
 				result.location = tournament.Location?.EventLocation;
