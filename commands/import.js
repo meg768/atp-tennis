@@ -91,6 +91,7 @@ class Import extends Command {
 					continue;
 				}
 
+				// Skip Challenger and FU
 				switch (event.type) {
 					case 'FU':
 						return;
