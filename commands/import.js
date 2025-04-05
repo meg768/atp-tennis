@@ -45,14 +45,14 @@ class Import extends Command {
 		if (players[player]) {
 			return;
 		}
-		{
+
+		// Important - this deletes all variables before recursion
+		if (true) {
 			let playerFetcher = new PlayerFetcher();
 
 			if (true) {
 				let info = await playerFetcher.fetch({ player: player });
 
-
-			
 				await this.mysql.upsert('players', {
 					id: player,
 					name: info.name,
@@ -78,7 +78,7 @@ class Import extends Command {
 			}
 
 			let activityFetcher = new ActivityFetcher();
-			let activity = await activityFetcher.fetch({ player: player, since: 2025 });
+			let activity = await activityFetcher.fetch({ player: player, since: 2020 });
 
 			if (!activity || !activity.events) {
 				return;
@@ -130,9 +130,8 @@ class Import extends Command {
 				await this.importPlayerActivity({ player: opponent, players: players, events: events, matches: matches });
 			}
 		}
-
 	}
-	
+
 	async import() {
 		let rankingsFetcher = new RankingsFetcher();
 		let activityFetcher = new ActivityFetcher();
@@ -147,7 +146,6 @@ class Import extends Command {
 		for (let player of rankings.players) {
 			await this.importPlayerActivity({ player: player.player, players: players, events: events, matches: matches });
 		}
-
 	}
 
 	async run(argv) {
