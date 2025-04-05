@@ -91,6 +91,13 @@ class Import extends Command {
 					continue;
 				}
 
+				switch (event.type) {
+					case 'FU':
+						return;
+					case 'CH':
+						return;
+				}
+
 				events[event.event] = event;
 
 				await this.mysql.upsert('events', {
