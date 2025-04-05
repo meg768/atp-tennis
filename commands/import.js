@@ -71,7 +71,7 @@ class Import extends Command {
 					ytdl: info.matches.ytd.losses,
 
 					url: info.url,
-					crk: info.ranking.current.rank,
+					rank: info.ranking.current.rank,
 					hrk: info.ranking.highest.rank,
 					hrkd: info.ranking.highest.rank ? info.ranking.highest.date : null
 				});
