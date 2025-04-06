@@ -39,7 +39,7 @@ class Import extends Command {
 		}
 	}
 
-	async importPlayerActivity({ player, players, events, matches }) {
+	async importPlayerActivity({ player, players = {}, events = {}, matches = {} }) {
 		let opponents = [];
 
 		if (players[player]) {
@@ -78,7 +78,7 @@ class Import extends Command {
 			}
 
 			let activityFetcher = new ActivityFetcher();
-			let activity = await activityFetcher.fetch({ player: player, since: 2020 });
+			let activity = await activityFetcher.fetch({ player: player, since: 2024 });
 
 			if (!activity || !activity.events) {
 				return;
@@ -115,6 +115,7 @@ class Import extends Command {
 					if (matches[match.match]) {
 						continue;
 					}
+
 					matches[match.match] = match;
 
 					await this.mysql.upsert('matches', {
@@ -145,14 +146,46 @@ class Import extends Command {
 		let activityFetcher = new ActivityFetcher();
 		let eventFetcher = new EventFetcher();
 
-		let rankings = await rankingsFetcher.fetch({ top: 100 });
+		let rankings = await rankingsFetcher.fetch({ top: 1 });
 
-		let players = {};
 		let events = {};
-		let matches = {};
-
 		for (let player of rankings.players) {
-			await this.importPlayerActivity({ player: player.player, players: players, events: events, matches: matches });
+			await this.importPlayerActivity({ player: player.player, events: events });
+		}
+
+		// Convert map to array of events ID:s
+		events = Object.keys(events);
+
+		for (let event of events) {
+			let eventFetcher = new EventFetcher();
+			let details = await eventFetcher.fetch({ event: event });
+
+			if (!details) {
+				continue;
+			}
+
+			let sql = ``;
+			sql += `UPDATE events SET `;
+			sql += `level = ? `;
+			sql += `WHERE id = ?`;
+
+			let format = [details.level, event];
+			await this.mysql.query({ sql, format });
+
+			if (details.matches) {
+				for (let match of details.matches) {
+					let sql = ``;
+					sql += `UPDATE matches SET `;
+					sql += `round = ?, score = ?, duration = ?, umpire = ? `;
+					sql += `WHERE id = ?`;
+
+					console.log(match.match);
+
+					let format = [match.round, match.score, match.duration, match.umpire, match.match];
+
+					await this.mysql.query({ sql, format });
+				}
+			}
 		}
 	}
 

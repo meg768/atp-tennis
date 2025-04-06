@@ -73,6 +73,8 @@ class Module extends Fetcher {
 						entry.loser = { ...me };
 						entry.winner = { ...opponent };
 					}
+					// Generate my own match ID
+					entry.match = `${activity.EventYear}-${tournament.EventId}-${entry.winner.player}-${entry.loser.player}`;
 
 					return entry;
 				});

@@ -36,9 +36,13 @@ class Module extends Fetcher {
 				continue;
 			}
 
+			// Skip matches with invalid players (like Bye)
+			if (match.PlayerTeam1.PlayerId.length != 4 || match.PlayerTeam2.PlayerId.length  != 4) {
+				continue;
+			};
+
 			let item = {};
-			item.event = event;
-			item.match = match.MatchId;
+			item.match = `${event}-${match.MatchId}`;
 			item.round = match.Round?.ShortName;
 			item.score = match.ResultString;
 			item.duration = match.MatchTime == '00:00:00' ? null : match.MatchTime;
@@ -63,14 +67,16 @@ class Module extends Fetcher {
 			item.winner = {};
 			item.loser = {};
 
-			item.winner.id = winner.PlayerId;
+			item.winner.player = winner.PlayerId;
 			item.winner.name = `${winner.PlayerFirstNameFull} ${winner.PlayerLastName}`;
 			item.winner.country = winner.PlayerCountryCode;
 
-			item.loser.id = loser.PlayerId;
+			item.loser.player = loser.PlayerId;
 			item.loser.name = `${loser.PlayerFirstNameFull} ${loser.PlayerLastName}`;
 			item.loser.country = loser.PlayerCountryCode;
 
+			// Generate my own match id
+			item.match = `${event}-${winner.PlayerId}-${loser.PlayerId}`;
 
 			result.matches.push(item);
 		}
