@@ -51,6 +51,10 @@ class Module extends Fetcher {
 						return;
 					}
 
+					if (match.OpponentId.length != 4) {
+						throw new Error(`Invalid opponent ID '${match.OpponentId}' in event ${result.event}.`);
+					}
+
 					let me = {};
 					me.player = player;
 					me.rank = tournament.PlayerRank == 0 ? null : tournament.PlayerRank;

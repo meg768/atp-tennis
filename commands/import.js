@@ -164,13 +164,16 @@ class Import extends Command {
 				continue;
 			}
 
-			let sql = ``;
-			sql += `UPDATE events SET `;
-			sql += `level = ? `;
-			sql += `WHERE id = ?`;
+			// Update field level for events
+			if (true) {
+				let sql = ``;
+				sql += `UPDATE events SET `;
+				sql += `level = ? `;
+				sql += `WHERE id = ?`;
 
-			let format = [details.level, event];
-			await this.mysql.query({ sql, format });
+				let format = [details.level, event];
+				await this.mysql.query({ sql, format });
+			}
 
 			if (details.matches) {
 				for (let match of details.matches) {
@@ -178,8 +181,6 @@ class Import extends Command {
 					sql += `UPDATE matches SET `;
 					sql += `round = ?, score = ?, duration = ?, umpire = ? `;
 					sql += `WHERE id = ?`;
-
-					console.log(match.match);
 
 					let format = [match.round, match.score, match.duration, match.umpire, match.match];
 
