@@ -107,12 +107,46 @@ class Import extends Command {
 					continue;
 				}
 
-				// Skip Challenger and FU
+				// Skip Challenger and FU and change type to readable
 				switch (event.type) {
-					case 'FU':
+					case 'FU': {
 						return;
-					case 'CH':
+					}
+					case 'CH': {
 						return;
+					}
+					case 'GS': {
+						event.type = 'Grand Slam';
+						break;
+					}
+					case 'OL': {
+						event.type = 'Olympics';
+						break;
+					}
+					case '1000': {
+						event.type = 'Masters';
+						break;
+					}
+					case '500': {
+						event.type = 'ATP-500';
+						break;
+					}
+					case '250': {
+						event.type = 'ATP-250';
+						break;
+					}
+					case 'LVR': {
+						event.type = 'Rod Laver Cup';
+						break;
+					}
+					case 'DC': {
+						event.type = 'Davis Cup';
+						break;
+					}
+					case 'UC': {
+						event.type = 'United Cup';
+						break;
+					}
 				}
 
 				events[event.event] = event;
@@ -195,7 +229,7 @@ class Import extends Command {
 		}
 
 		// Make final changes to type of event. Want this in readable text
-		if (true) {
+		if (false) {
 			let sql = ``;
 			sql += `UPDATE events SET type = 'Grand Slam' WHERE type = 'GS'; `;
 			sql += `UPDATE events SET type = 'Masters' WHERE type = '1000'; `;
