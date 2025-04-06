@@ -133,7 +133,7 @@ class Import extends Command {
 					}
 					case '250': {
 						event.type = 'ATP-250';
-						break;
+						break;x
 					}
 					case 'LVR': {
 						event.type = 'Rod Laver Cup';
