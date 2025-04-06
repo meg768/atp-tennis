@@ -27,7 +27,6 @@ class Module extends Fetcher {
 		result.date = raw.PlayStartDate;
 		result.name = raw.EventDisplayName;
 		result.type = raw.EventType;
-		result.level = raw.EventLevel;
 		result.matches = [];
 
 		for (let match of raw.Matches) {

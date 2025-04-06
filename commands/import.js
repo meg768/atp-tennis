@@ -94,7 +94,7 @@ class Import extends Command {
 			}
 
 			let activityFetcher = new ActivityFetcher();
-			let activity = await activityFetcher.fetch({ player: player, since:this.argv.since});
+			let activity = await activityFetcher.fetch({ player: player, since: this.argv.since });
 
 			if (!activity || !activity.events) {
 				return;
@@ -180,29 +180,31 @@ class Import extends Command {
 				continue;
 			}
 
-			// Update field level for events
-			if (true) {
-				let sql = ``;
-				sql += `UPDATE events SET `;
-				sql += `level = ? `;
-				sql += `WHERE id = ?`;
-
-				let format = [details.level, event];
-				await this.mysql.query({ sql, format });
-			}
-
 			if (details.matches) {
 				for (let match of details.matches) {
 					let sql = ``;
 					sql += `UPDATE matches SET `;
-					sql += `round = ?, score = ?, duration = ?, umpire = ? `;
+					sql += `round = ?, score = ?, duration = ? `;
 					sql += `WHERE id = ?`;
 
-					let format = [match.round, match.score, match.duration, match.umpire, match.match];
+					let format = [match.round, match.score, match.duration, match.match];
 
 					await this.mysql.query({ sql, format });
 				}
 			}
+		}
+
+		// Make final changes to type of event. Want this in readable text
+		if (true) {
+			let sql = ``;
+			sql += `UPDATE events SET type = 'Grand Slam' WHERE type = 'GS'; `;
+			sql += `UPDATE events SET type = 'Masters' WHERE type = '1000'; `;
+			sql += `UPDATE events SET type = 'ATP-500' WHERE type = '500'; `;
+			sql += `UPDATE events SET type = 'ATP-250' WHERE type = '250'; `;
+			sql += `UPDATE events SET type = 'Davis Cup' WHERE type = 'DC'; `;
+			sql += `UPDATE events SET type = 'Rod Lavel Cup' WHERE type = 'LVR'; `;
+			sql += `UPDATE events SET type = 'United Cup' WHERE type = 'UC'; `;
+			await this.mysql.query(sql);
 		}
 	}
 
