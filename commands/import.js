@@ -27,14 +27,14 @@ class Import extends Command {
 			alias: 's',
 			describe: 'Import matches since this year',
 			type: 'number',
-			default: year - 10
+			default: year - 1
 		});
 
 		args.option('top', {
 			alias: 't',
 			describe: 'Import from top X players',
 			type: 'number',
-			default: 100
+			default: 1
 		});
 
 		args.option('clean', {
