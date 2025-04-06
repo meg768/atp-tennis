@@ -14,11 +14,27 @@ class Import extends Command {
 	}
 
 	arguments(args) {
+		let year = new Date().getFullYear();
+
 		args.option('loop', {
 			alias: 'l',
 			describe: 'Run again after specified number of days',
 			type: 'number',
 			default: undefined
+		});
+
+		args.option('since', {
+			alias: 's',
+			describe: 'Import matches since this year',
+			type: 'number',
+			default: year - 1
+		});
+
+		args.option('top', {
+			alias: 't',
+			describe: 'Import from top X players',
+			type: 'number',
+			default: 1
 		});
 
 		args.option('clean', {
@@ -39,7 +55,7 @@ class Import extends Command {
 		}
 	}
 
-	async importPlayerActivity({ player, players = {}, events = {}, matches = {} }) {
+	async importPlayer({ player, players = {}, events = {}, matches = {} }) {
 		let opponents = [];
 
 		if (players[player]) {
@@ -78,7 +94,7 @@ class Import extends Command {
 			}
 
 			let activityFetcher = new ActivityFetcher();
-			let activity = await activityFetcher.fetch({ player: player, since: 2024 });
+			let activity = await activityFetcher.fetch({ player: player, since:this.argv.since});
 
 			if (!activity || !activity.events) {
 				return;
@@ -136,7 +152,7 @@ class Import extends Command {
 		}
 		if (opponents.length > 0) {
 			for (let opponent of opponents) {
-				await this.importPlayerActivity({ player: opponent, players: players, events: events, matches: matches });
+				await this.importPlayer({ player: opponent, players: players, events: events, matches: matches });
 			}
 		}
 	}
@@ -146,11 +162,11 @@ class Import extends Command {
 		let activityFetcher = new ActivityFetcher();
 		let eventFetcher = new EventFetcher();
 
-		let rankings = await rankingsFetcher.fetch({ top: 1 });
+		let rankings = await rankingsFetcher.fetch({ top: this.argv.top });
 
 		let events = {};
 		for (let player of rankings.players) {
-			await this.importPlayerActivity({ player: player.player, events: events });
+			await this.importPlayer({ player: player.player, events: events });
 		}
 
 		// Convert map to array of events ID:s
