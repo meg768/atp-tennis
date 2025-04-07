@@ -77,19 +77,19 @@ class Import extends Command {
 					height: info.height,
 					weight: info.weight,
 
-					ct: info.titles.career,
-					ytdt: info.titles.ytd,
+					career_titles: info.titles.career,
+					ytd_titles: info.titles.ytd,
 
-					cw: info.matches.career.wins,
-					cl: info.matches.career.losses,
+					career_wins: info.matches.career.wins,
+					career_losses: info.matches.career.losses,
 
-					ytdw: info.matches.ytd.wins,
-					ytdl: info.matches.ytd.losses,
+					ytd_wins: info.matches.ytd.wins,
+					ytd_losses: info.matches.ytd.losses,
 
 					url: info.url,
 					rank: info.ranking.current.rank,
-					hrk: info.ranking.highest.rank,
-					hrkd: info.ranking.highest.rank ? info.ranking.highest.date : null
+					highest_rank: info.ranking.highest.rank,
+					highest_rank_date: info.ranking.highest.rank ? info.ranking.highest.date : null
 				});
 			}
 
@@ -174,8 +174,8 @@ class Import extends Command {
 						round: match.round,
 						winner: match.winner.player,
 						loser: match.loser.player,
-						lrk: match.loser.rank ? match.loser.rank : null,
-						wrk: match.winner.rank ? match.winner.rank : null
+						loser_rank: match.loser.rank ? match.loser.rank : null,
+						winner_rank: match.winner.rank ? match.winner.rank : null
 					});
 
 					if (match.opponent && !opponents.includes(match.opponent)) {
