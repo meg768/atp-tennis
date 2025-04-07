@@ -69,6 +69,8 @@ class Import extends Command {
 			if (true) {
 				let info = await playerFetcher.fetch({ player: player });
 
+				this.log(`Adding player ${player} - ${info.name}`);
+
 				await this.mysql.upsert('players', {
 					id: player,
 					name: info.name,
@@ -133,7 +135,8 @@ class Import extends Command {
 					}
 					case '250': {
 						event.type = 'ATP-250';
-						break;x
+						break;
+						x;
 					}
 					case 'LVR': {
 						event.type = 'Rod Laver Cup';
@@ -151,6 +154,8 @@ class Import extends Command {
 
 				events[event.event] = event;
 
+				this.log(`Adding event ${event.event} - ${event.name}`);
+
 				await this.mysql.upsert('events', {
 					id: event.event,
 					name: event.name,
@@ -167,6 +172,8 @@ class Import extends Command {
 					}
 
 					matches[match.match] = match;
+
+					this.log(`Adding match ${match.match}`);
 
 					await this.mysql.upsert('matches', {
 						id: match.match,
