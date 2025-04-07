@@ -62,7 +62,7 @@ class Import extends Command {
 			return;
 		}
 
-		players[player] = player;
+		players[player] = true;
 
 		if (true) {
 			let activityFetcher = new ActivityFetcher();
@@ -76,6 +76,8 @@ class Import extends Command {
 				if (events[event.event]) {
 					continue;
 				}
+
+				events[event.event] = true;
 
 				// Skip Challenger and FU and change type to readable
 				switch (event.type) {
@@ -120,7 +122,6 @@ class Import extends Command {
 					}
 				}
 
-				events[event.event] = event.event;
 
 				await this.mysql.upsert('events', {
 					id: event.event,
@@ -137,7 +138,7 @@ class Import extends Command {
 						continue;
 					}
 
-					matches[match.match] = match;
+					matches[match.match] = true;
 
 					await this.mysql.upsert('matches', {
 						id: match.match,
@@ -178,30 +179,33 @@ class Import extends Command {
 		if (true) {
 			// Convert map to array of events ID:s
 			events = Object.keys(events);
+			events.sort();
 
 			for (let event of events) {
-				let eventFetcher = new EventFetcher();
-				let details = await eventFetcher.fetch({ event: event });
+				await this.log(`Updating event ${event}...`);
 
-				if (!details) {
-					continue;
-				}
+				try {
+					let eventFetcher = new EventFetcher();
+					let details = await eventFetcher.fetch({ event: event });
 
-				if (details.matches) {
-					for (let match of details.matches) {
-						let sql = ``;
-						sql += `UPDATE matches SET `;
-						sql += `round = ?, score = ?, duration = ? `;
-						sql += `WHERE id = ?`;
+					if (details && details.matches) {
+						for (let match of details.matches) {
+							let sql = ``;
+							sql += `UPDATE matches SET `;
+							sql += `round = ?, score = ?, duration = ? `;
+							sql += `WHERE id = ?`;
 
-						// Make sure the winner and loser are updated
-						players[match.winner.player] = match.winner.player;
-						players[match.loser.player] = match.loser.player;
+							// Make sure the winner and loser are updated
+							players[match.winner.player] = match.winner.player;
+							players[match.loser.player] = match.loser.player;
 
-						let format = [match.round, match.score, match.duration, match.match];
+							let format = [match.round, match.score, match.duration, match.match];
 
-						await this.mysql.query({ sql, format });
+							await this.mysql.query({ sql, format });
+						}
 					}
+				} catch (error) {
+					await this.log(error.message);
 				}
 			}
 		}
@@ -209,35 +213,42 @@ class Import extends Command {
 		// Get details about all involved players
 		if (true) {
 			players = Object.keys(players);
+			players.sort();
 
 			for (let player of players) {
-				let playerFetcher = new PlayerFetcher();
-				let details = await playerFetcher.fetch({ player: player });
+				await this.log(`Updating player ${player}...`);
 
-				await this.mysql.upsert('players', {
-					id: details.player,
-					name: details.name,
-					country: details.country,
-					age: details.age,
-					pro: details.pro,
-					active: details.active,
-					height: details.height,
-					weight: details.weight,
+				try {
+					let playerFetcher = new PlayerFetcher();
+					let details = await playerFetcher.fetch({ player: player });
 
-					career_titles: details.titles.career,
-					ytd_titles: details.titles.ytd,
+					await this.mysql.upsert('players', {
+						id: details.player,
+						name: details.name,
+						country: details.country,
+						age: details.age,
+						pro: details.pro,
+						active: details.active,
+						height: details.height,
+						weight: details.weight,
 
-					career_wins: details.matches.career.wins,
-					career_losses: details.matches.career.losses,
+						career_titles: details.titles.career,
+						ytd_titles: details.titles.ytd,
 
-					ytd_wins: details.matches.ytd.wins,
-					ytd_losses: details.matches.ytd.losses,
+						career_wins: details.matches.career.wins,
+						career_losses: details.matches.career.losses,
 
-					url: details.url,
-					rank: details.ranking.current.rank,
-					highest_rank: details.ranking.highest.rank,
-					highest_rank_date: details.ranking.highest.rank ? details.ranking.highest.date : null
-				});
+						ytd_wins: details.matches.ytd.wins,
+						ytd_losses: details.matches.ytd.losses,
+
+						url: details.url,
+						rank: details.ranking.current.rank,
+						highest_rank: details.ranking.highest.rank,
+						highest_rank_date: details.ranking.highest.rank ? details.ranking.highest.date : null
+					});
+				} catch (error) {
+					await this.log(error.message);
+				}
 			}
 		}
 	}
@@ -249,18 +260,15 @@ class Import extends Command {
 				this.mysql.connect();
 				let probe = new Probe();
 
-				await this.log(`Starting import...`);
-
 				if (argv.clean) {
 					await this.mysql.query('TRUNCATE TABLE log');
 					await this.mysql.query('TRUNCATE TABLE events');
 					await this.mysql.query('TRUNCATE TABLE players');
 					await this.mysql.query('TRUNCATE TABLE matches');
-					await this.log('Cleaned events table.');
 				}
 
+				await this.log(`Starting import...`);
 				await this.import();
-
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
 				await this.log(error.message);
