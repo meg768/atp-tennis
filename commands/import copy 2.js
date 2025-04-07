@@ -62,9 +62,41 @@ class Import extends Command {
 			return;
 		}
 
-		players[player] = player;
-
+		// Important - this deletes all variables before recursion
 		if (true) {
+			let playerFetcher = new PlayerFetcher();
+
+			if (true) {
+				let info = await playerFetcher.fetch({ player: player });
+
+				this.log(`Adding player ${player} - ${info.name}`);
+
+				await this.mysql.upsert('players', {
+					id: player,
+					name: info.name,
+					country: info.country,
+					age: info.age,
+					height: info.height,
+					weight: info.weight,
+
+					career_titles: info.titles.career,
+					ytd_titles: info.titles.ytd,
+
+					career_wins: info.matches.career.wins,
+					career_losses: info.matches.career.losses,
+
+					ytd_wins: info.matches.ytd.wins,
+					ytd_losses: info.matches.ytd.losses,
+
+					url: info.url,
+					rank: info.ranking.current.rank,
+					highest_rank: info.ranking.highest.rank,
+					highest_rank_date: info.ranking.highest.rank ? info.ranking.highest.date : null
+				});
+
+				players[player] = player;
+			}
+
 			let activityFetcher = new ActivityFetcher();
 			let activity = await activityFetcher.fetch({ player: player, since: this.argv.since });
 
@@ -164,31 +196,31 @@ class Import extends Command {
 
 	async import() {
 		let rankingsFetcher = new RankingsFetcher();
+		let activityFetcher = new ActivityFetcher();
+		let eventFetcher = new EventFetcher();
+
 		let rankings = await rankingsFetcher.fetch({ top: this.argv.top });
 
 		let events = {};
 		let players = {};
-		let matches = {};
 
 		for (let player of rankings.players) {
-			await this.importPlayer({ player: player.player, players: players, events: events, matches: matches });
+			await this.importPlayer({ player: player.player, players: players, events: events });
 		}
 
-		// Get details about all involved players
+		players = Object.keys(players);
+
 		if (true) {
-			players = Object.keys(players);
+			let playerFetcher = new PlayerFetcher();
 
 			for (let player of players) {
-				let playerFetcher = new PlayerFetcher();
 				let details = await playerFetcher.fetch({ player: player });
 
 				await this.mysql.upsert('players', {
-					id: details.player,
+					id: player,
 					name: details.name,
 					country: details.country,
 					age: details.age,
-					pro: details.pro,
-					active: details.active,
 					height: details.height,
 					weight: details.weight,
 
@@ -209,32 +241,42 @@ class Import extends Command {
 			}
 		}
 
-		// Complement matches with duraction and scores
-		if (true) {
-			// Convert map to array of events ID:s
-			events = Object.keys(events);
+		// Convert map to array of events ID:s
+		events = Object.keys(events);
 
-			for (let event of events) {
-				let eventFetcher = new EventFetcher();
-				let details = await eventFetcher.fetch({ event: event });
+		for (let event of events) {
+			let eventFetcher = new EventFetcher();
+			let details = await eventFetcher.fetch({ event: event });
 
-				if (!details) {
-					continue;
-				}
+			if (!details) {
+				continue;
+			}
 
-				if (details.matches) {
-					for (let match of details.matches) {
-						let sql = ``;
-						sql += `UPDATE matches SET `;
-						sql += `round = ?, score = ?, duration = ? `;
-						sql += `WHERE id = ?`;
+			if (details.matches) {
+				for (let match of details.matches) {
+					let sql = ``;
+					sql += `UPDATE matches SET `;
+					sql += `round = ?, score = ?, duration = ? `;
+					sql += `WHERE id = ?`;
 
-						let format = [match.round, match.score, match.duration, match.match];
+					let format = [match.round, match.score, match.duration, match.match];
 
-						await this.mysql.query({ sql, format });
-					}
+					await this.mysql.query({ sql, format });
 				}
 			}
+		}
+
+		// Make final changes to type of event. Want this in readable text
+		if (false) {
+			let sql = ``;
+			sql += `UPDATE events SET type = 'Grand Slam' WHERE type = 'GS'; `;
+			sql += `UPDATE events SET type = 'Masters' WHERE type = '1000'; `;
+			sql += `UPDATE events SET type = 'ATP-500' WHERE type = '500'; `;
+			sql += `UPDATE events SET type = 'ATP-250' WHERE type = '250'; `;
+			sql += `UPDATE events SET type = 'Davis Cup' WHERE type = 'DC'; `;
+			sql += `UPDATE events SET type = 'Rod Lavel Cup' WHERE type = 'LVR'; `;
+			sql += `UPDATE events SET type = 'United Cup' WHERE type = 'UC'; `;
+			await this.mysql.query(sql);
 		}
 	}
 
