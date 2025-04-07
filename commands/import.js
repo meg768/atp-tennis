@@ -154,7 +154,6 @@ class Import extends Command {
 
 				events[event.event] = event;
 
-				this.log(`Adding event ${event.event} - ${event.name}`);
 
 				await this.mysql.upsert('events', {
 					id: event.event,
@@ -173,7 +172,6 @@ class Import extends Command {
 
 					matches[match.match] = match;
 
-					this.log(`Adding match ${match.match}`);
 
 					await this.mysql.upsert('matches', {
 						id: match.match,
