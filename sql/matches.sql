@@ -1,11 +1,14 @@
+DROP VIEW IF EXISTS `flat`;
+
+CREATE VIEW `flat` AS
 SELECT
-    matches.id,
-    C.date,
+    matches.id AS id,
+    C.date AS event_date,
     C.id AS event_id,
-    C.name AS event,
-    C.location,
-    C.type,
-    C.surface,
+    C.name AS event_name,
+    C.location AS event_location,
+    C.type AS event_type,
+    C.surface AS event_surface,
     matches.round,
     A.name AS winner,
     B.name AS loser,
@@ -21,4 +24,4 @@ FROM
     LEFT JOIN players AS B ON matches.loser = B.id
     LEFT JOIN events AS C ON matches.event = C.id
 ORDER BY
-    C.date
+    event_date
