@@ -27,7 +27,7 @@ class Import extends Command {
 			alias: 's',
 			describe: 'Import matches since this year',
 			type: 'number',
-			default: 2000
+			default: year - 10
 		});
 
 		args.option('top', {
