@@ -77,7 +77,7 @@ class Import extends Command {
 					continue;
 				}
 
-				events[event.event] = true;
+				events[event.event] = event;
 
 				// Skip Challenger and FU and change type to readable
 				switch (event.type) {
@@ -138,7 +138,7 @@ class Import extends Command {
 						continue;
 					}
 
-					matches[match.match] = true;
+					matches[match.match] = match;
 
 					await this.mysql.upsert('matches', {
 						id: match.match,
@@ -182,7 +182,6 @@ class Import extends Command {
 			events.sort();
 
 			for (let event of events) {
-				await this.log(`Updating event ${event}...`);
 
 				try {
 					let eventFetcher = new EventFetcher();
@@ -190,6 +189,8 @@ class Import extends Command {
 
 					if (details && details.matches) {
 						for (let match of details.matches) {
+							console.log(`Updating match ${match.match} from event ${event}...`);
+
 							let sql = ``;
 							sql += `UPDATE matches SET `;
 							sql += `round = ?, score = ?, duration = ? `;
@@ -216,7 +217,7 @@ class Import extends Command {
 			players.sort();
 
 			for (let player of players) {
-				await this.log(`Updating player ${player}...`);
+				console.log(`Updating player ${player}...`);
 
 				try {
 					let playerFetcher = new PlayerFetcher();
