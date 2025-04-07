@@ -257,6 +257,7 @@ class Import extends Command {
 				await this.log(`Starting import...`);
 
 				if (argv.clean) {
+					await this.mysql.query('TRUNCATE TABLE logs');
 					await this.mysql.query('TRUNCATE TABLE events');
 					await this.mysql.query('TRUNCATE TABLE players');
 					await this.mysql.query('TRUNCATE TABLE matches');
