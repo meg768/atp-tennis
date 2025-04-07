@@ -174,6 +174,38 @@ class Import extends Command {
 			await this.importPlayer({ player: player.player, players: players, events: events, matches: matches });
 		}
 
+		// Complement matches with duraction and scores
+		if (true) {
+			// Convert map to array of events ID:s
+			events = Object.keys(events);
+
+			for (let event of events) {
+				let eventFetcher = new EventFetcher();
+				let details = await eventFetcher.fetch({ event: event });
+
+				if (!details) {
+					continue;
+				}
+
+				if (details.matches) {
+					for (let match of details.matches) {
+						let sql = ``;
+						sql += `UPDATE matches SET `;
+						sql += `round = ?, score = ?, duration = ? `;
+						sql += `WHERE id = ?`;
+
+						// Make sure the winner and loser are updated
+						players[match.winner.player] = match.winner.player;
+						players[match.loser.player] = match.loser.player;
+
+						let format = [match.round, match.score, match.duration, match.match];
+
+						await this.mysql.query({ sql, format });
+					}
+				}
+			}
+		}
+
 		// Get details about all involved players
 		if (true) {
 			players = Object.keys(players);
@@ -206,34 +238,6 @@ class Import extends Command {
 					highest_rank: details.ranking.highest.rank,
 					highest_rank_date: details.ranking.highest.rank ? details.ranking.highest.date : null
 				});
-			}
-		}
-
-		// Complement matches with duraction and scores
-		if (true) {
-			// Convert map to array of events ID:s
-			events = Object.keys(events);
-
-			for (let event of events) {
-				let eventFetcher = new EventFetcher();
-				let details = await eventFetcher.fetch({ event: event });
-
-				if (!details) {
-					continue;
-				}
-
-				if (details.matches) {
-					for (let match of details.matches) {
-						let sql = ``;
-						sql += `UPDATE matches SET `;
-						sql += `round = ?, score = ?, duration = ? `;
-						sql += `WHERE id = ?`;
-
-						let format = [match.round, match.score, match.duration, match.match];
-
-						await this.mysql.query({ sql, format });
-					}
-				}
 			}
 		}
 	}
