@@ -174,8 +174,8 @@ class Import extends Command {
 						round: match.round,
 						winner: match.winner.player,
 						loser: match.loser.player,
-						lrk: match.loser.rank,
-						wrk: match.winner.rank
+						lrk: match.loser.rank ? match.loser.rank : null,
+						wrk: match.winner.rank ? match.winner.rank : null
 					});
 
 					if (match.opponent && !opponents.includes(match.opponent)) {
