@@ -4,14 +4,6 @@ class Module {
 		this.delay = 0;
 	}
 
-	clearCache() {
-		this.cache = {};
-	}
-
-	setDelay(ms) {
-		this.delay = ms;
-	}
-
 	async pause() {
 		if (this.delay > 0) {
 			return new Promise((resolve, reject) => {
@@ -21,40 +13,22 @@ class Module {
 	}
 
 	async fetch(url) {
-		try {
-			await this.pause();
-
-			const response = await fetch(url);
-
-			if (!response.ok) {
-				throw new Error(`Response not OK when fetching ${url}: ${response.statusText}`);
-			}
-
-			return await response.json();
-		} catch (error) {
-			throw new Error(`Failed to fetch ${url}: ${error.message}`);
-		}
-	}
-
-	async fetchX(url) {
-		try {
-			let json = this.cache[url];
-
-			if (!json) {
+		for (let tryCount = 0; tryCount < 3; tryCount++) {
+			try {
 				const response = await fetch(url);
 
 				if (!response.ok) {
-					throw new Error(`Response not OK when fetching ${url}: ${response.statusText}`);
+					throw new Error(`Fetch failed`);					
 				}
 
-				json = await response.json();
-				//this.cache[url] = json
+				return await response.json();
+			} catch (error) {
+				await this.pause(30000);
+				continue;
 			}
-
-			return json;
-		} catch (error) {
-			throw new Error(`Failed to fetch ${url}: ${error.message}`);
 		}
+
+		throw new Error(`Failed to fetch ${url}`);
 	}
 }
 
