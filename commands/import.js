@@ -185,6 +185,10 @@ class Import extends Command {
 						// Update match data
 						let entry = matches[match.match] || {};
 
+						if (match.match == '2025-403-M0NI-FB98') {
+							console.log(entry);
+						}
+
 						entry.id = match.match;
 						entry.event = eventID;
 						entry.round = match.round;
@@ -195,7 +199,7 @@ class Import extends Command {
 
 						if (match.match == '2025-403-M0NI-FB98') {
 							console.log(entry);
-							throw new Error ('Upps');
+							throw new Error('Upps');
 						}
 						matches[match.match] = entry;
 
