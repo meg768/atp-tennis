@@ -121,14 +121,13 @@ class Import extends Command {
 
 				events[event.event] = {
 					id: event.event,
-					date:event.date,
+					date: event.date,
 					name: event.name,
 					location: event.location,
-					type:event.type,
-					surface:event.surface,
-					url:event.url
+					type: event.type,
+					surface: event.surface,
+					url: event.url
 				};
-
 
 				for (let match of event.matches) {
 					if (!match || matches[match.match]) {
@@ -145,7 +144,6 @@ class Import extends Command {
 						loser_rank: match.loser.rank ? match.loser.rank : null
 					};
 
-					
 					if (match.opponent && !opponents.includes(match.opponent)) {
 						opponents.push(match.opponent);
 					}
@@ -171,7 +169,6 @@ class Import extends Command {
 			await this.importPlayer({ player: player.player, players: players, events: events, matches: matches });
 		}
 
-
 		// Complement matches with duraction and scores
 		if (true) {
 			await this.log(`Generating events...`);
@@ -181,10 +178,9 @@ class Import extends Command {
 					let eventFetcher = new EventFetcher();
 					let details = await eventFetcher.fetch({ event: eventID });
 
+					console.log(`Updating match ${match.match} from event ${eventID}...`);
 					if (details && details.matches) {
 						for (let match of details.matches) {
-							console.log(`Updating match ${match.match} from event ${eventID}...`);
-
 							// Update match data
 							let entry = matches[match.match] || {};
 
@@ -198,11 +194,9 @@ class Import extends Command {
 
 							matches[match.match] = entry;
 
-							
 							// Make sure the winner and loser are updated
 							players[match.winner.player] = match.winner.player;
 							players[match.loser.player] = match.loser.player;
-
 						}
 					}
 				} catch (error) {
