@@ -138,10 +138,6 @@ class Import extends Command {
 						loser: match.loser.player,
 						loser_rank: match.loser.rank ? match.loser.rank : null
 					};
-					if (match.match == '2025-403-M0NI-FB98') {
-						console.log(match);
-						throw new Error('STOP');
-					}
 
 					if (match.opponent && !opponents.includes(match.opponent)) {
 						opponents.push(match.opponent);
