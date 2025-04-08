@@ -73,8 +73,6 @@ class Import extends Command {
 			}
 
 			for (let event of activity.events) {
-
-
 				// Skip Challenger and FU and change type to readable
 				switch (event.type) {
 					case 'FU': {
@@ -128,7 +126,6 @@ class Import extends Command {
 				};
 
 				for (let match of event.matches) {
-
 					matches[match.match] = {
 						id: match.match,
 						event: event.event,
@@ -169,23 +166,25 @@ class Import extends Command {
 			await this.log(`Gathering event information...`);
 
 			for (let [eventID, event] of Object.entries(events)) {
-
 				let eventFetcher = new EventFetcher();
 				let details = null;
-				
+
 				try {
-					details = await eventFetcher.fetch({ event: eventID })
-				}
-				catch(error) {
+					details = await eventFetcher.fetch({ event: eventID });
+				} catch (error) {
 					await this.log(`${error.message}`);
 					continue;
-				};
+				}
 
 				if (details && details.matches) {
 					for (let match of details.matches) {
 						// Update match data
 						let entry = matches[match.match] || {};
 
+						if (match.match == '2025-404-M0NI-EA24') {
+							console.log(entry);
+							throw new Error('STOP');
+						}
 						entry.id = match.match;
 						entry.event = eventID;
 						entry.round = match.round;
@@ -203,7 +202,6 @@ class Import extends Command {
 				}
 			}
 		}
-
 
 		if (true) {
 			await this.log(`Generating events...`);
