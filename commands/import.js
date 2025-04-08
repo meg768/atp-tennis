@@ -72,14 +72,14 @@ class Import extends Command {
 				return;
 			}
 
-			if (player == 'FB98') {
-				console.log(activity.events);
-				throw new Error('XXX');
-			}
-
 			for (let event of activity.events) {
 				if (events[event.event]) {
 					continue;
+				}
+
+				if (player == 'FB98') {
+					console.log(activity.events.matches);
+					throw new Error('XXX');
 				}
 
 				// Skip Challenger and FU and change type to readable
