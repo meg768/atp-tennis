@@ -178,9 +178,9 @@ class Import extends Command {
 					let eventFetcher = new EventFetcher();
 					let details = await eventFetcher.fetch({ event: eventID });
 
-					console.log(`Updating match ${match.match} from event ${eventID}...`);
 					if (details && details.matches) {
 						for (let match of details.matches) {
+							console.log(`Updating match ${match.match} from event ${eventID}...`);
 							// Update match data
 							let entry = matches[match.match] || {};
 
