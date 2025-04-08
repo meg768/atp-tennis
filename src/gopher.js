@@ -17,13 +17,15 @@ class Module {
 			try {
 				const response = await fetch(url);
 
+				throw new Error ('XXX');
 				if (!response.ok) {
-					throw new Error(`Fetch failed`);					
+					throw new Error(`Failed to fetch ${url}`);
 				}
 
 				return await response.json();
 			} catch (error) {
-				await this.pause(30000);
+				console.log(error.message);
+				await this.pause(5000);
 				continue;
 			}
 		}
