@@ -74,14 +74,6 @@ class Import extends Command {
 
 			for (let event of activity.events) {
 
-				if (events[event.event]) {
-					continue;
-				}
-				if (player == 'FB98') {
-					console.log(event.matches);
-					throw new Error('XXX');
-				}
-
 
 				// Skip Challenger and FU and change type to readable
 				switch (event.type) {
@@ -136,9 +128,6 @@ class Import extends Command {
 				};
 
 				for (let match of event.matches) {
-					if (!match || matches[match.match]) {
-						continue;
-					}
 
 					matches[match.match] = {
 						id: match.match,
