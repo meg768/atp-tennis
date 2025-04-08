@@ -174,33 +174,29 @@ class Import extends Command {
 			await this.log(`Generating events...`);
 
 			for (let [eventID, event] of Object.entries(events)) {
-				try {
-					let eventFetcher = new EventFetcher();
-					let details = await eventFetcher.fetch({ event: eventID });
+				let eventFetcher = new EventFetcher();
+				let details = await eventFetcher.fetch({ event: eventID });
 
-					if (details && details.matches) {
-						for (let match of details.matches) {
-							console.log(`Updating match ${match.match} from event ${eventID}...`);
-							// Update match data
-							let entry = matches[match.match] || {};
+				if (details && details.matches) {
+					for (let match of details.matches) {
+						console.log(`Updating match ${match.match} from event ${eventID}...`);
+						// Update match data
+						let entry = matches[match.match] || {};
 
-							entry.id = match.match;
-							entry.event = eventID;
-							entry.round = match.round;
-							entry.winner = match.winner.player;
-							entry.loser = match.loser.player;
-							entry.score = match.score;
-							entry.duration = match.duration;
+						entry.id = match.match;
+						entry.event = eventID;
+						entry.round = match.round;
+						entry.winner = match.winner.player;
+						entry.loser = match.loser.player;
+						entry.score = match.score;
+						entry.duration = match.duration;
 
-							matches[match.match] = entry;
+						matches[match.match] = entry;
 
-							// Make sure the winner and loser are updated
-							players[match.winner.player] = match.winner.player;
-							players[match.loser.player] = match.loser.player;
-						}
+						// Make sure the winner and loser are updated
+						players[match.winner.player] = match.winner.player;
+						players[match.loser.player] = match.loser.player;
 					}
-				} catch (error) {
-					await this.log(error.message);
 				}
 			}
 		}
