@@ -184,10 +184,6 @@ class Import extends Command {
 						// Update match data
 						let entry = matches[match.match] || {};
 
-						if (match.match == '2025-404-M0NI-EA24') {
-							console.log(entry);
-							throw new Error('STOP');
-						}
 						entry.id = match.match;
 						entry.event = eventID;
 						entry.round = match.round;
