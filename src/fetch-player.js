@@ -15,6 +15,10 @@ class Module extends Fetcher {
 		let url = `https://www.atptour.com/en/-/www/players/hero/${player}`;
 		let response = await this.fetchURL(url);
 
+		if (!response) {
+			return null;
+		}
+		
 		let result = {};
 
 		result.player = player.toUpperCase();

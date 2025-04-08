@@ -68,6 +68,9 @@ class Import extends Command {
 			let activityFetcher = new ActivityFetcher();
 			let activity = await activityFetcher.fetch({ player: player, since: this.argv.since });
 
+			if (!activity || !activity.events) {
+				return;
+			}
 
 			for (let event of activity.events) {
 				// Skip Challenger and FU and change type to readable
