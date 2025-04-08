@@ -184,6 +184,7 @@ class Import extends Command {
 						let entry = matches[match.match]; //|| {};
 
 						if (!entry) {
+							entry = {};
 							entry.id = match.match;
 							entry.event = eventID;
 							entry.round = match.round;
