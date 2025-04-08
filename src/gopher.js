@@ -14,7 +14,6 @@ class Module {
 
 	async pause() {
 		if (this.delay > 0) {
-			console.log('DELAYING');
 			return new Promise((resolve, reject) => {
 				setTimeout(() => resolve(), this.delay);
 			});
