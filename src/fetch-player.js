@@ -18,7 +18,7 @@ class Module extends Fetcher {
 		let result = {};
 
 		result.player = player.toUpperCase();
-		result.name = `${response.FirstName} ${response.LastName}`;
+		result.name = `${response.FirstName ? response.FirstName + ' ' : ''}${response.LastName}`;
 		result.country = response.NatlId;
 		result.age = response.Age;
 		result.height = response.HeightCm;
