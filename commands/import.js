@@ -183,10 +183,11 @@ class Import extends Command {
 
 					if (details && details.matches) {
 						for (let match of details.matches) {
-							console.log(`Updating match ${match.match} from event ${event.event}...`);
+							console.log(`Updating match ${match.match} from event ${eventID}...`);
 
 							// Update match data
 							let entry = matches[match.match];
+							console.log(entry)
 							entry.round = match.round;
 							entry.score = match.score;
 							entry.duration = match.duration;
