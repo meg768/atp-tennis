@@ -65,9 +65,6 @@ class Import extends Command {
 		players[player] = true;
 
 		if (true) {
-			if (player == 'M0NI' || player == 'EA24') {
-				console.log(player);
-			}
 			let activityFetcher = new ActivityFetcher();
 			let activity = await activityFetcher.fetch({ player: player, since: this.argv.since });
 
