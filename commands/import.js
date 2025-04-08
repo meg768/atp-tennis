@@ -186,11 +186,17 @@ class Import extends Command {
 							console.log(`Updating match ${match.match} from event ${eventID}...`);
 
 							// Update match data
-							let entry = matches[match.match];
-							console.log(entry)
+							let entry = {...matches[match.match]};
+
+							entry.id = match.match;
+							entry.event = match.event;
 							entry.round = match.round;
+							entry.winner = match.winner.player;
+							entry.loser = match.loser.player;
 							entry.score = match.score;
 							entry.duration = match.duration;
+
+							matches[match.match] = entry;
 
 							// Make sure the winner and loser are updated
 							players[match.winner.player] = match.winner.player;
