@@ -126,6 +126,10 @@ class Import extends Command {
 				};
 
 				for (let match of event.matches) {
+
+					if (match.match == '2025-404-M0NI-EA24') {
+						console.log(match);
+					}
 					matches[match.match] = {
 						id: match.match,
 						event: event.event,
@@ -227,7 +231,6 @@ class Import extends Command {
 			await this.log(`Generating players...`);
 
 			for (let player of players) {
-				console.log(`Updating player ${player}...`);
 
 				try {
 					let playerFetcher = new PlayerFetcher();
