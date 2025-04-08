@@ -173,8 +173,8 @@ class Import extends Command {
 
 		if (true) {
 			await this.log(`Generating matches...`);
-			console.log(!matches ? 'ARGHH' : 'OK');		
-			for (let [matchID, match] in Object.entries(matches)) {
+
+			for (let [matchID, match] of Object.entries(matches)) {
 				console.log(match);
 				await this.mysql.upsert('matches', match);
 			}
@@ -184,7 +184,7 @@ class Import extends Command {
 		if (true) {
 			await this.log(`Generating events...`);
 
-			for (let [eventID, event] in Object.entries(events)) {
+			for (let [eventID, event] of Object.entries(events)) {
 				try {
 					let eventFetcher = new EventFetcher();
 					let details = await eventFetcher.fetch({ event: eventID });
@@ -192,11 +192,6 @@ class Import extends Command {
 					if (details && details.matches) {
 						for (let match of details.matches) {
 							console.log(`Updating match ${match.match} from event ${event}...`);
-
-							let sql = ``;
-							sql += `UPDATE matches SET `;
-							sql += `round = ?, score = ?, duration = ? `;
-							sql += `WHERE id = ?`;
 
 							event.round = match.round;
 							event.score = match.score;
