@@ -104,7 +104,6 @@ class Import extends Command {
 					case '250': {
 						event.type = 'ATP-250';
 						break;
-						x;
 					}
 					case 'LVR': {
 						event.type = 'Rod Laver Cup';
@@ -132,7 +131,7 @@ class Import extends Command {
 
 
 				for (let match of event.matches) {
-					if (matches[match.match]) {
+					if (!match || matches[match.match]) {
 						continue;
 					}
 
