@@ -74,12 +74,12 @@ class Import extends Command {
 
 			for (let event of activity.events) {
 
+				if (events[event.event]) {
+					continue;
+				}
 				if (player == 'FB98') {
 					console.log(event.matches);
 					throw new Error('XXX');
-				}
-				if (events[event.event]) {
-					continue;
 				}
 
 
