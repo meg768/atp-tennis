@@ -125,15 +125,9 @@ class Import extends Command {
 					url: event.url
 				};
 
-				if (event.event == '2025-404') {
-					//console.log(event.matches.length);
-				}
 
 				for (let match of event.matches) {
 
-					if (match.match == '2025-404-M0NI-EA24') {
-						console.log(match);
-					}
 					matches[match.match] = {
 						id: match.match,
 						event: event.event,
@@ -150,6 +144,7 @@ class Import extends Command {
 				}
 			}
 		}
+
 		if (opponents.length > 0) {
 			for (let opponent of opponents) {
 				await this.importPlayer({ player: opponent, players: players, events: events, matches: matches });
