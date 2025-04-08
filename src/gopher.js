@@ -12,7 +12,6 @@ class Module {
 			try {
 				const response = await fetch(url);
 
-				throw new Error('XXX');
 				if (!response.ok) {
 					throw new Error(`Failed to fetch ${url}`);
 				}
@@ -21,7 +20,7 @@ class Module {
 			} catch (error) {
 				console.log(error.message);
 				console.log('Retrying...');
-				await this.pause(5000);
+				await this.pause(30000);
 				continue;
 			}
 		}
