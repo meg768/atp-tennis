@@ -1,15 +1,10 @@
 class Module {
-	constructor() {
-		this.cache = {};
-		this.delay = 0;
-	}
+	constructor() {}
 
-	async pause() {
-		if (this.delay > 0) {
-			return new Promise((resolve, reject) => {
-				setTimeout(() => resolve(), this.delay);
-			});
-		}
+	async pause(delay) {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => resolve(), delay);
+		});
 	}
 
 	async fetch(url) {
@@ -17,7 +12,7 @@ class Module {
 			try {
 				const response = await fetch(url);
 
-				throw new Error ('XXX');
+				throw new Error('XXX');
 				if (!response.ok) {
 					throw new Error(`Failed to fetch ${url}`);
 				}
@@ -26,7 +21,7 @@ class Module {
 			} catch (error) {
 				console.log(error.message);
 				console.log('Retrying...');
-				await this.pause(50000);
+				await this.pause(1000);
 				continue;
 			}
 		}
