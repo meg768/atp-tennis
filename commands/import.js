@@ -173,7 +173,7 @@ class Import extends Command {
 
 		if (true) {
 			await this.log(`Generating matches...`);
-			console.log(matches);
+			console.log(!matches ? 'ARGHH' : 'OK');		
 			for (let [matchID, match] in Object.entries(matches)) {
 				console.log(match);
 				await this.mysql.upsert('matches', match);
