@@ -17,6 +17,7 @@ class MySQL {
 	}
 
 	async pause() {
+		console.log('DELAYING');
 		return new Promise((resolve, reject) => {
 			setTimeout(() => resolve(), this.delay);
 		});
