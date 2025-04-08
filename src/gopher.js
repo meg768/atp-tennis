@@ -1,14 +1,30 @@
 class Module {
 	constructor() {
 		this.cache = {};
+		this.delay = 0;
 	}
 
 	clearCache() {
 		this.cache = {};
 	}
 
+	setDelay(ms) {
+		this.delay = ms;
+	}
+
+	async pause() {
+		if (this.delay > 0) {
+			console.log('DELAYING');
+			return new Promise((resolve, reject) => {
+				setTimeout(() => resolve(), this.delay);
+			});
+		}
+	}
+
 	async fetch(url) {
 		try {
+			await this.pause();
+
 			const response = await fetch(url);
 
 			if (!response.ok) {

@@ -5,23 +5,12 @@ class MySQL {
 	constructor(options) {
 		let log = { options };
 		this.connection = undefined;
-		this.delay = 0;
 	}
 
 	log() {
 		console.log.apply(this, arguments);
 	}
 
-	setDelay(ms) {
-		this.delay = ms;
-	}
-
-	async pause() {
-		console.log('DELAYING');
-		return new Promise((resolve, reject) => {
-			setTimeout(() => resolve(), this.delay);
-		});
-	}
 
 	connect() {
 		this.log(`Connecting to database '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
@@ -66,8 +55,6 @@ class MySQL {
 
 	async query(params) {
 
-		await this.pause();
-		
 		let promise = new Promise((resolve, reject) => {
 			try {
 				if (isString(params)) {

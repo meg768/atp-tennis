@@ -5,6 +5,7 @@ class Module {
 		this.log = options?.log || console.log;
 	}
 
+
 	async fetchURL(url) {
 		this.log(`Fetching URL ${url}...`);
 		return await Gopher.fetch(url);

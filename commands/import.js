@@ -270,8 +270,10 @@ class Import extends Command {
 		this.argv = argv;
 		let work = async () => {
 			try {
+				const Gopher = require('./gopher');
+				Gopher.setDelay(500);
+
 				this.mysql.connect();
-				this.mysql.setDelay(1000);
 				let probe = new Probe();
 
 				if (argv.clean) {
