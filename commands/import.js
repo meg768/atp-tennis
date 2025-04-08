@@ -76,10 +76,10 @@ class Import extends Command {
 				// Skip Challenger and FU and change type to readable
 				switch (event.type) {
 					case 'FU': {
-						return;
+						continue;
 					}
 					case 'CH': {
-						return;
+						continue;
 					}
 					case 'GS': {
 						event.type = 'Grand Slam';
