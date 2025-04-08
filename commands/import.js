@@ -185,17 +185,18 @@ class Import extends Command {
 
 						if (!entry) {
 							entry = {};
-							entry.id = match.match;
-							entry.event = eventID;
 						}
-						
+
+						entry.id = match.match;
+						entry.event = eventID;
 						entry.round = match.round;
 						entry.winner = match.winner.player;
 						entry.loser = match.loser.player;
 						entry.score = match.score;
 						entry.duration = match.duration;
-						
+
 						matches[match.match] = entry;
+						console.log(entry);
 
 						// Make sure the winner and loser are updated
 						players[match.winner.player] = match.winner.player;
