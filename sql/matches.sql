@@ -1,6 +1,6 @@
-DROP VIEW IF EXISTS `flat`;
+DROP VIEW IF EXISTS `flatly`;
 
-CREATE VIEW `flat` AS
+CREATE VIEW `flatly` AS
 SELECT
     matches.id AS id,
     C.date AS event_date,
