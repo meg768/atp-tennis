@@ -181,7 +181,7 @@ class Import extends Command {
 					for (let match of details.matches) {
 						console.log(`Updating match ${match.match} from event ${eventID}...`);
 						// Update match data
-						let entry = matches[match.match] || {};
+						let entry = matches[match.match] ; //|| {};
 
 						entry.id = match.match;
 						entry.event = eventID;
