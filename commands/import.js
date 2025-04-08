@@ -174,6 +174,10 @@ class Import extends Command {
 			await this.log(`Generating events...`);
 
 			for (let [eventID, event] of Object.entries(events)) {
+
+				// Save event
+				await this.mysql.upsert('events', event);
+
 				let eventFetcher = new EventFetcher();
 				let details = await eventFetcher.fetch({ event: eventID });
 
