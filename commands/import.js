@@ -195,7 +195,7 @@ class Import extends Command {
 						entry.score = match.score;
 						entry.duration = match.duration;
 
-						matches[match.match] = entry;
+						//matches[match.match] = entry;
 						console.log(entry);
 
 						// Make sure the winner and loser are updated
