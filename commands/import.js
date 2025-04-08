@@ -186,8 +186,7 @@ class Import extends Command {
 							console.log(`Updating match ${match.match} from event ${eventID}...`);
 
 							// Update match data
-							/*
-							let entry = {...matches[match.match]};
+							let entry = matches[match.match] || {};
 
 							entry.id = match.match;
 							entry.event = eventID;
@@ -198,8 +197,8 @@ class Import extends Command {
 							entry.duration = match.duration;
 
 							matches[match.match] = entry;
-							*/
 
+							
 							// Make sure the winner and loser are updated
 							players[match.winner.player] = match.winner.player;
 							players[match.loser.player] = match.loser.player;
