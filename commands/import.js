@@ -20,14 +20,14 @@ class Import extends Command {
 			alias: 'l',
 			describe: 'Run again after specified number of days',
 			type: 'number',
-			default: undefined
+			default: 1
 		});
 
 		args.option('since', {
 			alias: 's',
 			describe: 'Import matches since this year',
 			type: 'number',
-			default: year - 10
+			default: year
 		});
 
 		args.option('top', {
