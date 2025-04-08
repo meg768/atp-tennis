@@ -174,7 +174,6 @@ class Import extends Command {
 			await this.log(`Generating events...`);
 
 			for (let [eventID, event] of Object.entries(events)) {
-
 				// Save event
 				await this.mysql.upsert('events', event);
 
@@ -183,7 +182,6 @@ class Import extends Command {
 
 				if (details && details.matches) {
 					for (let match of details.matches) {
-						console.log(`Updating match ${match.match} from event ${eventID}...`);
 						// Update match data
 						let entry = matches[match.match] || {};
 
@@ -195,6 +193,9 @@ class Import extends Command {
 						entry.score = match.score;
 						entry.duration = match.duration;
 
+						if (match.match == '2025-403-M0NI-FB98') {
+							console.log(entry);
+						}
 						matches[match.match] = entry;
 
 						// Make sure the winner and loser are updated
@@ -209,7 +210,6 @@ class Import extends Command {
 			await this.log(`Generating matches...`);
 
 			for (let [matchID, match] of Object.entries(matches)) {
-				console.log(match);
 				await this.mysql.upsert('matches', match);
 			}
 		}
