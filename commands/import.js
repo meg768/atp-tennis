@@ -141,7 +141,7 @@ class Import extends Command {
 						event: event.event,
 						round: match.round,
 						winner: match.winner.player,
-						winner_rank: match.winner.rank ? match.winner.rank : null
+						winner_rank: match.winner.rank ? match.winner.rank : null,
 						loser: match.loser.player,
 						loser_rank: match.loser.rank ? match.loser.rank : null
 					};
