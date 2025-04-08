@@ -145,8 +145,8 @@ class Import extends Command {
 						loser: match.loser.player,
 						loser_rank: match.loser.rank ? match.loser.rank : null
 					};
-					console.log(matches[match.match]);
 
+					
 					if (match.opponent && !opponents.includes(match.opponent)) {
 						opponents.push(match.opponent);
 					}
@@ -174,7 +174,7 @@ class Import extends Command {
 
 		if (true) {
 			await this.log(`Generating matches...`);
-			for (let [matchID, match] in matches) {
+			for (let [matchID, match] in Object.entries(matches)) {
 				console.log(match);
 				await this.mysql.upsert('matches', match);
 			}
