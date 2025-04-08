@@ -145,6 +145,7 @@ class Import extends Command {
 						loser: match.loser.player,
 						loser_rank: match.loser.rank ? match.loser.rank : null
 					};
+					console.log(matches[match.match]);
 
 					if (match.opponent && !opponents.includes(match.opponent)) {
 						opponents.push(match.opponent);
