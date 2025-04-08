@@ -171,7 +171,15 @@ class Import extends Command {
 			for (let [eventID, event] of Object.entries(events)) {
 
 				let eventFetcher = new EventFetcher();
-				let details = await eventFetcher.fetch({ event: eventID });
+				let details = null;
+				
+				try {
+					details = await eventFetcher.fetch({ event: eventID })
+				}
+				catch(error) {
+					await this.log(`${error.message}`);
+					continue;
+				};
 
 				if (details && details.matches) {
 					for (let match of details.matches) {
