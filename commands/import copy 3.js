@@ -77,6 +77,8 @@ class Import extends Command {
 					continue;
 				}
 
+				events[event.event] = event;
+
 				// Skip Challenger and FU and change type to readable
 				switch (event.type) {
 					case 'FU': {
@@ -120,31 +122,33 @@ class Import extends Command {
 					}
 				}
 
-				events[event.event] = {
+
+				await this.mysql.upsert('events', {
 					id: event.event,
-					date:event.date,
 					name: event.name,
 					location: event.location,
-					type:event.type,
-					surface:event.surface,
-					url:event.url
-				};
-
+					type: event.type,
+					surface: event.surface,
+					date: event.date,
+					url: event.url
+				});
 
 				for (let match of event.matches) {
 					if (matches[match.match]) {
 						continue;
 					}
 
-					matches[match.match] = {
+					matches[match.match] = match;
+
+					await this.mysql.upsert('matches', {
 						id: match.match,
 						event: event.event,
 						round: match.round,
 						winner: match.winner.player,
-						winner_rank: match.winner.rank ? match.winner.rank : null
 						loser: match.loser.player,
-						loser_rank: match.loser.rank ? match.loser.rank : null
-					};
+						loser_rank: match.loser.rank ? match.loser.rank : null,
+						winner_rank: match.winner.rank ? match.winner.rank : null
+					});
 
 					if (match.opponent && !opponents.includes(match.opponent)) {
 						opponents.push(match.opponent);
@@ -171,21 +175,17 @@ class Import extends Command {
 			await this.importPlayer({ player: player.player, players: players, events: events, matches: matches });
 		}
 
-		if (true) {
-			await this.log(`Generating matches...`);
-			for (let [matchID, match] in matches) {
-				await this.mysql.upsert('matches', match);
-			}
-		}
-
 		// Complement matches with duraction and scores
 		if (true) {
-			await this.log(`Generating events...`);
+			// Convert map to array of events ID:s
+			events = Object.keys(events);
+			events.sort();
 
-			for (let [eventID, event] in Object.entries(events)) {
+			for (let event of events) {
+
 				try {
 					let eventFetcher = new EventFetcher();
-					let details = await eventFetcher.fetch({ event: eventID });
+					let details = await eventFetcher.fetch({ event: event });
 
 					if (details && details.matches) {
 						for (let match of details.matches) {
@@ -196,15 +196,13 @@ class Import extends Command {
 							sql += `round = ?, score = ?, duration = ? `;
 							sql += `WHERE id = ?`;
 
-							event.round = match.round;
-							event.score = match.score;
-							event.duration = match.duration;
-
 							// Make sure the winner and loser are updated
 							players[match.winner.player] = match.winner.player;
 							players[match.loser.player] = match.loser.player;
 
-							await this.mysql.upsert('events', event);
+							let format = [match.round, match.score, match.duration, match.match];
+
+							await this.mysql.query({ sql, format });
 						}
 					}
 				} catch (error) {
@@ -217,8 +215,6 @@ class Import extends Command {
 		if (true) {
 			players = Object.keys(players);
 			players.sort();
-
-			await this.log(`Generating players...`);
 
 			for (let player of players) {
 				console.log(`Updating player ${player}...`);
@@ -266,6 +262,7 @@ class Import extends Command {
 				let probe = new Probe();
 
 				if (argv.clean) {
+					await this.mysql.query('TRUNCATE TABLE log');
 					await this.mysql.query('TRUNCATE TABLE events');
 					await this.mysql.query('TRUNCATE TABLE players');
 					await this.mysql.query('TRUNCATE TABLE matches');
