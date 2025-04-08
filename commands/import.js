@@ -166,11 +166,9 @@ class Import extends Command {
 
 		// Complement matches with duraction and scores
 		if (true) {
-			await this.log(`Generating events...`);
+			await this.log(`Gathering event information...`);
 
 			for (let [eventID, event] of Object.entries(events)) {
-				// Save event
-				await this.mysql.upsert('events', event);
 
 				let eventFetcher = new EventFetcher();
 				let details = await eventFetcher.fetch({ event: eventID });
@@ -195,6 +193,15 @@ class Import extends Command {
 						players[match.loser.player] = match.loser.player;
 					}
 				}
+			}
+		}
+
+
+		if (true) {
+			await this.log(`Generating events...`);
+
+			for (let [eventID, event] of Object.entries(events)) {
+				await this.mysql.upsert('events', event);
 			}
 		}
 
