@@ -231,6 +231,10 @@ class Import extends Command {
 					let playerFetcher = new PlayerFetcher();
 					let details = await playerFetcher.fetch({ player: player });
 
+					if (!details) {
+						continue;
+					}
+					
 					await this.mysql.upsert('players', {
 						id: details.player,
 						name: details.name,
