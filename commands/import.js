@@ -125,8 +125,8 @@ class Import extends Command {
 					url: event.url
 				};
 
-				if (event.event == '') {
-
+				if (event.event == '2025-404') {
+					console.log(event);
 				}
 
 				for (let match of event.matches) {
