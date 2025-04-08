@@ -126,7 +126,7 @@ class Import extends Command {
 				};
 
 				if (event.event == '2025-404') {
-					console.log(event);
+					console.log(event.matches.length);
 				}
 
 				for (let match of event.matches) {
