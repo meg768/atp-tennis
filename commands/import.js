@@ -65,12 +65,12 @@ class Import extends Command {
 		players[player] = true;
 
 		if (true) {
+			if (player == 'M0NI' || player == 'EA24') {
+				console.log(player);
+			}
 			let activityFetcher = new ActivityFetcher();
 			let activity = await activityFetcher.fetch({ player: player, since: this.argv.since });
 
-			if (!activity || !activity.events) {
-				return;
-			}
 
 			for (let event of activity.events) {
 				// Skip Challenger and FU and change type to readable
@@ -124,6 +124,10 @@ class Import extends Command {
 					surface: event.surface,
 					url: event.url
 				};
+
+				if (event.event == '') {
+
+				}
 
 				for (let match of event.matches) {
 
