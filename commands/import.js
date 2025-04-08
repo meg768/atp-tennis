@@ -195,6 +195,7 @@ class Import extends Command {
 
 						if (match.match == '2025-403-M0NI-FB98') {
 							console.log(entry);
+							throw new Error ('Upps');
 						}
 						matches[match.match] = entry;
 
