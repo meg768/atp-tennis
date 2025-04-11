@@ -33,12 +33,13 @@ class Module extends Fetcher {
 			let stats = await fetchStats({ type: type, field: field });
 
 			if (stats) {
+
 				let high = undefined;
 				let low = undefined;
 
 				for (let [key, value] of Object.entries(stats)) {
-					high = high == undefined ? value : Math.max(value, high);
-					low = low == undefined ? value : Math.min(value, low);
+					high = high == undefined ? value : value > high;
+					low = low == undefined ? value : value < low;
 				}
 
 				for (let [key, value] of Object.entries(stats)) {
@@ -46,8 +47,11 @@ class Module extends Fetcher {
 						result[key] = {};
 					}
 
+					high = high == undefined ? value : value > high;
+					low = low == undefined ? value : value < low;
+
 					result[key].player = key;
-					result[key][type] = Math.round((100 * (value - low)) / (high - low));
+					result[key][type] = value;
 				}
 			}
 		};
