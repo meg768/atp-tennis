@@ -1,31 +1,31 @@
 {
-	"player": "S0N0",
-	"name": "Tristan Schoolkate",
-	"country": "AUS",
-	"age": 24,
-	"height": 183,
-	"weight": 83,
-	"url": "https://www.atptour.com/en/players/tristan-schoolkate/s0n0/overview",
-	"pro": null,
-	"coach": "Andrew Roberts",
+	"player": "SG56",
+	"name": "Daniel Dutra da Silva",
+	"country": "BRA",
+	"age": 36,
+	"height": null,
+	"weight": 73,
+	"url": "https://www.atptour.com/en/players/daniel-dutra-da-silva/sg56/overview",
+	"pro": 2007,
+	"coach": "Luiz Peniza, Patricio Arnold, Caio Martins Claudino",
 	"active": true,
 	"ranking": {
 		"current": {
-			"rank": 119
+			"rank": 312
 		},
 		"highest": {
-			"rank": 119,
-			"date": "2025-04-07T00:00:00"
+			"rank": 207,
+			"date": "2022-08-15T00:00:00"
 		}
 	},
 	"matches": {
 		"career": {
-			"wins": 3,
-			"losses": 7
+			"wins": 0,
+			"losses": 2
 		},
 		"ytd": {
-			"wins": 2,
-			"losses": 3
+			"wins": 0,
+			"losses": 0
 		}
 	},
 	"titles": {
@@ -33,67 +33,72 @@
 		"ytd": 0
 	},
 	"raw": {
-		"LastName": "Schoolkate",
-		"FirstName": "Tristan",
+		"LastName": "Dutra da Silva",
+		"FirstName": "Daniel",
 		"MidInitial": null,
-		"BirthCity": "Perth",
+		"BirthCity": "Parelheiros , Brazil",
 		"Residence": null,
-		"Coach": "Andrew Roberts",
+		"Coach": "Luiz Peniza, Patricio Arnold, Caio Martins Claudino",
 		"Pronunciation": null,
-		"BirthDate": "2001-02-26T00:00:00",
-		"Age": 24,
-		"NatlId": "AUS",
-		"Nationality": "Australia",
-		"HeightIn": 72,
-		"HeightFt": "6'0\"",
-		"HeightCm": 183,
-		"WeightLb": 184,
-		"WeightKg": 83,
+		"BirthDate": "1988-07-05T00:00:00",
+		"Age": 36,
+		"NatlId": "BRA",
+		"Nationality": "Brazil",
+		"HeightIn": 0,
+		"HeightFt": "0'0\"",
+		"HeightCm": 0,
+		"WeightLb": 162,
+		"WeightKg": 73,
 		"PlayHand": {
-			"Id": "R",
-			"Description": "Right-Handed"
+			"Id": "L",
+			"Description": "Left-Handed"
 		},
 		"BackHand": {
 			"Id": "2",
 			"Description": "Two-Handed"
 		},
-		"ProYear": null,
+		"ProYear": 2007,
 		"Active": {
 			"Id": "A",
 			"Description": "Active"
 		},
 		"DblSpecialist": false,
-		"SglRank": 119,
-		"SglHiRank": 119,
-		"SglRankMove": 1,
+		"SglRank": 312,
+		"SglHiRank": 207,
+		"SglRankMove": 5,
 		"SglRankTie": false,
-		"DblRank": 176,
-		"DblHiRank": 120,
-		"DblRankMove": -24,
+		"DblRank": 264,
+		"DblHiRank": 191,
+		"DblRankMove": 1,
 		"DblRankTie": false,
-		"ScRelativeUrlPlayerProfile": "/en/players/tristan-schoolkate/s0n0/overview",
-		"ScRelativeUrlPlayerCountryFlag": "/en/~/media/images/flags/aus.svg",
+		"ScRelativeUrlPlayerProfile": "/en/players/daniel-dutra-da-silva/sg56/overview",
+		"ScRelativeUrlPlayerCountryFlag": "/en/~/media/images/flags/bra.svg",
 		"GladiatorImageUrl": null,
-		"SglCareerWon": 3,
-		"SglCareerLost": 7,
-		"SglYtdWon": 2,
-		"SglYtdLost": 3,
+		"SglCareerWon": 0,
+		"SglCareerLost": 2,
+		"SglYtdWon": 0,
+		"SglYtdLost": 0,
 		"SglCareerTitles": 0,
 		"SglYtdTitles": 0,
-		"SglYtdPrizeFormatted": "$206,985",
-		"CareerPrizeFormatted": "$747,185",
-		"DblCareerWon": 3,
-		"DblCareerLost": 5,
-		"DblYtdWon": 1,
-		"DblYtdLost": 2,
+		"SglYtdPrizeFormatted": "$14,002",
+		"CareerPrizeFormatted": "$385,985",
+		"DblCareerWon": 0,
+		"DblCareerLost": 0,
+		"DblYtdWon": 0,
+		"DblYtdLost": 0,
 		"DblCareerTitles": 0,
 		"DblYtdTitles": 0,
-		"DblYtdPrizeFormatted": "$19,457",
+		"DblYtdPrizeFormatted": "$3,610",
 		"IsCarbonTrackerEnabled": false,
-		"SocialLinks": [],
+		"SocialLinks": [
+			{
+				"SocialId": "IG",
+				"SocialLink": "https://www.instagram.com/danieldutrasilva/?hl=en"
+			}
+		],
 		"CacheTags": null,
 		"TopCourtLink": "",
-		"SglHiRankDate": "2025-04-07T00:00:00",
-		"DblHiRankDate": "2025-01-27T00:00:00"
+		"SglHiRankDate": "2022-08-15T00:00:00",
+		"DblHiRankDate": "2023-07-31T00:00:00"
 	}
 }
