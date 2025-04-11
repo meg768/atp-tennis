@@ -67,6 +67,8 @@ class MySQL {
 					sql = mysql.format(sql, format);
 				}
 
+				console.log(sql);
+
 				this.connection.query({ sql: sql, ...options }, (error, results) => {
 					if (error) {
 						reject(error);

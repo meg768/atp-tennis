@@ -6,6 +6,7 @@ const ActivityFetcher = require('../src/fetch-activity');
 const RankingsFetcher = require('../src/fetch-rankings');
 const EventFetcher = require('../src/fetch-event');
 const PlayerFetcher = require('../src/fetch-player');
+const StatsFetcher = require('../src/fetch-stats');
 
 class Import extends Command {
 	constructor() {
@@ -125,9 +126,7 @@ class Import extends Command {
 					url: event.url
 				};
 
-
 				for (let match of event.matches) {
-
 					matches[match.match] = {
 						id: match.match,
 						event: event.event,
@@ -152,6 +151,26 @@ class Import extends Command {
 		}
 	}
 
+	async uppdatePlayerStats() {
+		await this.mysql.query(`UPDATE players SET serve_rating = NULL, return_rating = NULL, pressure_rating = NULL`);
+
+		let statsFetcher = new StatsFetcher();
+		let details = await statsFetcher.fetch();
+
+		for (let entry of details) {
+			let sql = ``;
+			sql += `UPDATE players SET `;
+			sql += `serve_rating = ?, `;
+			sql += `return_rating = ?, `;
+			sql += `pressure_rating = ? `;
+			sql += `WHERE id = ?`;
+
+			let format = [entry.serve, entry.return, entry.pressure, entry.player];
+
+			console.log(`Updating stats for ${entry.player}`);
+			await this.mysql.query({ sql, format });
+		}
+	}
 	async import() {
 		let rankingsFetcher = new RankingsFetcher();
 		let rankings = await rankingsFetcher.fetch({ top: this.argv.top });
@@ -226,7 +245,6 @@ class Import extends Command {
 			await this.log(`Generating players...`);
 
 			for (let player of players) {
-
 				try {
 					let playerFetcher = new PlayerFetcher();
 					let details = await playerFetcher.fetch({ player: player });
@@ -234,7 +252,7 @@ class Import extends Command {
 					if (!details) {
 						continue;
 					}
-					
+
 					await this.mysql.upsert('players', {
 						id: details.player,
 						name: details.name,
@@ -270,7 +288,6 @@ class Import extends Command {
 		this.argv = argv;
 		let work = async () => {
 			try {
-
 				this.mysql.connect();
 				let probe = new Probe();
 
@@ -282,6 +299,7 @@ class Import extends Command {
 
 				await this.log(`Starting import...`);
 				await this.import();
+				await this.uppdatePlayerStats();
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
 				await this.log(error.message);
