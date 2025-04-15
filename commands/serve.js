@@ -47,6 +47,15 @@ class Module extends Command {
 					options = { sql: options };
 				}
 
+				if (options.format) {
+					try {
+						options.format = JSON.parse(options.format);
+					}
+					catch(error) {
+
+					}
+				}
+
 				console.log(options);
 				return await this.mysql.query(options);
 			});
