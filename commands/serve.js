@@ -47,7 +47,7 @@ class Module extends Command {
 				if (typeof options == 'string') {
 					options = { sql: options };
 				}
-				/*
+				
 				if (options.format) {
 					try {
 						options.format = JSON.parse(options.format);
@@ -56,7 +56,7 @@ class Module extends Command {
 
 					}
 				}
-*/
+
 				console.log(options);
 				return await this.mysql.query(options);
 			});
