@@ -27,6 +27,17 @@ class Module extends Command {
 		}
 	}
 
+	toJSON(x) {
+		try {
+			if (typeof x == 'object') {
+				return x;
+			}
+			return JSON.parse(x);
+		} catch (error) {
+			return {};
+		}
+	}
+
 	listen() {
 		let app = express();
 
@@ -43,20 +54,12 @@ class Module extends Command {
 
 		app.get('/query', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query);
+				let options = Object.assign({}, request.body, this.toJSON(request.query));
+
 				if (typeof options == 'string') {
 					options = { sql: options };
 				}
-				/*
-				if (options.format) {
-					try {
-						options.format = JSON.parse(options.format);
-					}
-					catch(error) {
 
-					}
-				}
-*/
 				console.log(options);
 				return await this.mysql.query(options);
 			});
