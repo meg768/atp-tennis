@@ -62,11 +62,24 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/live', async (request, response) => {
+		app.get('/raw/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let url = `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`;
 
 				return await fetch(url);
+			});
+		});
+
+		app.get('/raw/player', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let params = this.toJSON(request.query);
+
+				if (!params || !params.id) {
+					throw new Error('Need a player id.');
+				}
+				let url = `https://www.atptour.com/en/-/www/players/hero/${params.id}`;
+
+				return (await fetch(url)).json();
 			});
 		});
 
