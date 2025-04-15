@@ -55,7 +55,7 @@ class Module extends Command {
 		app.get('/query', async (request, response) => {
 			return this.execute(request, response, async () => {
 				console.log('body', request.body);
-				console.log('query', request.query);
+				console.log('query', JSON.stringify(request.query));
 				let options = Object.assign({}, request.body, this.toJSON(request.query));
 
 				if (typeof options == 'string') {
