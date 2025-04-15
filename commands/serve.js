@@ -2,6 +2,7 @@ let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 let bodyParser = require('body-parser');
+let Gopher = require('../src/gopher.js');
 
 let express = require('express');
 let cors = require('cors');
@@ -66,7 +67,7 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let url = `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`;
 
-				return await fetch(url);
+				return await Gopher.fetch(url);
 			});
 		});
 
