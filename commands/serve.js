@@ -47,6 +47,7 @@ class Module extends Command {
 					options = { sql: options };
 				}
 
+				console.log(options);
 				return await this.mysql.query(options);
 			});
 		});
