@@ -8,17 +8,17 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({}) {
+	async fetch({top}) {
 		let events = [];
 
 		let rankingsFetcher = new RankingsFetcher();
 		let activityFetcher = new ActivityFetcher();
 		let eventFetcher = new EventFetcher();
 
-		let rankings = await rankingsFetcher.fetch({});
+		let rankings = await rankingsFetcher.fetch({top});
 
 		for (let player of rankings.players) {
-			let activity = await activityFetcher.fetch({ player: player.id });
+			let activity = await activityFetcher.fetch({ player: player.player });
 
 			if (!activity || !activity.events) {
 				continue;

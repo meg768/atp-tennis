@@ -20,7 +20,9 @@ var App = function () {
             args.command(require('./commands/fetch-player.js'));
             args.command(require('./commands/fetch-activity.js'));
             args.command(require('./commands/fetch-rankings.js'));
+            args.command(require('./commands/fetch-live.js'));
             args.command(require('./commands/import-archive.js'));
+            args.command(require('./commands/serve.js'));
 
             args.help();
             args.wrap(null);

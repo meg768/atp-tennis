@@ -300,6 +300,10 @@ class Import extends Command {
 				await this.log(`Starting import...`);
 				await this.import();
 				await this.uppdatePlayerStats();
+
+				let importStatus = {date:new Date()};
+
+				await this.mysql.upsert('settings', {key:'import.status', value:JSON.stringify(importStatus)})
 				await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
 				await this.log(error.message);
