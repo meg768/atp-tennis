@@ -63,6 +63,14 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/live', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let url = `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`;
+
+				return await fetch(url);
+			});
+		});
+
 		app.get('/players', async (request, response) => {
 			return this.execute(request, response, async () => {
 				return await this.mysql.query('SELECT * FROM players');
