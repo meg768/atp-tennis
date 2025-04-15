@@ -83,6 +83,7 @@ class Module extends Command {
 				}
 
 				let url = `https://www.atptour.com/en/-/www/activity/last/${params.player}`;
+				console.log(url);
 				return await fetch(url);
 			});
 		});
