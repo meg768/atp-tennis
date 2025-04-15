@@ -48,8 +48,7 @@ class Module extends Command {
 		app.use(express.json());
 
 		app.get('/ok', function (request, response) {
-			let now = Date.now();
-			return response.status(200).json({ OK: 'I am OK' });
+			return response.status(200).json({ message: 'I am OK' });
 		});
 
 		app.get('/query', async (request, response) => {
@@ -71,19 +70,28 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/activity', async (request, response) => {
+		app.get('/raw/event', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let params = this.toJSON(request.query);
 
-				console.log(request.query);
-				console.log(params);
+				if (!params || !params.year || !params.id) {
+					throw new Error('Need both a year and an id.');
+				}
+
+				let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${params.year}&eventid=${params.id}`;
+				return (await fetch(url)).json();
+			});
+		});
+
+		app.get('/raw/activity', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let params = this.toJSON(request.query);
 
 				if (!params || !params.player) {
-					throw new Error('Need a player');
+					throw new Error('Need a player ID');
 				}
 
 				let url = `https://www.atptour.com/en/-/www/activity/last/${params.player}`;
-				console.log(url);
 				return (await fetch(url)).json();
 			});
 		});
