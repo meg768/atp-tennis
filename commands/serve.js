@@ -55,13 +55,13 @@ class Module extends Command {
 		app.get('/query', async (request, response) => {
 			return this.execute(request, response, async () => {
 				console.log('body', request.body);
-				console.log('query', JSON.stringify(request.query));
-				let options = Object.assign({}, request.body, this.toJSON(request.query));
+				console.log('query', request.query);
+				
+				let options = Object.assign({}, request.body, request.query);
 
-				if (typeof options == 'string') {
-					options = { sql: options };
+				if (options.format) {
+					options.format = this.toJSON(options.format);
 				}
-
 				console.log(options);
 				return await this.mysql.query(options);
 			});
