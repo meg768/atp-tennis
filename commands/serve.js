@@ -70,10 +70,10 @@ class Module extends Command {
 				return await fetch(url);
 			});
 		});
-		
+
 		app.get('/activity', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let params = toJSON(request.query);
+				let params = this.toJSON(request.query);
 
 				if (!params || !params.player) {
 					throw new Error('Need a player');
