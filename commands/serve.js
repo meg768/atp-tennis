@@ -34,6 +34,7 @@ class Module extends Command {
 		app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 		app.use(bodyParser.json({ limit: '50mb' }));
 		app.use(cors());
+		app.use(express.json());
 
 		app.get('/ok', function (request, response) {
 			let now = Date.now();
@@ -46,7 +47,7 @@ class Module extends Command {
 				if (typeof options == 'string') {
 					options = { sql: options };
 				}
-
+/*
 				if (options.format) {
 					try {
 						options.format = JSON.parse(options.format);
@@ -55,6 +56,7 @@ class Module extends Command {
 
 					}
 				}
+*/
 				console.log(options);
 				return await this.mysql.query(options);
 			});
