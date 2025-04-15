@@ -34,7 +34,7 @@ class Module extends Command {
 			}
 			return JSON.parse(x);
 		} catch (error) {
-			return {};
+			return undefined;
 		}
 	}
 
@@ -67,6 +67,19 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let url = `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`;
 
+				return await fetch(url);
+			});
+		});
+		
+		app.get('/activity', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let params = toJSON(request.query);
+
+				if (!params || !params.player) {
+					throw new Error('Need a player');
+				}
+
+				let url = `https://www.atptour.com/en/-/www/activity/last/${params.player}`;
 				return await fetch(url);
 			});
 		});
