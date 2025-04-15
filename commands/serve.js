@@ -75,6 +75,9 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let params = this.toJSON(request.query);
 
+				console.log(request.query);
+				console.log(params);
+
 				if (!params || !params.player) {
 					throw new Error('Need a player');
 				}
