@@ -15,6 +15,7 @@ class Module extends Command {
 	constructor() {
 		super({ command: 'serve [options]', description: 'Start ATP service' });
 		this.mysql = new MySQL();
+		this.port = 3004
 	}
 
 	arguments(args) {
@@ -212,8 +213,8 @@ class Module extends Command {
 			});
 		});
 
-		app.listen(app.get('port'), function () {
-			console.log('Node app is running on port ' + app.get('port'));
+		app.listen(this.port, function () {
+			console.log('Node app is running on port ' + this.port);
 		});
 	}
 
