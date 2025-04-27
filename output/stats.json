@@ -1,0 +1,464 @@
+[
+	{
+		"player": "S0AG",
+		"pressure": 100,
+		"serve": 94,
+		"return": 83
+	},
+	{
+		"player": "M0FH",
+		"pressure": 89,
+		"serve": 40,
+		"return": 74
+	},
+	{
+		"player": "D0CO",
+		"pressure": 85,
+		"serve": 66,
+		"return": 65
+	},
+	{
+		"player": "TC61",
+		"pressure": 81,
+		"serve": 48,
+		"return": 46
+	},
+	{
+		"player": "D875",
+		"pressure": 80,
+		"serve": 58,
+		"return": 56
+	},
+	{
+		"player": "MP20",
+		"pressure": 79,
+		"serve": 34,
+		"return": 60
+	},
+	{
+		"player": "MC65",
+		"pressure": 77,
+		"serve": 62,
+		"return": 40
+	},
+	{
+		"player": "F0F1",
+		"pressure": 75,
+		"serve": 54,
+		"return": 54
+	},
+	{
+		"player": "A0E2",
+		"pressure": 74,
+		"serve": 67,
+		"return": 95
+	},
+	{
+		"player": "MM58",
+		"pressure": 74,
+		"serve": 40,
+		"return": 80
+	},
+	{
+		"player": "M0EJ",
+		"pressure": 73,
+		"serve": 52,
+		"return": 61
+	},
+	{
+		"player": "RH16",
+		"pressure": 71,
+		"serve": 58,
+		"return": 58
+	},
+	{
+		"player": "G09O",
+		"pressure": 70,
+		"serve": 2,
+		"return": 65
+	},
+	{
+		"player": "M0GZ",
+		"pressure": 69,
+		"serve": 100,
+		"return": 2
+	},
+	{
+		"player": "BT72",
+		"pressure": 68,
+		"serve": 42,
+		"return": 58
+	},
+	{
+		"player": "R0DG",
+		"pressure": 67,
+		"serve": 56,
+		"return": 55
+	},
+	{
+		"player": "N732",
+		"pressure": 67,
+		"serve": 53,
+		"return": 47
+	},
+	{
+		"player": "TE51",
+		"pressure": 65,
+		"serve": 72,
+		"return": 43
+	},
+	{
+		"player": "L0BV",
+		"pressure": 65,
+		"serve": 66,
+		"return": 43
+	},
+	{
+		"player": "H0BH",
+		"pressure": 64,
+		"serve": 0,
+		"return": 53
+	},
+	{
+		"player": "SX91",
+		"pressure": 63,
+		"serve": 39,
+		"return": 36
+	},
+	{
+		"player": "PL56",
+		"pressure": 62,
+		"serve": 55,
+		"return": 89
+	},
+	{
+		"player": "GJ37",
+		"pressure": 62,
+		"serve": 71,
+		"return": 30
+	},
+	{
+		"player": "FB98",
+		"pressure": 62,
+		"serve": 95,
+		"return": 56
+	},
+	{
+		"player": "D643",
+		"pressure": 61,
+		"serve": 79,
+		"return": 80
+	},
+	{
+		"player": "SU55",
+		"pressure": 61,
+		"serve": 50,
+		"return": 58
+	},
+	{
+		"player": "HB71",
+		"pressure": 61,
+		"serve": 86,
+		"return": 34
+	},
+	{
+		"player": "Z355",
+		"pressure": 60,
+		"serve": 96,
+		"return": 66
+	},
+	{
+		"player": "GB88",
+		"pressure": 59,
+		"serve": 11,
+		"return": 71
+	},
+	{
+		"player": "O522",
+		"pressure": 59,
+		"serve": 91,
+		"return": 0
+	},
+	{
+		"player": "B0BI",
+		"pressure": 57,
+		"serve": 29,
+		"return": 78
+	},
+	{
+		"player": "M0NI",
+		"pressure": 56,
+		"serve": 53,
+		"return": 55
+	},
+	{
+		"player": "S0RE",
+		"pressure": 55,
+		"serve": 52,
+		"return": 49
+	},
+	{
+		"player": "K0AH",
+		"pressure": 55,
+		"serve": 68,
+		"return": 47
+	},
+	{
+		"player": "D0FJ",
+		"pressure": 55,
+		"serve": 33,
+		"return": 42
+	},
+	{
+		"player": "AE14",
+		"pressure": 54,
+		"serve": 34,
+		"return": 49
+	},
+	{
+		"player": "N771",
+		"pressure": 54,
+		"serve": 49,
+		"return": 54
+	},
+	{
+		"player": "BK40",
+		"pressure": 53,
+		"serve": 98,
+		"return": 41
+	},
+	{
+		"player": "S0S1",
+		"pressure": 53,
+		"serve": 87,
+		"return": 32
+	},
+	{
+		"player": "C0AU",
+		"pressure": 52,
+		"serve": 39,
+		"return": 82
+	},
+	{
+		"player": "GC88",
+		"pressure": 51,
+		"serve": 44,
+		"return": 47
+	},
+	{
+		"player": "AG37",
+		"pressure": 50,
+		"serve": 68,
+		"return": 49
+	},
+	{
+		"player": "DH58",
+		"pressure": 50,
+		"serve": 39,
+		"return": 100
+	},
+	{
+		"player": "BD06",
+		"pressure": 48,
+		"serve": 38,
+		"return": 57
+	},
+	{
+		"player": "M0QI",
+		"pressure": 48,
+		"serve": 51,
+		"return": 57
+	},
+	{
+		"player": "RE44",
+		"pressure": 48,
+		"serve": 63,
+		"return": 55
+	},
+	{
+		"player": "BU13",
+		"pressure": 47,
+		"serve": 48,
+		"return": 58
+	},
+	{
+		"player": "DH50",
+		"pressure": 47,
+		"serve": 40,
+		"return": 77
+	},
+	{
+		"player": "C0E9",
+		"pressure": 47,
+		"serve": 34,
+		"return": 51
+	},
+	{
+		"player": "P09Z",
+		"pressure": 45,
+		"serve": 56,
+		"return": 29
+	},
+	{
+		"player": "TD51",
+		"pressure": 45,
+		"serve": 53,
+		"return": 46
+	},
+	{
+		"player": "CF59",
+		"pressure": 45,
+		"serve": 23,
+		"return": 60
+	},
+	{
+		"player": "S0H2",
+		"pressure": 45,
+		"serve": 10,
+		"return": 65
+	},
+	{
+		"player": "MO44",
+		"pressure": 44,
+		"serve": 10,
+		"return": 52
+	},
+	{
+		"player": "A0FC",
+		"pressure": 44,
+		"serve": 28,
+		"return": 65
+	},
+	{
+		"player": "M0CI",
+		"pressure": 44,
+		"serve": 42,
+		"return": 46
+	},
+	{
+		"player": "V832",
+		"pressure": 42,
+		"serve": 57,
+		"return": 42
+	},
+	{
+		"player": "KE29",
+		"pressure": 39,
+		"serve": 59,
+		"return": 59
+	},
+	{
+		"player": "SU87",
+		"pressure": 39,
+		"serve": 67,
+		"return": 33
+	},
+	{
+		"player": "Z371",
+		"pressure": 36,
+		"serve": 69,
+		"return": 31
+	},
+	{
+		"player": "N0AE",
+		"pressure": 35,
+		"serve": 83,
+		"return": 35
+	},
+	{
+		"player": "RC91",
+		"pressure": 34,
+		"serve": 59,
+		"return": 20
+	},
+	{
+		"player": "HH26",
+		"pressure": 29,
+		"serve": 69,
+		"return": 49
+	},
+	{
+		"player": "TE30",
+		"pressure": 29,
+		"serve": 46,
+		"return": 44
+	},
+	{
+		"player": "SL28",
+		"pressure": 29,
+		"serve": 49,
+		"return": 32
+	},
+	{
+		"player": "KI95",
+		"pressure": 28,
+		"serve": 49,
+		"return": 54
+	},
+	{
+		"player": "EA24",
+		"pressure": 26,
+		"serve": 52,
+		"return": 52
+	},
+	{
+		"player": "BK92",
+		"pressure": 24,
+		"serve": 40,
+		"return": 36
+	},
+	{
+		"player": "MW02",
+		"pressure": 24,
+		"serve": 12,
+		"return": 64
+	},
+	{
+		"player": "ME82",
+		"pressure": 24,
+		"serve": 11,
+		"return": 46
+	},
+	{
+		"player": "N0BS",
+		"pressure": 22,
+		"serve": 9,
+		"return": 74
+	},
+	{
+		"player": "J551",
+		"pressure": 21,
+		"serve": 58,
+		"return": 12
+	},
+	{
+		"player": "Y09V",
+		"pressure": 14,
+		"serve": 48,
+		"return": 53
+	},
+	{
+		"player": "V812",
+		"pressure": 13,
+		"serve": 12,
+		"return": 57
+	},
+	{
+		"player": "O483",
+		"pressure": 12,
+		"serve": 43,
+		"return": 23
+	},
+	{
+		"player": "MU94",
+		"pressure": 7,
+		"serve": 30,
+		"return": 61
+	},
+	{
+		"player": "SX50",
+		"pressure": 0,
+		"serve": 44,
+		"return": 52
+	}
+]

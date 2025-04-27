@@ -1,0 +1,29 @@
+{
+    "name": "apt-tennis",
+    "version": "1.0.0",
+    "description": "",
+    "main": "atp.js",
+    "scripts": {
+        "git-commit": "git add -A && git commit -m '-' && git push",
+        "goto-github": "open https://github.com/meg768/apt-tennis"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^1.8.4",
+        "body-parser": "^2.2.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^5.1.0",
+        "jsonpath": "^1.1.1",
+        "mysql": "^2.18.1",
+        "node-fetch": "^3.3.2",
+        "yargs": "^17.7.2",
+        "yow": "^1.0.118"
+    },
+    "devDependencies": {
+        "eslint": "^9.19.0",
+        "prettier": "^3.4.2",
+        "prettier-plugin-sql": "^0.18.1"
+    }
+}

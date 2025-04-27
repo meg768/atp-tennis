@@ -1,0 +1,988 @@
+{
+	"event": "2024-0339",
+	"date": "2023-12-30T00:00:00",
+	"name": "Brisbane",
+	"type": "250",
+	"matches": [
+		{
+			"match": "2024-0339-D875-R0DG",
+			"round": "F",
+			"score": "76(5) 64",
+			"duration": "02:17:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D875",
+				"name": "Grigor Dimitrov",
+				"country": "BUL"
+			},
+			"loser": {
+				"player": "R0DG",
+				"name": "Holger Rune",
+				"country": "DEN"
+			}
+		},
+		{
+			"match": "2024-0339-R0DG-SX50",
+			"round": "SF",
+			"score": "64 76(0)",
+			"duration": "01:38:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "R0DG",
+				"name": "Holger Rune",
+				"country": "DEN"
+			},
+			"loser": {
+				"player": "SX50",
+				"name": "Roman Safiullin",
+				"country": "RUS"
+			}
+		},
+		{
+			"match": "2024-0339-D875-TC61",
+			"round": "SF",
+			"score": "63 75",
+			"duration": "01:50:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D875",
+				"name": "Grigor Dimitrov",
+				"country": "BUL"
+			},
+			"loser": {
+				"player": "TC61",
+				"name": "Jordan Thompson",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-R0DG-D994",
+			"round": "QF",
+			"score": "62 76(6)",
+			"duration": "01:46:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "R0DG",
+				"name": "Holger Rune",
+				"country": "DEN"
+			},
+			"loser": {
+				"player": "D994",
+				"name": "James Duckworth",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-D875-H0BH",
+			"round": "QF",
+			"score": "61 64",
+			"duration": "01:18:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D875",
+				"name": "Grigor Dimitrov",
+				"country": "BUL"
+			},
+			"loser": {
+				"player": "H0BH",
+				"name": "Rinky Hijikata",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-SX50-A0FC",
+			"round": "QF",
+			"score": "76(4) 62",
+			"duration": "02:00:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "SX50",
+				"name": "Roman Safiullin",
+				"country": "RUS"
+			},
+			"loser": {
+				"player": "A0FC",
+				"name": "Matteo Arnaldi",
+				"country": "ITA"
+			}
+		},
+		{
+			"match": "2024-0339-TC61-N409",
+			"round": "QF",
+			"score": "57 76(6) 63",
+			"duration": "03:26:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "TC61",
+				"name": "Jordan Thompson",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "N409",
+				"name": "Rafael Nadal",
+				"country": "ESP"
+			}
+		},
+		{
+			"match": "2024-0339-R0DG-S0H2",
+			"round": "R16",
+			"score": "64 57 62",
+			"duration": "02:27:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "R0DG",
+				"name": "Holger Rune",
+				"country": "DEN"
+			},
+			"loser": {
+				"player": "S0H2",
+				"name": "Alexander Shevchenko",
+				"country": "KAZ"
+			}
+		},
+		{
+			"match": "2024-0339-D875-AE14",
+			"round": "R16",
+			"score": "61 62",
+			"duration": "01:08:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D875",
+				"name": "Grigor Dimitrov",
+				"country": "BUL"
+			},
+			"loser": {
+				"player": "AE14",
+				"name": "Daniel Altmaier",
+				"country": "GER"
+			}
+		},
+		{
+			"match": "2024-0339-TC61-HH26",
+			"round": "R16",
+			"score": "",
+			"duration": null,
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "TC61",
+				"name": "Jordan Thompson",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "HH26",
+				"name": "Ugo Humbert",
+				"country": "FRA"
+			}
+		},
+		{
+			"match": "2024-0339-A0FC-KI63",
+			"round": "R16",
+			"score": "64 36 75",
+			"duration": "02:04:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "A0FC",
+				"name": "Matteo Arnaldi",
+				"country": "ITA"
+			},
+			"loser": {
+				"player": "KI63",
+				"name": "Lukas Klein",
+				"country": "SVK"
+			}
+		},
+		{
+			"match": "2024-0339-D994-H997",
+			"round": "R16",
+			"score": "46 61 76(2)",
+			"duration": "02:25:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D994",
+				"name": "James Duckworth",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "H997",
+				"name": "Yannick Hanfmann",
+				"country": "GER"
+			}
+		},
+		{
+			"match": "2024-0339-H0BH-M0FH",
+			"round": "R16",
+			"score": "57 62 76(4)",
+			"duration": "02:29:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "H0BH",
+				"name": "Rinky Hijikata",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "M0FH",
+				"name": "Tomas Machac",
+				"country": "CZE"
+			}
+		},
+		{
+			"match": "2024-0339-N409-KB95",
+			"round": "R16",
+			"score": "61 62",
+			"duration": "01:25:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "N409",
+				"name": "Rafael Nadal",
+				"country": "ESP"
+			},
+			"loser": {
+				"player": "KB95",
+				"name": "Jason Kubler",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-SX50-P09Z",
+			"round": "R16",
+			"score": "67(9) 64 76(3)",
+			"duration": "02:55:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "SX50",
+				"name": "Roman Safiullin",
+				"country": "RUS"
+			},
+			"loser": {
+				"player": "P09Z",
+				"name": "Alexei Popyrin",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-R0DG-PH71",
+			"round": "R32",
+			"score": "46 64 62",
+			"duration": "01:40:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "R0DG",
+				"name": "Holger Rune",
+				"country": "DEN"
+			},
+			"loser": {
+				"player": "PH71",
+				"name": "Max Purcell",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-D875-MC10",
+			"round": "R32",
+			"score": "46 75 62",
+			"duration": "02:27:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D875",
+				"name": "Grigor Dimitrov",
+				"country": "BUL"
+			},
+			"loser": {
+				"player": "MC10",
+				"name": "Andy Murray",
+				"country": "GBR"
+			}
+		},
+		{
+			"match": "2024-0339-SX50-S0S1",
+			"round": "R32",
+			"score": "63 67(5) 63",
+			"duration": "02:37:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "SX50",
+				"name": "Roman Safiullin",
+				"country": "RUS"
+			},
+			"loser": {
+				"player": "S0S1",
+				"name": "Ben Shelton",
+				"country": "USA"
+			}
+		},
+		{
+			"match": "2024-0339-HH26-M0QI",
+			"round": "R32",
+			"score": "64 64",
+			"duration": "01:35:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "HH26",
+				"name": "Ugo Humbert",
+				"country": "FRA"
+			},
+			"loser": {
+				"player": "M0QI",
+				"name": "Alex Michelsen",
+				"country": "USA"
+			}
+		},
+		{
+			"match": "2024-0339-H997-K0AH",
+			"round": "R32",
+			"score": "75 64",
+			"duration": "01:36:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "H997",
+				"name": "Yannick Hanfmann",
+				"country": "GER"
+			},
+			"loser": {
+				"player": "K0AH",
+				"name": "Sebastian Korda",
+				"country": "USA"
+			}
+		},
+		{
+			"match": "2024-0339-KI63-B0BI",
+			"round": "R32",
+			"score": "46 63 64",
+			"duration": "02:15:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "KI63",
+				"name": "Lukas Klein",
+				"country": "SVK"
+			},
+			"loser": {
+				"player": "B0BI",
+				"name": "Sebastian Baez",
+				"country": "ARG"
+			}
+		},
+		{
+			"match": "2024-0339-M0FH-EA24",
+			"round": "R32",
+			"score": "67(5) 75 76(1)",
+			"duration": "03:09:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "M0FH",
+				"name": "Tomas Machac",
+				"country": "CZE"
+			},
+			"loser": {
+				"player": "EA24",
+				"name": "Tomas Martin Etcheverry",
+				"country": "ARG"
+			}
+		},
+		{
+			"match": "2024-0339-KB95-KC56",
+			"round": "R32",
+			"score": "64 67(4)",
+			"duration": "02:23:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "KB95",
+				"name": "Jason Kubler",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "KC56",
+				"name": "Aslan Karatsev",
+				"country": "RUS"
+			}
+		},
+		{
+			"match": "2024-0339-AE14-TC01",
+			"round": "R32",
+			"score": "76(5) 76(4)",
+			"duration": "02:01:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "AE14",
+				"name": "Daniel Altmaier",
+				"country": "GER"
+			},
+			"loser": {
+				"player": "TC01",
+				"name": "Li Tu",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-A0FC-F724",
+			"round": "R32",
+			"score": "67(5) 64 76(7)",
+			"duration": "03:08:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "A0FC",
+				"name": "Matteo Arnaldi",
+				"country": "ITA"
+			},
+			"loser": {
+				"player": "F724",
+				"name": "Marton Fucsovics",
+				"country": "HUN"
+			}
+		},
+		{
+			"match": "2024-0339-D994-W09G",
+			"round": "R32",
+			"score": "63 64",
+			"duration": "01:04:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D994",
+				"name": "James Duckworth",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "W09G",
+				"name": "J.J. Wolf",
+				"country": "USA"
+			}
+		},
+		{
+			"match": "2024-0339-H0BH-KD46",
+			"round": "R32",
+			"score": "76(8) 62",
+			"duration": "01:37:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "H0BH",
+				"name": "Rinky Hijikata",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "KD46",
+				"name": "Thanasi Kokkinakis",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-N409-TB69",
+			"round": "R32",
+			"score": "75 61",
+			"duration": "01:29:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "N409",
+				"name": "Rafael Nadal",
+				"country": "ESP"
+			},
+			"loser": {
+				"player": "TB69",
+				"name": "Dominic Thiem",
+				"country": "AUT"
+			}
+		},
+		{
+			"match": "2024-0339-P09Z-O483",
+			"round": "R32",
+			"score": "64 67(5) 76(4)",
+			"duration": "03:05:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "P09Z",
+				"name": "Alexei Popyrin",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "O483",
+				"name": "Christopher O'Connell",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-S0H2-V0DZ",
+			"round": "R32",
+			"score": "63 62",
+			"duration": "01:15:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "S0H2",
+				"name": "Alexander Shevchenko",
+				"country": "KAZ"
+			},
+			"loser": {
+				"player": "V0DZ",
+				"name": "Luca Van Assche",
+				"country": "FRA"
+			}
+		},
+		{
+			"match": "2024-0339-TC61-V832",
+			"round": "R32",
+			"score": "63 62",
+			"duration": "01:36:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "TC61",
+				"name": "Jordan Thompson",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "V832",
+				"name": "Aleksandar Vukic",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-M0FH-K0AZ",
+			"round": "Q2",
+			"score": "64 62",
+			"duration": "01:17:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "M0FH",
+				"name": "Tomas Machac",
+				"country": "CZE"
+			},
+			"loser": {
+				"player": "K0AZ",
+				"name": "Aleksandar Kovacevic",
+				"country": "USA"
+			}
+		},
+		{
+			"match": "2024-0339-D994-BK24",
+			"round": "Q2",
+			"score": "61 76(2)",
+			"duration": "01:35:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D994",
+				"name": "James Duckworth",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "BK24",
+				"name": "Gregoire Barrere",
+				"country": "FRA"
+			}
+		},
+		{
+			"match": "2024-0339-TC01-GE33",
+			"round": "Q2",
+			"score": "63 76(5)",
+			"duration": "01:38:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "TC01",
+				"name": "Li Tu",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "GE33",
+				"name": "Daniel Elahi Galan",
+				"country": "COL"
+			}
+		},
+		{
+			"match": "2024-0339-M0QI-SM37",
+			"round": "Q2",
+			"score": "61 64",
+			"duration": "01:20:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "M0QI",
+				"name": "Alex Michelsen",
+				"country": "USA"
+			},
+			"loser": {
+				"player": "SM37",
+				"name": "Diego Schwartzman",
+				"country": "ARG"
+			}
+		},
+		{
+			"match": "2024-0339-TB69-Z0A1",
+			"round": "Q2",
+			"score": "36 64 64",
+			"duration": "02:31:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "TB69",
+				"name": "Dominic Thiem",
+				"country": "AUT"
+			},
+			"loser": {
+				"player": "Z0A1",
+				"name": "Giulio Zeppieri",
+				"country": "ITA"
+			}
+		},
+		{
+			"match": "2024-0339-KI63-C0BC",
+			"round": "Q2",
+			"score": "46 76(8) 64",
+			"duration": "02:43:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "KI63",
+				"name": "Lukas Klein",
+				"country": "SVK"
+			},
+			"loser": {
+				"player": "C0BC",
+				"name": "Maxime Cressy",
+				"country": "USA"
+			}
+		},
+		{
+			"match": "2024-0339-M0FH-EA27",
+			"round": "Q1",
+			"score": "76(2) 62",
+			"duration": "01:45:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "M0FH",
+				"name": "Tomas Machac",
+				"country": "CZE"
+			},
+			"loser": {
+				"player": "EA27",
+				"name": "Blake Ellis",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-BK24-S0IA",
+			"round": "Q1",
+			"score": "63 60",
+			"duration": "00:54:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "BK24",
+				"name": "Gregoire Barrere",
+				"country": "FRA"
+			},
+			"loser": {
+				"player": "S0IA",
+				"name": "Dane Sweeny",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-GE33-KB54",
+			"round": "Q1",
+			"score": "75 63",
+			"duration": "01:25:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "GE33",
+				"name": "Daniel Elahi Galan",
+				"country": "COL"
+			},
+			"loser": {
+				"player": "KB54",
+				"name": "Andrey Kuznetsov",
+				"country": "RUS"
+			}
+		},
+		{
+			"match": "2024-0339-M0QI-G983",
+			"round": "Q1",
+			"score": "63 62",
+			"duration": "01:02:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "M0QI",
+				"name": "Alex Michelsen",
+				"country": "USA"
+			},
+			"loser": {
+				"player": "G983",
+				"name": "Alessandro Giannessi",
+				"country": "ITA"
+			}
+		},
+		{
+			"match": "2024-0339-TB69-M0OQ",
+			"round": "Q1",
+			"score": "26 76(4) 64",
+			"duration": "02:53:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "TB69",
+				"name": "Dominic Thiem",
+				"country": "AUT"
+			},
+			"loser": {
+				"player": "M0OQ",
+				"name": "James McCabe",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-KI63-HB64",
+			"round": "Q1",
+			"score": "64 76(1)",
+			"duration": "01:55:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "KI63",
+				"name": "Lukas Klein",
+				"country": "SVK"
+			},
+			"loser": {
+				"player": "HB64",
+				"name": "Quentin Halys",
+				"country": "FRA"
+			}
+		},
+		{
+			"match": "2024-0339-K0AZ-GB53",
+			"round": "Q1",
+			"score": "76(5) 62",
+			"duration": "02:03:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "K0AZ",
+				"name": "Aleksandar Kovacevic",
+				"country": "USA"
+			},
+			"loser": {
+				"player": "GB53",
+				"name": "Federico Gaio",
+				"country": "ITA"
+			}
+		},
+		{
+			"match": "2024-0339-SM37-B0OT",
+			"round": "Q1",
+			"score": "62 64",
+			"duration": "01:24:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "SM37",
+				"name": "Diego Schwartzman",
+				"country": "ARG"
+			},
+			"loser": {
+				"player": "B0OT",
+				"name": "Jacob Bradshaw",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-D994-S0TI",
+			"round": "Q1",
+			"score": "76(5) 64",
+			"duration": "01:53:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "D994",
+				"name": "James Duckworth",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "S0TI",
+				"name": "Philip Sekulic",
+				"country": "AUS"
+			}
+		},
+		{
+			"match": "2024-0339-TC01-C0DF",
+			"round": "Q1",
+			"score": "76(1) 57 76(3)",
+			"duration": "02:52:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "TC01",
+				"name": "Li Tu",
+				"country": "AUS"
+			},
+			"loser": {
+				"player": "C0DF",
+				"name": "Francisco Comesana",
+				"country": "ARG"
+			}
+		},
+		{
+			"match": "2024-0339-C0BC-PH78",
+			"round": "Q1",
+			"score": "64 64",
+			"duration": "02:16:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "C0BC",
+				"name": "Maxime Cressy",
+				"country": "USA"
+			},
+			"loser": {
+				"player": "PH78",
+				"name": "Ryan Peniston",
+				"country": "GBR"
+			}
+		},
+		{
+			"match": "2024-0339-Z0A1-J553",
+			"round": "Q1",
+			"score": "75 63",
+			"duration": "01:33:00",
+			"court": null,
+			"umpire": null,
+			"sets": null,
+			"message": null,
+			"winner": {
+				"player": "Z0A1",
+				"name": "Giulio Zeppieri",
+				"country": "ITA"
+			},
+			"loser": {
+				"player": "J553",
+				"name": "Omar Jasika",
+				"country": "AUS"
+			}
+		}
+	]
+}
