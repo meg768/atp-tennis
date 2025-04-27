@@ -214,7 +214,7 @@ class Module extends Command {
 		});
 
 		app.listen(this.port, () => {
-			console.log('Node app is running on port XXX' + this.port);
+			console.log('Node app is running on port ' + this.port);
 
 		});
 	
