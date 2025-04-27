@@ -14,7 +14,7 @@ class MySQL {
 
 	connect() {
 		this.log(`Connecting to database '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
-		this.log(`Connecting to database XXXXXX'${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
+		this.log(`Connecting to database XXXXXXX'${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
 
 		let options = {};
 		options.host = process.env.MYSQL_HOST;
