@@ -4,7 +4,6 @@ let Command = require('../src/command.js');
 let bodyParser = require('body-parser');
 let Gopher = require('../src/gopher.js');
 let axios = require('axios');
-let { isString } = require('yow/utils');
 
 let isString = require('yow/isString');
 let isArray = require('yow/isArray');
