@@ -60,8 +60,6 @@ class MySQL {
 		let promise = new Promise((resolve, reject) => {
 			try {
 
-				console.log('Params:', params);
-
 				if (isString(params)) {
 					params = { sql: params };
 				}
@@ -71,8 +69,6 @@ class MySQL {
 				if (format) {
 					sql = mysql.format(sql, format);
 				}
-
-				console.log('SQL:', sql);
 
 				this.connection.query({ sql: sql, ...options }, (error, results) => {
 					if (error) {
