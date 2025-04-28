@@ -93,7 +93,7 @@ class Module extends Command {
 			result = await this.mysql.query(params);
 			let json = JSON.stringify(result);
 			console.log('Result:', json);
-			return response.status(200).json(result);
+			return response.status(200).json(json);
 		});
 
 		app.get('/atp/player', async (request, response) => {
