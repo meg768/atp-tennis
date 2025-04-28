@@ -88,11 +88,10 @@ class Module extends Command {
 		app.post('/query', async (request, response) => {
 			let params = Object.assign({}, request.body, request.query);
 			let result = undefined;
-			console.log('Params:', params);
 
 			result = await this.mysql.query(params);
 			let json = JSON.stringify(result);
-			console.log('Result:', json);
+
 			return response.status(200).json(json);
 		});
 
