@@ -38,18 +38,18 @@ class Module extends Command {
 		this.argv = argv;
 
 		let response = null;
-		let Parser = require('../src/parse-live.js');
-		let parser = new Parser();
 
 		if (this.argv.debug && this.argv.input) {
 			console.log('Reading from input file...');
-			response = parser.input(this.argv.input);
+			response = readJSON(this.argv.input);
 		} else {
 			console.log('Fetching live activity from ATP API...');
 			response = await Gopher.fetch('https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour');
 		}
 
-		let json = await parser.parse({ response });
+		let Parser = require('../src/parse-live.js');
+		let parser = new Parser({ response });
+		let json = await parser.parse();
 
 		parser.output({ fileName: this.argv.output, json });
 	}
