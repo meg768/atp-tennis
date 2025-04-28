@@ -3,6 +3,7 @@ let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 let Gopher = require('../src/gopher.js');
 let readJSON = require('yow/readJSON');
+let writeJSON = require('yow/writeJSON').writeJSON;
 
 class Module extends Command {
 	constructor() {
@@ -47,11 +48,12 @@ class Module extends Command {
 			response = await Gopher.fetch('https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour');
 		}
 
-		let Parser = require('../src/parse-live.js');
-		let parser = new Parser({ response });
-		let json = await parser.parse();
+		let Fetcher = require('../src/fetch-live.js');
+		let fetcher = new Fetcher({});
 
-		parser.output({ fileName: this.argv.output, json });
+		let json = await fetcher.fetch();
+
+		writeJSON(this.argv.output, json);
 	}
 }
 

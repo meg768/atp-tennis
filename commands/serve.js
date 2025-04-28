@@ -95,116 +95,13 @@ class Module extends Command {
 			return response.status(200).json(json);
 		});
 
-		app.get('/atp/player', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query);
-
-				if (!options.id) {
-					throw new Error(`Player ID is required`);
-				}
-
-				let url = `https://www.atptour.com/en/-/www/players/hero/${options.id}`;
-				let response = await Gopher.fetch(url);
-
-				if (options.parse == 'y') {
-					let Parser = require('../src/parse-player.js');
-					let parser = new Parser();
-					response = parser.parse({ response: response, player: options.id });
-				}
-				return response;
-			});
-		});
-
-		app.get('/atp/leaderboard', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query);
-
-				if (!options.type) {
-					throw new Error(`A leaderboard type is required`);
-				}
-
-				let url = `https://www.atptour.com/en/-/www/StatsLeaderboard/${options.type}/52week/all/all/false?v=1`;
-				return await Gopher.fetch(url);
-			});
-		});
-
-		app.get('/atp/activity', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query);
-
-				if (!options.id) {
-					throw new Error(`Player ID is required`);
-				}
-
-				let url = `https://www.atptour.com/en/-/www/activity/last/${options.id}`;
-				let response = await Gopher.fetch(url);
-
-				if (options.parse == 'y') {
-					let Parser = require('../src/parse-activity.js');
-					let parser = new Parser();
-					response = parser.parse({ response: response, player: options.id });
-				}
-
-				return response;
-			});
-		});
-
-		app.get('/atp/scores', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query);
-				let { parse, eventYear, eventID } = options;
-
-				if (!eventYear) {
-					throw new Error(`Event year is required`);
-				}
-				if (!eventID) {
-					throw new Error(`Event ID is required`);
-				}
-
-				let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${eventYear}&eventid=${eventID}`;
-				let response = await Gopher.fetch(url);
-
-				if (parse == 'y') {
-					let Parser = require('../src/parse-scores.js');
-					let parser = new Parser();
-					response = parser.parse({ response, eventYear, eventID });
-				}
-
-				return response;
-			});
-		});
-
-		app.get('/atp/rankings', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query);
-
-				let top = options.top ? options.top : 100;
-				let url = `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=${top}`;
-				let response = await Gopher.fetch(url);
-
-				if (options.parse == 'y') {
-					let Parser = require('../src/parse-rankings.js');
-					let parser = new Parser();
-					response = parser.parse({ response: response });
-				}
-
-				return response;
-			});
-		});
-
 		app.get('/atp/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
-				let url = `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`;
-				let response = await Gopher.fetch(url);
-
-				if (options.parse == 'y') {
-					let Parser = require('../src/parse-live.js');
-					let parser = new Parser();
-					response = parser.parse({ response: response });
-				}
-
+				let Fetcher = require('../src/fetch-live.js');
+				let fetcher = new Fetcher();
+				let response = await fetcher.fetch();
 				return response;
 			});
 		});
