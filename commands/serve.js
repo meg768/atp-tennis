@@ -32,7 +32,7 @@ class Module extends Command {
 				let { format, sql, ...options } = params;
 
 				if (format) {
-					sql = MySQL.format(sql, format);
+					sql = connection.format(sql, format);
 				}
 
 				connection.query({ sql: sql, ...options }, (error, results) => {
