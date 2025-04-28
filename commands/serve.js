@@ -85,7 +85,7 @@ class Module extends Command {
 			return response.status(200).json({ message: 'I am OK' });
 		});
 
-		app.get('/query', async (request, response) => {
+		app.post('/query', async (request, response) => {
 			let params = Object.assign({}, request.body, request.query);
 			let result = undefined;
 			console.log('Params:', params);
