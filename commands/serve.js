@@ -86,7 +86,7 @@ class Module extends Command {
 		});
 
 		app.get('/query', async (request, response) => {
-			let { params } = Object.assign({}, request.body, request.query);
+			let params = Object.assign({}, request.body, request.query);
 			let result = undefined;
 			console.log('Params:', params);
 
