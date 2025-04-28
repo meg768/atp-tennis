@@ -90,7 +90,7 @@ class Module extends Command {
 			let result = undefined;
 			console.log('Params:', params);
 
-			result = await this.mysql.query(options);
+			result = await this.mysql.query(params);
 			return response.status(200).json(result);
 		});
 
