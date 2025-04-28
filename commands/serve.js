@@ -91,7 +91,7 @@ class Module extends Command {
 			console.log('Params:', params);
 
 			result = await this.mysql.query(params);
-			return response.status(200).json(result);
+			return response.status(200).json(await result);
 		});
 
 		app.get('/atp/player', async (request, response) => {
