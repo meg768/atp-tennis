@@ -91,7 +91,8 @@ class Module extends Command {
 			console.log('Params:', params);
 
 			result = await this.mysql.query(params);
-			console.log('Result:', result);
+			let json = JSON.stringify(result);
+			console.log('Result:', json);
 			return response.status(200).json(result);
 		});
 
