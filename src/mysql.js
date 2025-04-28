@@ -56,7 +56,6 @@ class MySQL {
 
 	async query(params) {
 
-		this.log('Query:', params);
 
 		let promise = new Promise((resolve, reject) => {
 			try {

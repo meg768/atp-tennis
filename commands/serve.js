@@ -86,17 +86,12 @@ class Module extends Command {
 		});
 
 		app.get('/query', async (request, response) => {
-			let { database, ...options } = Object.assign({}, request.body, request.query);
+			let { params } = Object.assign({}, request.body, request.query);
 			let result = undefined;
+			console.log('Params:', params);
 
-			try {
-				result = await this.query(this.mysql, options);
-
-				response.status(200).json(result);
-			} catch (error) {
-				response.status(404).json({ error: error.message });
-			} finally {
-			}
+			result = await this.mysql.query(options);
+			return response.status(200).json(result);
 		});
 
 		app.get('/atp/player', async (request, response) => {
@@ -215,9 +210,7 @@ class Module extends Command {
 
 		app.listen(this.port, () => {
 			console.log('Node app is running on port ' + this.port);
-
 		});
-	
 	}
 
 	async run(argv) {
