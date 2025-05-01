@@ -142,7 +142,7 @@ class Import extends Command {
 		let players = {};
 		let matches = {};
 
-		await this.log(`Gathering activities from the top ${this.argv.top} players...`);
+		await this.log(`Gathering activities from the top ranked ${this.argv.top} players since ${this.argv.since}...`);
 
 		for (let player of rankings.players) {
 			await this.importPlayer({ player: player.player, players: players, events: events, matches: matches });
