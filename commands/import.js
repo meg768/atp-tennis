@@ -151,7 +151,7 @@ class Import extends Command {
 
 		// Complement matches with duraction and scores
 		if (true) {
-			await this.log(`Gathering event information...`);
+			await this.log(`Gathering information from ${Object.entries(events).length} events...`);
 
 			for (let [eventID, event] of Object.entries(events)) {
 				let eventFetcher = new EventFetcher();
@@ -188,7 +188,7 @@ class Import extends Command {
 		}
 
 		if (true) {
-			await this.log(`Generating events...`);
+			await this.log(`Updating ${Object.entries(events).length} events...`);
 
 			for (let [eventID, event] of Object.entries(events)) {
 				await this.mysql.upsert('events', event);
@@ -196,7 +196,7 @@ class Import extends Command {
 		}
 
 		if (true) {
-			await this.log(`Generating matches...`);
+			await this.log(`Updating ${Object.entries(matches).length} match results...`);
 
 			for (let [matchID, match] of Object.entries(matches)) {
 				await this.mysql.upsert('matches', match);
@@ -208,7 +208,7 @@ class Import extends Command {
 			players = Object.keys(players);
 			players.sort();
 
-			await this.log(`Generating players...`);
+			await this.log(`Updating ${players.length} players...`);
 
 			for (let player of players) {
 				try {

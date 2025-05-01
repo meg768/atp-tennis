@@ -2,31 +2,46 @@
 	{
 		"event": "2025-1536",
 		"name": "Mutua Madrid Open",
-		"score": "64 54",
+		"score": "22",
 		"player": {
-			"id": "D875",
-			"name": "Grigor Dimitrov",
-			"country": "BUL"
+			"id": "DH58",
+			"name": "Alex de Minaur",
+			"country": "AUS"
 		},
 		"opponent": {
-			"id": "F0BY",
-			"name": "Jacob Fearnley",
-			"country": "GBR"
+			"id": "SU55",
+			"name": "Denis Shapovalov",
+			"country": "CAN"
 		}
 	},
 	{
 		"event": "2025-1536",
 		"name": "Mutua Madrid Open",
-		"score": "36 46",
+		"score": "13",
 		"player": {
-			"id": "D923",
-			"name": "Damir Dzumhur",
-			"country": "BIH"
+			"id": "KE29",
+			"name": "Karen Khachanov",
+			"country": "RUS"
 		},
 		"opponent": {
-			"id": "A0FC",
-			"name": "Matteo Arnaldi",
-			"country": "ITA"
+			"id": "PL56",
+			"name": "Tommy Paul",
+			"country": "USA"
+		}
+	},
+	{
+		"event": "2025-1536",
+		"name": "Mutua Madrid Open",
+		"score": "22",
+		"player": {
+			"id": "TD51",
+			"name": "Frances Tiafoe",
+			"country": "USA"
+		},
+		"opponent": {
+			"id": "MP20",
+			"name": "Alexandre Muller",
+			"country": "FRA"
 		}
 	}
 ]
