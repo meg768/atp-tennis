@@ -111,12 +111,10 @@ class Import extends Command {
 
 	async updateELO() {
 		let { updateELO } = require('../src/elo.js');
-		await updateELO({mysql:this.mysql});
-
+		await updateELO({ mysql: this.mysql });
 	}
 
 	async updatePlayerStats() {
-
 		await this.mysql.query(`UPDATE players SET serve_rating = NULL, return_rating = NULL, pressure_rating = NULL`);
 
 		let Fetcher = require('../src/fetch-stats.js');
@@ -135,7 +133,6 @@ class Import extends Command {
 
 			await this.mysql.query({ sql, format });
 		}
-
 	}
 	async import() {
 		let rankingsFetcher = new RankingsFetcher();
@@ -144,6 +141,8 @@ class Import extends Command {
 		let events = {};
 		let players = {};
 		let matches = {};
+
+		await this.log(`Gathering activities from the top ${this.argv.top} players...`);
 
 		for (let player of rankings.players) {
 			await this.importPlayer({ player: player.player, players: players, events: events, matches: matches });
