@@ -134,6 +134,11 @@ class Import extends Command {
 			await this.mysql.query({ sql, format });
 		}
 	}
+	async updateSurfaceFactors() {
+		await this.mysql.query(`CALL sp_update_surface_factors()`);
+
+	}
+
 	async import() {
 		let rankingsFetcher = new RankingsFetcher();
 		let rankings = await rankingsFetcher.fetch({ top: this.argv.top });
@@ -269,6 +274,7 @@ class Import extends Command {
 				await this.import();
 				await this.updatePlayerStats();
 				await this.updateELO();
+				await this.updateSurfaceFactors();
 
 				let importStatus = { date: new Date() };
 
