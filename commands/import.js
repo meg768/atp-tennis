@@ -135,7 +135,7 @@ class Import extends Command {
 		}
 	}
 	async updateSurfaceFactors() {
-		await this.log(`Updating surface factors on top 100 players for last two years...`);
+		await this.log(`Updating surface factors on top 100 players for the last two years...`);
 		await this.mysql.query(`CALL sp_update_surface_factors()`);
 
 	}
