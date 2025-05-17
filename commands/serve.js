@@ -81,6 +81,7 @@ class Module extends Command {
 		app.use(bodyParser.json({ limit: '50mb' }));
 		app.use(cors());
 		app.set('trust proxy', true);
+		app.use(express.static(path.join(__dirname, 'vitel'))); // serve vitel/ as root
 
 		app.get('/ok', function (request, response) {
 			return response.status(200).json({ message: 'I am OK' });
