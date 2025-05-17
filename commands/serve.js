@@ -81,12 +81,15 @@ class Module extends Command {
 		app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 		app.use(bodyParser.json({ limit: '50mb' }));
 		app.use(cors());
-		app.use(express.static(path.join(__dirname, 'vitel'))); // serve vitel/ as root
 
+		// Serve static files from vitel folder
+		app.use('/vitel', express.static(path.join(__dirname, 'vitel')));
+
+		// Redirect root to /vitel
 		app.get('/', (req, res) => {
 			res.redirect('/vitel');
 		});
-		  
+
 		app.get('/ok', function (request, response) {
 			return response.status(200).json({ message: 'I am OK' });
 		});
