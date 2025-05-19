@@ -96,7 +96,7 @@ class Module extends Command {
 
 		app.post('/query', async (request, response) => {
 			return this.execute(request, response, async () => {
-				const params = { ...request.body, ...request.query };
+				let params = Object.assign({}, request.body, request.query);
 
 				return await this.mysql.query(params);
 			});
