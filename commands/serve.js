@@ -94,13 +94,18 @@ class Module extends Command {
 				const result = await this.mysql.query(params);
 				return response.status(200).json(result);
 			} catch (error) {
+				console.error('Query error:', error);
+
 				return response.status(500).json({
-					error: error.message,
-					stack: error.stack?.split('\n') || []
+					error: error.message || 'Unknown error',
+					stack:
+						process.env.NODE_ENV === 'development'
+							? error.stack.split('\n')
+							: undefined
 				});
 			}
 		});
-		
+				  
 		app.get('/atp/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
