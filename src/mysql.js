@@ -3,14 +3,12 @@ var mysql = require('mysql');
 
 class MySQL {
 	constructor(options) {
-		
 		this.connection = undefined;
 	}
 
 	log() {
 		console.log.apply(this, arguments);
 	}
-
 
 	connect() {
 		this.log(`Connecting to database '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
@@ -25,7 +23,12 @@ class MySQL {
 		// Allow multiple statements
 		options.multipleStatements = true;
 
-		if (!isString(options.host) || !isString(options.user) || !isString(options.password) || !isString(options.database)) {
+		if (
+			!isString(options.host) ||
+			!isString(options.user) ||
+			!isString(options.password) ||
+			!isString(options.database)
+		) {
 			throw new Error('MySQL credentials/database not specified.');
 		}
 
@@ -54,11 +57,8 @@ class MySQL {
 	}
 
 	async query(params) {
-
-
 		let promise = new Promise((resolve, reject) => {
 			try {
-
 				if (isString(params)) {
 					params = { sql: params };
 				}
@@ -71,6 +71,7 @@ class MySQL {
 
 				this.connection.query({ sql: sql, ...options }, (error, results) => {
 					if (error) {
+						console.log(error);
 						reject(error);
 					} else resolve(results);
 				});
@@ -118,7 +119,7 @@ class MySQL {
 		sql += this.format('ON DUPLICATE KEY UPDATE ');
 
 		sql += columns
-			.map((column) => {
+			.map(column => {
 				return this.format('?? = VALUES(??)', [column, column]);
 			})
 			.join(',');
