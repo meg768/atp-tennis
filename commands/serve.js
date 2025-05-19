@@ -98,6 +98,7 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let params = Object.assign({}, request.body, request.query);
 
+				console.log(params);
 				return await this.mysql.query(params);
 			});
 		});
