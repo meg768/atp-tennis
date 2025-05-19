@@ -57,6 +57,29 @@ class MySQL {
 	}
 
 	async query(params) {
+		if (typeof params === 'string') {
+			params = { sql: params };
+		}
+
+		let { format, sql, ...options } = params;
+
+		if (format) {
+			sql = require('mysql').format(sql, format); // or this.mysql.format(sql, format)
+		}
+
+		return await new Promise((resolve, reject) => {
+			this.connection.query({ sql, ...options }, (error, results) => {
+				if (error) {
+					console.error('MySQL query error:', error.message);
+					reject(error);
+				} else {
+					resolve(results);
+				}
+			});
+		});
+	}
+
+	async queryX(params) {
 		let promise = new Promise((resolve, reject) => {
 			try {
 				if (isString(params)) {
