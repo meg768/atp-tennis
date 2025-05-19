@@ -88,25 +88,19 @@ class Module extends Command {
 		});
 
 		app.post('/query', async (request, response) => {
-			let params = Object.assign({}, request.body, request.query);
-			let result = undefined;
+			const params = { ...request.body, ...request.query };
 
 			try {
-				result = await this.mysql.query(params);
-				let json = JSON.stringify(result);
-	
-				return response.status(200).json(json);
-	
-			}
-			catch(error) {
-				let result = {};
-				result.error = error.message;
-				result.stack = error.stack.split('\n');
-				return response.status(500).json(result);
-	
+				const result = await this.mysql.query(params);
+				return response.status(200).json(result);
+			} catch (error) {
+				return response.status(500).json({
+					error: error.message,
+					stack: error.stack?.split('\n') || []
+				});
 			}
 		});
-
+		
 		app.get('/atp/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
