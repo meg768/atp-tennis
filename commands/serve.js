@@ -13,10 +13,7 @@ let cors = require('cors');
 
 class Module extends Command {
 	constructor() {
-		super({
-			command: 'serve [options]',
-			description: 'Start ATP service'
-		});
+		super({ command: 'serve [options]', description: 'Start ATP service' });
 		this.mysql = new MySQL();
 		this.port = 3004;
 	}
@@ -81,26 +78,33 @@ class Module extends Command {
 
 		const app = express();
 
-		app.use(
-			bodyParser.urlencoded({
-				limit: '50mb',
-				extended: false
-			})
-		);
+		app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 		app.use(bodyParser.json({ limit: '50mb' }));
 		app.use(cors());
+
 
 		app.get('/ok', function (request, response) {
 			return response.status(200).json({ message: 'I am OK' });
 		});
 
 		app.post('/query', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let params = Object.assign({}, request.body, request.query);
+			let params = Object.assign({}, request.body, request.query);
+			let result = undefined;
 
-				console.log(params);
-				return await this.mysql.query(params);
-			});
+			try {
+				result = await this.mysql.query(params);
+				let json = JSON.stringify(result);
+	
+				return response.status(200).json(json);
+	
+			}
+			catch(error) {
+				let result = {};
+				result.error = error.message;
+				result.stack = error.stack.split('\n');
+				return response.status(401).json(result);
+	
+			}
 		});
 
 		app.get('/atp/live', async (request, response) => {
