@@ -102,7 +102,7 @@ class Module extends Command {
 				let result = {};
 				result.error = error.message;
 				result.stack = error.stack.split('\n');
-				return response.status(401).json(result);
+				return response.status(500).json(result);
 	
 			}
 		});
