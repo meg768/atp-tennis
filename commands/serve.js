@@ -86,7 +86,7 @@ class Module extends Command {
 		app.get('/ok', function (request, response) {
 			return response.status(200).json({ message: 'I am OK' });
 		});
-		
+
 		app.post('/query', async (req, res) => {
 			const params = { ...req.body, ...req.query };
 
@@ -94,7 +94,7 @@ class Module extends Command {
 				const result = await this.mysql.query(params);
 				res.status(200).json(result);
 			} catch (error) {
-				console.error('Server error:', error);
+				console.error('Server error:', JSON.stringify(error));
 
 				res.status(500).json({
 					message: error.message || 'Unknown error',
