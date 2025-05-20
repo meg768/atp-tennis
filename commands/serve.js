@@ -114,18 +114,7 @@ class Module extends Command {
 			res.json({ message: 'pong' });
 		});
 
-		// app.get('/api/live', async (request, response) => {
-		// 	return this.execute(request, response, async () => {
-		// 		let options = Object.assign({}, request.body, request.query);
-
-		// 		let Fetcher = require('../src/fetch-live.js');
-		// 		let fetcher = new Fetcher();
-		// 		let response = await fetcher.fetch();
-		// 		return response;
-		// 	});
-		// });
-
-		app.get('/live', async (request, response) => {
+		app.get('/api/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
@@ -135,6 +124,17 @@ class Module extends Command {
 				return response;
 			});
 		});
+
+		// app.get('/live', async (request, response) => {
+		// 	return this.execute(request, response, async () => {
+		// 		let options = Object.assign({}, request.body, request.query);
+
+		// 		let Fetcher = require('../src/fetch-live.js');
+		// 		let fetcher = new Fetcher();
+		// 		let response = await fetcher.fetch();
+		// 		return response;
+		// 	});
+		// });
 
 		app.use('/api', api);
 
