@@ -113,8 +113,8 @@ class Module extends Command {
 		app.get('/api/ping', (req, res) => {
 			res.json({ message: 'pong' });
 		});
-		
-		app.get('/atp/live', async (request, response) => {
+
+		app.get('/api/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
