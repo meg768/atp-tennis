@@ -110,7 +110,6 @@ class Module extends Command {
 			}
 		});
 
-
 		app.get('/atp/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
