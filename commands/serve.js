@@ -82,7 +82,6 @@ class Module extends Command {
 		app.use(bodyParser.json({ limit: '50mb' }));
 		app.use(cors());
 
-
 		app.get('/ok', function (request, response) {
 			return response.status(200).json({ message: 'I am OK' });
 		});
@@ -102,7 +101,7 @@ class Module extends Command {
 				});
 			}
 		});
-				  
+
 		app.get('/atp/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
@@ -114,8 +113,8 @@ class Module extends Command {
 			});
 		});
 
-		app.listen(this.port, () => {
-			console.log('Node app is running on port ' + this.port);
+		app.listen(3004, '127.0.0.1', () => {
+			console.log('Express running on http://localhost:3004');
 		});
 	}
 
