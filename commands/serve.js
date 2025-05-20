@@ -112,6 +112,22 @@ class Module extends Command {
 			}
 		});
 
+		app.post('/', async (req, res) => {
+			console.log('HANDLED: POST / (because Apache stripped /query)');
+			const params = { ...req.body, ...req.query };
+
+			try {
+				const result = await this.mysql.query(params);
+				res.status(200).json(result);
+			} catch (error) {
+				console.error('Server error:', JSON.stringify(error));
+				res.status(500).json({
+					message: error.message || 'Unknown error',
+					stack: error.stack?.split('\n')
+				});
+			}
+		});
+		  
 		app.get('/atp/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
