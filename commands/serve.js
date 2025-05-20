@@ -92,7 +92,11 @@ class Module extends Command {
 		});
 
 
-
+		app.all('*', (req, res) => {
+			console.log('FALLBACK:', req.method, req.url);
+			res.status(404).json({ path: req.url });
+		});
+		  
 		app.post('/query', async (req, res) => {
 			const params = { ...req.body, ...req.query };
 
