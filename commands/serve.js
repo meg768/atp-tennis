@@ -78,6 +78,11 @@ class Module extends Command {
 
 		const app = express();
 
+		app.use((req, res, next) => {
+			console.log('INCOMING:', req.method, req.url);
+			next();
+		});
+
 		app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 		app.use(bodyParser.json({ limit: '50mb' }));
 		app.use(cors());
