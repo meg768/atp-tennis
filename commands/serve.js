@@ -125,6 +125,17 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/live', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query);
+
+				let Fetcher = require('../src/fetch-live.js');
+				let fetcher = new Fetcher();
+				let response = await fetcher.fetch();
+				return response;
+			});
+		});
+
 		app.use('/api', api);
 
 		app.listen(3004, '127.0.0.1', () => {
