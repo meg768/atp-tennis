@@ -86,22 +86,19 @@ class Module extends Command {
 		app.get('/ok', function (request, response) {
 			return response.status(200).json({ message: 'I am OK' });
 		});
-
-		app.post('/query', async (request, response) => {
-			const params = { ...request.body, ...request.query };
+		
+		app.post('/query', async (req, res) => {
+			const params = { ...req.body, ...req.query };
 
 			try {
 				const result = await this.mysql.query(params);
-				return response.status(200).json(result);
+				res.status(200).json(result);
 			} catch (error) {
-				console.error('Query error:', error);
+				console.error('Server error:', error);
 
-				return response.status(500).json({
-					error: error.message || 'Unknown error',
-					stack:
-						process.env.NODE_ENV === 'development'
-							? error.stack.split('\n')
-							: undefined
+				res.status(500).json({
+					message: error.message || 'Unknown error',
+					stack: error.stack?.split('\n')
 				});
 			}
 		});
