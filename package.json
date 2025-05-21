@@ -5,6 +5,7 @@
     "main": "atp.js",
     "scripts": {
         "git-commit": "git add -A && git commit -m '-' && git push",
+        "run serve": "./atp.js serve",
         "goto-github": "open https://github.com/meg768/apt-tennis"
     },
     "author": "",
