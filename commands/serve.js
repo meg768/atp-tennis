@@ -11,6 +11,8 @@ let isArray = require('yow/isArray');
 let express = require('express');
 let cors = require('cors');
 
+let probe = require('../src/probe.js');
+
 class Module extends Command {
 	constructor() {
 		super({ command: 'serve [options]', description: 'Start ATP service' });
@@ -89,8 +91,13 @@ class Module extends Command {
 		api.post('/query', async (req, res) => {
 			const params = { ...req.body, ...req.query };
 
+			
 			try {
+				const probe = new Probe();
 				const result = await this.mysql.query(params);
+
+				console.log(`Query executed in ${probe.toString()}`);
+				
 				res.status(200).json(result);
 			} catch (error) {
 				res.status(500).json({ message: error.message });
