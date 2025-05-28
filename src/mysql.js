@@ -1,14 +1,13 @@
-var isString = require('yow/isString');
-var mysql = require('mysql');
+const isString = require('yow/isString');
+const mysql = require('mysql');
+const Probe = require('./probe.js');
 
 class MySQL {
 	constructor(options) {
 		this.connection = undefined;
+		this.log = console.log;
 	}
 
-	log() {
-		console.log.apply(this, arguments);
-	}
 
 	connect() {
 		this.log(`Connecting to database '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
@@ -57,26 +56,38 @@ class MySQL {
 	}
 
 	async query(params) {
-		if (typeof params === 'string') {
-			params = { sql: params };
-		}
 
-		let { format, sql, ...options } = params;
+		 function run() {
+			if (typeof params === 'string') {
+				params = { sql: params };
+			}
 
-		if (format) {
-			sql = require('mysql').format(sql, format); // or this.mysql.format(sql, format)
-		}
+			let { format, sql, ...options } = params;
 
-		return await new Promise((resolve, reject) => {
-			this.connection.query({ sql, ...options }, (error, results) => {
-				if (error) {
-					console.error('MySQL query error:', error.message);
-					reject(error);
-				} else {
-					resolve(results);
-				}
+			if (format) {
+				sql = require('mysql').format(sql, format); // or this.mysql.format(sql, format)
+			}
+
+			return new Promise((resolve, reject) => {
+				this.connection.query({ sql, ...options }, (error, results) => {
+					if (error) {
+						console.error('MySQL query error:', error.message);
+						reject(error);
+					} else {
+						resolve(results);
+					}
+				});
 			});
-		});
+	
+		}
+
+		let probe = new Probe();
+		let result = await run();
+
+		this.log(`MySQL query executed in ${probe.toString()}`);
+
+		return result;
+		
 	}
 
 	async queryX(params) {
