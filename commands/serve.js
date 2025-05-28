@@ -9,6 +9,9 @@ let isArray = require('yow/isArray');
 let express = require('express');
 let cors = require('cors');
 
+const compression = require('compression');
+
+
 class Module extends Command {
 	constructor() {
 		super({ command: 'serve [options]', description: 'Start ATP service' });
@@ -80,6 +83,9 @@ class Module extends Command {
 		});
 
 		app.use('/api', api);
+		
+		// Compress responses > 1 KB
+		app.use(compression({ threshold: 1 * 1024 }));
 
 		app.listen(3004, '127.0.0.1', () => {
 			console.log('Express running on http://localhost:3004');
