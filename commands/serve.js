@@ -1,7 +1,6 @@
 let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
-let Probe = require('../src/probe.js');
 let bodyParser = require('body-parser');
 
 let isString = require('yow/isString');
