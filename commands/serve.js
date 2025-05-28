@@ -9,45 +9,18 @@ let isArray = require('yow/isArray');
 let express = require('express');
 let cors = require('cors');
 
-
 class Module extends Command {
 	constructor() {
 		super({ command: 'serve [options]', description: 'Start ATP service' });
 		this.mysql = new MySQL();
 		this.port = 3004;
-		this.log = console.log
+		this.log = console.log;
 	}
 
 	arguments(args) {
 		args.help();
 	}
-/*
-	async query(connection, params) {
-		let promise = new Promise((resolve, reject) => {
-			try {
-				if (isString(params)) {
-					params = { sql: params };
-				}
 
-				let { format, sql, ...options } = params;
-
-				if (format) {
-					sql = connection.format(sql, format);
-				}
-
-				connection.query({ sql: sql, ...options }, (error, results) => {
-					if (error) {
-						reject(error);
-					} else resolve(results);
-				});
-			} catch (error) {
-				reject(error);
-			}
-		});
-
-		return await promise;
-	}
-*/
 	async execute(request, response, fn) {
 		try {
 			return response.status(200).json(await fn());
@@ -66,7 +39,6 @@ class Module extends Command {
 		const path = require('path');
 		const api = express.Router();
 
-
 		const app = express();
 
 		app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
@@ -80,7 +52,6 @@ class Module extends Command {
 		api.post('/query', async (req, res) => {
 			const params = { ...req.body, ...req.query };
 
-			
 			try {
 				const probe = new Probe();
 				const result = await this.mysql.query(params);
@@ -107,7 +78,6 @@ class Module extends Command {
 				return response;
 			});
 		});
-
 
 		app.use('/api', api);
 
