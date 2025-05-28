@@ -38,15 +38,15 @@ class Module extends Command {
 	listen() {
 		const express = require('express');
 
-		// Compress responses > 1 KB
-		app.use(compression({ threshold: 1 * 1024 }));
-
 		const bodyParser = require('body-parser');
 		const cors = require('cors');
 		const path = require('path');
 		const api = express.Router();
 
 		const app = express();
+
+		// Compress responses > 1 KB
+		app.use(compression({ threshold: 1 * 1024 }));
 
 		app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 		app.use(bodyParser.json({ limit: '50mb' }));
