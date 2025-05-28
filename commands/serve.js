@@ -1,9 +1,8 @@
 let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
+let Probe = require('../src/probe.js');
 let bodyParser = require('body-parser');
-let Gopher = require('../src/gopher.js');
-let axios = require('axios');
 
 let isString = require('yow/isString');
 let isArray = require('yow/isArray');
@@ -11,13 +10,13 @@ let isArray = require('yow/isArray');
 let express = require('express');
 let cors = require('cors');
 
-let probe = require('../src/probe.js');
 
 class Module extends Command {
 	constructor() {
 		super({ command: 'serve [options]', description: 'Start ATP service' });
 		this.mysql = new MySQL();
 		this.port = 3004;
+		this.log = console.log
 	}
 
 	arguments(args) {
@@ -71,21 +70,12 @@ class Module extends Command {
 
 		const app = express();
 
-		app.use((req, res, next) => {
-			console.log('INCOMING:', req.method, req.url);
-			next();
-		});
-
 		app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 		app.use(bodyParser.json({ limit: '50mb' }));
 		app.use(cors());
 
 		app.get('/ok', function (request, response) {
 			return response.status(200).json({ message: 'I am OK' });
-		});
-
-		app.use((req, res, next) => {
-			next();
 		});
 
 		api.post('/query', async (req, res) => {
@@ -96,8 +86,8 @@ class Module extends Command {
 				const probe = new Probe();
 				const result = await this.mysql.query(params);
 
-				console.log(`Query executed in ${probe.toString()}`);
-				
+				this.log(`Query executed in ${probe.toString()}`);
+
 				res.status(200).json(result);
 			} catch (error) {
 				res.status(500).json({ message: error.message });
