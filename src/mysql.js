@@ -57,17 +57,17 @@ class MySQL {
 
 	async query(params) {
 
-		let run = () => {
-			if (typeof params === 'string') {
-				params = { sql: params };
-			}
+		if (typeof params === 'string') {
+			params = { sql: params };
+		}
 
-			let { format, sql, ...options } = params;
+		let { format, sql, ...options } = params;
 
-			if (format) {
-				sql = require('mysql').format(sql, format); // or this.mysql.format(sql, format)
-			}
+		if (format) {
+			sql = require('mysql').format(sql, format); // or this.mysql.format(sql, format)
+		}
 
+		let query = () => {
 			return new Promise((resolve, reject) => {
 				this.connection.query({ sql, ...options }, (error, results) => {
 					if (error) {
@@ -83,7 +83,7 @@ class MySQL {
 
 
 		let probe = new Probe();
-		let result = await run();
+		let result = await query();
 
 		this.log(`Query: ${sql}`);
 		this.log(`Query executed in ${probe.toString()}`);
