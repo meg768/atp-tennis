@@ -37,6 +37,10 @@ class Module extends Command {
 
 	listen() {
 		const express = require('express');
+
+		// Compress responses > 1 KB
+		app.use(compression({ threshold: 1 * 1024 }));
+
 		const bodyParser = require('body-parser');
 		const cors = require('cors');
 		const path = require('path');
@@ -83,9 +87,6 @@ class Module extends Command {
 		});
 
 		app.use('/api', api);
-		
-		// Compress responses > 1 KB
-		app.use(compression({ threshold: 1 * 1024 }));
 
 		app.listen(3004, '127.0.0.1', () => {
 			console.log('Express running on http://localhost:3004');
