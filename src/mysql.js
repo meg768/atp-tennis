@@ -65,7 +65,7 @@ class MySQL {
 		let { format, sql, ...options } = params;
 
 		if (format) {
-			sql = require('mysql').format(sql, format); // or this.mysql.format(sql, format)
+			sql = mysql.format(sql, format); // or this.mysql.format(sql, format)
 		}
 
 		let query = () => {
@@ -92,54 +92,6 @@ class MySQL {
 		return result;
 		
 	}
-
-	async queryX(params) {
-		let promise = new Promise((resolve, reject) => {
-			try {
-				if (isString(params)) {
-					params = { sql: params };
-				}
-
-				let { format, sql, ...options } = params;
-
-				if (format) {
-					sql = mysql.format(sql, format);
-				}
-
-				this.connection.query({ sql: sql, ...options }, (error, results) => {
-					if (error) {
-						console.log(error);
-						reject(error);
-					} else resolve(results);
-				});
-			} catch (error) {
-				reject(error);
-			}
-		});
-
-		return await promise;
-	}
-
-	/*
-
-	query(options) {
-		return new Promise((resolve, reject) => {
-			try {
-				if (isString(options)) {
-					options = { sql: options };
-				}
-
-				this.connection.query(options, function (error, results) {
-					if (error) {
-						reject(error);
-					} else resolve(results);
-				});
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
-        */
 
 	upsert(table, row) {
 		let values = [];
