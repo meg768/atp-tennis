@@ -57,7 +57,7 @@ class MySQL {
 
 	async query(params) {
 
-		 function run() {
+		let run = () => {
 			if (typeof params === 'string') {
 				params = { sql: params };
 			}
@@ -78,8 +78,9 @@ class MySQL {
 					}
 				});
 			});
-	
-		}
+
+		};
+
 
 		let probe = new Probe();
 		let result = await run();
