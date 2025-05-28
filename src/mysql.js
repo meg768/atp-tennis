@@ -85,7 +85,8 @@ class MySQL {
 		let probe = new Probe();
 		let result = await run();
 
-		this.log(`MySQL query executed in ${probe.toString()}`);
+		this.log(`Query: ${sql}`);
+		this.log(`Query executed in ${probe.toString()}`);
 
 		return result;
 		
