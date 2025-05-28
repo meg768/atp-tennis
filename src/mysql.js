@@ -45,10 +45,6 @@ class MySQL {
 		this.connection = undefined;
 	}
 
-	format() {
-		return mysql.format.apply(this, arguments);
-	}
-
 	async execute(file) {
 		const fs = require('node:fs/promises');
 		const data = await fs.readFile(file, { encoding: 'utf8' });
@@ -65,7 +61,7 @@ class MySQL {
 		let { format, sql, ...options } = params;
 
 		if (format) {
-			sql = mysql.format(sql, format); // or this.mysql.format(sql, format)
+			sql = mysql.format(sql, format);
 		}
 
 		let query = () => {
