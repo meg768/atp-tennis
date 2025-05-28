@@ -85,7 +85,7 @@ class Module extends Command {
 				const probe = new Probe();
 				const result = await this.mysql.query(params);
 
-				this.log(`Query executed in ${probe.toString()}`);
+				this.log(`/query executed in ${probe.toString()}`);
 
 				res.status(200).json(result);
 			} catch (error) {
