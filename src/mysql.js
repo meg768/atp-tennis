@@ -6,6 +6,7 @@ class MySQL {
 	constructor(options) {
 		this.connection = undefined;
 		this.log = console.log;
+		this.error = console.error;
 	}
 
 
@@ -71,7 +72,7 @@ class MySQL {
 			return new Promise((resolve, reject) => {
 				this.connection.query({ sql, ...options }, (error, results) => {
 					if (error) {
-						console.error('MySQL query error:', error.message);
+						this.error('MySQL query error:', error.message);
 						reject(error);
 					} else {
 						resolve(results);
@@ -85,7 +86,7 @@ class MySQL {
 		let probe = new Probe();
 		let result = await query();
 
-		this.log(`Query: ${sql}`);
+		this.log(`${sql}`);
 		this.log(`Query executed in ${probe.toString()}`);
 
 		return result;

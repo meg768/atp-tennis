@@ -21,7 +21,7 @@ class Module extends Command {
 	arguments(args) {
 		args.help();
 	}
-
+/*
 	async query(connection, params) {
 		let promise = new Promise((resolve, reject) => {
 			try {
@@ -47,7 +47,7 @@ class Module extends Command {
 
 		return await promise;
 	}
-
+*/
 	async execute(request, response, fn) {
 		try {
 			return response.status(200).json(await fn());
