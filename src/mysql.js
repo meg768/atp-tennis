@@ -100,12 +100,12 @@ class MySQL {
 
 		let sql = '';
 
-		sql += this.format('INSERT INTO ?? (??) VALUES (?) ', [table, columns, values]);
-		sql += this.format('ON DUPLICATE KEY UPDATE ');
+		sql += mysql.format('INSERT INTO ?? (??) VALUES (?) ', [table, columns, values]);
+		sql += mysql.format('ON DUPLICATE KEY UPDATE ');
 
 		sql += columns
 			.map(column => {
-				return this.format('?? = VALUES(??)', [column, column]);
+				return mysql.format('?? = VALUES(??)', [column, column]);
 			})
 			.join(',');
 
