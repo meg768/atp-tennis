@@ -1,3 +1,4 @@
+const util = require('util');
 const isString = require('yow/isString');
 const mysql = require('mysql');
 const Probe = require('./probe.js');
@@ -9,8 +10,38 @@ class MySQL {
 		this.error = console.error;
 	}
 
+	async connect() {
+		this.log(`Connecting to database '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
 
-	connect() {
+		const options = {
+			host: process.env.MYSQL_HOST,
+			user: process.env.MYSQL_USER,
+			password: process.env.MYSQL_PASSWORD,
+			database: process.env.MYSQL_DATABASE,
+			port: process.env.MYSQL_PORT,
+			multipleStatements: true
+		};
+
+		if (!isString(options.host) || !isString(options.user) || !isString(options.password) || !isString(options.database)) {
+			throw new Error('MySQL credentials/database not specified.');
+		}
+
+		this.disconnect();
+
+		this.connection = mysql.createConnection(options);
+
+		const connectAsync = util.promisify(this.connection.connect).bind(this.connection);
+
+		try {
+			await connectAsync();
+			this.log('✅ Connected to MySQL successfully.');
+		} catch (error) {
+			this.error('❌ MySQL connection error:', error.message);
+			throw error;
+		}
+	}
+
+	connectX() {
 		this.log(`Connecting to database '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
 
 		let options = {};
@@ -23,12 +54,7 @@ class MySQL {
 		// Allow multiple statements
 		options.multipleStatements = true;
 
-		if (
-			!isString(options.host) ||
-			!isString(options.user) ||
-			!isString(options.password) ||
-			!isString(options.database)
-		) {
+		if (!isString(options.host) || !isString(options.user) || !isString(options.password) || !isString(options.database)) {
 			throw new Error('MySQL credentials/database not specified.');
 		}
 
@@ -53,7 +79,6 @@ class MySQL {
 	}
 
 	async query(params) {
-
 		if (typeof params === 'string') {
 			params = { sql: params };
 		}
@@ -75,9 +100,7 @@ class MySQL {
 					}
 				});
 			});
-
 		};
-
 
 		let probe = new Probe();
 		let result = await query();
@@ -86,7 +109,6 @@ class MySQL {
 		this.log(`Query executed in ${probe.toString()}`);
 
 		return result;
-		
 	}
 
 	upsert(table, row) {
