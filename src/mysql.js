@@ -26,17 +26,18 @@ class MySQL {
 			throw new Error('MySQL credentials/database not specified.');
 		}
 
-		this.disconnect();
+		await this.disconnect();
 
-		this.connection = mysql.createConnection(options);
-
-		const connectAsync = util.promisify(this.connection.connect).bind(this.connection);
+		const connection = mysql.createConnection(options);
+		const connectAsync = util.promisify(connection.connect).bind(connection);
 
 		try {
 			await connectAsync();
+			this.connection = connection;
 			this.log('✅ Connected to MySQL successfully.');
 		} catch (error) {
 			this.error('❌ MySQL connection error:', error.message);
+			// Don't assign this.connection
 			throw error;
 		}
 	}
@@ -62,7 +63,25 @@ class MySQL {
 		this.connection = mysql.createConnection(options);
 	}
 
-	disconnect() {
+	async disconnect() {
+		if (this.connection !== undefined) {
+			this.log(`Disconnecting from '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
+
+			const endAsync = util.promisify(this.connection.end).bind(this.connection);
+
+			try {
+				await endAsync();
+				this.log('✅ Disconnected from MySQL.');
+			} catch (error) {
+				this.error('⚠️ Error while disconnecting:', error.message);
+				// Du kan lägga till fallback med connection.destroy() här om du vill
+			}
+		}
+
+		this.connection = undefined;
+	}
+
+	disconnectX() {
 		if (this.connection != undefined) {
 			this.log(`Disconnecting '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
 			this.connection.end();
