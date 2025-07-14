@@ -29,6 +29,7 @@ class Module extends Fetcher {
 		result.name = `${response.FirstName ? response.FirstName + ' ' : ''}${response.LastName}`;
 		result.country = response.NatlId;
 		result.age = response.Age;
+		result.birthdate = response.BirthDate ? response.BirthDate.split('T')[0] : null;
 		result.height = response.HeightCm > 0 ? response.HeightCm : null;
 		result.weight = response.WeightKg > 0 ? response.WeightKg : null;
 		result.url = `https://www.atptour.com${response.ScRelativeUrlPlayerProfile}`;

@@ -125,7 +125,6 @@ class MySQL {
 		let result = await query();
 
 		this.log(`${sql}`);
-		this.log(`Query executed in ${probe.toString()}`);
 
 		return result;
 	}

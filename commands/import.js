@@ -230,6 +230,7 @@ class Import extends Command {
 						country: details.country,
 						age: details.age,
 						pro: details.pro,
+						birthdate: details.birthdate,
 						active: details.active,
 						height: details.height,
 						weight: details.weight,

@@ -22,6 +22,7 @@ var App = function () {
             args.command(require('./commands/serve.js'));
             args.command(require('./commands/update-elo.js'));
             args.command(require('./commands/update-stats.js'));
+            args.command(require('./commands/update-players.js'));
 
             args.help();
             args.wrap(null);

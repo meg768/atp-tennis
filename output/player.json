@@ -3,6 +3,7 @@
 	"name": "Jannik Sinner",
 	"country": "ITA",
 	"age": 23,
+	"birthdate": "2001-08-16",
 	"height": 191,
 	"weight": 77,
 	"url": "https://www.atptour.com/en/players/jannik-sinner/s0ag/overview",
@@ -20,21 +21,21 @@
 	},
 	"matches": {
 		"career": {
-			"wins": 270,
-			"losses": 80
+			"wins": 289,
+			"losses": 83
 		},
 		"ytd": {
-			"wins": 7,
-			"losses": 0
+			"wins": 26,
+			"losses": 3
 		}
 	},
 	"titles": {
-		"career": 19,
-		"ytd": 1
+		"career": 20,
+		"ytd": 2
 	},
 	"prize": {
-		"ytd": "2150400",
-		"career": "39389088"
+		"ytd": "8437163",
+		"career": "45682097"
 	},
 	"raw": {
 		"LastName": "Sinner",
@@ -71,28 +72,28 @@
 		"SglHiRank": 1,
 		"SglRankMove": 0,
 		"SglRankTie": false,
-		"DblRank": 345,
+		"DblRank": 576,
 		"DblHiRank": 124,
-		"DblRankMove": 3,
+		"DblRankMove": 11,
 		"DblRankTie": false,
 		"ScRelativeUrlPlayerProfile": "/en/players/jannik-sinner/s0ag/overview",
 		"ScRelativeUrlPlayerCountryFlag": "/en/~/media/images/flags/ita.svg",
 		"GladiatorImageUrl": null,
-		"SglCareerWon": 270,
-		"SglCareerLost": 80,
-		"SglYtdWon": 7,
-		"SglYtdLost": 0,
-		"SglCareerTitles": 19,
-		"SglYtdTitles": 1,
-		"SglYtdPrizeFormatted": "$2,150,400",
-		"CareerPrizeFormatted": "$39,389,088",
+		"SglCareerWon": 289,
+		"SglCareerLost": 83,
+		"SglYtdWon": 26,
+		"SglYtdLost": 3,
+		"SglCareerTitles": 20,
+		"SglYtdTitles": 2,
+		"SglYtdPrizeFormatted": "$8,437,163",
+		"CareerPrizeFormatted": "$45,682,097",
 		"DblCareerWon": 26,
-		"DblCareerLost": 24,
+		"DblCareerLost": 25,
 		"DblYtdWon": 0,
-		"DblYtdLost": 0,
+		"DblYtdLost": 1,
 		"DblCareerTitles": 1,
 		"DblYtdTitles": 0,
-		"DblYtdPrizeFormatted": "$0",
+		"DblYtdPrizeFormatted": "$6,245",
 		"IsCarbonTrackerEnabled": false,
 		"SocialLinks": [
 			{
