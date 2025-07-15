@@ -122,7 +122,7 @@ class Module extends Command {
 
 				}
 
-				response.json({ question: question, sql:sql, response: result });
+				response.json({ question: question, sql:sql, answer: result });
 			} catch (error) {
 				let result = {};
 				result.error = error.message;
