@@ -16,6 +16,6 @@ Regler:
 - Visa hur många Grand Slam-titlar som vunnits totalt per decennium.  
 
 Om något är oklart eller inte kan besvaras, returnera:
-SELECT 'förklaring här' AS `Meddelande`;
+SELECT 'förklaring här' AS `!`;
 
 Svara ENDAST med en giltig MySQL SELECT-sats.
