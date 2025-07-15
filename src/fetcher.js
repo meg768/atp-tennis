@@ -13,8 +13,10 @@ class Module {
 
 	output({ fileName, json }) {
 		if (typeof fileName === 'string' && json) {
+			const text = JSON.stringify(json, null, '   ');
 			const fs = require('fs');
-			fs.writeFileSync(fileName, JSON.stringify(json, null, '\t'));
+			fs.writeFileSync(fileName, text);
+			this.log(text);
 		}
 	}
 }

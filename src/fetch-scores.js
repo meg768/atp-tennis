@@ -24,6 +24,10 @@ class Module extends Fetcher {
 			return response;
 		}
 		
+		if (!(response.Data || response.Data.length == 0)) {
+			throw Error(`No information about event ${event} found.`);
+		}
+		
 		raw = response.Data[0];
 
 		let result = {};
