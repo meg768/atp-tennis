@@ -14,6 +14,9 @@ Regler:
 - En Grand Slam-titel innebär att en spelare har vunnit finalen i ett event där events.type = 'Grand Slam' och matches.round = 'F'. Endast matches.winner ska räknas.  
 - Gruppera spelare efter födelsedecennium, t.ex. 1970–1979, 1980–1989, 1990–1999 osv.  
 - Visa hur många Grand Slam-titlar som vunnits totalt per decennium.  
+- Att vinna en titel är samma som att vinna en turnering.
+- Att söka på namn innebär player.name LIKE '%namn%'
+
 
 Om något är oklart eller inte kan besvaras, returnera:
 SELECT 'förklaring här' AS `!`;
