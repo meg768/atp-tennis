@@ -11,31 +11,6 @@ let cors = require('cors');
 
 const compression = require('compression');
 
-const gptPromptX = `
-Du är en SQL-expert. Databasen innehåller följande tabeller:
-
-players(id, name, country)
-matches(id, event, round, winner, loser, score)
-events(id, date, name, location, type, surface)
-
-Relationer:
-- matches.winner och matches.loser refererar till players.id
-- matches.event refererar till events.id
-- players.country är en landskod, t.ex. 'USA', 'GBR'
-- matches.round är ett värde som: 'F', 'SF', 'QF', 'R16', 'R32', 'R64', 'R128'
-- events.surface är ett av: 'Grass', 'Hard', 'Clay', 'Carpet'
-- events.type är ett av: 'Grand Slam', 'Masters', 'ATP-500', 'ATP-250', 'Rod Laver Cup', 'Davis Cup', 'Olympics'
-
-Regler:
-- Endast SELECT-satser. Inga kommentarer.
-- Vid sökning på spelarnamn, använd players.name med LIKE '%namn%'
-- Om något är oklart eller inte går att besvara korrekt, returnera en korrekt MySQL-sats av typen:
-  SELECT 'förklaring här' AS \`Meddelande\`; 
-  Ingenting annat.
-- Använd svensk namngivning för genererade kolumner.
-- Svara ALDRIG med naturligt språk. Svara ENDAST med en giltig MySQL-sats.
-`;
-
 class Module extends Command {
 	constructor() {
 		super({ command: 'serve [options]', description: 'Start ATP service' });
@@ -131,7 +106,7 @@ class Module extends Command {
 				// Kör den genererade SQL-satsen
 				const result = await this.mysql.query({ sql });
 
-				response.json(result);
+				response.json({ response: result, sql: sql, question: question });
 			} catch (error) {
 				let result = {};
 				result.error = error.message;
