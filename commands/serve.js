@@ -27,9 +27,12 @@ Relationer:
 - events.type är ett av: 'Grand Slam', 'Masters', 'ATP-500', 'ATP-250', 'Rod Laver Cup', 'Davis Cup', 'Olympics'
 
 Regler:
-- Endast SELECT-satser.
+- Endast SELECT-satser. Inga kommentarer.
 - Vid sökning på spelarnamn, använd players.name med LIKE '%namn%'
+- Om något är oklart eller inte går att besvara korrekt, returnera en korrekt MySQL-sats av typen:
+  SELECT 'förklaring här' AS \`Meddelande\`; Ingenting annat.
 - Använd svensk namngivning för genererade kolumner.
+- Svara ALDRIG med naturligt språk. Svara ENDAST med en giltig MySQL-sats.
 `;
 
 class Module extends Command {
