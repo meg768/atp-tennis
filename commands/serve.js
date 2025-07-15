@@ -95,7 +95,11 @@ class Module extends Command {
 				let sql = await this.generateSQLFromNaturalLanguage(question);
 
 				// Rensa SQL-satsen från onödiga radbrytningar
-				sql = sql.replace(/\n/g, ' ');
+				sql = sql
+					.replace(/[\r\n]+/g, ' ')
+					.replace(/\s+/g, ' ')
+					.trim();
+
 
 				this.log(`Fråga: "${question}"`);
 				this.log(`SQL: ${sql}`);
