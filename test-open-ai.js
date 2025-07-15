@@ -9,7 +9,7 @@ const gptSqlPrompt = require('./src/gpt-sql-prompt.js');
 
 async function main() {
 
-	const question = 'Hur många titlar har Jimmy Connors vunnit?. Namnge alla turneringar med årtal.';
+	const question = 'Gruppera alla spelare när de är födda per decennium . Hur många Grand Slam titlar har de vunnit totalt per grupp?';
 	const prompt = gptSqlPrompt.getPrompt(question);
 	
 	const response = await openai.chat.completions.create({
