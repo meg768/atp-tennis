@@ -29,9 +29,10 @@ Regler:
 
 async function main() {
 
-	const question = 'Visa alla matcher som Nadal vann på grus under 2022.';
+	const question = 'Visa de bästa spelarna genom tiderna, top 10';
 	const prompt = `${basicPrompt}\nSkriv en MySQL-sats som svarar på: "${question}"`;
 	
+	console.log(prompt);
 	const response = await openai.chat.completions.create({
 		model: 'gpt-4',
 		messages: [{ role: 'user', content: prompt }],

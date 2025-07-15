@@ -119,6 +119,12 @@ class Module extends Command {
 				this.log(`Fråga: "${question}"`);
 				this.log(`SQL: ${sql}`);
 
+				if (!sql.trim().toUpperCase().startsWith('SELECT')) {
+					return res.status(400).json({
+						error: sql
+					});
+				}
+
 				// Kör den genererade SQL-satsen
 				const result = await this.mysql.query({ sql });
 
