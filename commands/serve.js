@@ -105,11 +105,11 @@ class Module extends Command {
 			});
 		});
 
-		api.post('/ask', async (req, res) => {
-			const { question } = req.body;
+		api.post('/ask', async (request, response) => {
+			const { question } = request.body;
 
 			if (!question || typeof question !== 'string') {
-				return res.status(400).json({ error: 'Du måste skicka med en fråga i textform.' });
+				return response.status(400).json({ error: 'Du måste skicka med en fråga i textform.' });
 			}
 
 			try {
@@ -122,7 +122,7 @@ class Module extends Command {
 				// Kör den genererade SQL-satsen
 				const result = await this.mysql.query({ sql });
 
-				res.json(result);
+				response.json(result);
 			} catch (error) {
 				let result = {};
 				result.error = error.message;
