@@ -118,7 +118,7 @@ class Module extends Command {
 				this.log(`SQL: ${sql}`);
 
 				if (!sql.trim().toUpperCase().startsWith('SELECT')) {
-					return res.status(400).json({
+					return response.status(400).json({
 						error: sql
 					});
 				}
