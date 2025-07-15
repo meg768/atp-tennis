@@ -18,5 +18,5 @@ Regler:
 - Om något är oklart eller inte går att besvara korrekt, returnera en korrekt MySQL-sats av typen:
   SELECT 'förklaring här' AS \`!\`; 
   Ingenting annat.
-- Använd svensk namngivning för genererade kolumner.
+- Använd svensk namngivning för genererade kolumner med inledande stor bokstav där det är passande.
 - Svara ALDRIG med naturligt språk. Svara ENDAST med en giltig MySQL-sats.
