@@ -94,6 +94,9 @@ class Module extends Command {
 				// Här anropar du GPT för att få SQL från svensk fråga
 				const sql = await this.generateSQLFromNaturalLanguage(question);
 
+				// Rensa SQL-satsen från onödiga radbrytningar
+				sql = sql.replace(/\n/g, ' ');
+
 				this.log(`Fråga: "${question}"`);
 				this.log(`SQL: ${sql}`);
 

@@ -9,7 +9,7 @@ const gptSqlPrompt = require('./src/gpt-sql-prompt.js');
 
 async function main() {
 
-	const question = 'Var är min favoritspelare nu?';
+	const question = 'Hur många titlar har Jimmy Connors vunnit?. Namnge alla turneringar med årtal.';
 	const prompt = gptSqlPrompt.getPrompt(question);
 	
 	const response = await openai.chat.completions.create({
