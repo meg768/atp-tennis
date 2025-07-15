@@ -18,6 +18,7 @@ Regler:
 - Att söka på namn innebär player.name LIKE '%namn%'
 - Bästa spelare innebär flest Grand Slam titlar följt av antal vunna Masters.
 - Visa ALDRIG duplicerade rader!
+- Att vinna en turnering innebär en vinst när matches.round = 'F'.
 
 
 Om något är oklart eller inte kan besvaras, returnera:
