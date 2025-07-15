@@ -105,6 +105,14 @@ class Module extends Command {
 
 				// Kör den genererade SQL-satsen
 				const result = await this.mysql.query({ sql });
+
+				if (result && result.length == 1 && result[0].hasOwnProperty('!')) {
+					// Om resultatet är en förklaring, returnera det som ett fel
+					return response.status(400).json({
+						error: result[0]['!']
+					});
+
+				}
 				console.log(result);
 
 				response.json({ question: question, sql:sql, response: result });
