@@ -106,7 +106,7 @@ class Module extends Command {
 				// Kör den genererade SQL-satsen
 				const result = await this.mysql.query({ sql });
 
-				response.json({ response: result, sql: sql, question: question });
+				response.json({ question: question, sql:sql, response: result });
 			} catch (error) {
 				let result = {};
 				result.error = error.message;
