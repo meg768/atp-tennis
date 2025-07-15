@@ -11,7 +11,8 @@ let cors = require('cors');
 
 const compression = require('compression');
 
-const gptPrompt = `
+const gptPrompt = require('../src/gpt-prompt.js');
+const gptPromptX = `
 Du är en SQL-expert. Databasen innehåller följande tabeller:
 
 players(id, name, country)
@@ -30,7 +31,8 @@ Regler:
 - Endast SELECT-satser. Inga kommentarer.
 - Vid sökning på spelarnamn, använd players.name med LIKE '%namn%'
 - Om något är oklart eller inte går att besvara korrekt, returnera en korrekt MySQL-sats av typen:
-  SELECT 'förklaring här' AS \`Meddelande\`; Ingenting annat.
+  SELECT 'förklaring här' AS \`Meddelande\`; 
+  Ingenting annat.
 - Använd svensk namngivning för genererade kolumner.
 - Svara ALDRIG med naturligt språk. Svara ENDAST med en giltig MySQL-sats.
 `;
@@ -61,8 +63,9 @@ class Module extends Command {
 	async generateSQLFromNaturalLanguage(question) {
 		const { OpenAI } = require('openai');
 
+		const gptSqlPrompt = require('../src/gpt-sql-prompt.js');
 		const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-		const prompt = `${gptPrompt}\nSkriv en MySQL-sats som svarar på: "${question}"`;
+		const prompt = gptSqlPrompt.getPrompt(question);
 
 		const response = await openai.chat.completions.create({
 			model: 'gpt-4',
