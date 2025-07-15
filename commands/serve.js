@@ -97,6 +97,7 @@ class Module extends Command {
 				this.log(`Fråga: "${question}"`);
 				this.log(`SQL: ${sql}`);
 
+				// Om SQL-satsen inte börjar med SELECT, returnera ett vad vi fick tillbaka som ett fel
 				if (!sql.trim().toUpperCase().startsWith('SELECT')) {
 					return response.status(400).json({
 						error: sql
@@ -113,7 +114,6 @@ class Module extends Command {
 					});
 
 				}
-				console.log(result);
 
 				response.json({ question: question, sql:sql, response: result });
 			} catch (error) {
