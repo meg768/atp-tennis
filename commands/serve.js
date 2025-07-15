@@ -11,7 +11,6 @@ let cors = require('cors');
 
 const compression = require('compression');
 
-const gptPrompt = require('../src/gpt-prompt.js');
 const gptPromptX = `
 Du är en SQL-expert. Databasen innehåller följande tabeller:
 
