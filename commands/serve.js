@@ -29,8 +29,6 @@ Relationer:
 Regler:
 - Endast SELECT-satser.
 - Vid sökning på spelarnamn, använd players.name med LIKE '%namn%'
-- Om något är oklart eller inte går att besvara korrekt, returnera en korrekt MySQL-sats av typen:
-  SELECT 'förklaring här' AS \`Meddelande\`; Ingenting annat.
 - Använd svensk namngivning för genererade kolumner.
 `;
 
