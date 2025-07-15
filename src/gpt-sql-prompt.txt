@@ -1,6 +1,6 @@
 Du är en SQL-expert. Databasen innehåller följande tabeller:
 
-players(id, name, country)
+players(id, name, country, birthdate, rank, age, highest_rank, highest_rank_date)
 matches(id, event, round, winner, loser, score)
 events(id, date, name, location, type, surface)
 
