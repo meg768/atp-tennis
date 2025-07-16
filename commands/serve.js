@@ -75,6 +75,7 @@ class Module extends Command {
 			let sql;
 			try {
 				sql = await this.chatATP.sendMessage(question);
+				sql.replace(/\s+/g, ' ').trim();
 
 				this.log(`Fråga: "${question}"`);
 				this.log(`SQL: ${sql}`);
@@ -92,7 +93,7 @@ class Module extends Command {
 				return res.json({
 					question,
 					sql,
-					answer: result.replace(/\s+/g, ' ').trim(),
+					answer: result,
 					timestamp: new Date().toISOString()
 				});
 			} catch (error) {
