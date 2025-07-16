@@ -89,18 +89,16 @@ class Module extends Command {
 			if (!question || typeof question !== 'string') {
 				return response.status(400).json({ error: 'Du måste skicka med en fråga i textform.' });
 			}
+			// Här anropar du GPT för att få SQL från svensk fråga
+			let sql = await this.generateSQLFromNaturalLanguage(question);
+
+			// Rensa SQL-satsen från onödiga radbrytningar
+			sql = sql
+				.replace(/[\r\n]+/g, ' ')
+				.replace(/\s+/g, ' ')
+				.trim();
 
 			try {
-				// Här anropar du GPT för att få SQL från svensk fråga
-				let sql = await this.generateSQLFromNaturalLanguage(question);
-
-				// Rensa SQL-satsen från onödiga radbrytningar
-				sql = sql
-					.replace(/[\r\n]+/g, ' ')
-					.replace(/\s+/g, ' ')
-					.trim();
-
-
 				this.log(`Fråga: "${question}"`);
 				this.log(`SQL: ${sql}`);
 
@@ -119,13 +117,13 @@ class Module extends Command {
 					return response.status(400).json({
 						error: result[0]['!']
 					});
-
 				}
 
-				response.json({ question: question, sql:sql, answer: result });
+				response.json({ question: question, sql: sql, answer: result });
 			} catch (error) {
 				let result = {};
 				result.error = error.message;
+				result.sql = sql;
 				result.stack = error.stack.split('\n');
 				return response.status(401).json(result);
 			}
