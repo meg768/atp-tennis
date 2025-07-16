@@ -66,10 +66,10 @@ class Module extends Command {
 		});
 
 		api.get('/ask', async (req, res) => {
-			const question = req.query.q;
+			const question = req.query.question;
 
 			if (!question || typeof question !== 'string') {
-				return res.status(400).json({ error: 'Ange frågan som ?q=...' });
+				return res.status(400).json({ error: 'Supply a query as in ?question=...' });
 			}
 
 			let sql;
@@ -86,7 +86,7 @@ class Module extends Command {
 				const result = await this.mysql.query({ sql });
 
 				if (result?.length === 1 && result[0]?.Meddelande) {
-					return res.status(400).json({ error: result[0].Meddelande });
+					return res.status(400).json({ message: result[0].Meddelande });
 				}
 
 				return res.json({
