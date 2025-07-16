@@ -65,6 +65,45 @@ class Module extends Command {
 			});
 		});
 
+		api.get('/ask', async (req, res) => {
+			const question = req.query.q;
+
+			if (!question || typeof question !== 'string') {
+				return res.status(400).json({ error: 'Ange frågan som ?q=...' });
+			}
+
+			let sql;
+			try {
+				sql = await this.chatATP.sendMessage(question);
+
+				this.log(`Fråga: "${question}"`);
+				this.log(`SQL: ${sql}`);
+
+				if (!/^SELECT\s/i.test(sql.trim())) {
+					return res.status(400).json({ error: sql });
+				}
+
+				const result = await this.mysql.query({ sql });
+
+				if (result?.length === 1 && result[0]?.Meddelande) {
+					return res.status(400).json({ error: result[0].Meddelande });
+				}
+
+				return res.json({
+					question,
+					sql,
+					answer: result,
+					timestamp: new Date().toISOString()
+				});
+			} catch (error) {
+				return res.status(500).json({
+					error: error.message,
+					sql: sql || null,
+					stack: error.stack?.split('\n')
+				});
+			}
+		});
+
 		api.post('/ask', async (request, response) => {
 			const { question } = request.body;
 
