@@ -16,6 +16,7 @@ Relationer:
 Definitioner:
 
 - Att vinna en titel = att vinna finalen i en turnering (dvs. matches.round = 'F')  
+- Att vinna en masters = att vinna finalen i en turnering (dvs. matches.round = 'F' och event.type = 'Masters')  
 - Att vinna en turnering innbär att vinna en titel.
 - En Grand Slam är ett event där events.type = 'Grand Slam'  
 - En Masters är ett event där events.type = 'Masters'  
