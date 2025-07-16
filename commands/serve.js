@@ -92,7 +92,7 @@ class Module extends Command {
 				return res.json({
 					question,
 					sql,
-					answer: result,
+					answer: result.replace(/\s+/g, ' ').trim(),
 					timestamp: new Date().toISOString()
 				});
 			} catch (error) {
