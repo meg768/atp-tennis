@@ -1,10 +1,8 @@
 let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
+let ChatATP = require('../src/chat-atp.js');
 let Command = require('../src/command.js');
 let bodyParser = require('body-parser');
-
-let isString = require('yow/isString');
-let isArray = require('yow/isArray');
 
 let express = require('express');
 let cors = require('cors');
@@ -17,6 +15,7 @@ class Module extends Command {
 		this.mysql = new MySQL();
 		this.port = 3004;
 		this.log = console.log;
+		this.chatATP = new ChatATP();
 	}
 
 	arguments(args) {
@@ -34,23 +33,6 @@ class Module extends Command {
 		}
 	}
 
-	async generateSQLFromNaturalLanguage(question) {
-		const { OpenAI } = require('openai');
-
-		const gptSqlPrompt = require('../src/gpt-sql-prompt.js');
-		const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-		const prompt = gptSqlPrompt.getPrompt(question);
-
-		const response = await openai.chat.completions.create({
-			model: 'gpt-4',
-			messages: [{ role: 'user', content: prompt }],
-			temperature: 0
-		});
-
-		let sql = response.choices[0].message.content.trim();
-
-		return sql;
-	}
 
 	listen() {
 		const express = require('express');
@@ -90,13 +72,7 @@ class Module extends Command {
 				return response.status(400).json({ error: 'Du måste skicka med en fråga i textform.' });
 			}
 			// Här anropar du GPT för att få SQL från svensk fråga
-			let sql = await this.generateSQLFromNaturalLanguage(question);
-
-			// Rensa SQL-satsen från onödiga radbrytningar
-			sql = sql
-				.replace(/[\r\n]+/g, ' ')
-				.replace(/\s+/g, ' ')
-				.trim();
+			let sql = await this.chatATP.sendMessage(question);
 
 			try {
 				this.log(`Fråga: "${question}"`);
