@@ -124,7 +124,7 @@ class Module extends Command {
 					reply
 				});
 			} catch (error) {
-				return res.status(500).json({
+				return response.status(500).json({
 					prompt: prompt,
 					reply: null,
 					error: error.message,
