@@ -1,0 +1,9 @@
+Tabeller:
+- players(id, name, country, birthdate, rank, age, highest_rank, highest_rank_date, pro, active, height, weight, career_wins, career_losses, career_titles, career_prize, ytd_wins, ytd_losses, ytd_titles, ytd_prize, coach, points, serve_rating, return_rating, pressure_rating, elo_rank, elo_rank_clay, elo_rank_grass, elo_rank_hard, hard_factor, clay_factor, grass_factor, url, image_url)
+- matches(id, event, round, winner, loser, winner_rank, loser_rank, score, duration)
+- events(id, date, name, location, type, surface, url)
+
+Relationer:
+- matches.winner och matches.loser → players.id  
+- matches.event → events.id
+

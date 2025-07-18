@@ -1,4 +1,6 @@
-require('dotenv').config();
+#!/usr/bin/env node
+
+require('dotenv').config({ path: '../.env' });
 
 class ChatATP {
 	constructor(options = {}) {

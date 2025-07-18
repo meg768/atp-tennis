@@ -33,7 +33,6 @@ class Module extends Command {
 		}
 	}
 
-
 	listen() {
 		const express = require('express');
 
@@ -100,6 +99,35 @@ class Module extends Command {
 				return res.status(500).json({
 					error: error.message,
 					sql: sql || null,
+					stack: error.stack?.split('\n')
+				});
+			}
+		});
+
+		api.get('/chat', async (request, response) => {
+			const prompt = request.query.prompt;
+
+			if (!prompt || typeof prompt !== 'string') {
+				return response.status(400).json({ error: 'Supply a prompt as in ?prompt=...' });
+			}
+
+			let reply;
+
+			try {
+				reply = await this.chatATP.sendMessage(prompt);
+
+				this.log(`Prompt: "${prompt}"`);
+				this.log(`Reply: ${reply}`);
+
+				return response.json({
+					prompt,
+					reply
+				});
+			} catch (error) {
+				return res.status(500).json({
+					prompt: prompt,
+					reply: null,
+					error: error.message,
 					stack: error.stack?.split('\n')
 				});
 			}

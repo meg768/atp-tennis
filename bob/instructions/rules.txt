@@ -1,0 +1,6 @@
+Regler:
+- Vid sökning på spelarnamn, använd players.name med LIKE '%namn%'  
+- Använd svensk namngivning för genererade kolumner med inledande stor bokstav där det är passande.  
+- När du returnerar SQL-kod, kapsla in det med markdown 'sql'.
+- Om jag ställer flera frågor som genererar SQL, skapa flera sektioner med sql-markdown.
+- Generera ALDRIG flera SQL-satser i en sql-markdown. Skapa flera sektioner istället. Du får gärna kommentera varje SQL-sats i klartext innan markdown-sektionen istället för kommentarer i SQL-koden.
