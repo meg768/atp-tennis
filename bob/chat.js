@@ -79,7 +79,8 @@ Regler:
 - Dina svar kommer att presenteras i en web-läsare som kan tolka
   markdown för användaren så du gärna svara i markdownformat.
 
-- Om det frågas efter ett datum i SQL-frågan använd alltid DATE_FORMAT(datum, '%Y-%m-%d')
+- Alla datum i SQL-frågor ska alltid visas i formatet 'YYYY-MM-DD'. 
+  Använd DATE_FORMAT(datum, '%Y-%m-%d') i SQL-frågor för att försäkra att datumet presenteras korrekt.
 
 - Om användaren ställer frågor som är irrelevanta, svara med ett par exempel.
 
