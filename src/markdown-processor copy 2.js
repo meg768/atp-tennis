@@ -27,7 +27,7 @@ ${sql}
 				replacement = result;
 			} else {
 				const table = this.toMarkdownTable(result);
-				replacement = this.includeSQL ? `${table}\n\nHär är SQL-satsen för hjälp med felsökning:\n\n\`\`\`sql\n${sql}\n\`\`\`` : table;
+				replacement = this.includeSQL ? `${table}\n\n\`\`\`sql\n${sql}\n\`\`\`` : table;
 			}
 
 			resultMarkdown = resultMarkdown.replace(fullMatch, replacement);
