@@ -2,6 +2,7 @@ let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
 let ChatATP = require('../src/chat-atp.js');
 let Command = require('../src/command.js');
+let MarkdownProcessor = require('../src/markdown-processor.js');
 let bodyParser = require('body-parser');
 
 let express = require('express');
@@ -121,6 +122,10 @@ class Module extends Command {
 				this.log(`Prompt: "${prompt}"`);
 				this.log(`Reply: ${reply}`);
 
+				let processor = new MarkdownProcessor({mysql:this.mysql});
+
+				reply = await processor.process(reply);
+				this.log(`Processed reply: ${reply}`);
 				return response.json({
 					prompt,
 					reply
