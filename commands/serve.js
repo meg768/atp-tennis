@@ -107,6 +107,7 @@ class Module extends Command {
 		api.get('/chat', async (request, response) => {
 			const prompt = request.query.prompt;
 
+
 			if (!prompt || typeof prompt !== 'string') {
 				return response.status(400).json({ error: 'Supply a prompt as in ?prompt=...' });
 			}
@@ -114,6 +115,7 @@ class Module extends Command {
 			let reply;
 
 			try {
+			console.log('Sending prompt:', prompt);
 				reply = await this.chatATP.sendMessage(prompt);
 
 				this.log(`Prompt: "${prompt}"`);

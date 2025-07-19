@@ -64,7 +64,7 @@ class ChatATP {
 
 	async sendMessage_Working_Version(content) {
 		if (!this.threadID) {
-			const thread = await openai.beta.threads.create();
+			const thread = await this.openai.beta.threads.create();
 			this.threadID = thread.id;
 		}
 

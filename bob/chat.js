@@ -27,7 +27,7 @@ Definitioner:
 
 Innehåll:
 - players.name är spelarnamn
-- players.country är landskod (ISO 3166-1 alpha-2)
+- players.country är landskod (ISO 3166-1 alpha-3)
 - players.rank är aktuell rank
 - players.highest_rank är högsta rank någonsin
 - players.highest_rank_date är datum för högsta rank
