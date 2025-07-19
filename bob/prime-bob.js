@@ -34,7 +34,7 @@ async function primeBobFromFile(file) {
 	}
 
 	await openai.beta.threads.messages.create(threadID, {
-		role: 'user',
+		role: 'assistant',
 		content
 	});
 
