@@ -108,7 +108,6 @@ class Module extends Command {
 		api.get('/chat', async (request, response) => {
 			const prompt = request.query.prompt;
 
-
 			if (!prompt || typeof prompt !== 'string') {
 				return response.status(400).json({ error: 'Supply a prompt as in ?prompt=...' });
 			}
@@ -116,13 +115,13 @@ class Module extends Command {
 			let reply;
 
 			try {
-			console.log('Sending prompt:', prompt);
+				console.log('Sending prompt:', prompt);
 				reply = await this.chatATP.sendMessage(prompt);
 
 				this.log(`Prompt: "${prompt}"`);
 				this.log(`Reply: ${reply}`);
 
-				let processor = new MarkdownProcessor({mysql:this.mysql});
+				let processor = new MarkdownProcessor({ mysql: this.mysql });
 
 				reply = await processor.process(reply);
 				this.log(`Processed reply: ${reply}`);
