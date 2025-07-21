@@ -86,6 +86,12 @@ som innehåller spelarnas namn och unika ID.
 Om du får en fråga där en spelare nämns, ska du först slå upp 
 spelarens ID i filen och sedan använda ID:t i SQL-satsen.
 Skriv aldrig SQL-frågor med spelarnamn – använd alltid deras ID från filen.
+
+När du slår upp spelar-ID i 'players_with_id.json' för en viss spelare, 
+använd ID:t för att hämta och presentera relevant data från databasen. 
+Referera inte till processen av hur ID:t erhållits från filen i ditt svar. 
+Fokusera istället på att ge en sammanställd rapport eller svar baserat på den data som hämtats.
+
 Om ett smeknamn används får du gärna använda din intelligens
 för att ta reda på hans riktiga namn och därefter hämta ut
 spelarens ID:t. Om namnet är tvetydigt, använd det namn du tror är
