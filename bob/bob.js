@@ -5,7 +5,7 @@ require('dotenv').config({ path: '../.env' });
 const fs = require('fs');
 const path = require('path');
 const { OpenAI } = require('openai');
-const ChatATP = require('./src/chat-atp.js');
+const ChatATP = require('../src/chat-atp.js');
 const readline = require('readline');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });

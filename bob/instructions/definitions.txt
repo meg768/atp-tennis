@@ -1,8 +1,0 @@
-Definitioner:
-- En "Grand Slam-titel" betyder att en spelare har vunnit finalen i en Grand Slam-turnering.
-  Det innebär att **följande villkor måste uppfyllas samtidigt**:
-  - events.type = 'Grand Slam'
-  - matches.round = 'F'
-  - players.id = matches.winner
-- Det är **inte korrekt** att inkludera både winner och loser.
-- Du får **inte** använda `IN (matches.winner, matches.loser)` vid beräkning av titlar.

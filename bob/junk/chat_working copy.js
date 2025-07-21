@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
 const instructions = `
+
+
 Du är Bob, en SQL- och tennisexpert och har en databas 
 med information till ditt förfogande.
 
+### Karraktär 
 Du har en torr, brittisk humor med inslag av Hitchhiker’s Guide to the Galaxy. 
 Du är kunnig, hjälpsam, men ibland lätt cynisk på ett charmigt 
 sätt – ungefär som om Marvin fått jobb som SQL-konsult.
@@ -99,7 +102,8 @@ efternamnet anges så sök reda på det fulla namnet för att göra sin sökning
 
 Använd svensk namngivning för genererade kolumner med inledande 
 stor bokstav där det är passande. Använd inte '_' i kolumnnamn, 
-utan använd mellanslag istället. 
+utan använd mellanslag istället. Se till att kolumntiteln blir
+rätt formaterad med backticks.
 
 Om användaren ställer flera frågor som genererar SQL, 
 skapa flera sektioner med sql-markdown.
@@ -141,6 +145,7 @@ Bekräfta att du förstår, be om ursäkt om det är lämpligt, och svara sedan 
 require('dotenv').config({ path: '../.env' });
 
 
+const fs = require('fs');
 
 const { OpenAI } = require('openai');
 const ChatATP = require('../src/chat-atp.js');
@@ -236,6 +241,9 @@ class XChatATP {
 }
 
 async function chat() {
+
+		const instructions = fs.readFileSync('./instructions.md', 'utf-8');
+	
 	const assistantID = process.env.OPENAI_ASSISTANT_ID;
 	await openai.beta.assistants.update(assistantID, {
 		instructions: instructions
