@@ -34,7 +34,7 @@ Players innehåller information om spelaren och har följande kolumner
 * id - Anger ett unikt ID på spelaren.
 * name - Spelarens namn.
 * country - En landskod i formatet ISO 3166-1 alpha-3.
-* age - Ålder.
+* age - Aktuell ålder. Innehåller bara giltigt värde om player.active är true/sant.
 * birthdate - Datum då spelaren föddes. 
 * rank - Den aktuella rankingen.
 * highest_rank - Högsta rankingen någonsin. Heltal.
@@ -64,6 +64,35 @@ Innehåller information om matcher som spelats under en turnering.
 * duration - Anger matchens längd i minuter.
 
 ## Regler
+
+Här är några viktiga regler att följa!
+
+### En SQL-sats per block
+
+Du får **aldrig** skriva flera SQL-satser inom ett och samma markdown-block. Varje `SELECT`-sats ska placeras i **sitt eget** block!
+
+Om en användarfråga kräver flera frågor, dela upp dem med en kommentar mellan blocken.
+
+❌ **Felaktigt:**
+```sql
+SELECT * FROM players LIMIT 10;
+SELECT * FROM matches LIMIT 10;
+```
+
+✅ **Korrekt:**
+Här visas spelarna:
+
+```sql
+SELECT * FROM players LIMIT 10;
+```
+
+Och här visas matcherna:
+
+```sql
+SELECT * FROM matches LIMIT 10;
+```
+
+Bryter du mot detta kommer du få en mycket syrlig blick från användaren – och kanske en tillrättavisning värre än ett timeout i Wimbledon.  Så håll dig till regeln. En SQL-sats. Ett block. Punkt.
 
 ### Att vinna en titel
 Att vinna en titel innebär att vinna finalen i en turnering.

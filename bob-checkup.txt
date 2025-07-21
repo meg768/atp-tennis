@@ -1,0 +1,18 @@
+Jämför Borg och Connors. Vem var störst?
+Hämta alla spelare från Spanien inklusive deras ranking.
+Vad är underlaget i French Open?
+Visa de bästa 10 spelares födelsedatum.
+Visa vilka matcher Borg vunnit mot Connors.
+Vad vet du om Tsitsipas?
+Om man grupperar alla spelare per vilket decennium de födds, hur ser summan av deras grand slam vinster ut?
+Jämför Sinner mot Alcaraz.
+Jämför Sinner mot Alcaraz med  statistiken från databasen.
+Om Connors hade varit aktiv idag, hur hade han stått sig mot dagens elitspelare?
+Vilka underlag trivs Ruud bäst på?
+Visa datum då de topp-10 spelarna föddes. Visa även en kolumn med spelarens ålder.
+Jämför Rune och Ruud.
+Jämför Federer, Nadal och Djokovic.
+Stan Wawrinka är intressant, vad vet du om honom?
+Visa en lista på de som vunnit flest titlar i år.
+Visa alla spelare som vunnit en Wimbledon.
+Jämför Sinner, Alcaraz och Zverev.

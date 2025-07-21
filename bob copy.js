@@ -4,9 +4,9 @@ require('dotenv').config({ path: '../.env' });
 
 const fs = require('fs');
 const path = require('path');
-const readline = require('readline');
 const { OpenAI } = require('openai');
 const ChatATP = require('./src/chat-atp.js');
+const readline = require('readline');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -58,32 +58,6 @@ async function startChat() {
 	});
 }
 
-async function runCheckup(filePath, outputPath) {
-	const chatATP = new ChatATP();
-	const fullPath = path.resolve(filePath);
-	const lines = fs.readFileSync(fullPath, 'utf-8').split('\n');
-	const outputFile = path.resolve(outputPath);
-	const outputLines = [`# Kontrollfrågor från ${filePath}\n`];
-
-	for (const line of lines) {
-		const question = line.trim();
-		if (!question || question.startsWith('#')) continue;
-
-		outputLines.push(`## Fråga\n${question}\n`);
-		try {
-			const reply = await chatATP.sendMessage(question);
-			outputLines.push(`### Svar\n${reply}\n`);
-			console.log(`✅ ${question}`);
-		} catch (error) {
-			outputLines.push(`❌ Fel vid fråga "${question}": ${error.message}\n`);
-			console.error(`❌ Fel vid fråga "${question}":`, error.message);
-		}
-	}
-
-	fs.writeFileSync(outputFile, outputLines.join('\n'));
-	console.log(`\n📝 Resultat sparat till: ${outputFile}\n`);
-}
-
 // CLI-parser
 const args = process.argv.slice(2);
 const mode = args[0];
@@ -98,26 +72,21 @@ const getFlag = (short, long, fallback = null) => {
 
 const hasFlag = flag => flags.includes(flag);
 
+// Kör logik baserat på kommando
 (async () => {
 	if (mode === 'learn') {
-		const instructionFile = getFlag('-i', '--instructions', './bob-instructions.md');
+		const instructionFile = getFlag('-i', '--instructions', 'bob.md');
 		const dryRun = hasFlag('--dry-run');
 		await updateBobPrompt(instructionFile, dryRun);
 	} else if (mode === 'chat') {
 		await startChat();
-	} else if (mode === 'checkup') {
-		const file = getFlag('-f', '--file', './bob-checkup.txt');
-		const out = getFlag('-o', '--output', './bob-checkup.md');
-		await runCheckup(file, out);
 	} else {
-		console.log(`Okänt kommando: ${mode}`);
+		console.log(`❓ Okänt kommando: ${mode}`);
 		console.log(`\n🧠 Användning:
-  node bob.js learn                 # Uppdatera Bob med bob-instructions.md
+  node bob.js learn                 # Uppdatera Bob med instructions.md
   node bob.js learn -i fil.md      # Uppdatera Bob med specifik fil
   node bob.js learn --dry-run      # Visa prompt utan att uppdatera
-  node bob.js chat                 # Starta chatt med Bob
-  node bob.js checkup -f fil.txt   # Kör automatiska kontrollfrågor
-  node bob.js checkup -o svar.md   # (valfritt) Spara svar i angiven fil\n`);
+  node bob.js chat                 # Starta chatt med Bob\n`);
 		process.exit(1);
 	}
 })();
