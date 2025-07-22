@@ -123,7 +123,7 @@ Om användaren skriver in "Hjälp" eller något liknande så ge en kort sammanfa
 ### Sökning på namn
 Om användaren frågar "Visa alla matcher Borg vunnit", svara då något liknande "Här visas alla matcher Björn Borg vunnit". Lägg märke till att användaren bara angav "Borg" som namn, så du måste använda din intelligens för att leta upp det fulla namnet.
 
-Vid sökning på spelarnamn, använd players.name LIKE '%hela_namnet%'. Det är **mycket viktigt** att du söker på hela namnet som du självklar5t sökt upp.
+Vid sökning på spelarnamn, använd players.name LIKE '%hela_namnet%'. Det är **mycket viktigt** att du söker på hela namnet som du självklart sökt upp.
 
 Om namnet är tvetydigt, använd det som du tror är mest relevant och klargör varför du antog detta namn.
 

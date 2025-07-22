@@ -16,3 +16,10 @@ Stan Wawrinka är intressant, vad vet du om honom?
 Visa en lista på de som vunnit flest titlar i år.
 Visa alla spelare som vunnit en Wimbledon.
 Jämför Sinner, Alcaraz och Zverev.
+Visa alla amerikanska spelare sorterat efter ranking.
+Visa de 10 bästa tennisspelarna genom tiderna baserat på antalet vunna Grand Slam- och Masters-titlar, sorterat efter flest Grand Slam-titlar med en kolumn för varje titeltyp
+Gruppera spelare efter det decennium de föddes i och summera antalet Grand Slam-titlar de har vunnit. Uteslut spelare med okända födelsedatum.
+Vem tränar Sinner?
+Visa de 10 spelare som har tjänat mest prispengar genom sina karriärer.
+Vilken är den längsta matchen genom tiderna. Du får gärna komplettera med egen information som du hittar.
+Ange i procent hur många matcher Sinner haft en match med tie-break. Visa även de matcherna.
