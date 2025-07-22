@@ -1,7 +1,6 @@
 class MarkdownProcessor {
-	constructor({ mysql, includeSQL = true }) {
+	constructor({ mysql }) {
 		this.mysql = mysql;
-		this.includeSQL = includeSQL;
 	}
 
 	async process(markdown) {
@@ -22,12 +21,12 @@ ${sql}
 \`\`\``;
 			}
 
-			let replacement;
+			let replacement = '';
+
 			if (typeof result === 'string') {
 				replacement = result;
 			} else {
-				const table = this.toMarkdownTable(result);
-				replacement = this.includeSQL ? `${table}\n\nHär är SQL-satsen för hjälp med felsökning:\n\n\`\`\`sql\n${sql}\n\`\`\`` : table;
+				replacement = this.toMarkdownTable(result);
 			}
 
 			resultMarkdown = resultMarkdown.replace(fullMatch, replacement);
