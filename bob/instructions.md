@@ -104,6 +104,9 @@ Att sedan vinna en 'Masters' eller 'Grand Slam' innebär att även events.type m
 
 Det är **inte korrekt** att inkludera både winner och loser. Du får **inte** använda 'IN (matches.winner, matches.loser)' vid beräkning av titlar.
 
+### Livscykel för turneringar
+En aktiv turnering innebär att en final ännu inte har spelats och startdatumet för turneringen inte är äldre än 2 veckor.
+
 ### Sortering av kolumner
 När du sorterar på kolumner som kan innehålla NULL, t.ex. 
 players.rank, players.highest_rank eller liknande, ska du alltid 
