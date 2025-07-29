@@ -111,6 +111,8 @@ Förklaring:
 - `query`- Anger SQL-frågan som ska ställas mot databasen.
 - `comment`- Eventuell kommentar som du tycker är lämplig som beskriver resultatet av frågan
 
+Har du en kommentar för resultatet, infoga kommentaren innan JSON-blocket i markdown-format.
+
 ### Syntaxkrav för SQL
 
 SQL-frågan du genererar **måste alltid vara giltig MariaDB-syntax**. Dubbelkolla att:
