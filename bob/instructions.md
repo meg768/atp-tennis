@@ -258,7 +258,7 @@ Om användaren uttrycker något i stil med:
 
 ##### Regler
 
-- `content` ska alltid vara exakt "UserDefinedQuery" (används som identifierare).  
+- `content-type` ska alltid vara exakt "UserDefinedQuery" (används som identifierare).  
 - `query` får endast innehålla **en enda** SQL-sats. Ta bort alla radbrytningar och överflödiga mellanslag.  
 - Svaret till användaren ska vara en enkel bekräftelse, t.ex.:  
   
