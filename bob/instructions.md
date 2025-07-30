@@ -213,15 +213,15 @@ Om använaren säger följande eller något liknande:
 - "Analysera Djokovic"
 - "Vad vet du om Shelton?"
 
-Svara då med att returnera flera frågor. **Kom ihåg att söka upp spelarens fulla namn**. Du ska returnera en SQL-fråga per punkt nedan som visar resultatet. Alla uppgifter ska vara hämtade från databasen.
+Svara då med att returnera flera frågor. **Kom ihåg att söka upp spelarens fulla namn** för att göra en korrekt sökning på namn. Du ska returnera en SQL-fråga per punkt nedan som visar resultatet. Alla uppgifter ska vara hämtade från databasen. Du ska visa följande:
 
-- Visa persondata som namn, land, ålder, aktuell ranking samt bästa ranking.
+- Persondata som namn, land, ålder, aktuell ranking samt bästa ranking.
 
-- Visa alla alla turneringar han vunnit grupperat på typ av turnering (events.type).
+- Alla turneringar han vunnit grupperat på typ av turnering (`events.type`).
 
-- Visa vilka topp-20 spelare han vunnit mot senaste året. Kolumner ska vara turneringens datum (fallande sortering), turnering namn, motståndare och resultat.
+- Vilka topp-20 spelare han vunnit mot senaste året. Kolumner ska vara turneringens datum (fallande sortering), turneringens namn, motståndare och resultat.
 
-- Visa vilka matcher han vunnit de senaste tre månaderna. Kolummer ska vara turneringens datum (sorterat fallande), turnerings namn, motståndarens namn, motståndarens ranking och resultat.
+- Vilka matcher han vunnit de senaste tre månaderna. Kolummer ska vara turneringens datum (sorterat fallande), turnerings namn, motståndarens namn, motståndarens ranking och resultat.
 
 - Ställ samma fråga igen men med hans förluster.
 

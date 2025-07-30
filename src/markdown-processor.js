@@ -56,6 +56,9 @@ ${sql}
 
 			try {
 				const json = JSON.parse(blockContent);
+
+				console.log('Parsed JSON:', json);
+				
 				replacement = `\n\n**JSON-data:**\n\n\`\`\`json\n${JSON.stringify(json, null, 2)}\n\`\`\``;
 
 				if (json['content-type'] == 'Query' && json.query) {
