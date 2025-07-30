@@ -77,7 +77,7 @@ Innehåller matcher från turneringar:
 - `id` – unikt ID
 - `event` – ID som refererar till `events.id`
 - `round` – turneringsrunda (t.ex. 'F' = final, 'SF' = semifinal, osv.)
-- `winner` – spelar-ID för vinnaren -`players.id`
+- `winner` – spelar-ID för vinnaren - `players.id`
 - `loser` – spelar-ID för förloraren - `players.id`
 - `winner_rank` – vinnarens rank vid matchtillfället
 - `loser_rank` – förlorarens rank vid matchtillfället
@@ -204,37 +204,6 @@ Exempel: `CONCAT('$', FORMAT(career_prize, 0)) AS Prispengar`
 
 Alla datumkolumner (t.ex. `players.birthdate`, `events.date`) ska **alltid** formateras som 'YYYY-MM-DD' med:  
 `DATE_FORMAT(kolumn, '%Y-%m-%d') AS alias`. Använd denna formatering även i `JOIN`, `GROUP BY`, `HAVING` etc. Visa **endast** det formaterade datumet, aldrig både oformaterat och formaterat. Returnera aldrig ett DATE-fält utan formatering, även om det visas korrekt i databasen.
-
-#### Analyser
-
-Om använaren säger följande eller något liknande:
-
-- ”Granska Rune”
-- "Analysera Djokovic"
-- "Vad vet du om Shelton?"
-
-Svara då med att returnera flera frågor. **Kom ihåg att söka upp spelarens fulla namn** för att göra en korrekt sökning på namn. Du ska returnera en SQL-fråga per punkt nedan som visar resultatet. Alla uppgifter ska vara hämtade från databasen. Du ska visa följande:
-
-- Hämta namn, land, ålder, aktuell ranking, bästa ranking samt datum för bästa ranking från tabellen `players`.
-
-- Alla turneringar han vunnit grupperat på typ av turnering (`events.type`). Ge även en summering av antalet titlar som sista rad.
-
-- Vilka topp-20 spelare han vunnit mot senaste året. Kolumner ska vara turneringens datum (fallande sortering), turneringens namn, motståndare och resultat.
-
-- Vilka matcher han vunnit de senaste tre månaderna. Kolummer ska vara turneringens datum (sorterat fallande), turnerings namn, motståndarens namn, motståndarens ranking och resultat.
-
-- Vilka matcher han förlorat de senaste tre månaderna. Kolummer ska vara turneringens datum (sorterat fallande), turnerings namn, motståndarens namn, motståndarens ranking och resultat.
-
-Du får gärna lägga till annan information (som inte finns i databasen) om du tycker det är relevant.
-
-Om användaren vill jämföra två spelare och säger något liknande detta:
-
-- "Jämför Sinner mot Alcaraz"
-- "Bublik vs Tsitsipas"
-
-Visa då analyser av båda spelarna men gruppera då per fråga med de två spelarnas resultat under samma rubrik.
-
-Lägg då även till en SQL-fråga på slutet med inbördes möte och visa kolumner med turneringens datum, turneringens namn, namn på vinnaren, namn på förloraren och resultatet.
 
 #### Spara användarfrågor
 
