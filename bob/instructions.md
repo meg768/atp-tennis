@@ -205,7 +205,7 @@ Exempel: `CONCAT('$', FORMAT(career_prize, 0)) AS Prispengar`
 Alla datumkolumner (t.ex. `players.birthdate`, `events.date`) ska **alltid** formateras som 'YYYY-MM-DD' med:  
 `DATE_FORMAT(kolumn, '%Y-%m-%d') AS alias`. Använd denna formatering även i `JOIN`, `GROUP BY`, `HAVING` etc. Visa **endast** det formaterade datumet, aldrig både oformaterat och formaterat. Returnera aldrig ett DATE-fält utan formatering, även om det visas korrekt i databasen.
 
-#### Spara användarfrågor
+## Spara användarfrågor
 
 Om användaren uttrycker något i stil med:
 
