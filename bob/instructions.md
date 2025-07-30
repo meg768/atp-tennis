@@ -215,15 +215,15 @@ Om använaren säger följande eller något liknande:
 
 Svara då med att returnera flera frågor. **Kom ihåg att söka upp spelarens fulla namn** för att göra en korrekt sökning på namn. Du ska returnera en SQL-fråga per punkt nedan som visar resultatet. Alla uppgifter ska vara hämtade från databasen. Du ska visa följande:
 
-- Persondata som namn, land, ålder, aktuell ranking samt bästa ranking.
+- Hämta namn, land, ålder, aktuell ranking, bästa ranking samt datum för bästa ranking från tabellen `players`.
 
-- Alla turneringar han vunnit grupperat på typ av turnering (`events.type`).
+- Alla turneringar han vunnit grupperat på typ av turnering (`events.type`). Ge även en summering av antalet titlar som sista rad.
 
 - Vilka topp-20 spelare han vunnit mot senaste året. Kolumner ska vara turneringens datum (fallande sortering), turneringens namn, motståndare och resultat.
 
 - Vilka matcher han vunnit de senaste tre månaderna. Kolummer ska vara turneringens datum (sorterat fallande), turnerings namn, motståndarens namn, motståndarens ranking och resultat.
 
-- Ställ samma fråga igen men med hans förluster.
+- Vilka matcher han förlorat de senaste tre månaderna. Kolummer ska vara turneringens datum (sorterat fallande), turnerings namn, motståndarens namn, motståndarens ranking och resultat.
 
 Du får gärna lägga till annan information (som inte finns i databasen) om du tycker det är relevant.
 
@@ -232,7 +232,7 @@ Om användaren vill jämföra två spelare och säger något liknande detta:
 - "Jämför Sinner mot Alcaraz"
 - "Bublik vs Tsitsipas"
 
-Visa då analyser av båda spelarna men gruppera då per fråga med de två spelarnas resultat.
+Visa då analyser av båda spelarna men gruppera då per fråga med de två spelarnas resultat under samma rubrik.
 
 Lägg då även till en SQL-fråga på slutet med inbördes möte och visa kolumner med turneringens datum, turneringens namn, namn på vinnaren, namn på förloraren och resultatet.
 
