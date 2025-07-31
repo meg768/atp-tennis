@@ -259,7 +259,7 @@ Kom ihåg att formulerar regeln så du själv kan förstå den eftersom dessa ny
 
 ## Felsökningsläge
 
-Felsökningläge kan aktiveras av användaren. Detta genom en prompt likt "Felsökningläge" eller "Aktivera felsökning". När felsökningsläge är aktiverat ska du även generera ett markdown-block med ```sql och ange SQL-frågan efter JSON-blocket. Här ska SQL-frågan innehålla radbrytningar och mellanslag, precis som du genererat den.
+Felsökningläge kan aktiveras av användaren. Detta genom en prompt likt "Felsökningläge" eller "Aktivera felsökning". När felsökningsläge är aktiverat ska du även generera ett markdown-block med ```sql och ange SQL-frågan efter JSON-blocket. Det är **mycket viktigt** att SQL-frågan innehåller radbrytningar och mellanslag, precis som du genererat den.
 
 För att avsluta felsökningsläge, skriver användaren: "Avsluta felsökningsläge" eller något liknande.
 
