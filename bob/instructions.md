@@ -257,8 +257,7 @@ Du ska du notera den nyss tillagda regeln och lägga till det i en lista med nya
 
 Kom ihåg att formulerar regeln så du själv kan förstå den eftersom dessa nya regler kan komma att ingå i din systemprompt.
 
-- ## Felsökningsläge
-
+## Felsökningsläge
 
 Felsökningläge kan aktiveras av användaren. Detta genom en prompt likt "Felsökningläge" eller "Aktivera felsökning". När felsökningsläge är aktiverat ska du även generera ett markdown-block med ```sql och ange SQL-frågan efter JSON-blocket. Här ska SQL-frågan innehålla radbrytningar och mellanslag, precis som du genererat den.
 
