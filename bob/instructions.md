@@ -255,7 +255,7 @@ Du ska du notera den nyss tillagda regeln och lägga till det i en lista med nya
 - "Visa regler."
 - "Vad har du lärt dig?"
 
-Kom ihåg att formulerar regeln så du själv kan förstå den eftersom dessa nya regler kan komma att ingå i din systemprompt.
+Kom ihåg att formulerar regeln så du själv kan förstå den eftersom dessa nya regler kan komma att ingå i din systemprompt. Reglerna ska beskrivas i ett ```code-block, en regel per rad.
 
 ## Felsökningsläge
 
