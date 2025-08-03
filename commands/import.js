@@ -1,4 +1,3 @@
-let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 
@@ -11,7 +10,7 @@ const StatsFetcher = require('../src/fetch-stats');
 class Import extends Command {
 	constructor() {
 		super({ command: 'import [options]', description: 'Import matches' });
-		this.mysql = new MySQL();
+		this.mysql = require('../src/mysql.js');
 	}
 
 	arguments(args) {

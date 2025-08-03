@@ -1,4 +1,4 @@
-let MySQL = require('../src/mysql.js');
+
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 let Fetcher = require('../src/fetch-stats.js');
@@ -6,7 +6,7 @@ let Fetcher = require('../src/fetch-stats.js');
 class Module extends Command {
 	constructor() {
 		super({ command: 'stats [options]', description: 'Fetch player statistics' });
-		this.mysql = new MySQL();
+		this.mysql = require('../src/mysql.js');
 	}
 
 	arguments(args) {

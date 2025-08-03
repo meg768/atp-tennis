@@ -1,11 +1,10 @@
-let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 
 class Module extends Command {
 	constructor() {
 		super({ command: 'update-players [options]', description: 'Update player info' });
-		this.mysql = new MySQL();
+		this.mysql = require('../src/mysql.js');
 	}
 
 	arguments(args) {

@@ -1,12 +1,13 @@
 require('dotenv').config();
 
 class ChatATP {
-	constructor(options = {}) {
+	constructor() {
 		const { OpenAI } = require('openai');
-		let { assistantID, apiKey } = options;
-		this.apiKey = apiKey || process.env.OPENAI_API_KEY;
-		this.assistantID = assistantID || process.env.OPENAI_ASSISTANT_ID;
+		this.apiKey = process.env.OPENAI_API_KEY;
+		this.assistantID = process.env.OPENAI_ASSISTANT_ID;
 		this.threadID = null;
+		this.storage = require('./storage.js');
+		this.log = console.log;
 
 		if (!this.apiKey) {
 			throw new Error('API-key missing. Define OPENAI_API_KEY in environment variables.');
@@ -16,13 +17,26 @@ class ChatATP {
 		}
 
 		this.openai = new OpenAI({ apiKey: this.apiKey });
+	}
 
+	getThreadID() {
+		return this.threadID;
 	}
 
 	async sendMessage(content) {
+
 		if (!this.threadID) {
-			const thread = await this.openai.beta.threads.create();
-			this.threadID = thread.id;
+			let chat = await this.storage.get('chat');
+			this.threadID = chat?.threadID || null;
+
+			if (!this.threadID) {
+				this.log('Creating new thread for chat...');
+
+				const thread = await this.openai.beta.threads.create();
+				this.threadID = thread.id;
+				await this.storage.set('chat', { threadID: this.threadID });
+				this.log(`New thread created with ID: ${this.threadID}`);
+			}
 		}
 
 		await this.openai.beta.threads.messages.create(this.threadID, {
@@ -45,4 +59,4 @@ class ChatATP {
 	}
 }
 
-module.exports = ChatATP;
+module.exports = new ChatATP();

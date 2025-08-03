@@ -153,4 +153,4 @@ class MySQL {
 	}
 }
 
-module.exports = MySQL;
+module.exports = new MySQL();

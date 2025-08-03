@@ -1,4 +1,3 @@
-let MySQL = require('../src/mysql.js');
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 let Gopher = require('../src/gopher.js');
@@ -8,7 +7,7 @@ let writeJSON = require('yow/writeJSON').writeJSON;
 class Module extends Command {
 	constructor() {
 		super({ command: 'live [options]', description: 'Fetch live activity' });
-		this.mysql = new MySQL();
+		this.mysql = require('../src/mysql.js');
 	}
 
 	arguments(args) {

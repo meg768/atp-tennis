@@ -6,9 +6,10 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 const { OpenAI } = require('openai');
-const ChatATP = require('../src/chat-atp.js');
+const MySQL = require('../src/mysql.js');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 
 async function updateBobPrompt(instructionPath, dryRun) {
 	const assistantID = process.env.OPENAI_ASSISTANT_ID;
@@ -30,7 +31,7 @@ async function updateBobPrompt(instructionPath, dryRun) {
 }
 
 async function startChat() {
-	const chatATP = new ChatATP();
+	const chatATP = require('../src/chat-atp.js');
 
 	const rl = readline.createInterface({
 		input: process.stdin,
@@ -51,7 +52,7 @@ async function startChat() {
 			let reply = await chatATP.sendMessage(line);
 			console.log(`\n${reply}\n`);
 		} catch (error) {
-			console.error('❌ Fel:', error.message);
+			console.error('❌ Fel:', error.message, error.stack ? `\n${error.stack}` : '');
 		}
 
 		rl.prompt();
@@ -99,6 +100,9 @@ const getFlag = (short, long, fallback = null) => {
 const hasFlag = flag => flags.includes(flag);
 
 (async () => {
+
+	await MySQL.connect();
+
 	if (mode === 'learn') {
 		const instructionFile = getFlag('-i', '--instructions', './instructions.md');
 		const dryRun = hasFlag('--dry-run');
