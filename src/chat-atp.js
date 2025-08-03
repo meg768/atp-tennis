@@ -23,22 +23,30 @@ class ChatATP {
 		return this.threadID;
 	}
 
-	async sendMessage(content) {
+	async ensureThread() {
+		// Redan satt i minnet?
+		if (this.threadID) return;
 
-		if (!this.threadID) {
-			let chat = await this.storage.get('chat');
-			this.threadID = chat?.threadID || null;
-
-			if (!this.threadID) {
-				this.log('Creating new thread for chat...');
-
-				const thread = await this.openai.beta.threads.create();
-				this.threadID = thread.id;
-				await this.storage.set('chat', { threadID: this.threadID });
-				this.log(`New thread created with ID: ${this.threadID}`);
-			}
+		let chat = await this.storage.get('chat');
+		if (chat?.threadID && typeof chat.threadID === 'string') {
+			this.threadID = chat.threadID;
+			this.log(`🔁 Reusing existing thread ID: ${this.threadID}`);
+			return;
 		}
 
+		// Skapa ny tråd
+		this.log('🧵 Creating new thread for chat...');
+		const thread = await this.openai.beta.threads.create();
+		this.threadID = thread.id;
+
+		await this.storage.set('chat', { threadID: this.threadID });
+		this.log(`✅ New thread created with ID: ${this.threadID}`);
+	}
+
+	async sendMessage(content) {
+		await this.ensureThread();
+
+		this.log(`💬 Sending message to assistant: "${content}"`);
 		await this.openai.beta.threads.messages.create(this.threadID, {
 			role: 'user',
 			content
@@ -49,13 +57,15 @@ class ChatATP {
 		});
 
 		if (run.status !== 'completed') {
-			throw new Error(`OpenAI run failed: Run status is ${run.status}`);
+			throw new Error(`❌ OpenAI run failed: Run status is ${run.status}`);
 		}
 
 		const messages = await this.openai.beta.threads.messages.list(this.threadID);
 		const reply = messages.data.find(m => m.role === 'assistant');
 
-		return reply?.content[0]?.text?.value || '';
+		const output = reply?.content[0]?.text?.value || '';
+		this.log(`🤖 Assistant replied: "${output.slice(0, 100)}..."`);
+		return output;
 	}
 }
 

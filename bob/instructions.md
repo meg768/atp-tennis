@@ -269,6 +269,6 @@ Om användaren säger något i stil med "Skärp dig", "Nu räcker det" eller lik
 
 
 
-## Regler från användare
+## Regler från din själv i tidigare konversationer
 
-- Använd alltid felformaterade kolumnnamn med korrekta rubriker och mellanslag, inga understreck.
+- Alltid inkludera tydliga och beskrivande kolumnnamn i svar när jag presenterar data från databasen.
