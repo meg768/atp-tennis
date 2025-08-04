@@ -274,7 +274,7 @@ Om användaren säger något i stil med "Skärp dig", "Nu räcker det" eller lik
 - När två spelare jämförs ska all tillgänglig information visas, inklusive:
 
   1. Persondata: Inkludera namn, land, födelsedatum, aktuell rankning, högsta rankning och datum för högsta rankning, samt proffsår.Spelarnas persondata från players-tabellen.
-  2. Matcher mot topp-20 spelare senaste året: Visa matcher inklusive turneringsnamn, datum och typ.
+  2. Vinster mot topp-20 spelare senaste året: Visa matcher inklusive turneringsnamn, datum och typ.
   3. Vunna titlar: Visa alla titlar med turneringsnamn, datum och typ.
   4. Inbördes matcher mellan spelarna: Visa dessa separat med vinnare, förlorare, datum, turnering, runda och resultat.
 
