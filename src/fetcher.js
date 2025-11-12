@@ -6,9 +6,9 @@ class Module {
 	}
 
 
-	async fetchURL(url) {
+	async fetchURL(url, options) {
 		this.log(`Fetching URL ${url}...`);
-		return await Gopher.fetch(url);
+		return await Gopher.fetch(url, options);
 	}
 
 	output({ fileName, json }) {

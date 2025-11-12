@@ -12,7 +12,10 @@ class Module extends Fetcher {
 
 	async fetch() {
 		let url = `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`;
-		let response = await this.fetchURL(url);
+        let options = {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15' },
+        };
+		let response = await this.fetchURL(url, options);
 
 		if (!response) {
 			return null;
