@@ -16,7 +16,7 @@ class Module extends Fetcher {
 			let results = {};
 
 			let url = `https://www.atptour.com/en/-/www/StatsLeaderboard/${type}/52week/all/all/false?v=1`;
-			let response = await this.fetchURL(url);
+			let response = await this.fetchATP(url);
 
 			if (!response) {
 				return null;

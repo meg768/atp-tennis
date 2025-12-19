@@ -18,7 +18,7 @@ class Module extends Fetcher {
 		}
 
 		let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${eventYear}&eventid=${eventID}`;
-		let response = await this.fetchURL(url);
+		let response = await this.fetchATP(url);
 
 		if (raw != undefined && (raw == '' || raw != 0)) {
 			return response;

@@ -5,26 +5,18 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ top = 10, raw}) {
+	async fetch(options = {}) {
 		let results = {};
 
-		if (!top) {
-			throw new Error('Top players count is required');
-		}
+		const url = 'https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100';
 
-		let url = `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=${top}`;
-		let response = await this.fetchURL(url);
-
-		if (raw != undefined && (raw == '' || raw != 0)) {
-			return response;
-		}
-
+		let response = await this.fetchATP(url, options);
 
 		let result = {};
 
-		result.players = response.Data.Rankings.Players.map((player) => {
+		result.players = response.Data.Rankings.Players.map(player => {
 			return {
-				date:response.Data.Rankings.RankDate,
+				date: response.Data.Rankings.RankDate,
 				player: player.PlayerId,
 				name: `${player.FirstName} ${player.LastName}`,
 				age: player.AgeAtRankDate,

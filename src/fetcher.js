@@ -5,6 +5,15 @@ class Module {
 		this.log = options?.log || console.log;
 	}
 
+	async fetchATP(url, options) {
+
+        if (!process.env.ATP_SERVICE) {
+            throw new Error('ATP_SERVICE environment variable is not set');
+        }   
+        
+		url = `${process.env.ATP_SERVICE}/api/atp?url=${encodeURIComponent(url)}`;
+        return await this.fetchURL(url, options);
+	}
 
 	async fetchURL(url, options) {
 		this.log(`Fetching URL ${url}...`);

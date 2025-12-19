@@ -106,6 +106,36 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/api/rankings', async (request, response) => {
+			return this.execute(request, response, async () => {
+				console.log('asdfasdfasdfasdf');
+				let options = Object.assign({}, request.body, request.query);
+
+				let Fetcher = require('../src/fetch-rankings.js');
+				let fetcher = new Fetcher(options);
+				let data = await fetcher.fetch();
+				return data;
+			});
+		});
+
+		app.get('/api/atp', async (request, response) => {
+			return this.execute(request, response, async () => {
+                console.log('asdfasdfasdfasdf');
+				let params = Object.assign({}, request.body, request.query);
+
+				let options = {
+					headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15' }
+				};
+
+				if (!params.url) {
+					throw new Error('URL parameter is required');
+				}
+				let Fetcher = require('../src/fetcher.js');
+				let fetcher = new Fetcher();
+				return await fetcher.fetchURL(params.url, options);
+			});
+		});
+
 		app.use('/api', api);
 
 		app.listen(this.port, '127.0.0.1', () => {

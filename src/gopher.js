@@ -8,24 +8,26 @@ class Module {
 	}
 
 	async fetch(url, options) {
-		for (let tryCount = 0; tryCount < 3; tryCount++) {
-			try {
-				const response = await fetch(url, options);
+        console.log('Fetching URL:', url, options);
+		const response = await fetch(url, options);
 
-				if (!response.ok) {
-					throw new Error(`Failed to fetch ${url}`);
-				}
+		const contentType = response.headers.get('content-type') || '';
+		const bodyText = await response.text();
 
-				return await response.json();
-			} catch (error) {
-				console.log(error.message);
-				console.log('Retrying...');
-				await this.pause(30000);
-				continue;
-			}
+//		console.log('STATUS:', response.status);
+//		console.log('CONTENT-TYPE:', contentType);
+//		console.log('BODY (first 500):', bodyText.slice(0, 500));
+
+		if (!response.ok) {
+			throw new Error(`Failed to fetch ${url} (${response.status})`);
 		}
 
-		throw new Error(`Failed to fetch ${url}`);
+		// försök bara JSON om det verkar vara JSON
+		if (contentType.includes('application/json')) {
+			return JSON.parse(bodyText);
+		}
+
+		throw new Error(`Expected JSON but got ${contentType}`);
 	}
 }
 
