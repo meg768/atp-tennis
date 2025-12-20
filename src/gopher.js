@@ -9,7 +9,6 @@ class Module {
 
 	async fetch(url, options) {
 		try {
-			console.log('Fetching URL:', url, options);
 			const response = await fetch(url, options);
 
 			const contentType = response.headers.get('content-type') || '';
