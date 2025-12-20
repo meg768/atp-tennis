@@ -108,7 +108,6 @@ class Module extends Command {
 
 		app.get('/api/rankings', async (request, response) => {
 			return this.execute(request, response, async () => {
-				console.log('asdfasdfasdfasdf');
 				let options = Object.assign({}, request.body, request.query);
 
 				let Fetcher = require('../src/fetch-rankings.js');
@@ -120,7 +119,6 @@ class Module extends Command {
 
 		app.get('/api/atp', async (request, response) => {
 			return this.execute(request, response, async () => {
-                console.log('asdfasdfasdfasdf');
 				let params = Object.assign({}, request.body, request.query);
 
 				let options = {
