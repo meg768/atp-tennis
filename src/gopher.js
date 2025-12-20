@@ -14,9 +14,9 @@ class Module {
 		const contentType = response.headers.get('content-type') || '';
 		const bodyText = await response.text();
 
-//		console.log('STATUS:', response.status);
-//		console.log('CONTENT-TYPE:', contentType);
-//		console.log('BODY (first 500):', bodyText.slice(0, 500));
+		console.log('STATUS:', response.status);
+		console.log('CONTENT-TYPE:', contentType);
+		console.log('BODY (first 500):', bodyText.slice(0, 500));
 
 		if (!response.ok) {
 			throw new Error(`Failed to fetch ${url} (${response.status})`);
