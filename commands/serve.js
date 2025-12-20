@@ -136,7 +136,7 @@ class Module extends Command {
 
 		app.use('/api', api);
 
-		app.listen(this.port, '127.0.0.1', () => {
+		app.listen(this.port, '::', () => {
 			this.log(`Express running on http://localhost:${this.port}`);
 		});
 	}
