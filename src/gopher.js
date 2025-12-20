@@ -30,8 +30,8 @@ class Module {
 
 			throw new Error(`Expected JSON but got ${contentType}`);
 		} catch (error) {
-			console.error('Error fetching URL:', error);
-			console.log({
+
+            console.log({
 				message: error.message,
 				name: error.name,
 				cause: error.cause,
