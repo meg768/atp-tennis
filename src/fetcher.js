@@ -23,6 +23,7 @@ class Fetcher {
 	}
 
 	async fetchURL(url, options) {
+        console.log(`Fetching URL: ${url}`);
 		return await Gopher.fetch(url, options);
 	}
 
