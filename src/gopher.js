@@ -8,45 +8,50 @@ class Gopher {
 	}
 
 	async fetch(url, options) {
-		try {
-			const defaultHeaders = {
-				'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15',
-				'Accept': 'application/json'
-			};
+		let retryCount = options?.retryCount || 3;
+		let retryDelay = options?.retryDelay || 30000;
 
-			options = {
-				...options,
-				headers: {
-					...defaultHeaders,
-					...(options?.headers || {})
-				}
-			};
+		const defaultHeaders = {
+			'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15',
+			Accept: 'application/json'
+		};
 
+		options = {
+			...options,
+			headers: {
+				...defaultHeaders,
+				...(options?.headers || {})
+			}
+		};
+
+		async function fetchOnce() {
 			const response = await fetch(url, options);
-
-			const contentType = response.headers.get('content-type') || '';
-			const bodyText = await response.text();
 
 			if (!response.ok) {
 				throw new Error(`Failed to fetch ${url} (${response.status})`);
 			}
 
-			// försök bara JSON om det verkar vara JSON
+			const contentType = response.headers.get('content-type') || '';
+			const bodyText = await response.text();
+
+			// Försök bara JSON om det verkar vara JSON
 			if (contentType.includes('application/json')) {
 				return JSON.parse(bodyText);
 			}
 
 			throw new Error(`Expected JSON but got ${contentType}`);
-		} catch (error) {
-			console.log({
-				message: error.message,
-				name: error.name,
-				cause: error.cause,
-				stack: error.stack
-			});
-
-			throw error;
 		}
+
+		for (let attempt = 1; attempt <= retryCount; attempt++) {
+			try {
+				return await fetchOnce();
+			} catch (error) {
+				console.log(error.message);
+				await this.pause(retryDelay);
+			}
+		}
+
+        throw new Error(`Failed to fetch ${url} after ${retryCount} attempts`);
 	}
 }
 
