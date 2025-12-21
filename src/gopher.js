@@ -1,4 +1,4 @@
-class Module {
+class Gopher {
 	constructor() {}
 
 	async pause(delay) {
@@ -38,4 +38,4 @@ class Module {
 	}
 }
 
-module.exports = new Module();
+module.exports = new Gopher();
