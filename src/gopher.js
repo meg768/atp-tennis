@@ -1,12 +1,6 @@
 class Gopher {
 	constructor() {}
 
-	async pause(delay) {
-		return new Promise((resolve, reject) => {
-			setTimeout(() => resolve(), delay);
-		});
-	}
-
 	async fetch(url, options) {
 		let retryCount = options?.retryCount || 3;
 		let retryDelay = options?.retryDelay || 30000;
@@ -23,6 +17,12 @@ class Gopher {
 				...(options?.headers || {})
 			}
 		};
+
+		async function pause(delay) {
+			return new Promise((resolve, reject) => {
+				setTimeout(() => resolve(), delay);
+			});
+		}
 
 		async function fetchOnce() {
 			const response = await fetch(url, options);
@@ -47,11 +47,11 @@ class Gopher {
 				return await fetchOnce();
 			} catch (error) {
 				console.log(error.message);
-				await this.pause(retryDelay);
+				await pause(retryDelay);
 			}
 		}
 
-        throw new Error(`Failed to fetch ${url} after ${retryCount} attempts`);
+		throw new Error(`Failed to fetch ${url} after ${retryCount} attempts`);
 	}
 }
 
