@@ -9,6 +9,19 @@ class Gopher {
 
 	async fetch(url, options) {
 		try {
+			const defaultHeaders = {
+				'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15',
+				'Accept': 'application/json, text/plain, */*'
+			};
+
+			options = {
+				...options,
+				headers: {
+					...defaultHeaders,
+					...(options?.headers || {})
+				}
+			};
+
 			const response = await fetch(url, options);
 
 			const contentType = response.headers.get('content-type') || '';
@@ -25,8 +38,7 @@ class Gopher {
 
 			throw new Error(`Expected JSON but got ${contentType}`);
 		} catch (error) {
-
-            console.log({
+			console.log({
 				message: error.message,
 				name: error.name,
 				cause: error.cause,

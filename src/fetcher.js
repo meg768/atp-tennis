@@ -7,9 +7,6 @@ class Fetcher {
 
 	async fetchATP(url, options) {
 		const defaultHeaders = {
-			'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15',
-			Accept: 'application/json, text/plain, */*',
-			'Accept-Language': 'sv-SE,sv;q=0.9,en-US;q=0.8,en;q=0.7',
 			Referer: 'https://app.atptour.com/',
 			Origin: 'https://app.atptour.com'
 		};
