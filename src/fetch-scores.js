@@ -6,7 +6,6 @@ class Module extends Fetcher {
 	}
 
 	async fetch({ event, raw }) {
-
 		if (!event) {
 			throw new Error('Event ID is required');
 		}
@@ -23,11 +22,11 @@ class Module extends Fetcher {
 		if (raw != undefined && (raw == '' || raw != 0)) {
 			return response;
 		}
-		
-		if (!(response.Data || response.Data.length == 0)) {
-			throw Error(`No information about event ${event} found.`);
+
+		if (!Array.isArray(response.Data) || response.Data.length === 0) {
+			throw new Error(`No information about event ${event} found.`);
 		}
-		
+
 		raw = response.Data[0];
 
 		let result = {};
@@ -45,9 +44,9 @@ class Module extends Fetcher {
 			}
 
 			// Skip matches with invalid players (like Bye)
-			if (match.PlayerTeam1.PlayerId.length != 4 || match.PlayerTeam2.PlayerId.length  != 4) {
+			if (match.PlayerTeam1.PlayerId.length != 4 || match.PlayerTeam2.PlayerId.length != 4) {
 				continue;
-			};
+			}
 
 			let item = {};
 			item.match = `${event}-${match.MatchId}`;
@@ -57,7 +56,7 @@ class Module extends Fetcher {
 			item.court = match.CourtName ? match.CourtName : null;
 			item.umpire = match.UmpireFirstName && match.UmpireLastName ? `${match.UmpireFirstName} ${match.UmpireLastName}` : null;
 			item.sets = match.NumberOfSets;
-			item.message = match.Message ? match.Message : null; 
+			item.message = match.Message ? match.Message : null;
 
 			let winner = undefined;
 			let loser = undefined;
