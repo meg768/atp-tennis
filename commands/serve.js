@@ -116,7 +116,7 @@ class Module extends Command {
 				return data;
 			});
 		});
-
+/*
 		app.get('/api/atp', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let params = Object.assign({}, request.body, request.query);
@@ -133,7 +133,7 @@ class Module extends Command {
 				return await fetcher.fetchURL(params.url, options);
 			});
 		});
-
+*/
 		app.use('/api', api);
 		/*
 		app.listen(this.port, '::', () => {
