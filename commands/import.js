@@ -20,7 +20,7 @@ class Import extends Command {
 			alias: 'l',
 			describe: 'Run again after specified number of days',
 			type: 'number',
-			default: 0.5
+			default: 1
 		});
 
 		args.option('since', {
