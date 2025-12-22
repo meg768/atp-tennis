@@ -5,7 +5,9 @@ const Probe = require('./probe.js');
 
 class MySQL {
 	constructor(options) {
+
 		this.connection = undefined;
+        this.debug = options?.debug || false;
 		this.log = console.log;
 		this.error = console.error;
 	}
@@ -124,7 +126,7 @@ class MySQL {
 		let probe = new Probe();
 		let result = await query();
 
-		this.log(`${sql}`);
+		//this.log(`${sql}`);
 
 		return result;
 	}
