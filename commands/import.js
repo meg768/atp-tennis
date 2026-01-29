@@ -135,7 +135,6 @@ class Import extends Command {
 	}
 
     async updateAfterImport() {
-		await this.log(`Updating after import procedures...`);
 		await this.mysql.query(`CALL sp_update()`);
 	}
 

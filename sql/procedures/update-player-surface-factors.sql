@@ -13,6 +13,7 @@ BEGIN
   DECLARE hard_factor TINYINT;
   DECLARE grass_factor TINYINT;
 
+
   -- Drop and recreate temporary table
   DROP TEMPORARY TABLE IF EXISTS recent_matches;
 

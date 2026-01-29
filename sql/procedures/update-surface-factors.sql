@@ -1,14 +1,25 @@
 DROP PROCEDURE IF EXISTS sp_update_surface_factors;
-
 DELIMITER ;;
 CREATE DEFINER=`root`@`%` PROCEDURE `sp_update_surface_factors`()
 BEGIN
   DECLARE done INT DEFAULT FALSE;
   DECLARE current_player_id VARCHAR(50);
-  DECLARE player_cursor CURSOR FOR SELECT id FROM players;
+
+  -- Cursor: endast aktiva spelare
+  DECLARE player_cursor CURSOR FOR
+      SELECT id FROM players WHERE active;
+
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-  -- Open cursor and loop through each player
+  CALL sp_log('Updating surface factors for active players...');
+
+  -- 1) Nollställ ALLA spelare
+  UPDATE players
+     SET grass_factor = NULL,
+         clay_factor  = NULL,
+         hard_factor  = NULL;
+
+  -- 2) Uppdatera endast aktiva
   OPEN player_cursor;
 
   player_loop: LOOP
@@ -17,7 +28,6 @@ BEGIN
       LEAVE player_loop;
     END IF;
 
-    -- Call the per-player update procedure
     CALL sp_update_player_surface_factors(current_player_id);
   END LOOP;
 
