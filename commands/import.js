@@ -133,11 +133,8 @@ class Import extends Command {
 			await this.mysql.query({ sql, format });
 		}
 	}
-	async updateSurfaceFactors() {
-		await this.log(`Updating surface factors on top 100 players for the last two years...`);
-		await this.mysql.query(`CALL sp_update_surface_factors()`);
-	}
-	async updateAfterImport() {
+
+    async updateAfterImport() {
 		await this.log(`Updating after import procedures...`);
 		await this.mysql.query(`CALL sp_update()`);
 	}
@@ -278,7 +275,6 @@ class Import extends Command {
 				await this.import();
 				await this.updatePlayerStats();
 				await this.updateELO();
-				await this.updateSurfaceFactors();
 				await this.updateAfterImport();
 
 				let importStatus = { date: new Date() };
