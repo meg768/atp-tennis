@@ -14,7 +14,7 @@ class Import extends Command {
 	}
 
 	arguments(args) {
-		let year = new Date().getFullYear();
+		let year = new Date().getFullYear() - 1;
 
 		args.option('loop', {
 			alias: 'l',
