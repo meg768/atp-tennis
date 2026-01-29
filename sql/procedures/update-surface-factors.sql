@@ -28,7 +28,7 @@ BEGIN
       LEAVE player_loop;
     END IF;
 
-    CALL sp_update_player_surface_factors(current_player_id);
+    CALL sp_update_surface_factors_for_player(current_player_id);
   END LOOP;
 
   CLOSE player_cursor;

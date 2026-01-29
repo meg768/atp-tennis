@@ -1,7 +1,7 @@
-DROP PROCEDURE IF EXISTS sp_update_player_surface_factors;
+DROP PROCEDURE IF EXISTS sp_update_surface_factors_for_player;
 
 DELIMITER ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `sp_update_player_surface_factors`(IN player_id VARCHAR(50))
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_update_surface_factors_for_player`(IN player_id VARCHAR(50))
 BEGIN
   DECLARE clay_wins INT DEFAULT 0;
   DECLARE clay_matches INT DEFAULT 0;

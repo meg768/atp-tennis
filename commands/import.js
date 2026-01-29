@@ -134,9 +134,6 @@ class Import extends Command {
 		}
 	}
 
-    async updateAfterImport() {
-		await this.mysql.query(`CALL sp_update()`);
-	}
 
 	async import() {
 		let rankingsFetcher = new RankingsFetcher();
@@ -274,7 +271,8 @@ class Import extends Command {
 				await this.import();
 				await this.updatePlayerStats();
 				await this.updateELO();
-				await this.updateAfterImport();
+                await this.mysql.query(`CALL sp_update()`);
+
 
 				let importStatus = { date: new Date() };
 
