@@ -73,7 +73,6 @@ class MySQL {
 
 			try {
 				await endAsync();
-				this.log('✅ Disconnected from MySQL.');
 			} catch (error) {
 				this.error('⚠️ Error while disconnecting:', error.message);
 				// Du kan lägga till fallback med connection.destroy() här om du vill
