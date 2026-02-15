@@ -49,8 +49,21 @@ class Module extends Fetcher {
                     // Skip some event types that are not relevant
                     case 'CH':
                     case 'FU':
-                    case 'PZ':
+                    case 'Q':
+                    case 'ATPC':
                         continue;
+                    case 'PZ':
+                        event.type = 'Prize Money';
+                        break
+                    case 'GC':  
+                        event.type = 'Grand Championship';
+                        break;
+                    case 'GP':
+                        event.type = 'Grand Prix';
+                        break;
+                    case 'WT':
+                        event.type = 'World Tour';
+                        break;
 					case 'GS':
 						event.type = 'Grand Slam';
 						break;
