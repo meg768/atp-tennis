@@ -46,9 +46,11 @@ class Module extends Fetcher {
 				event.type = tournament.EventType;
 
 				switch (event.type) {
-					case 'FU': // Futures
-					case 'CH': // Challenger
-						continue;
+                    // Skip some event types that are not relevant
+                    case 'CH':
+                    case 'FU':
+                    case 'PZ':
+                        continue;
 					case 'GS':
 						event.type = 'Grand Slam';
 						break;
@@ -79,11 +81,11 @@ class Module extends Fetcher {
 					case 'CS':
 						event.type = 'Championship Series';
 						break;
-					case 'S9':
-						event.type = 'Super 9';
-						break;
 					case 'UC':
 						event.type = 'United Cup';
+						break;
+					case 'XXI':
+						event.type = 'Next Gen Finals';
 						break;
 				}
 
