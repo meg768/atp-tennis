@@ -258,7 +258,7 @@ class Import extends Command {
 		this.argv = argv;
 		let work = async () => {
 			try {
-				this.mysql.connect();
+				await this.mysql.connect();
 				let probe = new Probe();
 
 				if (argv.clean) {
