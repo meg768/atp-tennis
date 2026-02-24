@@ -6,6 +6,8 @@ const RankingsFetcher = require('../src/fetch-rankings');
 const EventFetcher = require('../src/fetch-scores');
 const PlayerFetcher = require('../src/fetch-player');
 
+require('../src/logger')(); // 1 MB
+
 class Import extends Command {
 	constructor() {
 		super({ command: 'import [options]', description: 'Import matches' });
