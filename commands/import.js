@@ -404,11 +404,11 @@ class Import extends Command {
 				await this.mysql.upsert('settings', { key: 'import.status', value: JSON.stringify(importStatus) });
 
 				await this.log(`Import finished in ${probe.toString()}.`);
+				this.mysql.disconnect();
 			} catch (error) {
 				await this.log(`FATAL ERROR: ${error.message}`);
 				console.error(error.stack);
 			} finally {
-				this.mysql.disconnect();
 			}
 
 			if (argv.loop) {
