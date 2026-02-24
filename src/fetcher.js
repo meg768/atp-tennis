@@ -19,11 +19,12 @@ class Fetcher {
 			}
 		};
 
-        return await this.fetchURL(url, options)
+		return await this.fetchURL(url, options);
 	}
 
 	async fetchURL(url, options) {
-        console.log(`Fetching URL: ${url}`);
+		await new Promise(resolve => setTimeout(resolve, 500));
+		console.log(`Fetching URL: ${url}`);
 		return await Gopher.fetch(url, options);
 	}
 
