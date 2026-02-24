@@ -64,7 +64,7 @@ class Import extends Command {
 		players[player] = true;
 
 		const playerCount = Object.keys(players).length;
-		await this.log(`[${playerCount}] Processing player ${player}...`);
+		await this.log(`Processing player ${player} (${playerCount})...`);
 
 		let activityFetcher = new ActivityFetcher();
 		let activity = await activityFetcher.fetch({ player: player, since: this.argv.since });
@@ -106,9 +106,6 @@ class Import extends Command {
 			}
 		}
 
-		await this.log(
-			`[${playerCount}] Player ${player}: ${activity.events.length} events, ${matchCount} matches, ${opponents.length} opponents found. Total: ${Object.keys(events).length} events, ${Object.keys(matches).length} matches.`
-		);
 
 		if (opponents.length > 0) {
 			for (let opponent of opponents) {
