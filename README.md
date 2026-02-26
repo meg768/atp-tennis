@@ -46,9 +46,49 @@ Examples:
 node atp.js import --top 100 --since 2025
 node atp.js rankings --output ./output/rankings.json
 node atp.js live --output ./output/live.json
+node atp.js live --poll --interval 30 --changes-only
+node atp.js alert --interval 30
+node atp.js alert --once
 node atp.js update-stats
 node atp.js update-elo
 node atp.js update-players
+```
+
+## Alert Monitoring (`alert`)
+
+`alert` monitors ATP live singles matches and prints notifications when match scores change.
+
+Default data source:
+- `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
+
+Current output format:
+- `Player Name (ID) vs Player Name (ID) | current_score`
+
+Current behavior:
+- Prints on score changes only (quiet when nothing changes)
+- Also emits `UNUSUAL` notifications for standout patterns (for example bagel/breadstick sets, long tiebreaks, retirement/walkover/medical text, seed upset in progress)
+
+Useful options:
+- `--interval` polling interval in seconds
+- `--cooldown` minimum seconds between notifications for the same match
+- `--max-checks` stop after N polling cycles (`0` = unlimited)
+- `--once` stop after first notification
+- `--debug --input ./input/live.json` run from local sample input instead of ATP endpoint
+
+Examples:
+
+```bash
+# Run continuously
+node atp.js alert
+
+# Faster polling
+node atp.js alert --interval 10
+
+# Stop after first notification
+node atp.js alert --once
+
+# Test using local sample data
+node atp.js alert --debug --input ./input/live.json --max-checks 1
 ```
 
 ## Start API Service
@@ -132,17 +172,17 @@ For fresh dev/prod environments:
 ## Operational Context
 - `atp.js` is used for daily imports from ATP endpoints
 - Primary production concern is keeping the import pipeline stable
+- `alert` is used for lightweight live score monitoring/notifications from ATP live endpoint
 
 ## Priority Backlog
 1. Critical: unauthenticated SQL execution via `/api/query` with `multipleStatements=true`
 2. High: ELO calculation uses `^` (bitwise XOR) where exponentiation is expected
 3. High: async race in `update-elo` / `update-stats` (missing `await` on connect/disconnect)
 4. High: potential null dereference in live score parsing
-5. Medium: `live --debug` ignores debug input data
-6. Medium: `fetch-rankings` ignores `top` and does null checks too late
-7. Medium: `update-players` calls `this.log` without implementation
-8. Medium: possible naming conflict in SQL surface-factor procedure
+5. Medium: `fetch-rankings` ignores `top` and does null checks too late
+6. Medium: `update-players` calls `this.log` without implementation
+7. Medium: possible naming conflict in SQL surface-factor procedure
 
 ## Collaboration Notes
-- `README.md` is the shared source of truth for project context and memory
-- Update this file when operational details, architecture, or priorities change
+- `CONTEXT.md` is the shared source of truth for project context and memory
+- Update `CONTEXT.md` when operational details, architecture, or priorities change
