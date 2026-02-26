@@ -46,6 +46,7 @@ Examples:
 node atp.js import --top 100 --since 2025
 node atp.js rankings --output ./output/rankings.json
 node atp.js live --output ./output/live.json
+node atp.js monitor --interval 30
 node atp.js update-stats
 node atp.js update-elo
 node atp.js update-players
@@ -132,6 +133,7 @@ For fresh dev/prod environments:
 ## Operational Context
 - `atp.js` is used for daily imports from ATP endpoints
 - Primary production concern is keeping the import pipeline stable
+- `monitor` is used for lightweight live score monitoring from ATP live endpoint
 
 ## Priority Backlog
 1. Critical: unauthenticated SQL execution via `/api/query` with `multipleStatements=true`
@@ -144,22 +146,25 @@ For fresh dev/prod environments:
 8. Medium: possible naming conflict in SQL surface-factor procedure
 
 ## Session Memory (2026-02-26)
-- New CLI command added and registered: `alert` (`commands/alert.js`, registered in `atp.js`).
-- `alert` default source is ATP live URL:
+- Live monitoring command is `monitor` (`commands/monitor.js`, registered in `atp.js`).
+- `monitor` default source is ATP live URL:
   - `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
-- `alert` current primary behavior:
+- `monitor` current primary behavior:
   - Polls live singles matches.
-  - Prints output only when score changes for a match.
-  - Output format is intentionally minimal: `Player Name (ID) vs Player Name (ID) | current_score`.
-- `alert` also has an `UNUSUAL` notification path for standout events (deduped per match+reason):
-  - bagel/breadstick sets, long tiebreak, retirement/walkover/medical text, seed upset in progress.
-- `alert` options currently include:
-  - `--url`, `--interval`, `--cooldown`, `--max-checks`, `--once`, `--debug`, `--input`.
+  - Prints only ongoing matches (`MatchStatus = P`) to console.
+  - Output format: `Event | Round | Player vs Opponent | score`.
+- `monitor` options currently include:
+  - `--interval`, `--max-checks`.
+- `monitor` now fetches live payload through `src/fetch-live.js`.
+- `monitor` no longer parses raw endpoint JSON directly; it consumes normalized rows from `fetch-live.parse()`.
+- `alert` command was removed from CLI registration; `monitor` is the maintained path.
 - `live` command was extended with polling support:
   - `--poll`, `--interval`, `--max`, `--changes-only`.
   - It now supports real polling output and debug input in the same execution flow.
 - Live parser hardening applied in `src/fetch-live.js`:
   - Guard added for set score parsing (`pA && pB`) to avoid null dereference.
+- `src/fetch-live.js` now includes team seed in parsed player objects:
+  - `row.player.seed` and `row.opponent.seed`.
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory

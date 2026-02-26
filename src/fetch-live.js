@@ -1,8 +1,6 @@
 const Fetcher = require('./fetcher');
 const jp = require('jsonpath');
 
-let now = new Date();
-let year = now.getFullYear();
 
 class Module extends Fetcher {
 	constructor(options) {
@@ -90,12 +88,14 @@ class Module extends Fetcher {
 	getPlayer({ tournamentIndex, matchIndex }) {
 		// $.Data.LiveMatchesTournamentsOrdered[0].LiveMatches[0].PlayerTeam.Player
 		let player = jp.query(this.response, `$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].PlayerTeam.Player`);
+		let seed = jp.query(this.response, `$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].PlayerTeam.Seed`);
 
 		if (player.length == 0) {
 			return null;
 		}
 
 		player = player[0];
+		seed = seed.length ? seed[0] : null;
 
 		let sample = {
 			PlayerId: 'D0CO',
@@ -108,19 +108,22 @@ class Module extends Fetcher {
 		return {
 			id: player.PlayerId,
 			name: `${player.PlayerFirstName} ${player.PlayerLastName}`,
-			country: player.PlayerCountry
+			country: player.PlayerCountry,
+			seed: seed
 		};
 	}
 
 	getOpponent({ tournamentIndex, matchIndex }) {
 		// $.Data.LiveMatchesTournamentsOrdered[0].LiveMatches[0].OpponentTeam.Player
 		let opponent = jp.query(this.response, `$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].OpponentTeam.Player`);
+		let seed = jp.query(this.response, `$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].OpponentTeam.Seed`);
 
 		if (opponent.length == 0) {
 			return null;
 		}
 
 		opponent = opponent[0];
+		seed = seed.length ? seed[0] : null;
 
 		let sample = {
 			PlayerId: 'D0CO',
@@ -133,7 +136,8 @@ class Module extends Fetcher {
 		return {
 			id: opponent.PlayerId,
 			name: `${opponent.PlayerFirstName} ${opponent.PlayerLastName}`,
-			country: opponent.PlayerCountry
+			country: opponent.PlayerCountry,
+			seed: seed
 		};
 	}
 

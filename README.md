@@ -47,48 +47,43 @@ node atp.js import --top 100 --since 2025
 node atp.js rankings --output ./output/rankings.json
 node atp.js live --output ./output/live.json
 node atp.js live --poll --interval 30 --changes-only
-node atp.js alert --interval 30
-node atp.js alert --once
+node atp.js monitor --interval 30
+node atp.js monitor --max-checks 1
 node atp.js update-stats
 node atp.js update-elo
 node atp.js update-players
 ```
 
-## Alert Monitoring (`alert`)
+## Monitor (`monitor`)
 
-`alert` monitors ATP live singles matches and prints notifications when match scores change.
+`monitor` watches ATP live singles matches and logs ongoing matches to console.
 
 Default data source:
 - `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
 
 Current output format:
-- `Player Name (ID) vs Player Name (ID) | current_score`
+- `Event | Round | Player vs Opponent | score`
 
 Current behavior:
-- Prints on score changes only (quiet when nothing changes)
-- Also emits `UNUSUAL` notifications for standout patterns (for example bagel/breadstick sets, long tiebreaks, retirement/walkover/medical text, seed upset in progress)
+- Prints only matches with live status `P` (ongoing)
+- Skips finished and not-started matches
 
 Useful options:
 - `--interval` polling interval in seconds
-- `--cooldown` minimum seconds between notifications for the same match
 - `--max-checks` stop after N polling cycles (`0` = unlimited)
-- `--once` stop after first notification
-- `--debug --input ./input/live.json` run from local sample input instead of ATP endpoint
 
 Examples:
 
 ```bash
 # Run continuously
-node atp.js alert
+node atp.js monitor
 
 # Faster polling
-node atp.js alert --interval 10
+node atp.js monitor --interval 10
 
-# Stop after first notification
-node atp.js alert --once
+# Run one cycle only
+node atp.js monitor --max-checks 1
 
-# Test using local sample data
-node atp.js alert --debug --input ./input/live.json --max-checks 1
 ```
 
 ## Start API Service
@@ -172,7 +167,7 @@ For fresh dev/prod environments:
 ## Operational Context
 - `atp.js` is used for daily imports from ATP endpoints
 - Primary production concern is keeping the import pipeline stable
-- `alert` is used for lightweight live score monitoring/notifications from ATP live endpoint
+- `monitor` is used for lightweight live score monitoring from ATP live endpoint
 
 ## Priority Backlog
 1. Critical: unauthenticated SQL execution via `/api/query` with `multipleStatements=true`
