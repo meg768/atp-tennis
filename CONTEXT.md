@@ -154,9 +154,14 @@ For fresh dev/prod environments:
   - Prints only ongoing matches (`MatchStatus = P`) to console.
   - Output format: `Event | Round | Player vs Opponent | score`.
 - `monitor` options currently include:
-  - `--interval`, `--max-checks`.
+  - `--interval`.
 - `monitor` now fetches live payload through `src/fetch-live.js`.
 - `monitor` no longer parses raw endpoint JSON directly; it consumes normalized rows from `fetch-live.parse()`.
+- `monitor` now opens DB itself and enriches each row with `player.rank` / `opponent.rank` from `players.rank`.
+- `monitor` connects to DB once at startup and enriches rows with rank while running.
+- Rank enrichment in `monitor` uses `getPlayerRank(id)` with an in-memory cache (no batched `IN (...)` query path).
+- Wins/losses enrichment in `monitor` uses head-to-head lookup from `matches` with cached pair keys in `updateEventWithWinsAndLosses()`.
+- `updateEventWithWinsAndLosses()` cache access was fixed to use module scope (no `this` leakage inside inner function).
 - `alert` command was removed from CLI registration; `monitor` is the maintained path.
 - `live` command was extended with polling support:
   - `--poll`, `--interval`, `--max`, `--changes-only`.
@@ -165,6 +170,10 @@ For fresh dev/prod environments:
   - Guard added for set score parsing (`pA && pB`) to avoid null dereference.
 - `src/fetch-live.js` now includes team seed in parsed player objects:
   - `row.player.seed` and `row.opponent.seed`.
+- `src/fetch-live.js` game-point parsing now reads team-level fields:
+  - `row.game.player` from `PlayerTeam.GameScore`
+  - `row.game.opponent` from `OpponentTeam.GameScore`.
+- `src/fetch-live.js` doubles filter uses `match.IsDoubles` (API field name).
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory
