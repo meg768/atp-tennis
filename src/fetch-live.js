@@ -1,7 +1,6 @@
 const Fetcher = require('./fetcher');
 const jp = require('jsonpath');
 
-
 class Module extends Fetcher {
 	constructor(options) {
 		super(options);
@@ -167,17 +166,20 @@ class Module extends Fetcher {
 					let pA = this.getPlayerSetScore({ tournamentIndex, matchIndex, setIndex });
 					let pB = this.getOpponentSetScore({ tournamentIndex, matchIndex, setIndex });
 
-						if (pA && pB && pA.SetScore != null && pB.SetScore != null) {
+					if (pA && pB && pA.SetScore != null && pB.SetScore != null) {
 						let scoreA = pA.SetScore;
-						if (pA.TieBreakScore != null) {
-							scoreA += `(${pA.TieBreakScore})`;
-						}
 						let scoreB = pB.SetScore;
+
+                        let scoreAB = `${scoreA}-${scoreB}`;
+
+						if (pA.TieBreakScore != null) {
+							scoreAB += `(${pA.TieBreakScore})`;
+						}
 						if (pB.TieBreakScore != null) {
-							scoreB += `(${pB.TieBreakScore})`;
+							scoreAB += `(${pB.TieBreakScore})`;
 						}
 
-						score.push(`${scoreA}${scoreB}`);
+						score.push(scoreAB);
 					}
 				}
 
