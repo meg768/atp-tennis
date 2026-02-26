@@ -171,8 +171,8 @@ For fresh dev/prod environments:
 - `src/fetch-live.js` now includes team seed in parsed player objects:
   - `row.player.seed` and `row.opponent.seed`.
 - `src/fetch-live.js` game-point parsing now reads team-level fields:
-  - `row.game.player` from `PlayerTeam.GameScore`
-  - `row.game.opponent` from `OpponentTeam.GameScore`.
+  - `row.game` as combined game state string from team game scores (e.g. `30-30`, `40-0`, `A-40`).
+  - When `MatchStatus = P`, `row.score` appends current game state in brackets (e.g. `6-1 6-2 [0-40]`).
 - `src/fetch-live.js` doubles filter uses `match.IsDoubles` (API field name).
 
 ## Collaboration Notes

@@ -84,6 +84,26 @@ class Module extends Fetcher {
 		return setScore;
 	}
 
+	getGameScore({ tournamentIndex, matchIndex }) {
+		const playerGameScore = jp.query(
+			this.response,
+			`$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].PlayerTeam.GameScore`
+		);
+		const opponentGameScore = jp.query(
+			this.response,
+			`$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].OpponentTeam.GameScore`
+		);
+
+		const player = playerGameScore.length ? playerGameScore[0] : null;
+		const opponent = opponentGameScore.length ? opponentGameScore[0] : null;
+
+		if (player == null && opponent == null) {
+			return null;
+		}
+
+		return `${player ?? '0'}-${opponent ?? '0'}`;
+	}
+
 	getPlayer({ tournamentIndex, matchIndex }) {
 		// $.Data.LiveMatchesTournamentsOrdered[0].LiveMatches[0].PlayerTeam.Player
 		let player = jp.query(this.response, `$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].PlayerTeam.Player`);
@@ -156,7 +176,7 @@ class Module extends Fetcher {
 					break;
 				}
 
-				if (match.isDoubles || match.Type != 'singles') {
+				if (match.IsDoubles || match.Type != 'singles') {
 					continue;
 				}
 
@@ -185,6 +205,12 @@ class Module extends Fetcher {
 
 				let eventID = `${tournament.EventYear}-${tournament.EventId}`;
 				let eventTitle = tournament.EventTitle;
+				let game = this.getGameScore({ tournamentIndex, matchIndex });
+				let scoreText = score.join(' ');
+
+				if (match.MatchStatus === 'P' && game) {
+					scoreText = scoreText ? `${scoreText} [${game}]` : `[${game}]`;
+				}
 
 				let player = this.getPlayer({ tournamentIndex, matchIndex });
 				let opponent = this.getOpponent({ tournamentIndex, matchIndex });
@@ -192,7 +218,7 @@ class Module extends Fetcher {
 				let row = {};
 				row.event = eventID;
 				row.name = eventTitle;
-				row.score = score.join(' ');
+				row.score = scoreText;
 				row.player = player;
 				row.opponent = opponent;
 
