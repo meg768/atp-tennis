@@ -163,7 +163,7 @@ class Module extends Fetcher {
 					let pA = this.getPlayerSetScore({ tournamentIndex, matchIndex, setIndex });
 					let pB = this.getOpponentSetScore({ tournamentIndex, matchIndex, setIndex });
 
-					if (pA.SetScore != null && pB.SetScore != null) {
+						if (pA && pB && pA.SetScore != null && pB.SetScore != null) {
 						let scoreA = pA.SetScore;
 						if (pA.TieBreakScore != null) {
 							scoreA += `(${pA.TieBreakScore})`;

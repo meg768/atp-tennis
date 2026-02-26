@@ -143,6 +143,24 @@ For fresh dev/prod environments:
 7. Medium: `update-players` calls `this.log` without implementation
 8. Medium: possible naming conflict in SQL surface-factor procedure
 
+## Session Memory (2026-02-26)
+- New CLI command added and registered: `alert` (`commands/alert.js`, registered in `atp.js`).
+- `alert` default source is ATP live URL:
+  - `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
+- `alert` current primary behavior:
+  - Polls live singles matches.
+  - Prints output only when score changes for a match.
+  - Output format is intentionally minimal: `Player Name (ID) vs Player Name (ID) | current_score`.
+- `alert` also has an `UNUSUAL` notification path for standout events (deduped per match+reason):
+  - bagel/breadstick sets, long tiebreak, retirement/walkover/medical text, seed upset in progress.
+- `alert` options currently include:
+  - `--url`, `--interval`, `--cooldown`, `--max-checks`, `--once`, `--debug`, `--input`.
+- `live` command was extended with polling support:
+  - `--poll`, `--interval`, `--max`, `--changes-only`.
+  - It now supports real polling output and debug input in the same execution flow.
+- Live parser hardening applied in `src/fetch-live.js`:
+  - Guard added for set score parsing (`pA && pB`) to avoid null dereference.
+
 ## Collaboration Notes
-- `README.md` is the shared source of truth for project context and memory
+- `CONTEXT.md` is the shared source of truth for project context and memory
 - Update this file when operational details, architecture, or priorities change

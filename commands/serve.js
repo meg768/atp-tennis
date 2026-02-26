@@ -1,6 +1,5 @@
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
-let MarkdownProcessor = require('../src/markdown-processor.js');
 
 const compression = require('compression');
 
@@ -55,40 +54,6 @@ class Module extends Command {
 				this.log(`/query executed in ${probe.toString()}`);
 				return result;
 			});
-		});
-
-		api.get('/chat', async (request, response) => {
-			const ChatATP = require('../src/chat-atp.js');
-			const prompt = request.query.prompt;
-
-			if (!prompt || typeof prompt !== 'string') {
-				return response.status(400).json({ error: 'Supply a prompt as in ?prompt=...' });
-			}
-
-			try {
-				this.log('Sending prompt:', prompt);
-				let reply = await ChatATP.sendMessage(prompt);
-
-				this.log(`Prompt: "${prompt}"`);
-				this.log(`Reply: ${reply}`);
-
-				let processor = new MarkdownProcessor({ mysql: this.mysql });
-				let processedReply = await processor.process(reply);
-
-				this.log(`Processed reply: ${processedReply}`);
-
-				return response.json({
-					prompt,
-					reply: processedReply
-				});
-			} catch (error) {
-				return response.status(500).json({
-					prompt,
-					reply: null,
-					error: error.message,
-					stack: error.stack?.split('\n')
-				});
-			}
 		});
 
 		app.get('/api/ping', (req, res) => {
