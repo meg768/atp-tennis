@@ -1,6 +1,6 @@
 # Project Context Pointer
 
-All shared project context and memory live in `README.md`.
+All shared project context and memory live in `CONTEXT.md`.
 
 When updating project memory, architecture notes, operational details, or priorities, update:
 - `CONTEXT.md`
