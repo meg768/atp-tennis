@@ -13,14 +13,16 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
   - Example JSON: [rankings.ranksglrollrange.1-100.raw.example.json](./examples/rankings.ranksglrollrange.1-100.raw.example.json)
 - `GET https://www.atptour.com/en/-/www/activity/last/{player}`
   - Player activity feed.
-  - Example JSON: [activity.last.s0ag.raw.example.json](./examples/activity.last.s0ag.raw.example.json)
+  - Example (`{player}=S0AG`, Jannik Sinner): `https://www.atptour.com/en/-/www/activity/last/S0AG`
+  - Example JSON: [activity.last.S0AG.raw.example.json](./examples/activity.last.S0AG.raw.example.json)
 - `GET https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear={eventYear}&eventid={eventID}`
   - Tournament results archive.
   - Query params: `eventyear`, `eventid`.
   - Example JSON: [scores.resultsarchive.2025-336.raw.example.json](./examples/scores.resultsarchive.2025-336.raw.example.json)
 - `GET https://www.atptour.com/en/-/www/players/hero/{player}`
   - Player profile data.
-  - Example JSON: [players.hero.s0ag.raw.example.json](./examples/players.hero.s0ag.raw.example.json)
+  - Example (`{player}=S0AG`, Jannik Sinner): `https://www.atptour.com/en/-/www/players/hero/S0AG`
+  - Example JSON: [players.hero.S0AG.raw.example.json](./examples/players.hero.S0AG.raw.example.json)
 - `GET https://www.atptour.com/en/-/www/StatsLeaderboard/{type}/52week/all/all/false?v=1`
   - Stats leaderboard (`type`: `pressure`, `serve`, `return`).
   - Example JSON: [statsleaderboard.pressure.raw.example.json](./examples/statsleaderboard.pressure.raw.example.json)
