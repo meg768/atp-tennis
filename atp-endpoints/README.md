@@ -46,6 +46,7 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
 
 ### Country Flag Asset
 - `GET https://www.atptour.com/en/~/media/images/flags/{COUNTRY}.svg`
+- `{COUNTRY}` format: 3-letter uppercase country code (e.g. `SWE`, `USA`, `SRB`)
 - Returns SVG, not JSON
 - Example JSON (request/URL pattern): [flags.country.request.example.json](./examples/flags.country.request.example.json)
 
