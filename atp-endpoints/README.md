@@ -59,3 +59,67 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
 
 - `Referer: https://app.atptour.com/`
 - `Origin: https://app.atptour.com`
+
+## Fetch Examples
+
+### Node (Built-in `fetch`)
+Requires Node 18+.
+
+```js
+const url = 'https://www.atptour.com/en/-/www/activity/last/S0AG';
+
+const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 30000);
+
+try {
+	const response = await fetch(url, {
+		method: 'GET',
+		headers: {
+			'User-Agent': 'Mozilla/5.0',
+			Accept: 'application/json, text/plain, */*',
+			Referer: 'https://app.atptour.com/',
+			Origin: 'https://app.atptour.com'
+		},
+		signal: controller.signal
+	});
+
+	if (!response.ok) {
+		throw new Error(`HTTP ${response.status}`);
+	}
+
+	const contentType = response.headers.get('content-type') || '';
+	if (!contentType.includes('application/json')) {
+		throw new Error(`Expected JSON, got: ${contentType}`);
+	}
+
+	const data = await response.json();
+	console.log(data);
+} finally {
+	clearTimeout(timeout);
+}
+```
+
+### Python (`requests`)
+Requires Python 3 and `requests` (`pip install requests`).
+
+```python
+import requests
+
+url = "https://www.atptour.com/en/-/www/activity/last/S0AG"
+headers = {
+    "User-Agent": "Mozilla/5.0",
+    "Accept": "application/json, text/plain, */*",
+    "Referer": "https://app.atptour.com/",
+    "Origin": "https://app.atptour.com",
+}
+
+response = requests.get(url, headers=headers, timeout=30)
+response.raise_for_status()
+
+content_type = response.headers.get("content-type", "")
+if "application/json" not in content_type:
+    raise RuntimeError(f"Expected JSON, got: {content_type}")
+
+data = response.json()
+print(data)
+```
