@@ -2,6 +2,14 @@
 
 This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
 
+## Node Example
+
+- Script: [fetch-endpoint.js](./examples/fetch-endpoint.js)
+- Default (fetch Jannik Sinner activity):
+  - `node atp-endpoints/examples/fetch-endpoint.js`
+- Custom endpoint + output file:
+  - `node atp-endpoints/examples/fetch-endpoint.js "https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100" "atp-endpoints/examples/rankings.latest.json"`
+
 ## Endpoints
 
 ### Rankings
