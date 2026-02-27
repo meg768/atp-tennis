@@ -27,6 +27,7 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
   - ATP Tour calendar feed endpoint.
   - Interpretation: schedule/calendar content for ATP Tour events.
   - Comment: useful for event discovery and schedule sync.
+  - Example JSON: [calendar-tour.example.json](./examples/calendar-tour.example.json)
 - `GET https://www.atptour.com/en/~/media/images/flags/{COUNTRY}.svg`
   - Country flag SVG files.
 
@@ -43,9 +44,3 @@ Commonly required in ATP browser-like requests:
 
 - `Referer: https://app.atptour.com/`
 - `Origin: https://app.atptour.com`
-
-## JSON Examples
-
-- Calendar endpoint:
-  - [calendar-tour.example.json](./examples/calendar-tour.example.json)
-  - Endpoint: [https://www.atptour.com/en/-/tournaments/calendar/tour](https://www.atptour.com/en/-/tournaments/calendar/tour)
