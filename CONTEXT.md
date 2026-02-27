@@ -178,3 +178,22 @@ For fresh dev/prod environments:
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory
 - Update this file when operational details, architecture, or priorities change
+- Commit command policy (user shorthand):
+  - When the user says `commit`, interpret it as: stage all + commit + push.
+  - Standard sequence:
+    - `git add -A`
+    - generate an automatic concise commit message from current changes
+    - `git commit -m "..."`
+    - `git push origin <current-branch>`
+  - Defaults:
+    - remote: `origin`
+    - branch: current checked-out branch
+    - no force push by default
+    - no automatic merge/rebase by default
+  - Error handling:
+    - if there are no changes: report a clear no-op (`nothing to commit`)
+    - if commit fails: report the concrete git error
+    - if push fails with non-fast-forward: stop and ask user before any rebase/merge/force action
+    - if push fails for auth/network/remote reasons: report the concrete git error and stop
+  - Success confirmation after push:
+    - report commit hash, branch, and push target (`origin/<branch>`)

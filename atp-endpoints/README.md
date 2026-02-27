@@ -29,6 +29,14 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
 - Example JSON: [players.hero.S0AG.example.json](./examples/players.hero.S0AG.example.json)
 - Direct link: [https://www.atptour.com/en/-/www/players/hero/S0AG](https://www.atptour.com/en/-/www/players/hero/S0AG)
 
+### Player Avatar (Headshot)
+- `GET https://www.atptour.com/-/media/alias/player-headshot/{playerId}`
+- `{playerId}` format: 4-character player id in lowercase (e.g. `s0ag`, `z355`)
+- Source field: `PlayerHeadshotImageCmsUrl` (from rankings response)
+- Returns image, not JSON
+- Example JSON (request/URL pattern): [player.avatar.headshot.request.example.json](./examples/player.avatar.headshot.request.example.json)
+- Direct link (`{playerId}=s0ag`): [https://www.atptour.com/-/media/alias/player-headshot/s0ag](https://www.atptour.com/-/media/alias/player-headshot/s0ag)
+
 ### Stats Leaderboard
 - `GET https://www.atptour.com/en/-/www/StatsLeaderboard/{type}/52week/all/all/false?v=1`
 - Path param: `{type}` (`pressure`, `serve`, `return`)
