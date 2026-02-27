@@ -8,46 +8,55 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
 - `GET https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100`
 - Required query params: `fromRank`, `toRank`
 - Example: `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100`
+- Direct link: [https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100](https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100)
 - Example JSON: [rankings.ranksglrollrange.1-100.example.json](./examples/rankings.ranksglrollrange.1-100.example.json)
 
 ### Player Activity
 - `GET https://www.atptour.com/en/-/www/activity/last/{player}`
 - Example (`{player}=S0AG`, Jannik Sinner): `https://www.atptour.com/en/-/www/activity/last/S0AG`
+- Direct link: [https://www.atptour.com/en/-/www/activity/last/S0AG](https://www.atptour.com/en/-/www/activity/last/S0AG)
 - Example JSON: [activity.last.S0AG.example.json](./examples/activity.last.S0AG.example.json)
 
 ### Event Results Archive
 - `GET https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear={eventYear}&eventid={eventID}`
 - Required query params: `eventyear`, `eventid`
+- Direct link: [https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=2025&eventid=336](https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=2025&eventid=336)
 - Example JSON: [scores.resultsarchive.2025-336.example.json](./examples/scores.resultsarchive.2025-336.example.json)
 
 ### Player Profile
 - `GET https://www.atptour.com/en/-/www/players/hero/{player}`
 - Example (`{player}=S0AG`, Jannik Sinner): `https://www.atptour.com/en/-/www/players/hero/S0AG`
+- Direct link: [https://www.atptour.com/en/-/www/players/hero/S0AG](https://www.atptour.com/en/-/www/players/hero/S0AG)
 - Example JSON: [players.hero.S0AG.example.json](./examples/players.hero.S0AG.example.json)
 
 ### Stats Leaderboard
 - `GET https://www.atptour.com/en/-/www/StatsLeaderboard/{type}/52week/all/all/false?v=1`
 - Path param: `{type}` (`pressure`, `serve`, `return`)
+- Direct link (`type=pressure`): [https://www.atptour.com/en/-/www/StatsLeaderboard/pressure/52week/all/all/false?v=1](https://www.atptour.com/en/-/www/StatsLeaderboard/pressure/52week/all/all/false?v=1)
 - Example JSON: [statsleaderboard.pressure.example.json](./examples/statsleaderboard.pressure.example.json)
 
 ### Live Matches
 - `GET https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
 - Query param: `scoringTournamentLevel` (commonly `tour`)
+- Direct link: [https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour](https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour)
 - Example JSON: [livematches.website.tour.example.json](./examples/livematches.website.tour.example.json)
 
 ### Masters 1000 Tournament Explorer
 - `GET https://www.atptour.com/-/tournaments/explore/1000`
+- Direct link: [https://www.atptour.com/-/tournaments/explore/1000](https://www.atptour.com/-/tournaments/explore/1000)
 - Example JSON: [tournaments.explore.1000.example.json](./examples/tournaments.explore.1000.example.json)
 
 ### Tournament Calendar
 - `GET https://www.atptour.com/en/-/tournaments/calendar/tour`
 - Returns ATP Tour calendar/schedule data
+- Direct link: [https://www.atptour.com/en/-/tournaments/calendar/tour](https://www.atptour.com/en/-/tournaments/calendar/tour)
 - Example JSON: [tournaments.calendar.tour.example.json](./examples/tournaments.calendar.tour.example.json)
 
 ### Country Flag Asset
 - `GET https://www.atptour.com/en/~/media/images/flags/{COUNTRY}.svg`
 - `{COUNTRY}` format: 3-letter uppercase country code (e.g. `SWE`, `USA`, `SRB`)
 - Returns SVG, not JSON
+- Direct link (`{COUNTRY}=SWE`): [https://www.atptour.com/en/~/media/images/flags/SWE.svg](https://www.atptour.com/en/~/media/images/flags/SWE.svg)
 - Example JSON (request/URL pattern): [flags.country.request.example.json](./examples/flags.country.request.example.json)
 
 ## Derived ATP URL Patterns
