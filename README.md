@@ -120,7 +120,7 @@ This is a deduplicated list from the current codebase.
 
 Endpoint docs and examples:
 - [ATP Endpoints README](./atp-endpoints/README.md)
-- [Calendar JSON example](./atp-endpoints/examples/tournaments.calendar.tour.raw.example.json)
+- [Calendar JSON example](./atp-endpoints/examples/tournaments.calendar.tour.example.json)
 
 ### Actively Used (import/commands/serve)
 - `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100`
