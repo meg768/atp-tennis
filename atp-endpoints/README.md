@@ -22,6 +22,8 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
   - Stats leaderboard (`type`: `pressure`, `serve`, `return`).
 - `GET https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
   - Live match feed.
+  - Query params: `scoringTournamentLevel` (commonly `tour`).
+  - Example JSON: [live-matches-website.example.json](./examples/live-matches-website.example.json)
 - `GET https://www.atptour.com/-/tournaments/explore/1000`
   - Tournament explorer feed/page.
 - `GET https://www.atptour.com/en/-/tournaments/calendar/tour`
