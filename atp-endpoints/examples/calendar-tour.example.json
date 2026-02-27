@@ -1,0 +1,45 @@
+{
+  "TournamentDates": [
+    {
+      "Year": 2026,
+      "Month": 3,
+      "MonthName": "March",
+      "Tournaments": [
+        {
+          "Id": 404,
+          "Name": "BNP Paribas Open",
+          "Title": "ATP Masters 1000 Indian Wells",
+          "Location": "Indian Wells, CA, United States",
+          "CountryCode": "USA",
+          "Type": "ATP Masters 1000",
+          "Surface": "Hard",
+          "Date": "2026-03-04",
+          "FormattedDate": "4 - 17 March, 2026",
+          "IsLive": false,
+          "IsPastEvent": false,
+          "DetailsUrl": "/en/tournaments/atp-masters-1000-indian-wells/404/overview",
+          "DrawUrl": "/en/tournaments/atp-masters-1000-indian-wells/404/draws",
+          "ScoresUrl": "/en/scores/current/indian-wells/404/results",
+          "ScheduleUrl": "/en/scores/current/indian-wells/404/daily-schedule"
+        },
+        {
+          "Id": 403,
+          "Name": "Miami Open presented by Itau",
+          "Title": "ATP Masters 1000 Miami",
+          "Location": "Miami, FL, United States",
+          "CountryCode": "USA",
+          "Type": "ATP Masters 1000",
+          "Surface": "Hard",
+          "Date": "2026-03-18",
+          "FormattedDate": "18 - 31 March, 2026",
+          "IsLive": false,
+          "IsPastEvent": false,
+          "DetailsUrl": "/en/tournaments/atp-masters-1000-miami/403/overview",
+          "DrawUrl": "/en/tournaments/atp-masters-1000-miami/403/draws",
+          "ScoresUrl": "/en/scores/current/miami/403/results",
+          "ScheduleUrl": "/en/scores/current/miami/403/daily-schedule"
+        }
+      ]
+    }
+  ]
+}

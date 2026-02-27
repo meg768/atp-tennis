@@ -118,6 +118,10 @@ curl -X POST http://127.0.0.1:3004/api/query \
 
 This is a deduplicated list from the current codebase.
 
+Endpoint docs and examples:
+- [ATP Endpoints README](./atp-endpoints/README.md)
+- [Calendar JSON example](./atp-endpoints/examples/calendar-tour.example.json)
+
 ### Actively Used (import/commands/serve)
 - `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100`
 - `https://www.atptour.com/en/-/www/activity/last/{player}`
