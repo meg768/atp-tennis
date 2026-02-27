@@ -31,27 +31,6 @@ class Module extends Command {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
-    // Determine if the match is finished based on the event data
-    // Examine score, which is a string like "6-3 4-6 7-6(5)". 
-    // If the last set has a valid score and there are 2 or 3 sets, we can consider the match finished.
-	isMatchFinished(score) {
-		if (!score || typeof score !== 'string') {
-			return false;
-		}
-
-        // Split into sets and trim whitespace
-		const sets = score.split(' ').map(s => s.trim());
-		const lastSet = sets[sets.length - 1];
-
-		// A simple regex to check if the set score is in the format of "6-3" or "7-6(5)"
-		const setScoreRegex = /^\d+-\d+(\(\d+\))?$/;
-		if (!setScoreRegex.test(lastSet)) {
-			return false;
-		}
-
-		// If we have 2 or 3 sets, and the last set is valid, consider the match finished
-		return sets.length >= 2 && sets.length <= 3;
-	}
 
 	// Update the event object with player ranks from the database
 	async updateEventWithRank(event) {
@@ -143,13 +122,14 @@ class Module extends Command {
 		try {
 			while (true) {
 				let events = await liveFetcher.fetch();
-                //events = events.filter(event => !this.isMatchFinished(event.score));
+                
 
-             
+                events = events.filter((event) => {
+                    return !event.winner;
+                });
+
+                
 				for (let event of events) {
-					if (this.isMatchFinished(event)) {
-						continue;
-					}
 					await this.updateEventWithRank(event);
 					await this.updateEventWithWinsAndLosses(event);
 				}

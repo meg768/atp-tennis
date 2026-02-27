@@ -218,6 +218,7 @@ class Module extends Fetcher {
 				let row = {};
 				row.event = eventID;
 				row.name = eventTitle;
+                row.winner = match.WinningPlayerId;
 				row.score = scoreText;
 				row.player = player;
 				row.opponent = opponent;
