@@ -10,6 +10,7 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
     - `fromRank` (integer, inclusive start rank, typically `>= 1`)
     - `toRank` (integer, inclusive end rank, typically `>= fromRank`)
   - Example: `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100`
+  - Example JSON: [rankings-ranksglrollrange.example.json](./examples/rankings-ranksglrollrange.example.json)
 - `GET https://www.atptour.com/en/-/www/activity/last/{player}`
   - Player activity feed.
 - `GET https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear={eventYear}&eventid={eventID}`
