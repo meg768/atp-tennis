@@ -1,0 +1,20 @@
+{
+  "TournamentsList": [
+    {
+      "Name": "BNP Paribas Open",
+      "Title": "ATP Masters 1000 Indian Wells",
+      "Location": "Indian Wells, CA, U.S.A.",
+      "CountryCode": "USA",
+      "Type": "1000",
+      "FormattedDate": "4 - 17 March, 2026"
+    },
+    {
+      "Name": "Miami Open presented by Itau",
+      "Title": "ATP Masters 1000 Miami",
+      "Location": "Miami, FL, U.S.A.",
+      "CountryCode": "USA",
+      "Type": "1000",
+      "FormattedDate": "18 - 31 March, 2026"
+    }
+  ]
+}
