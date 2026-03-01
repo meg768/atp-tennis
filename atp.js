@@ -20,6 +20,7 @@ var App = function () {
             args.command(require('./commands/rankings.js'));
             args.command(require('./commands/live.js'));
             args.command(require('./commands/monitor.js'));
+            args.command(require('./commands/score-parser.js'));
             args.command(require('./commands/serve.js'));
             args.command(require('./commands/update-elo.js'));
             args.command(require('./commands/update-stats.js'));

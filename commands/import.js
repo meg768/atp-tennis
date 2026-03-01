@@ -143,75 +143,66 @@ class Import extends Command {
 	}
 
 	async import() {
-		// A function to convert match score to a consistent format
 		function formatScore(rawScore) {
-			/*
-            Before tennis had tiebreaks, scores are typically in the format "911 64 86",
-            which can be standardized to "9-11 6-4 8-6"
-
-            After tiebreaks were introduced, scores can also include tiebreak scores,
-            e.g. "7-6(5) 6-4"
-
-            This function will attempt to standardize the score format
-
-            Examples:
-
-            "911 64 86"        -> "9-11 6-4 8-6"
-            "7-6(5) 6-4"       -> "7-6(5) 6-4"
-            "67(4) 63 62 RET"  -> "6-7(4) 6-3 6-2"
-            "6-4 3-2 Ret'd"    -> "6-4 3-2"
-            "W/O"              -> null
-            "RET"              -> null
-            */
-
 			if (!rawScore || typeof rawScore !== 'string') {
 				return rawScore;
 			}
 
 			let text = rawScore.trim();
 
-			// Remove trailing retirement / walkover variants
 			text = text.replace(/\b(RET(?:['']?D)?|W\/O|WO|WALKOVER)\b\.?$/i, '').trim();
 
-			// If nothing left (e.g. "W/O", "RET")
 			if (!text) {
 				return null;
 			}
 
-			function splitGames(digits) {
-				if (!/^\d+$/.test(digits)) {
-					return { a: digits, b: '' };
-				}
+			const tokens = text.split(/\s+/);
+			return tokens.map(formatSetToken).join(' ');
+		}
 
-				const len = digits.length;
-
-				if (len === 2) return { a: digits[0], b: digits[1] };
-				if (len === 3) return { a: digits[0], b: digits.slice(1) };
-				if (len === 4) return { a: digits.slice(0, 2), b: digits.slice(2) };
-
-				const mid = Math.floor(len / 2);
-				return { a: digits.slice(0, mid), b: digits.slice(mid) };
+		function formatSetToken(token) {
+			if (token.includes('-')) {
+				return token;
 			}
 
-			function formatSetToken(setToken) {
-				if (setToken.includes('-')) {
-					return setToken;
+			const tieBreakMatch = token.match(/^(\d+)\((\d+)\)$/);
+			if (tieBreakMatch) {
+				const games = parseCompactGames(tieBreakMatch[1]);
+
+				if (!games) {
+					return token;
 				}
 
-				const tbMatch = setToken.match(/^(\d+)\((\d+)\)$/);
-				if (tbMatch) {
-					const { a, b } = splitGames(tbMatch[1]);
-					return `${a}-${b}(${tbMatch[2]})`;
-				}
-
-				const { a, b } = splitGames(setToken);
-				return `${a}-${b}`;
+				return `${games[0]}-${games[1]}(${tieBreakMatch[2]})`;
 			}
 
-			const setTokens = text.split(/\s+/);
-			const formattedSets = setTokens.map(formatSetToken);
+			const games = parseCompactGames(token);
 
-			return formattedSets.join(' ');
+			if (!games) {
+				return token;
+			}
+
+			return `${games[0]}-${games[1]}`;
+		}
+
+		function parseCompactGames(token) {
+			if (!/^\d+$/.test(token)) {
+				return null;
+			}
+
+			if (token.length === 2) {
+				return [token[0], token[1]];
+			}
+
+			if (token.length === 3) {
+				return [token[0], token.slice(1)];
+			}
+
+			if (token.length === 4) {
+				return [token.slice(0, 2), token.slice(2)];
+			}
+
+			return null;
 		}
 
 		// A function to convert match duration from "HH:MM:SS" to "HH:MM"

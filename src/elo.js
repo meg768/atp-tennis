@@ -7,111 +7,185 @@ function getScoreIndex(score) {
 		return null;
 	}
 
-	let winnerGames = 0;
-	let loserGames = 0;
-	let setsPlayed = 0;
-	let tiebreaks = 0;
+	const normalizedScore = normalizeScore(score);
 
-	const wasRetired = /Ret'?d|RET/i.test(score); // detect retirement
-	const cleanedScore = score.replace(/Ret'?d|RET/gi, '').trim(); // remove RET markers
-	const sets = cleanedScore.split(/\s+/);
-
-	if (wasRetired) {
+	if (typeof normalizedScore !== 'string' || normalizedScore.trim() === '') {
 		return null;
 	}
 
-	sets.forEach((set) => {
-		const hasTiebreak = /\(.*?\)/.test(set);
-		if (hasTiebreak) tiebreaks++;
+	if (/\b(RET|RET'D|RETD|W\/O|WO|WALKOVER|DEF|ABD)\b/i.test(normalizedScore)) {
+		return null;
+	}
 
-		const cleanedSet = set.replace(/\(.*?\)/g, '');
+	let completedSets = 0;
+	let totalGames = 0;
 
-		if (/^\d{2}$/.test(cleanedSet)) {
-			const g1 = parseInt(cleanedSet[0], 10);
-			const g2 = parseInt(cleanedSet[1], 10);
+	for (const token of normalizedScore.toUpperCase().split(/\s+/)) {
+		const games = parseSetToken(token);
 
-			const isLikelyComplete = g1 >= 6 || g2 >= 6;
-
-			if (isLikelyComplete) {
-				setsPlayed++;
-				if (g1 > g2) {
-					winnerGames += g1;
-					loserGames += g2;
-				} else {
-					winnerGames += g2;
-					loserGames += g1;
-				}
-			}
+		if (!games) {
+			return null;
 		}
-	});
 
-	if (setsPlayed <= 1) {
+		const [winnerGames, loserGames] = games;
+
+		if (!isCompletedSet(winnerGames, loserGames)) {
+			return null;
+		}
+
+		completedSets++;
+		totalGames += winnerGames + loserGames;
+	}
+
+	if (completedSets < 2) {
 		return null;
 	}
-	let x = 1 - (winnerGames + loserGames - 6 * setsPlayed) / (7 * setsPlayed);
-	//console.log(`${score} : ${x}`);
-	return x;
+
+	return 1 - (totalGames - 6 * completedSets) / (7 * completedSets);
+}
+
+function normalizeScore(rawScore) {
+	if (!rawScore || typeof rawScore !== 'string') {
+		return rawScore;
+	}
+
+	let text = rawScore.trim();
+
+	text = text.replace(/\b(RET(?:['']?D)?|W\/O|WO|WALKOVER)\b\.?$/i, '').trim();
+
+	if (!text) {
+		return null;
+	}
+
+	const tokens = text.split(/\s+/);
+	return tokens.map(normalizeSetToken).join(' ');
+}
+
+function normalizeSetToken(token) {
+	if (token.includes('-')) {
+		return token;
+	}
+
+	const tieBreakMatch = token.match(/^(\d+)\((\d+)\)$/);
+	if (tieBreakMatch) {
+		const games = parseCompactGames(tieBreakMatch[1]);
+
+		if (!games) {
+			return token;
+		}
+
+		return `${games[0]}-${games[1]}(${tieBreakMatch[2]})`;
+	}
+
+	const games = parseCompactGames(token);
+
+	if (!games) {
+		return token;
+	}
+
+	return `${games[0]}-${games[1]}`;
+}
+
+function parseSetToken(token) {
+	const cleanToken = token.replace(/\([^)]*\)/g, '');
+
+	const hyphenMatch = cleanToken.match(/^(\d+)-(\d+)$/);
+	if (hyphenMatch) {
+		return [parseInt(hyphenMatch[1], 10), parseInt(hyphenMatch[2], 10)];
+	}
+
+	return parseCompactGames(cleanToken);
+}
+
+function parseCompactGames(token) {
+	if (!/^\d+$/.test(token)) {
+		return null;
+	}
+
+	if (token.length === 2) {
+		return [parseInt(token[0], 10), parseInt(token[1], 10)];
+	}
+
+	if (token.length === 3) {
+		return [parseInt(token[0], 10), parseInt(token.slice(1), 10)];
+	}
+
+	if (token.length === 4) {
+		return [parseInt(token.slice(0, 2), 10), parseInt(token.slice(2), 10)];
+	}
+
+	return null;
+}
+
+function isCompletedSet(a, b) {
+	const high = Math.max(a, b);
+	const low = Math.min(a, b);
+	const diff = high - low;
+
+	if (high < 6) {
+		return false;
+	}
+
+	if (high === 6) {
+		return diff >= 2;
+	}
+
+	if (high === 7) {
+		return low === 5 || low === 6;
+	}
+
+	return diff === 2;
 }
 
 async function computeELO({ mysql }) {
 	let elo = {};
 	let count = {};
 
-	let sql = `SELECT * FROM flatly WHERE event_date >= CURDATE() - INTERVAL 52 WEEK`;
+	let sql = `SELECT * FROM flatly WHERE event_date IS NOT NULL ORDER BY event_date ASC, id ASC`;
 	let format = [];
 
 	let matches = await mysql.query({ sql, format });
 
-	// Count matches and create entries
 	for (let match of matches) {
 		let { winner_id: playerA, loser_id: playerB } = match;
 
-		let countA = count[playerA] || 0;
-		let countB = count[playerB] || 0;
-
-		count[playerA] = countA + 1;
-		count[playerB] = countB + 1;
-	}
-
-	for (let match of matches) {
-		let { winner_id: playerA, loser_id: playerB } = match;
-
-		if (count[playerA] < 10 || count[playerB] < 10) {
-			console.log(`Skipping ${match.winner}/${match.loser}`);
+		if (!playerA || !playerB) {
 			continue;
 		}
 
-		let scoreIndex = getScoreIndex(match.score);
-
-		if (scoreIndex == null) {
+		// Reuse score parsing only to ignore incomplete/retired matches.
+		if (getScoreIndex(match.score) == null) {
 			continue;
 		}
 
-		let eloA = elo[playerA] || { rank: 1500, id: playerA, name: match.winner, matches: count[playerA] };
-		let eloB = elo[playerB] || { rank: 1500, id: playerB, name: match.loser, matches: count[playerB] };
+		let matchesA = count[playerA] || 0;
+		let matchesB = count[playerB] || 0;
+
+		let eloA = elo[playerA] || { rank: 1500, id: playerA, name: match.winner };
+		let eloB = elo[playerB] || { rank: 1500, id: playerB, name: match.loser };
 
 		let rA = eloA.rank;
 		let rB = eloB.rank;
 
-		let eA = 1 / (1 + (10 ^ ((rB - rA) / 400)));
-		let eB = 1 / (1 + (10 ^ ((rA - rB) / 400)));
+		let eA = 1 / (1 + Math.pow(10, (rB - rA) / 400));
+		let eB = 1 / (1 + Math.pow(10, (rA - rB) / 400));
 
-		let sA = 0.5 + scoreIndex / 2;
+		let sA = 1;
 		let sB = 0;
 
-		let kA = 250 / ((eloA.matches + 5) ^ 0.4);
-		let kB = 250 / ((eloB.matches + 5) ^ 0.4);
+		let kA = 250 / Math.pow(matchesA + 5, 0.4);
+		let kB = 250 / Math.pow(matchesB + 5, 0.4);
 
 		let k = match.event_type == 'Grand Slam' ? 1.1 : 1;
-
-		// ??
-		k = k * 4;
 		
 		eloA.rank = rA + k * kA * (sA - eA);
 		eloB.rank = rB + k * kB * (sB - eB);
 
 		elo[playerA] = eloA;
 		elo[playerB] = eloB;
+
+		count[playerA] = matchesA + 1;
+		count[playerB] = matchesB + 1;
 	}
 
 	return elo;

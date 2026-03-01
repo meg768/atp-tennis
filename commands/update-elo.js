@@ -15,11 +15,13 @@ class Module extends Command {
 	async run(argv) {
 		this.argv = argv;
 
-		this.mysql.connect();
+		await this.mysql.connect();
 
-		await updateELO({ mysql: this.mysql });
-
-		this.mysql.disconnect();
+		try {
+			await updateELO({ mysql: this.mysql });
+		} finally {
+			await this.mysql.disconnect();
+		}
 	}
 }
 

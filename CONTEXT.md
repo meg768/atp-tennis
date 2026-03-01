@@ -50,6 +50,7 @@ node atp.js monitor --interval 30
 node atp.js update-stats
 node atp.js update-elo
 node atp.js update-players
+node atp.js score-parser --examples
 ```
 
 ## Start API Service
@@ -134,6 +135,7 @@ For fresh dev/prod environments:
 - `atp.js` is used for daily imports from ATP endpoints
 - Primary production concern is keeping the import pipeline stable
 - `monitor` is used for lightweight live score monitoring from ATP live endpoint
+- `score-parser` is available as a standalone CLI test bench for developing `src/score-parser.js` without coupling it to import/ELO flows
 
 ## Priority Backlog
 1. Critical: unauthenticated SQL execution via `/api/query` with `multipleStatements=true`
