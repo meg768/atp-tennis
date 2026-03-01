@@ -2,7 +2,6 @@ let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 
 const ActivityFetcher = require('../src/fetch-activity');
-const RankingsFetcher = require('../src/fetch-rankings');
 const EventFetcher = require('../src/fetch-scores');
 const PlayerFetcher = require('../src/fetch-player');
 
@@ -108,7 +107,6 @@ class Import extends Command {
 			}
 		}
 
-
 		if (opponents.length > 0) {
 			for (let opponent of opponents) {
 				await this.importPlayer({ player: opponent, players: players, events: events, matches: matches });
@@ -142,7 +140,30 @@ class Import extends Command {
 		}
 	}
 
-	async import() {
+	async getTopPlayerRankings(top) {
+		let Fetcher = require('../src/fetch-rankings');
+		let fetcher = new Fetcher();
+		let rankings = await fetcher.fetch({ top: top });
+
+		return rankings;
+	}
+
+	async updateRankings(rankings) {
+		if (!rankings || !Array.isArray(rankings.players)) {
+			return;
+		}
+
+		await this.mysql.query(`UPDATE players SET rank = NULL, points = NULL`);
+
+		for (let player of rankings.players) {
+			await this.mysql.query({
+				sql: `UPDATE players SET rank = ?, points = ? WHERE id = ?`,
+				format: [player.rank, player.points, player.player]
+			});
+		}
+	}
+
+	async import(rankings) {
 		function formatScore(rawScore) {
 			if (!rawScore || typeof rawScore !== 'string') {
 				return rawScore;
@@ -222,9 +243,6 @@ class Import extends Command {
 			}
 		}
 
-		let rankingsFetcher = new RankingsFetcher();
-		let rankings = await rankingsFetcher.fetch({ top: this.argv.top });
-
 		let events = {};
 		let players = {};
 		let matches = {};
@@ -273,6 +291,7 @@ class Import extends Command {
 					entry.winner = match.winner.player;
 					entry.loser = match.loser.player;
 					entry.score = formatScore(match.score);
+					entry.status = match.status;
 					entry.duration = formatDuration(match.duration);
 
 					matches[match.match] = entry;
@@ -379,8 +398,14 @@ class Import extends Command {
 					await this.log(`Tables truncated.`);
 				}
 
+				let rankings = await this.getTopPlayerRankings(this.argv.top);
+
 				await this.log(`Starting import...`);
-				await this.import();
+				await this.import(rankings);
+
+				await this.log(`Updating rankings...`);
+				await this.updateRankings(rankings);
+				await this.log(`Rankings updated.`);
 
 				await this.log(`Updating player stats...`);
 				await this.updatePlayerStats();

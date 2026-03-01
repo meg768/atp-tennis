@@ -390,45 +390,22 @@ BEGIN
     CALL sp_log('Updating match status for matches...');
 
     UPDATE matches m
-    JOIN events e ON e.id = m.event
     SET m.status =
         CASE
-
-            -- Behåll Walkover om vi inte tvingar uppdatering
-            WHEN force_update = FALSE AND m.status = 'Walkover'
+            WHEN force_update = FALSE AND m.status IN ('Completed', 'Aborted', 'Walkover')
                 THEN m.status
-
-            -- Ingen score (NULL eller bara whitespace)
             WHEN m.score IS NULL OR TRIM(m.score) = ''
                 THEN 'Unknown'
-
-            -- Om matchen inte är färdig enligt tennisregler
-            WHEN IS_MATCH_COMPLETED(m.score) = 0
+            WHEN UPPER(m.score) REGEXP '(^|[[:space:]])(W/O|WO|WALKOVER)($|[[:space:]])'
+                THEN 'Walkover'
+            WHEN UPPER(m.score) REGEXP '(^|[[:space:]])(RET|RET''D|RETD|DEF|ABD)($|[[:space:]])'
                 THEN 'Aborted'
-
-            -- Grand Slam main draw = best-of-5
-            WHEN e.type = 'Grand Slam'
-                 AND m.round IN ('F','SF','QF','R16','R32','R64','R128')
-                 AND NUMBER_OF_SETS_PLAYED(m.score) >= 3
-                THEN 'Completed'
-
-            WHEN e.type = 'Grand Slam'
-                 AND m.round IN ('F','SF','QF','R16','R32','R64','R128')
-                 AND NUMBER_OF_SETS_PLAYED(m.score) < 3
-                THEN 'Aborted'
-
-            -- Övriga matcher = best-of-3
-            WHEN NUMBER_OF_SETS_PLAYED(m.score) >= 2
-                THEN 'Completed'
-
-            ELSE 'Aborted'
-
+            ELSE 'Completed'
         END
     WHERE
         force_update = TRUE
         OR m.status IS NULL
         OR m.status = 'Unknown';
-
 END;;
 DELIMITER ;
 

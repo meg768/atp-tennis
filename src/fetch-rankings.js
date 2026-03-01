@@ -7,10 +7,15 @@ class FetchRankings extends Fetcher {
 
 	async fetch(options = {}) {
 		let results = {};
+		let top = Number.isFinite(Number(options.top)) ? Math.max(1, Math.trunc(Number(options.top))) : 100;
 
-		const url = 'https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100';
+		const url = `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=${top}`;
 
 		let response = await this.fetchATP(url, options);
+
+		if (!response) {
+			return results;
+		}
 
 		let result = {};
 
@@ -25,10 +30,6 @@ class FetchRankings extends Fetcher {
 				points: player.Points
 			};
 		});
-
-		if (!response) {
-			return results;
-		}
 
 		return result;
 	}

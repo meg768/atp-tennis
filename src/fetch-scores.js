@@ -6,6 +6,27 @@ class Module extends Fetcher {
 	}
 
 	async fetch({ event, raw }) {
+		function getMatchStatus(match) {
+			const statusText = [match.MatchStateReasonMessage, match.Message, match.ResultString]
+				.filter(Boolean)
+				.join(' ')
+				.toUpperCase();
+
+			if (/\b(W\/O|WO|WALKOVER)\b/.test(statusText)) {
+				return 'Walkover';
+			}
+
+			if (/\b(RET|RET'D|RETD|RETIREMENT|DEF|ABD|ABANDONED)\b/.test(statusText)) {
+				return 'Aborted';
+			}
+
+			if (match.Status === 'F') {
+				return 'Completed';
+			}
+
+			return 'Unknown';
+		}
+
 		if (!event) {
 			throw new Error('Event ID is required');
 		}
@@ -57,6 +78,7 @@ class Module extends Fetcher {
 			item.umpire = match.UmpireFirstName && match.UmpireLastName ? `${match.UmpireFirstName} ${match.UmpireLastName}` : null;
 			item.sets = match.NumberOfSets;
 			item.message = match.Message ? match.Message : null;
+			item.status = getMatchStatus(match);
 
 			let winner = undefined;
 			let loser = undefined;
