@@ -5,7 +5,7 @@
     "main": "atp.js",
     "scripts": {
         "git-commit": "git add -A && git commit -m '-' && git push",
-        "pi-log": "ssh pi@pi-kato 'tail -f ~/atp-tennis/atp.log'",
+        "show atp log": "ssh pi@pi-kato 'tail -f ~/atp-tennis/atp.log'",
         "run serve": "./atp.js serve",
         "goto-github": "open https://github.com/meg768/atp-tennis"
     },
