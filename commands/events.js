@@ -1,10 +1,10 @@
-let axios = require('axios');
-
 let Command = require('../src/command.js');
+let Fetcher = require('../src/fetcher.js');
 
 class Module extends Command {
 	constructor() {
 		super({ command: 'events [options]', description: 'List events' });
+		this.fetcher = new Fetcher();
 	}
 
 	arguments(args) {
@@ -16,12 +16,13 @@ class Module extends Command {
 	}
 
 	async fetch(eventID) {
-		let response = await axios.get('https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=2024&eventid=404', {
+		let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=2024&eventid=${eventID}`;
+		let response = await this.fetcher.fetchATP(url, {
 			headers: {
 				'User-Agent': 'YourAppName/1.0'
 			}
 		});
-		console.log(response.data);
+		console.log(response);
 	}
 
 	async run(argv) {

@@ -7,11 +7,26 @@ class Request {
 
 	async request(options) {
 		try {
-			let axios = require('axios');
-			let response = await axios(options);
+			let url = new URL(options.url);
 
-			console.log(response.data);
-			return response.data;
+			if (options.params) {
+				for (let [key, value] of Object.entries(options.params)) {
+					url.searchParams.set(key, value);
+				}
+			}
+
+			let response = await fetch(url, {
+				method: options.method || 'GET',
+				headers: options.headers
+			});
+
+			if (!response.ok) {
+				throw new Error(`Request failed with status ${response.status}`);
+			}
+
+			let data = await response.json();
+			console.log(data);
+			return data;
 		} catch (error) {
 			throw new Error(error.message);
 		}
