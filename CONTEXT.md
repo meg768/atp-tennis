@@ -143,9 +143,8 @@ For fresh dev/prod environments:
 3. High: async race in `update-elo` / `update-stats` (missing `await` on connect/disconnect)
 4. High: potential null dereference in live score parsing
 5. Medium: `live --debug` ignores debug input data
-6. Medium: `fetch-rankings` ignores `top` and does null checks too late
-7. Medium: `update-players` calls `this.log` without implementation
-8. Medium: possible naming conflict in SQL surface-factor procedure
+6. Medium: `update-players` calls `this.log` without implementation
+7. Medium: possible naming conflict in SQL surface-factor procedure
 
 ## Session Memory (2026-02-26)
 - Live monitoring command is `monitor` (`commands/monitor.js`, registered in `atp.js`).
@@ -176,6 +175,17 @@ For fresh dev/prod environments:
   - `row.game` as combined game state string from team game scores (e.g. `30-30`, `40-0`, `A-40`).
   - When `MatchStatus = P`, `row.score` appends current game state in brackets (e.g. `6-1 6-2 [0-40]`).
 - `src/fetch-live.js` doubles filter uses `match.IsDoubles` (API field name).
+
+## Session Memory (2026-03-01)
+- Import flow now has a separate rankings sync step in `commands/import.js`:
+  - `getTopPlayerRankings(top)` fetches rankings once.
+  - `updateRankings(rankings)` clears `players.rank` and `players.points` for all players, then restores current values for players in the fetched ranking list.
+- `src/fetch-rankings.js` now respects the requested `top` value instead of always fetching top 100.
+- `src/fetch-scores.js` now derives `matches.status` from ATP archive fields (`Status`, `MatchStateReasonMessage`, `Message`, `ResultString`) and import persists that status into `matches.status`.
+- `database/schema.sql` `sp_update_match_status` was updated to stop depending on missing SQL functions (`IS_MATCH_COMPLETED`, `NUMBER_OF_SETS_PLAYED`) and now:
+  - preserves already known statuses (`Completed`, `Aborted`, `Walkover`)
+  - uses `score` as fallback to derive `Walkover` / `Aborted` / `Completed`
+- User reported a 2026 import run looked good after these changes.
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory
