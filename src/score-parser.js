@@ -9,6 +9,7 @@
     A valid score may only contain digits, spaces, parentheses, brackets, and hyphens.
     If a game score like [0-15] is present, it must be the last token in the score string. If not move to the end of the string.
     Valid game scores are 0, 15, 30, 40, A and D. Any other game score should be considered invalid.
+    If the last set played does not have at least 6 games played, the score should be considered invalid.
 */
 
 class ScoreParser {
@@ -21,6 +22,10 @@ class ScoreParser {
 	}
 
 	parse(score) {
+		function isAbortedScore(value) {
+			return /\b(RET|RET'D|RETD|W\/O|WO|WALKOVER|DEF|ABD)\b/i.test(value);
+		}
+
 		function isCurrentGameToken(token) {
 			return /^\[(0|15|30|40|A|D)-(0|15|30|40|A|D)\]$/i.test(token);
 		}
@@ -103,6 +108,17 @@ class ScoreParser {
 			return games ? `${games[0]}-${games[1]}` : null;
 		}
 
+		function parseSetGames(token) {
+			const setToken = token.replace(/\(\d+\)/g, '');
+			const match = setToken.match(/^(\d+)-(\d+)$/);
+
+			if (!match) {
+				return null;
+			}
+
+			return [parseInt(match[1], 10), parseInt(match[2], 10)];
+		}
+
 		if (typeof score !== 'string') {
 			throw new Error('Invalid score.');
 		}
@@ -113,7 +129,7 @@ class ScoreParser {
 			throw new Error('Invalid score.');
 		}
 
-		if (/\b(RET|RET'D|RETD|W\/O|WO|WALKOVER|DEF|ABD)\b/i.test(trimmedScore)) {
+		if (isAbortedScore(trimmedScore)) {
 			this.score = '';
 			return this.score;
 		}
@@ -124,7 +140,7 @@ class ScoreParser {
 
 		const tokens = trimmedScore.split(/\s+/);
 		const setTokens = [];
-		let currentGameToken = null;
+		let gameToken = null;
 
 		for (const token of tokens) {
 			if (token.startsWith('[') || token.endsWith(']')) {
@@ -132,7 +148,7 @@ class ScoreParser {
 					throw new Error(`Invalid score: ${score}`);
 				}
 
-				currentGameToken = normalizeCurrentGameToken(token);
+				gameToken = normalizeCurrentGameToken(token);
 				continue;
 			}
 
@@ -145,11 +161,19 @@ class ScoreParser {
 			setTokens.push(normalizedSetToken);
 		}
 
-		if (setTokens.length === 0 && currentGameToken === null) {
+		if (setTokens.length === 0 && gameToken === null) {
 			throw new Error(`Invalid score: ${score}`);
 		}
 
-		this.score = currentGameToken == null ? setTokens.join(' ') : [...setTokens, currentGameToken].join(' ');
+		if (setTokens.length > 0) {
+			const lastSetGames = parseSetGames(setTokens[setTokens.length - 1]);
+
+			if (!lastSetGames || lastSetGames[0] + lastSetGames[1] < 6) {
+				throw new Error(`Invalid score: ${score}`);
+			}
+		}
+
+		this.score = gameToken == null ? setTokens.join(' ') : [...setTokens, gameToken].join(' ');
 		return this.score;
 	}
 
