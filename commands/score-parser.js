@@ -76,7 +76,6 @@ class Module extends Command {
 	inspectScore(score) {
 		try {
 			const parser = new ScoreParser(score);
-			const currentGame = parser.getGameScore();
 
 			return {
 				score,
@@ -84,7 +83,7 @@ class Module extends Command {
 				sets: parser.getSetsPlayed(),
 				tiebreaks: parser.getTieBreaksPlayed(),
 				games: parser.getGamesPlayed(),
-				currentGame: currentGame ? currentGame.join('-') : null,
+				currentGame: parser.getGameScore(),
 				error: null
 			};
 		} catch (error) {

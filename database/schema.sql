@@ -1,30 +1,4 @@
-# ************************************************************
-# Sequel Pro SQL dump
-# Version 4541
-#
-# http://www.sequelpro.com/
-# https://github.com/sequelpro/sequelpro
-#
-# Värd: router.egelberg.se (MySQL 5.5.5-10.11.6-MariaDB-0+deb12u1)
-# Databas: atp
-# Genereringstid: 2026-02-25 17:41:26 +0000
-# ************************************************************
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
-# Tabelldump archive
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `archive`;
-
+-- Create syntax for TABLE 'archive'
 CREATE TABLE `archive` (
   `id` varchar(32) NOT NULL DEFAULT '',
   `date` date DEFAULT NULL,
@@ -33,33 +7,10 @@ CREATE TABLE `archive` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Create syntax for VIEW 'currently'
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `currently` AS with ongoing_events as (select `e`.`id` AS `id`,`e`.`name` AS `name`,`e`.`date` AS `date`,`e`.`type` AS `type`,`e`.`location` AS `location` from `events` `e` where `e`.`type` in ('Grand Slam','Masters','ATP-500','ATP-250') and `e`.`date` >= curdate() - interval 14 day and !exists(select 1 from `matches` `m` where `m`.`event` = `e`.`id` and `m`.`round` = 'F' and `m`.`score` is not null and `m`.`score` <> '' limit 1)), main_draw_matches as (select `m`.`id` AS `match_id`,`m`.`event` AS `event`,`m`.`round` AS `round`,`m`.`winner` AS `winner`,`m`.`loser` AS `loser` from `matches` `m` where `m`.`round` in ('F','SF','QF','R16','R32','R128')), player_matches as (select `mdm`.`event` AS `event`,`mdm`.`match_id` AS `match_id`,`mdm`.`round` AS `round`,`mdm`.`winner` AS `winner`,`mdm`.`loser` AS `loser`,`mdm`.`winner` AS `player_id`,1 AS `is_winner` from `main_draw_matches` `mdm` union all select `mdm`.`event` AS `event`,`mdm`.`match_id` AS `match_id`,`mdm`.`round` AS `round`,`mdm`.`winner` AS `winner`,`mdm`.`loser` AS `loser`,`mdm`.`loser` AS `player_id`,0 AS `is_winner` from `main_draw_matches` `mdm`), ranked_player_matches as (select `pm`.`event` AS `event`,`pm`.`match_id` AS `match_id`,`pm`.`round` AS `round`,`pm`.`winner` AS `winner`,`pm`.`loser` AS `loser`,`pm`.`player_id` AS `player_id`,`pm`.`is_winner` AS `is_winner`,row_number() over ( partition by `pm`.`event`,`pm`.`player_id` order by case `pm`.`round` when 'F' then 6 when 'SF' then 5 when 'QF' then 4 when 'R16' then 3 when 'R32' then 2 when 'R128' then 1 else 0 end desc,`pm`.`match_id` desc) AS `rn` from `player_matches` `pm`), alive_players as (select `rpm`.`event` AS `event`,`rpm`.`player_id` AS `player_id`,`rpm`.`round` AS `round` from `ranked_player_matches` `rpm` where `rpm`.`rn` = 1 and `rpm`.`is_winner` = 1)select `oe`.`id` AS `event_id`,`oe`.`date` AS `event_date`,`oe`.`name` AS `event_name`,`oe`.`location` AS `event_location`,`oe`.`type` AS `event_type`,`p`.`id` AS `player_id`,`p`.`name` AS `player`,`p`.`country` AS `player_country`,`p`.`rank` AS `player_rank`,`ap`.`round` AS `round` from ((`ongoing_events` `oe` join `alive_players` `ap` on(`ap`.`event` = `oe`.`id`)) join `players` `p` on(`p`.`id` = `ap`.`player_id`)) order by `oe`.`date` desc,`oe`.`name`,`p`.`rank` is null,`p`.`rank`,`p`.`name`;
 
-
-# Tabelldump currently
-# ------------------------------------------------------------
-
-DROP VIEW IF EXISTS `currently`;
-
-CREATE TABLE `currently` (
-   `event_id` VARCHAR(20) NOT NULL DEFAULT '',
-   `event_date` DATE NULL DEFAULT NULL,
-   `event_name` VARCHAR(50) NULL DEFAULT NULL,
-   `event_location` VARCHAR(50) NULL DEFAULT NULL,
-   `event_type` VARCHAR(50) NULL DEFAULT NULL,
-   `player_id` VARCHAR(32) NOT NULL DEFAULT '',
-   `player` VARCHAR(64) NULL DEFAULT NULL,
-   `player_country` VARCHAR(16) NULL DEFAULT NULL,
-   `player_rank` INT(11) NULL DEFAULT NULL,
-   `round` VARCHAR(50) NULL DEFAULT NULL
-) ENGINE=MyISAM;
-
-
-
-# Tabelldump events
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `events`;
-
+-- Create syntax for TABLE 'events'
 CREATE TABLE `events` (
   `id` varchar(20) NOT NULL DEFAULT '' COMMENT 'Unique ID',
   `date` date DEFAULT NULL COMMENT 'Start of event',
@@ -71,52 +22,35 @@ CREATE TABLE `events` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Create syntax for VIEW 'flatly'
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `flatly`
+AS SELECT
+   `matches`.`id` AS `id`,
+   `C`.`date` AS `event_date`,
+   `C`.`id` AS `event_id`,
+   `C`.`name` AS `event_name`,
+   `C`.`location` AS `event_location`,
+   `C`.`type` AS `event_type`,
+   `C`.`surface` AS `event_surface`,
+   `matches`.`round` AS `round`,
+   `A`.`name` AS `winner`,
+   `B`.`name` AS `loser`,
+   `A`.`id` AS `winner_id`,
+   `matches`.`winner_rank` AS `winner_rank`,
+   `B`.`id` AS `loser_id`,
+   `matches`.`loser_rank` AS `loser_rank`,
+   `matches`.`score` AS `score`,
+   `matches`.`status` AS `status`,
+   `matches`.`duration` AS `duration`
+FROM (((`matches` left join `players` `A` on(`matches`.`winner` = `A`.`id`)) left join `players` `B` on(`matches`.`loser` = `B`.`id`)) left join `events` `C` on(`matches`.`event` = `C`.`id`)) order by `C`.`date`;
 
-
-# Tabelldump flatly
-# ------------------------------------------------------------
-
-DROP VIEW IF EXISTS `flatly`;
-
-CREATE TABLE `flatly` (
-   `id` VARCHAR(50) NOT NULL DEFAULT '',
-   `event_date` DATE NULL DEFAULT NULL,
-   `event_id` VARCHAR(20) NULL DEFAULT '',
-   `event_name` VARCHAR(50) NULL DEFAULT NULL,
-   `event_location` VARCHAR(50) NULL DEFAULT NULL,
-   `event_type` VARCHAR(50) NULL DEFAULT NULL,
-   `event_surface` VARCHAR(50) NULL DEFAULT NULL,
-   `round` VARCHAR(50) NULL DEFAULT 'NUL',
-   `winner` VARCHAR(64) NULL DEFAULT NULL,
-   `loser` VARCHAR(64) NULL DEFAULT NULL,
-   `winner_id` VARCHAR(32) NULL DEFAULT '',
-   `winner_rank` INT(11) NULL DEFAULT NULL,
-   `loser_id` VARCHAR(32) NULL DEFAULT '',
-   `loser_rank` INT(11) NULL DEFAULT NULL,
-   `score` VARCHAR(50) NULL DEFAULT NULL,
-   `status` ENUM('Completed','Aborted','Walkover','Unknown') NULL DEFAULT NULL,
-   `duration` VARCHAR(50) NULL DEFAULT NULL
-) ENGINE=MyISAM;
-
-
-
-# Tabelldump log
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `log`;
-
+-- Create syntax for TABLE 'log'
 CREATE TABLE `log` (
   `timestamp` datetime DEFAULT current_timestamp(),
   `message` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-
-# Tabelldump matches
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `matches`;
-
+-- Create syntax for TABLE 'matches'
 CREATE TABLE `matches` (
   `id` varchar(50) NOT NULL DEFAULT '',
   `event` varchar(50) DEFAULT NULL COMMENT 'ID of event',
@@ -127,18 +61,12 @@ CREATE TABLE `matches` (
   `loser_rank` int(11) DEFAULT NULL COMMENT 'Loser current rank',
   `score` varchar(50) DEFAULT NULL COMMENT 'Final score - example ''7-6(5) 3-6 6-3 6-4''',
   `status` enum('Completed','Aborted','Walkover','Unknown') DEFAULT NULL COMMENT 'Status of match',
-  `duration` varchar(50) DEFAULT NULL COMMENT 'Duration of the match',
+  `duration` varchar(50) DEFAULT NULL COMMENT 'Duration of the match in format H:MM',
   PRIMARY KEY (`id`),
   KEY `events` (`event`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-
-# Tabelldump players
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `players`;
-
+-- Create syntax for TABLE 'players'
 CREATE TABLE `players` (
   `id` varchar(32) NOT NULL DEFAULT '' COMMENT 'Unique ID',
   `name` varchar(64) DEFAULT NULL COMMENT 'Full name',
@@ -177,106 +105,247 @@ CREATE TABLE `players` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-
-# Tabelldump queries
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `queries`;
-
+-- Create syntax for TABLE 'queries'
 CREATE TABLE `queries` (
   `name` longtext DEFAULT NULL,
   `question` longtext NOT NULL,
   `query` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-
-# Tabelldump settings
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `settings`;
-
+-- Create syntax for TABLE 'settings'
 CREATE TABLE `settings` (
   `key` varchar(100) NOT NULL DEFAULT '',
   `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`value`)),
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
-
-# Tabelldump storage
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `storage`;
-
+-- Create syntax for TABLE 'storage'
 CREATE TABLE `storage` (
   `key` varchar(100) NOT NULL DEFAULT '',
   `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`value`)),
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Create syntax for FUNCTION 'NUMBER_OF_GAMES'
+CREATE DEFINER=`root`@`%` FUNCTION `NUMBER_OF_GAMES`(score TEXT) RETURNS int(11)
+    DETERMINISTIC
+BEGIN
+        DECLARE working TEXT;
+        DECLARE token TEXT;
+        DECLARE base_token TEXT;
+        DECLARE pos INT;
+        DECLARE left_games INT;
+        DECLARE right_games INT;
+        DECLARE total_games INT DEFAULT 0;
+        DECLARE set_count INT DEFAULT 0;
 
+        IF score IS NULL THEN
+            RETURN NULL;
+        END IF;
 
+        IF TRIM(score) = '' THEN
+            RETURN 0;
+        END IF;
 
+        SET working = UPPER(TRIM(score));
 
-# Replace placeholder table for currently with correct view syntax
-# ------------------------------------------------------------
+        IF working REGEXP '(^|[[:space:]])(RET|RET''D|RETD|W/O|WO|WALKOVER|DEF|ABD)($|[[:space:]])' THEN
+            RETURN 0;
+        END IF;
 
-DROP TABLE `currently`;
+        SET working = REGEXP_REPLACE(working, '[[:space:]]+', ' ');
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `currently` AS with ongoing_events as (select `e`.`id` AS `id`,`e`.`name` AS `name`,`e`.`date` AS `date`,`e`.`type` AS `type`,`e`.`location` AS `location` from `events` `e` where `e`.`type` in ('Grand Slam','Masters','ATP-500','ATP-250') and `e`.`date` >= curdate() - interval 14 day and !exists(select 1 from `matches` `m` where `m`.`event` = `e`.`id` and `m`.`round` = 'F' and `m`.`score` is not null and `m`.`score` <> '' limit 1)), main_draw_matches as (select `m`.`id` AS `match_id`,`m`.`event` AS `event`,`m`.`round` AS `round`,`m`.`winner` AS `winner`,`m`.`loser` AS `loser` from `matches` `m` where `m`.`round` in ('F','SF','QF','R16','R32','R128')), player_matches as (select `mdm`.`event` AS `event`,`mdm`.`match_id` AS `match_id`,`mdm`.`round` AS `round`,`mdm`.`winner` AS `winner`,`mdm`.`loser` AS `loser`,`mdm`.`winner` AS `player_id`,1 AS `is_winner` from `main_draw_matches` `mdm` union all select `mdm`.`event` AS `event`,`mdm`.`match_id` AS `match_id`,`mdm`.`round` AS `round`,`mdm`.`winner` AS `winner`,`mdm`.`loser` AS `loser`,`mdm`.`loser` AS `player_id`,0 AS `is_winner` from `main_draw_matches` `mdm`), ranked_player_matches as (select `pm`.`event` AS `event`,`pm`.`match_id` AS `match_id`,`pm`.`round` AS `round`,`pm`.`winner` AS `winner`,`pm`.`loser` AS `loser`,`pm`.`player_id` AS `player_id`,`pm`.`is_winner` AS `is_winner`,row_number() over ( partition by `pm`.`event`,`pm`.`player_id` order by case `pm`.`round` when 'F' then 6 when 'SF' then 5 when 'QF' then 4 when 'R16' then 3 when 'R32' then 2 when 'R128' then 1 else 0 end desc,`pm`.`match_id` desc) AS `rn` from `player_matches` `pm`), alive_players as (select `rpm`.`event` AS `event`,`rpm`.`player_id` AS `player_id`,`rpm`.`round` AS `round` from `ranked_player_matches` `rpm` where `rpm`.`rn` = 1 and `rpm`.`is_winner` = 1)select `oe`.`id` AS `event_id`,`oe`.`date` AS `event_date`,`oe`.`name` AS `event_name`,`oe`.`location` AS `event_location`,`oe`.`type` AS `event_type`,`p`.`id` AS `player_id`,`p`.`name` AS `player`,`p`.`country` AS `player_country`,`p`.`rank` AS `player_rank`,`ap`.`round` AS `round` from ((`ongoing_events` `oe` join `alive_players` `ap` on(`ap`.`event` = `oe`.`id`)) join `players` `p` on(`p`.`id` = `ap`.`player_id`)) order by `oe`.`date` desc,`oe`.`name`,`p`.`rank` is null,`p`.`rank`,`p`.`name`;
+        WHILE working <> '' DO
+            SET pos = LOCATE(' ', working);
 
+            IF pos = 0 THEN
+                SET token = working;
+                SET working = '';
+            ELSE
+                SET token = LEFT(working, pos - 1);
+                SET working = TRIM(SUBSTRING(working, pos + 1));
+            END IF;
 
-# Replace placeholder table for flatly with correct view syntax
-# ------------------------------------------------------------
+            IF token NOT REGEXP '^\\[(0|15|30|40|A)-(0|15|30|40|A)\\]$' THEN
+                IF NOT (
+                    token REGEXP '^[0-9]+-[0-9]+$' OR
+                    token REGEXP '^[0-9]+-[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)-[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)[0-9]+$' OR
+                    token REGEXP '^[0-9]{2,4}$'
+                ) THEN
+                    RETURN NULL;
+                END IF;
 
-DROP TABLE `flatly`;
+                SET base_token = REGEXP_REPLACE(token, '\\([0-9]+\\)', '');
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `flatly`
-AS SELECT
-   `matches`.`id` AS `id`,
-   `C`.`date` AS `event_date`,
-   `C`.`id` AS `event_id`,
-   `C`.`name` AS `event_name`,
-   `C`.`location` AS `event_location`,
-   `C`.`type` AS `event_type`,
-   `C`.`surface` AS `event_surface`,
-   `matches`.`round` AS `round`,
-   `A`.`name` AS `winner`,
-   `B`.`name` AS `loser`,
-   `A`.`id` AS `winner_id`,
-   `matches`.`winner_rank` AS `winner_rank`,
-   `B`.`id` AS `loser_id`,
-   `matches`.`loser_rank` AS `loser_rank`,
-   `matches`.`score` AS `score`,
-   `matches`.`status` AS `status`,
-   `matches`.`duration` AS `duration`
-FROM (((`matches` left join `players` `A` on(`matches`.`winner` = `A`.`id`)) left join `players` `B` on(`matches`.`loser` = `B`.`id`)) left join `events` `C` on(`matches`.`event` = `C`.`id`)) order by `C`.`date`;
+                IF base_token REGEXP '^[0-9]+-[0-9]+$' THEN
+                    SET left_games = CAST(SUBSTRING_INDEX(base_token, '-', 1) AS UNSIGNED);
+                    SET right_games = CAST(SUBSTRING_INDEX(base_token, '-', -1) AS UNSIGNED);
+                ELSEIF CHAR_LENGTH(base_token) = 2 THEN
+                    SET left_games = CAST(LEFT(base_token, 1) AS UNSIGNED);
+                    SET right_games = CAST(RIGHT(base_token, 1) AS UNSIGNED);
+                ELSEIF CHAR_LENGTH(base_token) = 3 THEN
+                    SET left_games = CAST(LEFT(base_token, 1) AS UNSIGNED);
+                    SET right_games = CAST(RIGHT(base_token, 2) AS UNSIGNED);
+                ELSEIF CHAR_LENGTH(base_token) = 4 THEN
+                    SET left_games = CAST(LEFT(base_token, 2) AS UNSIGNED);
+                    SET right_games = CAST(RIGHT(base_token, 2) AS UNSIGNED);
+                ELSE
+                    RETURN NULL;
+                END IF;
 
---
--- Dumping routines (PROCEDURE) for database 'atp'
---
+                SET total_games = total_games + left_games + right_games;
+                SET set_count = set_count + 1;
+            END IF;
+        END WHILE;
+
+        IF set_count = 0 THEN
+            RETURN NULL;
+        END IF;
+
+        RETURN total_games;
+    END;
+
+-- Create syntax for FUNCTION 'NUMBER_OF_SETS'
+CREATE DEFINER=`root`@`%` FUNCTION `NUMBER_OF_SETS`(score TEXT) RETURNS int(11)
+    DETERMINISTIC
+BEGIN
+        DECLARE working TEXT;
+        DECLARE token TEXT;
+        DECLARE pos INT;
+        DECLARE total_sets INT DEFAULT 0;
+
+        IF score IS NULL THEN
+            RETURN NULL;
+        END IF;
+
+        IF TRIM(score) = '' THEN
+            RETURN 0;
+        END IF;
+
+        SET working = UPPER(TRIM(score));
+
+        IF working REGEXP '(^|[[:space:]])(RET|RET''D|RETD|W/O|WO|WALKOVER|DEF|ABD)($|[[:space:]])' THEN
+            RETURN 0;
+        END IF;
+
+        SET working = REGEXP_REPLACE(working, '[[:space:]]+', ' ');
+
+        WHILE working <> '' DO
+            SET pos = LOCATE(' ', working);
+
+            IF pos = 0 THEN
+                SET token = working;
+                SET working = '';
+            ELSE
+                SET token = LEFT(working, pos - 1);
+                SET working = TRIM(SUBSTRING(working, pos + 1));
+            END IF;
+
+            IF token NOT REGEXP '^\\[(0|15|30|40|A)-(0|15|30|40|A)\\]$' THEN
+                IF NOT (
+                    token REGEXP '^[0-9]+-[0-9]+$' OR
+                    token REGEXP '^[0-9]+-[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)-[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)[0-9]+$' OR
+                    token REGEXP '^[0-9]{2,4}$'
+                ) THEN
+                    RETURN NULL;
+                END IF;
+
+                SET total_sets = total_sets + 1;
+            END IF;
+        END WHILE;
+
+        IF total_sets = 0 THEN
+            RETURN NULL;
+        END IF;
+
+        RETURN total_sets;
+    END;
+
+-- Create syntax for FUNCTION 'NUMBER_OF_TIE_BREAKS'
+CREATE DEFINER=`root`@`%` FUNCTION `NUMBER_OF_TIE_BREAKS`(score TEXT) RETURNS int(11)
+    DETERMINISTIC
+BEGIN
+        DECLARE working TEXT;
+        DECLARE token TEXT;
+        DECLARE pos INT;
+        DECLARE total_tie_breaks INT DEFAULT 0;
+        DECLARE set_count INT DEFAULT 0;
+
+        IF score IS NULL THEN
+            RETURN NULL;
+        END IF;
+
+        IF TRIM(score) = '' THEN
+            RETURN 0;
+        END IF;
+
+        SET working = UPPER(TRIM(score));
+
+        IF working REGEXP '(^|[[:space:]])(RET|RET''D|RETD|W/O|WO|WALKOVER|DEF|ABD)($|[[:space:]])' THEN
+            RETURN 0;
+        END IF;
+
+        SET working = REGEXP_REPLACE(working, '[[:space:]]+', ' ');
+
+        WHILE working <> '' DO
+            SET pos = LOCATE(' ', working);
+
+            IF pos = 0 THEN
+                SET token = working;
+                SET working = '';
+            ELSE
+                SET token = LEFT(working, pos - 1);
+                SET working = TRIM(SUBSTRING(working, pos + 1));
+            END IF;
+
+            IF token NOT REGEXP '^\\[(0|15|30|40|A)-(0|15|30|40|A)\\]$' THEN
+                IF NOT (
+                    token REGEXP '^[0-9]+-[0-9]+$' OR
+                    token REGEXP '^[0-9]+-[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)-[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+[0-9]+\\([0-9]+\\)$' OR
+                    token REGEXP '^[0-9]+\\([0-9]+\\)[0-9]+$' OR
+                    token REGEXP '^[0-9]{2,4}$'
+                ) THEN
+                    RETURN NULL;
+                END IF;
+
+                SET set_count = set_count + 1;
+
+                IF token REGEXP '\\([0-9]+\\)' THEN
+                    SET total_tie_breaks = total_tie_breaks + 1;
+                END IF;
+            END IF;
+        END WHILE;
+
+        IF set_count = 0 THEN
+            RETURN NULL;
+        END IF;
+
+        RETURN total_tie_breaks;
+    END;
+
+-- Create syntax for PROCEDURE 'sp_log'
 DELIMITER ;;
-
-# Dump of PROCEDURE sp_log
-# ------------------------------------------------------------
-
-/*!50003 DROP PROCEDURE IF EXISTS `sp_log` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 PROCEDURE `sp_log`(IN p_message TEXT)
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_log`(IN p_message TEXT)
 BEGIN
     INSERT INTO log(message)
     VALUES (p_message);
-END */;;
+END;;
+DELIMITER ;
 
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of PROCEDURE sp_update
-# ------------------------------------------------------------
-
-/*!50003 DROP PROCEDURE IF EXISTS `sp_update` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 PROCEDURE `sp_update`()
+-- Create syntax for PROCEDURE 'sp_update'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_update`()
 BEGIN
     DECLARE exit handler FOR SQLEXCEPTION
     BEGIN
@@ -291,15 +360,12 @@ BEGIN
     CALL sp_update_match_status(FALSE);
 
     CALL sp_log('Update finished successfully.');
-END */;;
+END;;
+DELIMITER ;
 
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of PROCEDURE sp_update_match_duration
-# ------------------------------------------------------------
-
-/*!50003 DROP PROCEDURE IF EXISTS `sp_update_match_duration` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 PROCEDURE `sp_update_match_duration`()
+-- Create syntax for PROCEDURE 'sp_update_match_duration'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_update_match_duration`()
 BEGIN
     /*
         Uppdaterar matches.duration
@@ -314,15 +380,12 @@ BEGIN
     SET duration = LEFT(duration, 5)
     WHERE duration IS NOT NULL
       AND duration REGEXP '^[0-9]{2}:[0-9]{2}:[0-9]{2}$';
-END */;;
+END;;
+DELIMITER ;
 
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of PROCEDURE sp_update_match_status
-# ------------------------------------------------------------
-
-/*!50003 DROP PROCEDURE IF EXISTS `sp_update_match_status` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 PROCEDURE `sp_update_match_status`(IN force_update BOOLEAN)
+-- Create syntax for PROCEDURE 'sp_update_match_status'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_update_match_status`(IN force_update BOOLEAN)
 BEGIN
     CALL sp_log('Updating match status for matches...');
 
@@ -366,15 +429,12 @@ BEGIN
         OR m.status IS NULL
         OR m.status = 'Unknown';
 
-END */;;
+END;;
+DELIMITER ;
 
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of PROCEDURE sp_update_surface_factors
-# ------------------------------------------------------------
-
-/*!50003 DROP PROCEDURE IF EXISTS `sp_update_surface_factors` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 PROCEDURE `sp_update_surface_factors`()
+-- Create syntax for PROCEDURE 'sp_update_surface_factors'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_update_surface_factors`()
 BEGIN
   DECLARE done INT DEFAULT FALSE;
   DECLARE current_player_id VARCHAR(50);
@@ -406,15 +466,12 @@ BEGIN
   END LOOP;
 
   CLOSE player_cursor;
-END */;;
+END;;
+DELIMITER ;
 
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of PROCEDURE sp_update_surface_factors_for_player
-# ------------------------------------------------------------
-
-/*!50003 DROP PROCEDURE IF EXISTS `sp_update_surface_factors_for_player` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 PROCEDURE `sp_update_surface_factors_for_player`(IN player_id VARCHAR(50))
+-- Create syntax for PROCEDURE 'sp_update_surface_factors_for_player'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `sp_update_surface_factors_for_player`(IN player_id VARCHAR(50))
 BEGIN
   DECLARE clay_wins INT DEFAULT 0;
   DECLARE clay_matches INT DEFAULT 0;
@@ -477,247 +534,5 @@ BEGIN
 
   -- Cleanup
   DROP TEMPORARY TABLE IF EXISTS recent_matches;
-END */;;
-
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
+END;;
 DELIMITER ;
-
---
--- Dumping routines (FUNCTION) for database 'atp'
---
-DELIMITER ;;
-
-# Dump of FUNCTION IS_MATCH_COMPLETED
-# ------------------------------------------------------------
-
-/*!50003 DROP FUNCTION IF EXISTS `IS_MATCH_COMPLETED` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 FUNCTION `IS_MATCH_COMPLETED`(score VARCHAR(255)) RETURNS tinyint(4)
-    DETERMINISTIC
-BEGIN
-    DECLARE last_set VARCHAR(50);
-    DECLARE games_part VARCHAR(50);
-    DECLARE a_str VARCHAR(10);
-    DECLARE b_str VARCHAR(10);
-    DECLARE a INT;
-    DECLARE b INT;
-    DECLARE hi INT;
-    DECLARE lo INT;
-
-    IF score IS NULL OR TRIM(score) = '' THEN
-        RETURN 0;
-    END IF;
-
-    -- Normalisera whitespace: TAB, NBSP, CR/LF -> space
-    SET score = TRIM(score);
-    SET score = REPLACE(score, CHAR(9),  ' ');
-    SET score = REPLACE(score, CHAR(160),' ');
-    SET score = REPLACE(score, CHAR(10), ' ');
-    SET score = REPLACE(score, CHAR(13), ' ');
-
-    -- Kollapsa dubbla spaces
-    WHILE INSTR(score, '  ') > 0 DO
-        SET score = REPLACE(score, '  ', ' ');
-    END WHILE;
-
-    -- Hämta sista setet
-    SET last_set = SUBSTRING_INDEX(score, ' ', -1);
-
-    -- Ta bort eventuell tiebreak-del, t.ex. 7-6(5) → 7-6
-    SET games_part = SUBSTRING_INDEX(last_set, '(', 1);
-
-    -- Validera formatet "X-Y" eller "XX-YY"
-    IF games_part NOT REGEXP '^[0-9]{1,2}-[0-9]{1,2}$' THEN
-        RETURN 0;
-    END IF;
-
-    SET a_str = SUBSTRING_INDEX(games_part, '-', 1);
-    SET b_str = SUBSTRING_INDEX(games_part, '-', -1);
-
-    SET a = CAST(a_str AS UNSIGNED);
-    SET b = CAST(b_str AS UNSIGNED);
-
-    SET hi = GREATEST(a, b);
-    SET lo = LEAST(a, b);
-
-    /*
-      Match anses avslutad om:
-      - någon har minst 6 games
-      - och leder med minst 2 games
-      (täcker 6-0, 6-4, 8-6, 13-11 osv)
-      - eller tiebreak-set 7-6
-    */
-    IF (hi >= 6 AND (hi - lo) >= 2)
-       OR (hi = 7 AND lo = 6)
-    THEN
-        RETURN 1;
-    END IF;
-
-    RETURN 0;
-END */;;
-
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of FUNCTION NUMBER_OF_GAMES_PLAYED
-# ------------------------------------------------------------
-
-/*!50003 DROP FUNCTION IF EXISTS `NUMBER_OF_GAMES_PLAYED` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 FUNCTION `NUMBER_OF_GAMES_PLAYED`(score VARCHAR(255)) RETURNS int(11)
-    DETERMINISTIC
-BEGIN
-    DECLARE total_games INT DEFAULT 0;
-    DECLARE i INT DEFAULT 1;
-    DECLARE sets INT;
-    DECLARE set_token VARCHAR(30);
-    DECLARE games_part VARCHAR(30);
-    DECLARE a_str VARCHAR(10);
-    DECLARE b_str VARCHAR(10);
-    DECLARE a INT;
-    DECLARE b INT;
-
-    IF score IS NULL OR TRIM(score) = '' THEN
-        RETURN 0;
-    END IF;
-
-    -- Normalisera whitespace: TAB, NBSP, CR/LF -> space
-    SET score = TRIM(score);
-    SET score = REPLACE(score, CHAR(9),  ' ');
-    SET score = REPLACE(score, CHAR(160),' ');
-    SET score = REPLACE(score, CHAR(10), ' ');
-    SET score = REPLACE(score, CHAR(13), ' ');
-
-    -- Kollapsa dubbla spaces
-    WHILE INSTR(score, '  ') > 0 DO
-        SET score = REPLACE(score, '  ', ' ');
-    END WHILE;
-
-    -- Antal set = antal tokens (spaces + 1)
-    SET sets = 1 + LENGTH(score) - LENGTH(REPLACE(score, ' ', ''));
-
-    WHILE i <= sets DO
-        SET set_token = SUBSTRING_INDEX(SUBSTRING_INDEX(score, ' ', i), ' ', -1);
-
-        -- Ta bort eventuell tiebreak-del: 7-6(5) -> 7-6
-        SET games_part = SUBSTRING_INDEX(set_token, '(', 1);
-
-        -- Måste se ut som "X-Y" eller "XX-YY"
-        IF games_part NOT REGEXP '^[0-9]{1,2}-[0-9]{1,2}$' THEN
-            RETURN 0;
-        END IF;
-
-        SET a_str = SUBSTRING_INDEX(games_part, '-', 1);
-        SET b_str = SUBSTRING_INDEX(games_part, '-', -1);
-
-        SET a = CAST(a_str AS UNSIGNED);
-        SET b = CAST(b_str AS UNSIGNED);
-
-        SET total_games = total_games + a + b;
-        SET i = i + 1;
-    END WHILE;
-
-    RETURN total_games;
-END */;;
-
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of FUNCTION NUMBER_OF_MINUTES_PLAYED
-# ------------------------------------------------------------
-
-/*!50003 DROP FUNCTION IF EXISTS `NUMBER_OF_MINUTES_PLAYED` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 FUNCTION `NUMBER_OF_MINUTES_PLAYED`(duration VARCHAR(8)) RETURNS int(11)
-    DETERMINISTIC
-BEGIN
-    DECLARE hours INT;
-    DECLARE minutes INT;
-
-    IF duration IS NULL OR LENGTH(duration) < 5 THEN
-        RETURN NULL;
-    END IF;
-
-    SET hours = CAST(SUBSTRING_INDEX(duration, ':', 1) AS UNSIGNED);
-    SET minutes = CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(duration, ':', -2), ':', 1) AS UNSIGNED);
-
-    RETURN (hours * 60) + minutes;
-END */;;
-
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of FUNCTION NUMBER_OF_SETS
-# ------------------------------------------------------------
-
-/*!50003 DROP FUNCTION IF EXISTS `NUMBER_OF_SETS` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 FUNCTION `NUMBER_OF_SETS`(event_type VARCHAR(50), round VARCHAR(20)) RETURNS int(11)
-    DETERMINISTIC
-BEGIN
-  RETURN
-    CASE
-      WHEN event_type = 'Grand Slam'
-           AND round IN ('F','SF','QF','R16','R32','R64','R128')
-        THEN 5
-      ELSE 3
-    END;
-END */;;
-
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of FUNCTION NUMBER_OF_SETS_PLAYED
-# ------------------------------------------------------------
-
-/*!50003 DROP FUNCTION IF EXISTS `NUMBER_OF_SETS_PLAYED` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 FUNCTION `NUMBER_OF_SETS_PLAYED`(score VARCHAR(255)) RETURNS int(11)
-    DETERMINISTIC
-BEGIN
-    DECLARE sets_played INT DEFAULT 0;
-
-    IF score IS NULL OR TRIM(score) = '' THEN
-        RETURN 0;
-    END IF;
-
-    -- Normalisera whitespace: TAB, NBSP, CR/LF -> space
-    SET score = TRIM(score);
-    SET score = REPLACE(score, CHAR(9),  ' ');
-    SET score = REPLACE(score, CHAR(160),' ');
-    SET score = REPLACE(score, CHAR(10), ' ');
-    SET score = REPLACE(score, CHAR(13), ' ');
-
-    -- Kollapsa dubbla spaces
-    WHILE INSTR(score, '  ') > 0 DO
-        SET score = REPLACE(score, '  ', ' ');
-    END WHILE;
-
-    -- Räkna antal set = antal tokens (spaces + 1)
-    SET sets_played = 1 + LENGTH(score) - LENGTH(REPLACE(score, ' ', ''));
-
-    -- Rimliga gränser: 1..5 (avbruten match kan ge 1 set)
-    IF sets_played BETWEEN 1 AND 5 THEN
-        RETURN sets_played;
-    END IF;
-
-    RETURN 0;
-END */;;
-
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-# Dump of FUNCTION NUMBER_OF_TIEBREAKS_PLAYED
-# ------------------------------------------------------------
-
-/*!50003 DROP FUNCTION IF EXISTS `NUMBER_OF_TIEBREAKS_PLAYED` */;;
-/*!50003 SET SESSION SQL_MODE="STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"*/;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`%`*/ /*!50003 FUNCTION `NUMBER_OF_TIEBREAKS_PLAYED`(score VARCHAR(255)) RETURNS int(11)
-    DETERMINISTIC
-BEGIN
-    IF score IS NULL OR TRIM(score) = '' THEN
-        RETURN 0;
-    END IF;
-
-    RETURN LENGTH(score) - LENGTH(REPLACE(score, '(', ''));
-END */;;
-
-/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
-DELIMITER ;
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
