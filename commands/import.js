@@ -71,7 +71,7 @@ class Import extends Command {
 		let activity = await activityFetcher.fetch({ player: player, since: this.argv.since });
 
 		if (!activity || !activity.events) {
-			await this.log(`[${playerCount}] No activity found for player ${player}, skipping.`);
+			await this.log(`No activity found for player ${player}, skipping.`);
 			return;
 		}
 
