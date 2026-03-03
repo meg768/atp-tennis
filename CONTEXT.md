@@ -179,7 +179,8 @@ For fresh dev/prod environments:
 ## Session Memory (2026-03-01)
 - Import flow now has a separate rankings sync step in `commands/import.js`:
   - `getTopPlayerRankings(top)` fetches rankings once.
-  - `updateRankings(rankings)` clears `players.rank` and `players.points` for all players, then restores current values for players in the fetched ranking list.
+  - `updateRankings(rankings)` now clears only `players.points`, then restores `rank` and `points` for players in the fetched ranking list.
+  - This preserves `players.rank` values fetched per player during import, so imported players outside the requested top list do not lose their ranking.
 - `src/fetch-rankings.js` now respects the requested `top` value instead of always fetching top 100.
 - `src/fetch-scores.js` now derives `matches.status` from ATP archive fields (`Status`, `MatchStateReasonMessage`, `Message`, `ResultString`) and import persists that status into `matches.status`.
 - `database/schema.sql` `sp_update_match_status` was updated to stop depending on missing SQL functions (`IS_MATCH_COMPLETED`, `NUMBER_OF_SETS_PLAYED`) and now:

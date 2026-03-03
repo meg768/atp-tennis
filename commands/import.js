@@ -153,7 +153,9 @@ class Import extends Command {
 			return;
 		}
 
-		await this.mysql.query(`UPDATE players SET rank = NULL, points = NULL`);
+		// Keep ranks fetched from each player's profile so imported players
+		// outside the requested top list do not lose their current ranking.
+		await this.mysql.query(`UPDATE players SET points = NULL`);
 
 		for (let player of rankings.players) {
 			await this.mysql.query({
