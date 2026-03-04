@@ -125,6 +125,11 @@ class Module extends Fetcher {
 		return null;
 	}
 
+    getComment({ tournamentIndex, matchIndex }) {
+        let comment = jp.query(this.response, `$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].ExtendedMessage`);
+        return comment.length ? comment[0] : null;
+    }
+
 	getPlayer({ tournamentIndex, matchIndex }) {
 		// $.Data.LiveMatchesTournamentsOrdered[0].LiveMatches[0].PlayerTeam.Player
 		let player = jp.query(this.response, `$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].PlayerTeam.Player`);
@@ -229,6 +234,7 @@ class Module extends Fetcher {
 				let game = this.getGameScore({ tournamentIndex, matchIndex });
 				let scoreText = score.join(' ');
 				let server = this.getServerSide({ tournamentIndex, matchIndex });
+                let comment = this.getComment({ tournamentIndex, matchIndex });
 
 				if (match.MatchStatus === 'P' && game) {
 					scoreText = scoreText ? `${scoreText} [${game}]` : `[${game}]`;
@@ -245,6 +251,7 @@ class Module extends Fetcher {
 				row.player = player;
 				row.opponent = opponent;
 				row.server = server;
+                row.comment = comment;
 
 				result.push(row);
 			}
