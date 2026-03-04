@@ -104,6 +104,27 @@ class Module extends Fetcher {
 		return `${player ?? '0'}-${opponent ?? '0'}`;
 	}
 
+	getServerSide({ tournamentIndex, matchIndex }) {
+		const serverTeam = jp.query(
+			this.response,
+			`$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].ServerTeam`
+		);
+
+		if (!serverTeam.length) {
+			return null;
+		}
+
+		if (serverTeam[0] === 0) {
+			return 'player';
+		}
+
+		if (serverTeam[0] === 1) {
+			return 'opponent';
+		}
+
+		return null;
+	}
+
 	getPlayer({ tournamentIndex, matchIndex }) {
 		// $.Data.LiveMatchesTournamentsOrdered[0].LiveMatches[0].PlayerTeam.Player
 		let player = jp.query(this.response, `$.Data.LiveMatchesTournamentsOrdered[${tournamentIndex}].LiveMatches[${matchIndex}].PlayerTeam.Player`);
@@ -207,6 +228,7 @@ class Module extends Fetcher {
 				let eventTitle = tournament.EventTitle;
 				let game = this.getGameScore({ tournamentIndex, matchIndex });
 				let scoreText = score.join(' ');
+				let server = this.getServerSide({ tournamentIndex, matchIndex });
 
 				if (match.MatchStatus === 'P' && game) {
 					scoreText = scoreText ? `${scoreText} [${game}]` : `[${game}]`;
@@ -218,10 +240,11 @@ class Module extends Fetcher {
 				let row = {};
 				row.event = eventID;
 				row.name = eventTitle;
-                row.winner = match.WinningPlayerId;
+				row.winner = match.WinningPlayerId;
 				row.score = scoreText;
 				row.player = player;
 				row.opponent = opponent;
+				row.server = server;
 
 				result.push(row);
 			}
