@@ -205,6 +205,7 @@ For fresh dev/prod environments:
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory
 - Update this file when operational details, architecture, or priorities change
+- `LOG.md` is the running change log for repository edits; append new entries as changes are made
 - Commit command policy (user shorthand):
   - When the user says `commit`, interpret it as: stage all + commit + push.
   - Standard sequence:
