@@ -44,13 +44,7 @@ Examples:
 
 ```bash
 node atp.js import --top 100 --since 2025
-node atp.js rankings --output ./output/rankings.json
-node atp.js live --output ./output/live.json
-node atp.js monitor --interval 30
-node atp.js update-stats
-node atp.js update-elo
-node atp.js update-players
-node atp.js score-parser --examples
+node atp.js serve
 ```
 
 ## Start API Service
@@ -139,17 +133,14 @@ For fresh dev/prod environments:
 ## Operational Context
 - `atp.js` is used for daily imports from ATP endpoints
 - Primary production concern is keeping the import pipeline stable
-- `monitor` is used for lightweight live score monitoring from ATP live endpoint
-- `score-parser` is available as a standalone CLI test bench for developing `src/score-parser.js` without coupling it to import/ELO flows
+- CLI has been minimized to `import` and `serve`
+- endpoint/fetch testing is expected to happen under `sandbox/`
 
 ## Priority Backlog
 1. Critical: unauthenticated SQL execution via `/api/query` with `multipleStatements=true`
 2. High: ELO calculation uses `^` (bitwise XOR) where exponentiation is expected
-3. High: async race in `update-elo` / `update-stats` (missing `await` on connect/disconnect)
-4. High: potential null dereference in live score parsing
-5. Medium: `live --debug` ignores debug input data
-6. Medium: `update-players` calls `this.log` without implementation
-7. Medium: possible naming conflict in SQL surface-factor procedure
+3. High: potential null dereference in live score parsing
+4. Medium: possible naming conflict in SQL surface-factor procedure
 
 ## Session Memory (2026-02-26)
 - Live monitoring command is `monitor` (`commands/monitor.js`, registered in `atp.js`).
@@ -221,6 +212,9 @@ For fresh dev/prod environments:
     - `sandbox/output/fetch-calendar.raw.json`
   - `sandbox/README.md` documents the simplified sandbox flow.
   - Team convention: sandbox-specific iteration notes belong in `sandbox/README.md`, not top-level `LOG.md`.
+- CLI command registration in `atp.js` has been trimmed further:
+  - `import`, `serve`
+  - all other command files were removed; sandbox is now the place for endpoint/debug testing
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory

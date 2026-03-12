@@ -39,40 +39,17 @@ node atp.js --help
 
 Available commands (from `atp.js`):
 - `import [options]` - Full import pipeline (rankings -> activity -> scores -> players -> stats -> ELO -> `sp_update()`).
-- `rankings [options]` - Fetch rankings to JSON.
-- `live [options]` - Fetch/poll ATP live matches and write `output/live.json`.
-- `monitor [options]` - Poll live matches, enrich with DB rank + head-to-head, print JSON snapshots.
-- `scores [options]` - Fetch one event archive.
-- `player [options]` - Fetch one player profile.
-- `activity [options]` - Fetch one player's activity history.
-- `stats [options]` - Fetch ATP leaderboard-derived ratings.
-- `update-stats [options]` - Write ratings into `players`.
-- `update-elo [options]` - Recompute and write ELO into `players.elo_rank`.
-- `update-players [options]` - Backfill missing birthdates.
-- `score-parser [scores..]` - Score parser test bench.
-- `events [options]` - Internal/debug helper.
 - `serve [options]` - Start local API server.
 
 ### Common Command Examples
 
 ```bash
 node atp.js import --top 100 --since 2025
-node atp.js rankings --top 50 --output ./output/rankings.json
-node atp.js live --poll --interval 30 --max 10 --changes-only
-node atp.js monitor --interval 15
-node atp.js scores --event 2024-0339
-node atp.js player --player S0AG
-node atp.js activity --player R0DG --since 2020
-node atp.js score-parser --examples --json
+node atp.js serve
 ```
 
 ### Important Options
 - `import`: `--top`, `--since`, `--clean`, `--loop` (days; default `0.33`).
-- `live`: `--poll`, `--interval`, `--max`, `--changes-only`, `--debug`, `--input`, `--output`.
-- `monitor`: `--interval` only.
-- `rankings`: `--top`, `--output`.
-- `scores`: `--event`, `--output`.
-- `player` / `activity`: `--player`, `--output` (+ `activity --since`).
 
 ## API Service
 
@@ -134,9 +111,6 @@ Reference docs:
 
 ## Security and Caveats (From Current Source)
 - `POST /api/query` runs SQL from request input and DB config enables `multipleStatements=true`. Keep service private/trusted.
-- `update-stats` does not `await` DB connect/disconnect (`commands/update-stats.js`).
-- `update-players` catches errors with `this.log(...)` but command has no `log` method (`commands/update-players.js`).
-- `events` command is a hardcoded helper (`eventid=403`) rather than a general CLI.
 
 ## Project Structure
 - `atp.js` - CLI entrypoint

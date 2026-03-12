@@ -12,19 +12,7 @@ var App = function () {
             args.usage("Usage: $0 <command> [options]");
 
             args.command(require("./commands/import.js"));
-            args.command(require('./commands/events.js'));
-            args.command(require('./commands/stats.js'));
-            args.command(require('./commands/scores.js'));
-            args.command(require('./commands/player.js'));
-            args.command(require('./commands/activity.js'));
-            args.command(require('./commands/rankings.js'));
-            args.command(require('./commands/live.js'));
-            args.command(require('./commands/monitor.js'));
-            args.command(require('./commands/score-parser.js'));
             args.command(require('./commands/serve.js'));
-            args.command(require('./commands/update-elo.js'));
-            args.command(require('./commands/update-stats.js'));
-            args.command(require('./commands/update-players.js'));
 
             args.help();
             args.wrap(null);
