@@ -1,0 +1,11 @@
+{
+  "requestUrl": "https://www.atptour.com/-/media/alias/player-headshot/s0ag",
+  "finalUrl": "https://www.atptour.com/-/media/alias/player-headshot/s0ag",
+  "fetchedAt": "2026-03-12T18:47:43.496705+00:00",
+  "note": "Endpoint returns image data, not JSON.",
+  "response": {
+    "status": 200,
+    "contentType": "image/png",
+    "contentLength": 31914
+  }
+}

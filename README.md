@@ -121,8 +121,8 @@ curl -X POST http://127.0.0.1:3004/api/query \
 - `https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true`
 
 Reference docs:
-- [ATP Endpoints README](./atp-endpoints/README.md)
-- [Calendar JSON example](./atp-endpoints/examples/tournaments.calendar.tour.example.json)
+- [Project Endpoints README](./endpoints/README.md)
+- [Calendar JSON example](./endpoints/examples/tournaments.calendar.tour.example.json)
 
 ## Database Notes
 - Schema in repo: `database/schema.sql`.

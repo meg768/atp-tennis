@@ -1,0 +1,923 @@
+{
+  "Content": null,
+  "Data": {
+    "EventYear": 0,
+    "EventLevel": "tour",
+    "LiveMatchesTournamentsOrdered": [
+      {
+        "EventYear": 2026,
+        "EventId": 404,
+        "EventTitle": "BNP Paribas Open",
+        "EventCountryCode": "USA",
+        "EventCountry": "United States",
+        "EventLocation": "CA, U.S.A.",
+        "EventCity": "Indian Wells",
+        "EventStartDate": "3/4/2026 12:00:00 AM",
+        "EventEndDate": "3/15/2026 12:00:00 AM",
+        "HasTeamTieStats": false,
+        "EventType": "1000",
+        "EventCurrentDayNumber": 9,
+        "SortOrderLevel": 0,
+        "TournamentPosition": 1,
+        "IsLive": false,
+        "LiveMatches": [
+          {
+            "Type": "singles",
+            "TeamTieResults": {
+              "RoundRobinGroupNumber": 0,
+              "RoundRobinGroupName": null,
+              "RoundRobinCityName": null,
+              "TeamCountryCode": null,
+              "TeamCountryName": null,
+              "TeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+              "OpponentTeamCountryCode": null,
+              "OpponentTeamCountryName": null,
+              "OpponentTeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+              "TeamTieMatchWins": 0,
+              "OpponentTeamTieMatchWins": 0,
+              "TotalTieMatchesPlayed": 0,
+              "TieWinnerTeamCountryCode": null,
+              "IsRoundRobin": false,
+              "PlayerTeamCountriesIndex": "_"
+            },
+            "MatchId": "MS006",
+            "Org": "ATP",
+            "IsDoubles": false,
+            "RoundName": "Quarterfinals",
+            "CourtName": "Stadium 2",
+            "CourtId": 1,
+            "MatchTimeTotal": "00:35:42",
+            "MatchStateReasonMessage": null,
+            "ExtendedMessage": "Arthur Fils wins the point on his 1st serve.  2 game points.",
+            "HasChallengerTvMobile": false,
+            "HasWatchLive": false,
+            "HasHead2Head": true,
+            "HasStats": true,
+            "HasCourtTracking": false,
+            "MatchStatus": "P",
+            "ServerTeam": 0,
+            "WinningPlayerId": null,
+            "UmpireFirstName": "Mohamed",
+            "UmpireLastName": "Lahyani",
+            "LastUpdated": "2026-03-12T14:47:12.8766667",
+            "KSeq": 149,
+            "RailPosition": 1,
+            "LiveListingPosition": 1,
+            "PlayerTeam": {
+              "Player": {
+                "PlayerId": "F0F1",
+                "PlayerCountry": "FRA",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Arthur",
+                "PlayerLastName": "Fils"
+              },
+              "Partner": {
+                "PlayerId": null,
+                "PlayerCountry": null,
+                "PlayerCountryName": null,
+                "PlayerFirstName": null,
+                "PlayerLastName": null
+              },
+              "EntryType": null,
+              "Seed": 30,
+              "GameScore": "40",
+              "SetScores": [
+                {
+                  "SetNumber": 1,
+                  "SetScore": 1,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 2,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 3,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 4,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 5,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                }
+              ]
+            },
+            "OpponentTeam": {
+              "Player": {
+                "PlayerId": "Z355",
+                "PlayerCountry": "GER",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Alexander",
+                "PlayerLastName": "Zverev"
+              },
+              "Partner": {
+                "PlayerId": null,
+                "PlayerCountry": null,
+                "PlayerCountryName": null,
+                "PlayerFirstName": null,
+                "PlayerLastName": null
+              },
+              "EntryType": null,
+              "Seed": 4,
+              "GameScore": "15",
+              "SetScores": [
+                {
+                  "SetNumber": 1,
+                  "SetScore": 5,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 2,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 3,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 4,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 5,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                }
+              ]
+            }
+          },
+          {
+            "Type": "doubles",
+            "TeamTieResults": {
+              "RoundRobinGroupNumber": 0,
+              "RoundRobinGroupName": null,
+              "RoundRobinCityName": null,
+              "TeamCountryCode": null,
+              "TeamCountryName": null,
+              "TeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+              "OpponentTeamCountryCode": null,
+              "OpponentTeamCountryName": null,
+              "OpponentTeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+              "TeamTieMatchWins": 0,
+              "OpponentTeamTieMatchWins": 0,
+              "TotalTieMatchesPlayed": 0,
+              "TieWinnerTeamCountryCode": null,
+              "IsRoundRobin": false,
+              "PlayerTeamCountriesIndex": "_"
+            },
+            "MatchId": "MD005",
+            "Org": "ATP",
+            "IsDoubles": true,
+            "RoundName": "Quarterfinals",
+            "CourtName": "Stadium 3",
+            "CourtId": 2,
+            "MatchTimeTotal": "00:36:38",
+            "MatchStateReasonMessage": null,
+            "ExtendedMessage": "C. Harrison/N. Skupski win the point on the 1st serve of C. Harrison. \r\n Game C. Harrison/N. Skupski. \r\n Set level 1-1.",
+            "HasChallengerTvMobile": false,
+            "HasWatchLive": false,
+            "HasHead2Head": true,
+            "HasStats": true,
+            "HasCourtTracking": false,
+            "MatchStatus": "P",
+            "ServerTeam": 1,
+            "WinningPlayerId": null,
+            "UmpireFirstName": "Fergus",
+            "UmpireLastName": "Murphy",
+            "LastUpdated": "2026-03-12T14:47:29.84",
+            "KSeq": 173,
+            "RailPosition": 2,
+            "LiveListingPosition": 2,
+            "PlayerTeam": {
+              "Player": {
+                "PlayerId": "HB05",
+                "PlayerCountry": "USA",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Christian",
+                "PlayerLastName": "Harrison"
+              },
+              "Partner": {
+                "PlayerId": "SL22",
+                "PlayerCountry": "GBR",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Neal",
+                "PlayerLastName": "Skupski"
+              },
+              "EntryType": null,
+              "Seed": 4,
+              "GameScore": "0",
+              "SetScores": [
+                {
+                  "SetNumber": 1,
+                  "SetScore": 6,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 2,
+                  "SetScore": 1,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 3,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 4,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 5,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                }
+              ]
+            },
+            "OpponentTeam": {
+              "Player": {
+                "PlayerId": "A887",
+                "PlayerCountry": "ARG",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Guido",
+                "PlayerLastName": "Andreozzi"
+              },
+              "Partner": {
+                "PlayerId": "GH33",
+                "PlayerCountry": "FRA",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Manuel",
+                "PlayerLastName": "Guinard"
+              },
+              "EntryType": null,
+              "Seed": null,
+              "GameScore": "0",
+              "SetScores": [
+                {
+                  "SetNumber": 1,
+                  "SetScore": 3,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 2,
+                  "SetScore": 1,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 3,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 4,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 5,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                }
+              ]
+            }
+          },
+          {
+            "Type": "doubles",
+            "TeamTieResults": {
+              "RoundRobinGroupNumber": 0,
+              "RoundRobinGroupName": null,
+              "RoundRobinCityName": null,
+              "TeamCountryCode": null,
+              "TeamCountryName": null,
+              "TeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+              "OpponentTeamCountryCode": null,
+              "OpponentTeamCountryName": null,
+              "OpponentTeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+              "TeamTieMatchWins": 0,
+              "OpponentTeamTieMatchWins": 0,
+              "TotalTieMatchesPlayed": 0,
+              "TieWinnerTeamCountryCode": null,
+              "IsRoundRobin": false,
+              "PlayerTeamCountriesIndex": "_"
+            },
+            "MatchId": "MX004",
+            "Org": "Mixed",
+            "IsDoubles": true,
+            "RoundName": "Quarterfinals",
+            "CourtName": "Stadium 4",
+            "CourtId": 3,
+            "MatchTimeTotal": "00:35:34",
+            "MatchStateReasonMessage": null,
+            "ExtendedMessage": "",
+            "HasChallengerTvMobile": false,
+            "HasWatchLive": false,
+            "HasHead2Head": false,
+            "HasStats": true,
+            "HasCourtTracking": false,
+            "MatchStatus": "P",
+            "ServerTeam": 1,
+            "WinningPlayerId": null,
+            "UmpireFirstName": null,
+            "UmpireLastName": null,
+            "LastUpdated": "2026-03-12T14:47:25.0566667",
+            "KSeq": 168,
+            "RailPosition": null,
+            "LiveListingPosition": 3,
+            "PlayerTeam": {
+              "Player": {
+                "PlayerId": "314445",
+                "PlayerCountry": "CAN",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Gabriela",
+                "PlayerLastName": "Dabrowski"
+              },
+              "Partner": {
+                "PlayerId": "GD08",
+                "PlayerCountry": "GBR",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Lloyd",
+                "PlayerLastName": "Glasspool"
+              },
+              "EntryType": null,
+              "Seed": 1,
+              "GameScore": "0",
+              "SetScores": [
+                {
+                  "SetNumber": 1,
+                  "SetScore": 4,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 2,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 3,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 4,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 5,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                }
+              ]
+            },
+            "OpponentTeam": {
+              "Player": {
+                "PlayerId": "PC68",
+                "PlayerCountry": "GER",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Tim",
+                "PlayerLastName": "Puetz"
+              },
+              "Partner": {
+                "PlayerId": "317299",
+                "PlayerCountry": "NZL",
+                "PlayerCountryName": null,
+                "PlayerFirstName": "Erin",
+                "PlayerLastName": "Routliffe"
+              },
+              "EntryType": null,
+              "Seed": null,
+              "GameScore": "0",
+              "SetScores": [
+                {
+                  "SetNumber": 1,
+                  "SetScore": 5,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 2,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 3,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 4,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                },
+                {
+                  "SetNumber": 5,
+                  "SetScore": null,
+                  "TieBreakScore": null,
+                  "Stats": null
+                }
+              ]
+            }
+          }
+        ],
+        "LiveTeamTieDetails": [
+          {
+            "TeamTieResults": {
+              "RoundRobinGroupNumber": 0,
+              "RoundRobinGroupName": null,
+              "RoundRobinCityName": null,
+              "TeamCountryCode": null,
+              "TeamCountryName": null,
+              "TeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+              "OpponentTeamCountryCode": null,
+              "OpponentTeamCountryName": null,
+              "OpponentTeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+              "TeamTieMatchWins": 0,
+              "OpponentTeamTieMatchWins": 0,
+              "TotalTieMatchesPlayed": 0,
+              "TieWinnerTeamCountryCode": null,
+              "IsRoundRobin": false,
+              "PlayerTeamCountriesIndex": "_"
+            },
+            "Matches": [
+              {
+                "Type": "singles",
+                "TeamTieResults": {
+                  "RoundRobinGroupNumber": 0,
+                  "RoundRobinGroupName": null,
+                  "RoundRobinCityName": null,
+                  "TeamCountryCode": null,
+                  "TeamCountryName": null,
+                  "TeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+                  "OpponentTeamCountryCode": null,
+                  "OpponentTeamCountryName": null,
+                  "OpponentTeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+                  "TeamTieMatchWins": 0,
+                  "OpponentTeamTieMatchWins": 0,
+                  "TotalTieMatchesPlayed": 0,
+                  "TieWinnerTeamCountryCode": null,
+                  "IsRoundRobin": false,
+                  "PlayerTeamCountriesIndex": "_"
+                },
+                "MatchId": "MS006",
+                "Org": "ATP",
+                "IsDoubles": false,
+                "RoundName": "Quarterfinals",
+                "CourtName": "Stadium 2",
+                "CourtId": 1,
+                "MatchTimeTotal": "00:35:42",
+                "MatchStateReasonMessage": null,
+                "ExtendedMessage": "Arthur Fils wins the point on his 1st serve.  2 game points.",
+                "HasChallengerTvMobile": false,
+                "HasWatchLive": false,
+                "HasHead2Head": true,
+                "HasStats": true,
+                "HasCourtTracking": false,
+                "MatchStatus": "P",
+                "ServerTeam": 0,
+                "WinningPlayerId": null,
+                "UmpireFirstName": "Mohamed",
+                "UmpireLastName": "Lahyani",
+                "LastUpdated": "2026-03-12T14:47:12.8766667",
+                "KSeq": 149,
+                "RailPosition": 1,
+                "LiveListingPosition": 1,
+                "PlayerTeam": {
+                  "Player": {
+                    "PlayerId": "F0F1",
+                    "PlayerCountry": "FRA",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Arthur",
+                    "PlayerLastName": "Fils"
+                  },
+                  "Partner": {
+                    "PlayerId": null,
+                    "PlayerCountry": null,
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": null,
+                    "PlayerLastName": null
+                  },
+                  "EntryType": null,
+                  "Seed": 30,
+                  "GameScore": "40",
+                  "SetScores": [
+                    {
+                      "SetNumber": 1,
+                      "SetScore": 1,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 2,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 3,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 4,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 5,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    }
+                  ]
+                },
+                "OpponentTeam": {
+                  "Player": {
+                    "PlayerId": "Z355",
+                    "PlayerCountry": "GER",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Alexander",
+                    "PlayerLastName": "Zverev"
+                  },
+                  "Partner": {
+                    "PlayerId": null,
+                    "PlayerCountry": null,
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": null,
+                    "PlayerLastName": null
+                  },
+                  "EntryType": null,
+                  "Seed": 4,
+                  "GameScore": "15",
+                  "SetScores": [
+                    {
+                      "SetNumber": 1,
+                      "SetScore": 5,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 2,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 3,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 4,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 5,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    }
+                  ]
+                }
+              },
+              {
+                "Type": "doubles",
+                "TeamTieResults": {
+                  "RoundRobinGroupNumber": 0,
+                  "RoundRobinGroupName": null,
+                  "RoundRobinCityName": null,
+                  "TeamCountryCode": null,
+                  "TeamCountryName": null,
+                  "TeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+                  "OpponentTeamCountryCode": null,
+                  "OpponentTeamCountryName": null,
+                  "OpponentTeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+                  "TeamTieMatchWins": 0,
+                  "OpponentTeamTieMatchWins": 0,
+                  "TotalTieMatchesPlayed": 0,
+                  "TieWinnerTeamCountryCode": null,
+                  "IsRoundRobin": false,
+                  "PlayerTeamCountriesIndex": "_"
+                },
+                "MatchId": "MD005",
+                "Org": "ATP",
+                "IsDoubles": true,
+                "RoundName": "Quarterfinals",
+                "CourtName": "Stadium 3",
+                "CourtId": 2,
+                "MatchTimeTotal": "00:36:38",
+                "MatchStateReasonMessage": null,
+                "ExtendedMessage": "C. Harrison/N. Skupski win the point on the 1st serve of C. Harrison. \r\n Game C. Harrison/N. Skupski. \r\n Set level 1-1.",
+                "HasChallengerTvMobile": false,
+                "HasWatchLive": false,
+                "HasHead2Head": true,
+                "HasStats": true,
+                "HasCourtTracking": false,
+                "MatchStatus": "P",
+                "ServerTeam": 1,
+                "WinningPlayerId": null,
+                "UmpireFirstName": "Fergus",
+                "UmpireLastName": "Murphy",
+                "LastUpdated": "2026-03-12T14:47:29.84",
+                "KSeq": 173,
+                "RailPosition": 2,
+                "LiveListingPosition": 2,
+                "PlayerTeam": {
+                  "Player": {
+                    "PlayerId": "HB05",
+                    "PlayerCountry": "USA",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Christian",
+                    "PlayerLastName": "Harrison"
+                  },
+                  "Partner": {
+                    "PlayerId": "SL22",
+                    "PlayerCountry": "GBR",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Neal",
+                    "PlayerLastName": "Skupski"
+                  },
+                  "EntryType": null,
+                  "Seed": 4,
+                  "GameScore": "0",
+                  "SetScores": [
+                    {
+                      "SetNumber": 1,
+                      "SetScore": 6,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 2,
+                      "SetScore": 1,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 3,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 4,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 5,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    }
+                  ]
+                },
+                "OpponentTeam": {
+                  "Player": {
+                    "PlayerId": "A887",
+                    "PlayerCountry": "ARG",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Guido",
+                    "PlayerLastName": "Andreozzi"
+                  },
+                  "Partner": {
+                    "PlayerId": "GH33",
+                    "PlayerCountry": "FRA",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Manuel",
+                    "PlayerLastName": "Guinard"
+                  },
+                  "EntryType": null,
+                  "Seed": null,
+                  "GameScore": "0",
+                  "SetScores": [
+                    {
+                      "SetNumber": 1,
+                      "SetScore": 3,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 2,
+                      "SetScore": 1,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 3,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 4,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 5,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    }
+                  ]
+                }
+              },
+              {
+                "Type": "doubles",
+                "TeamTieResults": {
+                  "RoundRobinGroupNumber": 0,
+                  "RoundRobinGroupName": null,
+                  "RoundRobinCityName": null,
+                  "TeamCountryCode": null,
+                  "TeamCountryName": null,
+                  "TeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+                  "OpponentTeamCountryCode": null,
+                  "OpponentTeamCountryName": null,
+                  "OpponentTeamCountryHemisphereImageCmsUrl": "/-/media/alias/nation-icon/",
+                  "TeamTieMatchWins": 0,
+                  "OpponentTeamTieMatchWins": 0,
+                  "TotalTieMatchesPlayed": 0,
+                  "TieWinnerTeamCountryCode": null,
+                  "IsRoundRobin": false,
+                  "PlayerTeamCountriesIndex": "_"
+                },
+                "MatchId": "MX004",
+                "Org": "Mixed",
+                "IsDoubles": true,
+                "RoundName": "Quarterfinals",
+                "CourtName": "Stadium 4",
+                "CourtId": 3,
+                "MatchTimeTotal": "00:35:34",
+                "MatchStateReasonMessage": null,
+                "ExtendedMessage": "",
+                "HasChallengerTvMobile": false,
+                "HasWatchLive": false,
+                "HasHead2Head": false,
+                "HasStats": true,
+                "HasCourtTracking": false,
+                "MatchStatus": "P",
+                "ServerTeam": 1,
+                "WinningPlayerId": null,
+                "UmpireFirstName": null,
+                "UmpireLastName": null,
+                "LastUpdated": "2026-03-12T14:47:25.0566667",
+                "KSeq": 168,
+                "RailPosition": null,
+                "LiveListingPosition": 3,
+                "PlayerTeam": {
+                  "Player": {
+                    "PlayerId": "314445",
+                    "PlayerCountry": "CAN",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Gabriela",
+                    "PlayerLastName": "Dabrowski"
+                  },
+                  "Partner": {
+                    "PlayerId": "GD08",
+                    "PlayerCountry": "GBR",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Lloyd",
+                    "PlayerLastName": "Glasspool"
+                  },
+                  "EntryType": null,
+                  "Seed": 1,
+                  "GameScore": "0",
+                  "SetScores": [
+                    {
+                      "SetNumber": 1,
+                      "SetScore": 4,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 2,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 3,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 4,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 5,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    }
+                  ]
+                },
+                "OpponentTeam": {
+                  "Player": {
+                    "PlayerId": "PC68",
+                    "PlayerCountry": "GER",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Tim",
+                    "PlayerLastName": "Puetz"
+                  },
+                  "Partner": {
+                    "PlayerId": "317299",
+                    "PlayerCountry": "NZL",
+                    "PlayerCountryName": null,
+                    "PlayerFirstName": "Erin",
+                    "PlayerLastName": "Routliffe"
+                  },
+                  "EntryType": null,
+                  "Seed": null,
+                  "GameScore": "0",
+                  "SetScores": [
+                    {
+                      "SetNumber": 1,
+                      "SetScore": 5,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 2,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 3,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 4,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    },
+                    {
+                      "SetNumber": 5,
+                      "SetScore": null,
+                      "TieBreakScore": null,
+                      "Stats": null
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "DrawsLink": "draws",
+        "ScheduleLink": "daily-schedule"
+      }
+    ]
+  }
+}

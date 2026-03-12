@@ -1,6 +1,6 @@
-# ATP Endpoints
+# Project Endpoints
 
-This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
+This file documents project endpoints and related URL patterns (updated 2026-03-12).
 
 ## Endpoints
 
@@ -48,6 +48,13 @@ This file documents ATP endpoints and related URL patterns (updated 2026-02-27).
 - Query param: `scoringTournamentLevel` (commonly `tour`)
 - Example JSON: [livematches.website.tour.example.json](./examples/livematches.website.tour.example.json)
 - Direct link: [https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour](https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour)
+
+### Oddset ATP Matches (Svenska Spel / Kambi)
+- `GET https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true`
+- Used by: `src/fetch-oddset.js`
+- Returns ATP matches with odds and live data
+- Example JSON: [oddset.atp.matches.example.json](./examples/oddset.atp.matches.example.json)
+- Direct link: [https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true](https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true)
 
 ### Masters 1000 Tournament Explorer
 - `GET https://www.atptour.com/-/tournaments/explore/1000`

@@ -201,6 +201,7 @@ For fresh dev/prod environments:
 - Module now follows project fetcher pattern:
   - inherits from `src/fetcher.js`
   - exports via CommonJS (`module.exports`)
+- Endpoint reference folder renamed from `atp-endpoints/` to `endpoints/`, and `endpoints/README.md` now includes the Oddset endpoint.
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory

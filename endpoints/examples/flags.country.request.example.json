@@ -1,0 +1,11 @@
+{
+  "requestUrl": "https://www.atptour.com/en/~/media/images/flags/SWE.svg",
+  "finalUrl": "https://www.atptour.com/en/~/media/images/flags/SWE.svg",
+  "fetchedAt": "2026-03-12T18:47:43.649285+00:00",
+  "note": "Endpoint returns SVG image data, not JSON.",
+  "response": {
+    "status": 200,
+    "contentType": "image/svg+xml",
+    "contentLength": 234
+  }
+}
