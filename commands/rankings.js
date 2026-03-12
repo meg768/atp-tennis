@@ -29,7 +29,8 @@ class Module extends Command {
 		this.argv = argv;
 
 		let fetcher = new Fetcher();
-		let json = await fetcher.fetch({ top: this.argv.top });
+		let raw = await fetcher.fetch({ top: this.argv.top });
+		let json = fetcher.parse(raw);
 
 		fetcher.output({ fileName: this.argv.output, json });
 	}

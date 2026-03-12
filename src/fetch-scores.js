@@ -5,7 +5,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ event, raw }) {
+	parse(payload, { event } = {}) {
 		function getMatchStatus(match) {
 			const statusText = [match.MatchStateReasonMessage, match.Message, match.ResultString]
 				.filter(Boolean)
@@ -31,24 +31,11 @@ class Module extends Fetcher {
 			throw new Error('Event ID is required');
 		}
 
-		let [eventYear, eventID] = event.split('-');
-
-		if (!eventYear || !eventID) {
-			throw Error('A valid event ID must be specified');
-		}
-
-		let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${eventYear}&eventid=${eventID}`;
-		let response = await this.fetchATP(url);
-
-		if (raw != undefined && (raw == '' || raw != 0)) {
-			return response;
-		}
-
-		if (!Array.isArray(response.Data) || response.Data.length === 0) {
+		if (!Array.isArray(payload?.Data) || payload.Data.length === 0) {
 			throw new Error(`No information about event ${event} found.`);
 		}
 
-		raw = response.Data[0];
+		let raw = payload.Data[0];
 
 		let result = {};
 
@@ -111,6 +98,21 @@ class Module extends Fetcher {
 		}
 
 		return result;
+	}
+
+	async fetch({ event } = {}) {
+		if (!event) {
+			throw new Error('Event ID is required');
+		}
+
+		let [eventYear, eventID] = event.split('-');
+
+		if (!eventYear || !eventID) {
+			throw Error('A valid event ID must be specified');
+		}
+
+		let url = `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear=${eventYear}&eventid=${eventID}`;
+		return await this.fetchATP(url);
 	}
 }
 

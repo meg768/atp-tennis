@@ -5,38 +5,31 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ player, raw }) {
+	parse(payload, { player } = {}) {
 		let results = {};
 
 		if (!player) {
 			throw new Error('Player ID is required');
 		}
 
-		let url = `https://www.atptour.com/en/-/www/players/hero/${player}`;
-		let response = await this.fetchATP(url);
-
-		if (!response) {
+		if (!payload) {
 			return null;
-		}
-
-		if (raw != undefined && (raw == '' || raw != 0)) {
-			return response;
 		}
 
 		let result = {};
 
 		result.player = player.toUpperCase();
-		result.name = `${response.FirstName ? response.FirstName + ' ' : ''}${response.LastName}`;
-		result.country = response.NatlId;
-		result.age = response.Age;
-		result.birthdate = response.BirthDate ? response.BirthDate.split('T')[0] : null;
-		result.height = response.HeightCm > 0 ? response.HeightCm : null;
-		result.weight = response.WeightKg > 0 ? response.WeightKg : null;
-		result.url = `https://www.atptour.com${response.ScRelativeUrlPlayerProfile}`;
+		result.name = `${payload.FirstName ? payload.FirstName + ' ' : ''}${payload.LastName}`;
+		result.country = payload.NatlId;
+		result.age = payload.Age;
+		result.birthdate = payload.BirthDate ? payload.BirthDate.split('T')[0] : null;
+		result.height = payload.HeightCm > 0 ? payload.HeightCm : null;
+		result.weight = payload.WeightKg > 0 ? payload.WeightKg : null;
+		result.url = `https://www.atptour.com${payload.ScRelativeUrlPlayerProfile}`;
 
-		result.pro = response.ProYear;
-		result.coach = response.Coach;
-		result.active = response.Active?.Description == 'Active';
+		result.pro = payload.ProYear;
+		result.coach = payload.Coach;
+		result.active = payload.Active?.Description == 'Active';
 
 		result.ranking = {};
 		result.matches = {};
@@ -50,29 +43,38 @@ class Module extends Fetcher {
 
 		result.ranking.current = {};
 		result.ranking.highest = {};
-		result.ranking.current.rank = response.SglRank;
-		result.ranking.highest.rank = response.SglHiRank;
-		result.ranking.highest.date = response.SglHiRankDate;
+		result.ranking.current.rank = payload.SglRank;
+		result.ranking.highest.rank = payload.SglHiRank;
+		result.ranking.highest.date = payload.SglHiRankDate;
 
-		result.titles.ytd = response.SglYtdTitles;
-		result.titles.career = response.SglCareerTitles;
+		result.titles.ytd = payload.SglYtdTitles;
+		result.titles.career = payload.SglCareerTitles;
 
-		result.prize.ytd = response.SglYtdPrizeFormatted ? response.SglYtdPrizeFormatted.replace(/[^0-9-]/g, '') : null;
-		result.prize.career = response.CareerPrizeFormatted ? response.CareerPrizeFormatted.replace(/[^0-9-]/g, '') : null;
+		result.prize.ytd = payload.SglYtdPrizeFormatted ? payload.SglYtdPrizeFormatted.replace(/[^0-9-]/g, '') : null;
+		result.prize.career = payload.CareerPrizeFormatted ? payload.CareerPrizeFormatted.replace(/[^0-9-]/g, '') : null;
 
-		result.matches.ytd.wins = response.SglYtdWon;
-		result.matches.ytd.losses = response.SglYtdLost;
+		result.matches.ytd.wins = payload.SglYtdWon;
+		result.matches.ytd.losses = payload.SglYtdLost;
 
-		result.matches.career.wins = response.SglCareerWon;
-		result.matches.career.losses = response.SglCareerLost;
+		result.matches.career.wins = payload.SglCareerWon;
+		result.matches.career.losses = payload.SglCareerLost;
 
-		result.raw = response;
+		result.raw = payload;
 
-		if (!response) {
+		if (!payload) {
 			return results;
 		}
 
 		return result;
+	}
+
+	async fetch({ player } = {}) {
+		if (!player) {
+			throw new Error('Player ID is required');
+		}
+
+		let url = `https://www.atptour.com/en/-/www/players/hero/${player}`;
+		return await this.fetchATP(url);
 	}
 }
 

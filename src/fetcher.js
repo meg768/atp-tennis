@@ -28,6 +28,10 @@ class Fetcher {
 		return await Gopher.fetch(url, options);
 	}
 
+	parse(payload) {
+		return payload;
+	}
+
 	output({ fileName, json }) {
 		if (typeof fileName === 'string' && json) {
 			const text = JSON.stringify(json, null, '   ');

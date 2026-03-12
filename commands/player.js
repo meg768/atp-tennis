@@ -31,7 +31,8 @@ class Module extends Command {
 		this.argv = argv;
 
 		let fetcher = new Fetcher();
-		let json = await fetcher.fetch({ player: this.argv.player });
+		let raw = await fetcher.fetch({ player: this.argv.player });
+		let json = fetcher.parse(raw, { player: this.argv.player });
 
 		fetcher.output({ fileName: this.argv.output, json });
 	}

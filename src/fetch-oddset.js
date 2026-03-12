@@ -14,7 +14,7 @@ class Module extends Fetcher {
 		this.requestTimeoutMs = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
 	}
 
-	static parse(payload, { states = ODDSET_CURRENT_STATES } = {}) {
+	parseRows(payload, { states = this.states } = {}) {
 		const STATE_STARTED = 'STARTED';
 
 		function toDecimalOdds(odds) {
@@ -114,6 +114,27 @@ class Module extends Fetcher {
 		return rows;
 	}
 
+	parse(payload, { states = this.states } = {}) {
+		function toOutputRow(row) {
+			return {
+				start: row.start,
+				tournament: row.tournament,
+				score: row.liveScore,
+				playerA: {
+					name: row.playerA,
+					odds: row.oddsA
+				},
+				playerB: {
+					name: row.playerB,
+					odds: row.oddsB
+				}
+			};
+		}
+
+		const rows = this.parseRows(payload, { states });
+		return rows.map(toOutputRow);
+	}
+
 	async fetchPayload({ url = this.url, requestTimeoutMs = this.requestTimeoutMs } = {}) {
 		function toMessage(error) {
 			return error instanceof Error ? error.message : String(error);
@@ -138,35 +159,12 @@ class Module extends Fetcher {
 	}
 
 	async fetchRows({ states = this.states, url = this.url, requestTimeoutMs = this.requestTimeoutMs } = {}) {
-		const payload = await this.fetchPayload({ url, requestTimeoutMs });
-		return Module.parse(payload, { states });
+		const payload = await this.fetch({ url, requestTimeoutMs });
+		return this.parseRows(payload, { states });
 	}
 
-	async fetch({ states = this.states, raw, url = this.url, requestTimeoutMs = this.requestTimeoutMs } = {}) {
-		function toOutputRow(row) {
-			return {
-				start: row.start,
-				tournament: row.tournament,
-				score: row.liveScore,
-				playerA: {
-					name: row.playerA,
-					odds: row.oddsA
-				},
-				playerB: {
-					name: row.playerB,
-					odds: row.oddsB
-				}
-			};
-		}
-
-		const payload = await this.fetchPayload({ url, requestTimeoutMs });
-
-		if (raw != undefined && (raw == '' || raw != 0)) {
-			return payload;
-		}
-
-		const rows = Module.parse(payload, { states });
-		return rows.map(toOutputRow);
+	async fetch({ url = this.url, requestTimeoutMs = this.requestTimeoutMs } = {}) {
+		return await this.fetchPayload({ url, requestTimeoutMs });
 	}
 }
 

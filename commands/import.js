@@ -68,7 +68,8 @@ class Import extends Command {
 		await this.log(`Processing player ${player} (${playerCount})...`);
 
 		let activityFetcher = new ActivityFetcher();
-		let activity = await activityFetcher.fetch({ player: player, since: this.argv.since });
+		let activityRaw = await activityFetcher.fetch({ player: player });
+		let activity = activityFetcher.parse(activityRaw, { player: player, since: this.argv.since });
 
 		if (!activity || !activity.events) {
 			await this.log(`No activity found for player ${player}, skipping.`);
@@ -124,7 +125,8 @@ class Import extends Command {
 
 		let Fetcher = require('../src/fetch-stats.js');
 		let fetcher = new Fetcher();
-		let details = await fetcher.fetch();
+		let raw = await fetcher.fetch();
+		let details = fetcher.parse(raw);
 
 		for (let entry of details) {
 			let sql = ``;
@@ -143,7 +145,8 @@ class Import extends Command {
 	async getTopPlayerRankings(top) {
 		let Fetcher = require('../src/fetch-rankings');
 		let fetcher = new Fetcher();
-		let rankings = await fetcher.fetch({ top: top });
+		let raw = await fetcher.fetch({ top: top });
+		let rankings = fetcher.parse(raw);
 
 		return rankings;
 	}
@@ -277,7 +280,8 @@ class Import extends Command {
 			let details = null;
 
 			try {
-				details = await eventFetcher.fetch({ event: eventID });
+				let detailsRaw = await eventFetcher.fetch({ event: eventID });
+				details = eventFetcher.parse(detailsRaw, { event: eventID });
 			} catch (error) {
 				await this.log(`ERROR fetching event ${eventID}: ${error.message}`);
 				continue;
@@ -343,7 +347,8 @@ class Import extends Command {
 
 			try {
 				let playerFetcher = new PlayerFetcher();
-				let details = await playerFetcher.fetch({ player: player });
+				let detailsRaw = await playerFetcher.fetch({ player: player });
+				let details = playerFetcher.parse(detailsRaw, { player: player });
 
 				if (!details) {
 					continue;

@@ -1,5 +1,4 @@
 let Command = require('../src/command.js');
-let Gopher = require('../src/gopher.js');
 let readJSON = require('yow/readJSON');
 let writeJSON = require('yow/writeJSON').writeJSON;
 
@@ -127,11 +126,10 @@ class Module extends Command {
 			if (argv.debug && argv.input) {
 				response = readJSON(argv.input);
 			} else {
-				response = await Gopher.fetch('https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour', { retryCount: 1, retryDelay: 1000 });
+				response = await fetcher.fetch();
 			}
 
-			fetcher.response = response;
-			return await fetcher.parse();
+			return await fetcher.parse(response);
 		}
 
 		let previous = null;

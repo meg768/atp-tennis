@@ -24,7 +24,8 @@ class Module extends Command {
 			try {
 				let Fetcher = require('../src/fetch-player.js');
 				let fetcher = new Fetcher();
-				let details = await fetcher.fetch({ player: player.id });
+				let raw = await fetcher.fetch({ player: player.id });
+				let details = fetcher.parse(raw, { player: player.id });
 
 				if (!details) {
 					continue;

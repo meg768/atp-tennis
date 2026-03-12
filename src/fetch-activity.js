@@ -1,4 +1,3 @@
-const { raw } = require('mysql');
 const Fetcher = require('./fetcher');
 
 let now = new Date();
@@ -9,26 +8,18 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	async fetch({ player, since = year, raw }) {
+	parse(payload, { player, since = year } = {}) {
 		let events = [];
 
 		if (!player) {
 			throw new Error('Player ID is required');
 		}
 
-		let url = `https://www.atptour.com/en/-/www/activity/last/${player}`;
-		let response = await this.fetchATP(url);
-
-		if (!response) {
+		if (!payload || !Array.isArray(payload.Activity)) {
 			return null;
 		}
 
-		if (raw != undefined && (raw == '' || raw != 0)) {
-			return response;
-		}
-
-
-		for (let activity of response.Activity) {
+		for (let activity of payload.Activity) {
 			if (since != undefined && activity.EventYear < since) {
 				continue;
 			}
@@ -156,12 +147,21 @@ class Module extends Fetcher {
 
 		return {
 			player: player.toUpperCase(),
-			wins: response.Won,
-			losses: response.Lost,
-			titles: response.Titles,
-			prize: response.Prize,
+			wins: payload.Won,
+			losses: payload.Lost,
+			titles: payload.Titles,
+			prize: payload.Prize,
 			events: events
 		};
+	}
+
+	async fetch({ player } = {}) {
+		if (!player) {
+			throw new Error('Player ID is required');
+		}
+
+		let url = `https://www.atptour.com/en/-/www/activity/last/${player}`;
+		return await this.fetchATP(url);
 	}
 }
 

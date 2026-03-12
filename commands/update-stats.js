@@ -20,7 +20,8 @@ class Module extends Command {
 
 		let Fetcher = require('../src/fetch-stats.js');
 		let fetcher = new Fetcher();
-		let details = await fetcher.fetch({});
+		let raw = await fetcher.fetch();
+		let details = fetcher.parse(raw);
 
 		for (let entry of details) {
 			let sql = ``;

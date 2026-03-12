@@ -121,7 +121,8 @@ class Module extends Command {
 
 		try {
 			while (true) {
-				let events = await liveFetcher.fetch();
+				let raw = await liveFetcher.fetch();
+				let events = await liveFetcher.parse(raw);
                 
 
                 events = events.filter((event) => {

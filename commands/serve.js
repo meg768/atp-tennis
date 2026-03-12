@@ -62,12 +62,10 @@ class Module extends Command {
 
 		app.get('/api/live', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query);
-
 				let Fetcher = require('../src/fetch-live.js');
 				let fetcher = new Fetcher();
-				let data = await fetcher.fetch();
-				return data;
+				let raw = await fetcher.fetch();
+				return await fetcher.parse(raw);
 			});
 		});
 
@@ -77,8 +75,8 @@ class Module extends Command {
 
 				let Fetcher = require('../src/fetch-rankings.js');
 				let fetcher = new Fetcher(options);
-				let data = await fetcher.fetch();
-				return data;
+				let raw = await fetcher.fetch(options);
+				return fetcher.parse(raw);
 			});
 		});
 
@@ -95,8 +93,13 @@ class Module extends Command {
 
 				let Fetcher = require('../src/fetch-oddset.js');
 				let fetcher = new Fetcher(options);
-				let data = await fetcher.fetch(options);
-				return data;
+				let raw = await fetcher.fetch(options);
+
+				if (options.raw != undefined && (options.raw == '' || options.raw != 0)) {
+					return raw;
+				}
+
+				return fetcher.parse(raw, { states: options.states });
 			});
 		});
 

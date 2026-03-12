@@ -1,14 +1,32 @@
+const Fetcher = require('./fetcher');
 
-export default async function () {
-	const url = 'https://www.atptour.com/-/tournaments/explore/1000'; // not a JSON endpoint!
+const UPCOMING_EVENTS_URL = 'https://www.atptour.com/-/tournaments/explore/1000';
 
-	function parseStartDate(formattedDate) {
-		const match = formattedDate.match(/^(\d{1,2})\s*-\s*(\d{1,2})\s*(\w+),\s*(\d{4})/) || formattedDate.match(/^(\d{1,2})\s*(\w+)\s*-\s*(\d{1,2})\s*(\w+),\s*(\d{4})/);
+class Module extends Fetcher {
+	constructor(options) {
+		super(options);
+	}
 
-		let day, monthName, year;
-		if (match?.length === 5) [, day, , monthName, year] = match;
-		else if (match?.length === 6) [, day, monthName, , , year] = match;
-		else return null;
+	parseStartDate(formattedDate) {
+		if (!formattedDate || typeof formattedDate !== 'string') {
+			return null;
+		}
+
+		const match =
+			formattedDate.match(/^(\d{1,2})\s*-\s*(\d{1,2})\s*(\w+),\s*(\d{4})/) ||
+			formattedDate.match(/^(\d{1,2})\s*(\w+)\s*-\s*(\d{1,2})\s*(\w+),\s*(\d{4})/);
+
+		let day;
+		let monthName;
+		let year;
+
+		if (match?.length === 5) {
+			[, day, , monthName, year] = match;
+		} else if (match?.length === 6) {
+			[, day, monthName, , , year] = match;
+		} else {
+			return null;
+		}
 
 		const months = {
 			January: '01',
@@ -28,21 +46,31 @@ export default async function () {
 		return `${year}-${months[monthName] || '01'}-${day.padStart(2, '0')}`;
 	}
 
-	const response = await fetch(url);
+	parse(payload) {
+		if (!payload || !Array.isArray(payload.TournamentsList)) {
+			return [];
+		}
 
-	if (!response.headers.get('content-type')?.includes('application/json')) {
-		throw new Error('Expected JSON but got something else (probably HTML)');
+		return payload.TournamentsList.map(tournament => ({
+			name: tournament.Name,
+			title: tournament.Title,
+			location: tournament.Location,
+			country: tournament.CountryCode,
+			type: tournament.Type,
+			date: this.parseStartDate(tournament.FormattedDate)
+		}));
 	}
 
-	// This will throw unless response is actual JSON (see earlier warning)
-	const data = await response.json();
+	async fetch() {
+		const response = await fetch(UPCOMING_EVENTS_URL);
+		const contentType = response.headers.get('content-type') || '';
 
-	return data.TournamentsList.map(t => ({
-		name: t.Name,
-		title: t.Title,
-		location: t.Location,
-		country: t.CountryCode,
-		type: t.Type,
-		date: parseStartDate(t.FormattedDate)
-	}));
+		if (!contentType.includes('application/json')) {
+			throw new Error('Expected JSON but got something else (probably HTML)');
+		}
+
+		return await response.json();
+	}
 }
+
+module.exports = Module;

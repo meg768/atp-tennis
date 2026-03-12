@@ -9,13 +9,7 @@ class Module extends Fetcher {
 
 	async fetch() {
 		let url = `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`;
-		let response = await this.fetchATP(url);
-
-		if (!response) {
-			return null;
-		}
-		this.response = response;
-		return await this.parse();
+		return await this.fetchATP(url);
 	}
 
 	getTournament({ tournamentIndex }) {
@@ -186,7 +180,13 @@ class Module extends Fetcher {
 		};
 	}
 
-	async parse() {
+	async parse(payload) {
+		this.response = payload;
+
+		if (!this.response) {
+			return [];
+		}
+
 		let result = [];
 
 		for (let tournamentIndex = 0; ; tournamentIndex++) {

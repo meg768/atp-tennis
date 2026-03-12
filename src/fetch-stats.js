@@ -1,37 +1,34 @@
-const { raw } = require('mysql');
 const Fetcher = require('./fetcher');
-
-let now = new Date();
-let year = now.getFullYear();
 
 class Module extends Fetcher {
 	constructor(options) {
 		super(options);
 	}
 
-	async fetch() {
+	parse(payload) {
+		if (!payload || typeof payload !== 'object') {
+			return [];
+		}
+
 		let result = {};
-
-		let fetchStats = async ({ type, field }) => {
-			let results = {};
-
-			let url = `https://www.atptour.com/en/-/www/StatsLeaderboard/${type}/52week/all/all/false?v=1`;
-			let response = await this.fetchATP(url);
-
-			if (!response) {
-				return null;
-			}
-
-
-			for (let item of response.Leaderboard) {
-				results[item.PlayerId] = item.Stats[field];
-			}
-
-			return results;
+		const typeToField = {
+			pressure: 'PressureRating',
+			serve: 'ServeRating',
+			return: 'ReturnRating'
 		};
 
-		let extractStats = async ({ type, field }) => {
-			let stats = await fetchStats({ type: type, field: field });
+		let extractStats = ({ type, field }) => {
+			let stats = {};
+			let leaderboard = payload[type]?.Leaderboard;
+
+			if (Array.isArray(leaderboard)) {
+				for (let item of leaderboard) {
+					if (!item?.PlayerId) {
+						continue;
+					}
+					stats[item.PlayerId] = item?.Stats?.[field];
+				}
+			}
 
 			if (stats) {
 				let high = undefined;
@@ -53,9 +50,9 @@ class Module extends Fetcher {
 			}
 		};
 
-		await extractStats({ type: 'pressure', field: 'PressureRating' });
-		await extractStats({ type: 'serve', field: 'ServeRating' });
-		await extractStats({ type: 'return', field: 'ReturnRating' });
+		for (let [type, field] of Object.entries(typeToField)) {
+			extractStats({ type, field });
+		}
 
 		let array = [];
 
@@ -63,6 +60,22 @@ class Module extends Fetcher {
 			array.push(value);
 		}
 		return array;
+	}
+
+	async fetch() {
+		const urls = {
+			pressure: 'https://www.atptour.com/en/-/www/StatsLeaderboard/pressure/52week/all/all/false?v=1',
+			serve: 'https://www.atptour.com/en/-/www/StatsLeaderboard/serve/52week/all/all/false?v=1',
+			return: 'https://www.atptour.com/en/-/www/StatsLeaderboard/return/52week/all/all/false?v=1'
+		};
+
+		let payload = {};
+
+		for (let [type, url] of Object.entries(urls)) {
+			payload[type] = await this.fetchATP(url);
+		}
+
+		return payload;
 	}
 }
 
