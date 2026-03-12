@@ -82,7 +82,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/oddset', async (request, response) => {
+		app.get('/api/oddset', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
