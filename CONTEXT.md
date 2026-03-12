@@ -66,6 +66,7 @@ The service listens on `127.0.0.1:3004` (localhost).
 - `GET /api/ping`
 - `GET /api/live`
 - `GET /api/rankings`
+- `GET /oddset`
 - `POST /api/query`
 
 `/api/query` executes SQL directly against the database and should only be exposed in a trusted network.
@@ -76,6 +77,7 @@ Examples:
 curl http://127.0.0.1:3004/ok
 curl http://127.0.0.1:3004/api/ping
 curl http://127.0.0.1:3004/api/rankings
+curl http://127.0.0.1:3004/oddset
 curl -X POST http://127.0.0.1:3004/api/query \
   -H "Content-Type: application/json" \
   -d '{"sql":"SELECT 1"}'
@@ -187,6 +189,18 @@ For fresh dev/prod environments:
   - preserves already known statuses (`Completed`, `Aborted`, `Walkover`)
   - uses `score` as fallback to derive `Walkover` / `Aborted` / `Completed`
 - User reported a 2026 import run looked good after these changes.
+
+## Session Memory (2026-03-12)
+- New module added: `src/fetch-oddset.js`.
+- Purpose: fetch ATP match odds from Kambi/Svenska Spel endpoint:
+  - `https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true`
+- Parser filters by event state (`STARTED`, `NOT_STARTED` by default), sorts by start time, and maps rows to:
+  - `start`, `tournament`, `score`, `playerA{name, odds}`, `playerB{name, odds}`
+- Module includes request timeout handling (`AbortController`) and explicit error messages for fetch/HTTP/JSON failures.
+- `serve` command now exposes endpoint `GET /oddset` using this module.
+- Module now follows project fetcher pattern:
+  - inherits from `src/fetcher.js`
+  - exports via CommonJS (`module.exports`)
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory

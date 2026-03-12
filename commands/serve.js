@@ -81,6 +81,24 @@ class Module extends Command {
 				return data;
 			});
 		});
+
+		app.get('/oddset', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query);
+
+				if (typeof options.states === 'string') {
+					options.states = options.states
+						.split(',')
+						.map(value => value.trim())
+						.filter(Boolean);
+				}
+
+				let Fetcher = require('../src/fetch-oddset.js');
+				let fetcher = new Fetcher(options);
+				let data = await fetcher.fetch(options);
+				return data;
+			});
+		});
 /*
 		app.get('/api/atp', async (request, response) => {
 			return this.execute(request, response, async () => {
