@@ -32,7 +32,7 @@ class Module extends Command {
 
 		let fetcher = new Fetcher();
 		let raw = await fetcher.fetch({ player: this.argv.player });
-		let json = fetcher.parse(raw, { player: this.argv.player });
+		let json = fetcher.parse(raw);
 
 		fetcher.output({ fileName: this.argv.output, json });
 	}

@@ -27,7 +27,7 @@ class Module extends Command {
 
 		let fetcher = new Fetcher();
 		let raw = await fetcher.fetch({ event: this.argv.event });
-		let json = fetcher.parse(raw, { event: this.argv.event });
+		let json = fetcher.parse(raw);
 
 		fetcher.output({ fileName: this.argv.output, json });
 	}

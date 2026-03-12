@@ -11,6 +11,7 @@ class Import extends Command {
 	constructor() {
 		super({ command: 'import [options]', description: 'Import matches' });
 		this.mysql = require('../src/mysql.js');
+		this.fetcherOptions = { delay: 500 };
 	}
 
 	arguments(args) {
@@ -67,9 +68,9 @@ class Import extends Command {
 		const playerCount = Object.keys(players).length;
 		await this.log(`Processing player ${player} (${playerCount})...`);
 
-		let activityFetcher = new ActivityFetcher();
-		let activityRaw = await activityFetcher.fetch({ player: player });
-		let activity = activityFetcher.parse(activityRaw, { player: player, since: this.argv.since });
+		let activityFetcher = new ActivityFetcher(this.fetcherOptions);
+		let activityRaw = await activityFetcher.fetch({ player: player, since: this.argv.since });
+		let activity = activityFetcher.parse(activityRaw);
 
 		if (!activity || !activity.events) {
 			await this.log(`No activity found for player ${player}, skipping.`);
@@ -124,7 +125,7 @@ class Import extends Command {
 		await this.mysql.query(`UPDATE players SET serve_rating = NULL, return_rating = NULL, pressure_rating = NULL`);
 
 		let Fetcher = require('../src/fetch-stats.js');
-		let fetcher = new Fetcher();
+		let fetcher = new Fetcher(this.fetcherOptions);
 		let raw = await fetcher.fetch();
 		let details = fetcher.parse(raw);
 
@@ -144,7 +145,7 @@ class Import extends Command {
 
 	async getTopPlayerRankings(top) {
 		let Fetcher = require('../src/fetch-rankings');
-		let fetcher = new Fetcher();
+		let fetcher = new Fetcher(this.fetcherOptions);
 		let raw = await fetcher.fetch({ top: top });
 		let rankings = fetcher.parse(raw);
 
@@ -276,12 +277,12 @@ class Import extends Command {
 				await this.log(`Event ${i}/${total}: ${event.name || eventID}...`);
 			}
 
-			let eventFetcher = new EventFetcher();
+			let eventFetcher = new EventFetcher(this.fetcherOptions);
 			let details = null;
 
 			try {
 				let detailsRaw = await eventFetcher.fetch({ event: eventID });
-				details = eventFetcher.parse(detailsRaw, { event: eventID });
+				details = eventFetcher.parse(detailsRaw);
 			} catch (error) {
 				await this.log(`ERROR fetching event ${eventID}: ${error.message}`);
 				continue;
@@ -346,9 +347,9 @@ class Import extends Command {
 			}
 
 			try {
-				let playerFetcher = new PlayerFetcher();
+				let playerFetcher = new PlayerFetcher(this.fetcherOptions);
 				let detailsRaw = await playerFetcher.fetch({ player: player });
-				let details = playerFetcher.parse(detailsRaw, { player: player });
+				let details = playerFetcher.parse(detailsRaw);
 
 				if (!details) {
 					continue;

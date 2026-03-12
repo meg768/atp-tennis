@@ -14,7 +14,7 @@ class Module extends Fetcher {
 		this.requestTimeoutMs = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
 	}
 
-	parseRows(raw, { states = this.states } = {}) {
+	parseRows(raw) {
 		const STATE_STARTED = 'STARTED';
 
 		function toDecimalOdds(odds) {
@@ -104,7 +104,7 @@ class Module extends Fetcher {
 			};
 		}
 
-		const trackedStates = new Set(states);
+		const trackedStates = new Set(this.states);
 		const rows = (raw?.events || [])
 			.filter(item => trackedStates.has(item.event?.state))
 			.map(toMatchRow);
@@ -114,7 +114,7 @@ class Module extends Fetcher {
 		return rows;
 	}
 
-	parse(raw, { states = this.states } = {}) {
+	parse(raw) {
 		function toOutputRow(row) {
 			return {
 				start: row.start,
@@ -131,7 +131,7 @@ class Module extends Fetcher {
 			};
 		}
 
-		const rows = this.parseRows(raw, { states });
+		const rows = this.parseRows(raw);
 		return rows.map(toOutputRow);
 	}
 
@@ -158,13 +158,16 @@ class Module extends Fetcher {
 		}
 	}
 
-	async fetchRows({ states = this.states, url = this.url, requestTimeoutMs = this.requestTimeoutMs } = {}) {
-		const raw = await this.fetch({ url, requestTimeoutMs });
-		return this.parseRows(raw, { states });
+	async fetchRows(options = {}) {
+		const raw = await this.fetch(options);
+		return this.parseRows(raw);
 	}
 
-	async fetch({ url = this.url, requestTimeoutMs = this.requestTimeoutMs } = {}) {
-		return await this.fetchPayload({ url, requestTimeoutMs });
+	async fetch({ url = this.url, states = this.states, requestTimeoutMs = this.requestTimeoutMs } = {}) {
+		this.url = url;
+		this.requestTimeoutMs = requestTimeoutMs;
+		this.states = Array.isArray(states) ? states : this.states;
+		return await this.fetchPayload({ url: this.url, requestTimeoutMs: this.requestTimeoutMs });
 	}
 }
 

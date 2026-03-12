@@ -6,10 +6,14 @@ let year = now.getFullYear();
 class Module extends Fetcher {
 	constructor(options) {
 		super(options);
+		this.player = null;
+		this.since = year;
 	}
 
-	parse(raw, { player, since = year } = {}) {
+	parse(raw) {
 		let events = [];
+		const player = this.player;
+		const since = this.since;
 
 		if (!player) {
 			throw new Error('Player ID is required');
@@ -155,12 +159,16 @@ class Module extends Fetcher {
 		};
 	}
 
-	async fetch({ player } = {}) {
+	async fetch({ player, since } = {}) {
 		if (!player) {
 			throw new Error('Player ID is required');
 		}
 
-		let url = `https://www.atptour.com/en/-/www/activity/last/${player}`;
+		this.player = String(player).toUpperCase();
+		const parsedSince = Number(since);
+		this.since = since != undefined && Number.isFinite(parsedSince) ? parsedSince : year;
+
+		let url = `https://www.atptour.com/en/-/www/activity/last/${this.player}`;
 		return await this.fetchATP(url);
 	}
 }

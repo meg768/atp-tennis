@@ -1,8 +1,11 @@
 const Gopher = require('./gopher');
 
 class Fetcher {
-	constructor(options) {
-		this.log = options?.log || console.log;
+	constructor(options = {}) {
+		this.log = options.log || console.log;
+
+		const delay = Number(options.delay);
+		this.delay = Number.isFinite(delay) && delay > 0 ? delay : 0;
 	}
 
 	async fetchATP(url, options) {
@@ -23,8 +26,11 @@ class Fetcher {
 	}
 
 	async fetchURL(url, options) {
-		await new Promise(resolve => setTimeout(resolve, 500));
-		console.log(`Fetching URL: ${url}`);
+		if (this.delay > 0) {
+			await new Promise(resolve => setTimeout(resolve, this.delay));
+		}
+
+		this.log(`Fetching URL: ${url}`);
 		return await Gopher.fetch(url, options);
 	}
 

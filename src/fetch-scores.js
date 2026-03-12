@@ -3,9 +3,12 @@ const Fetcher = require('./fetcher');
 class Module extends Fetcher {
 	constructor(options) {
 		super(options);
+		this.event = null;
 	}
 
-	parse(raw, { event } = {}) {
+	parse(raw) {
+		const event = this.event;
+
 		function getMatchStatus(match) {
 			const statusText = [match.MatchStateReasonMessage, match.Message, match.ResultString]
 				.filter(Boolean)
@@ -104,6 +107,8 @@ class Module extends Fetcher {
 		if (!event) {
 			throw new Error('Event ID is required');
 		}
+
+		this.event = event;
 
 		let [eventYear, eventID] = event.split('-');
 

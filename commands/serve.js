@@ -99,7 +99,7 @@ class Module extends Command {
 					return raw;
 				}
 
-				return fetcher.parse(raw, { states: options.states });
+				return fetcher.parse(raw);
 			});
 		});
 
