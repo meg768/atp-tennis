@@ -90,6 +90,7 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/live`
 - `GET /api/rankings`
 - `GET /api/oddset`
+- `GET /api/calendar`
 - `POST /api/query`
 
 Examples:
@@ -100,6 +101,7 @@ curl http://127.0.0.1:3004/api/ping
 curl http://127.0.0.1:3004/api/live
 curl http://127.0.0.1:3004/api/rankings
 curl "http://127.0.0.1:3004/api/oddset?states=STARTED,NOT_STARTED"
+curl http://127.0.0.1:3004/api/calendar
 curl -X POST http://127.0.0.1:3004/api/query \
   -H "Content-Type: application/json" \
   -d '{"sql":"SELECT 1"}'
@@ -119,6 +121,7 @@ curl -X POST http://127.0.0.1:3004/api/query \
 - `https://www.atptour.com/en/-/www/StatsLeaderboard/{type}/52week/all/all/false?v=1`
 - `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
 - `https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true`
+- `https://www.atptour.com/en/-/tournaments/calendar/tour`
 
 Reference docs:
 - [Project Endpoints README](./endpoints/README.md)

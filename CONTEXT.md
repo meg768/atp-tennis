@@ -66,7 +66,8 @@ The service listens on `127.0.0.1:3004` (localhost).
 - `GET /api/ping`
 - `GET /api/live`
 - `GET /api/rankings`
-- `GET /oddset`
+- `GET /api/oddset`
+- `GET /api/calendar`
 - `POST /api/query`
 
 `/api/query` executes SQL directly against the database and should only be exposed in a trusted network.
@@ -77,7 +78,8 @@ Examples:
 curl http://127.0.0.1:3004/ok
 curl http://127.0.0.1:3004/api/ping
 curl http://127.0.0.1:3004/api/rankings
-curl http://127.0.0.1:3004/oddset
+curl "http://127.0.0.1:3004/api/oddset?states=STARTED,NOT_STARTED"
+curl http://127.0.0.1:3004/api/calendar
 curl -X POST http://127.0.0.1:3004/api/query \
   -H "Content-Type: application/json" \
   -d '{"sql":"SELECT 1"}'
@@ -94,6 +96,7 @@ This is a deduplicated list from the current codebase.
 - `https://www.atptour.com/en/-/www/players/hero/{player}`
 - `https://www.atptour.com/en/-/www/StatsLeaderboard/{type}/52week/all/all/false?v=1`
 - `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
+- `https://www.atptour.com/en/-/tournaments/calendar/tour`
 
 ### Other ATP References in Repo
 - `https://www.atptour.com/-/tournaments/explore/1000` (in `src/fetch-upcoming-events.js`)
@@ -197,11 +200,27 @@ For fresh dev/prod environments:
 - Parser filters by event state (`STARTED`, `NOT_STARTED` by default), sorts by start time, and maps rows to:
   - `start`, `tournament`, `score`, `playerA{name, odds}`, `playerB{name, odds}`
 - Module includes request timeout handling (`AbortController`) and explicit error messages for fetch/HTTP/JSON failures.
-- `serve` command now exposes endpoint `GET /oddset` using this module.
+- `serve` command now exposes endpoint `GET /api/oddset` using this module.
 - Module now follows project fetcher pattern:
   - inherits from `src/fetcher.js`
   - exports via CommonJS (`module.exports`)
 - Endpoint reference folder renamed from `atp-endpoints/` to `endpoints/`, and `endpoints/README.md` now includes the Oddset endpoint.
+- New module added: `src/fetch-calendar.js`.
+  - Purpose: fetch ATP tournament calendar from:
+    - `https://www.atptour.com/en/-/tournaments/calendar/tour`
+  - Current behavior:
+    - `fetch()` returns raw passthrough JSON from endpoint.
+    - `parse(payload)` is an instance method (not static) that currently returns:
+      - `{ events: [{ id, name, date, location, type }] }`
+      - `id` format is `YYYY-Id` based on `TournamentDates[].DisplayDate` year (fallback: original `Id` if year is missing).
+- `serve` command now exposes endpoint `GET /api/calendar` (returns parsed `{ events: [...] }`).
+- New test area added: `sandbox/`.
+  - `sandbox/fetch-calendar.js` runs `fetch-calendar` with no parameters.
+  - It always writes:
+    - `sandbox/output/fetch-calendar.parsed.json`
+    - `sandbox/output/fetch-calendar.raw.json`
+  - `sandbox/README.md` documents the simplified sandbox flow.
+  - Team convention: sandbox-specific iteration notes belong in `sandbox/README.md`, not top-level `LOG.md`.
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory

@@ -99,6 +99,15 @@ class Module extends Command {
 				return data;
 			});
 		});
+
+		app.get('/api/calendar', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let Fetcher = require('../src/fetch-calendar.js');
+				let fetcher = new Fetcher();
+				let raw = await fetcher.fetch();
+				return fetcher.parse(raw);
+			});
+		});
 /*
 		app.get('/api/atp', async (request, response) => {
 			return this.execute(request, response, async () => {
