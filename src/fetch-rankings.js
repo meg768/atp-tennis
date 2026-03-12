@@ -5,15 +5,15 @@ class FetchRankings extends Fetcher {
 		super(options);
 	}
 
-	parse(payload) {
-		if (!payload?.Data?.Rankings?.Players || !Array.isArray(payload.Data.Rankings.Players)) {
+	parse(raw) {
+		if (!raw?.Data?.Rankings?.Players || !Array.isArray(raw.Data.Rankings.Players)) {
 			return { players: [] };
 		}
 
 		return {
-			players: payload.Data.Rankings.Players.map(player => {
+			players: raw.Data.Rankings.Players.map(player => {
 				return {
-					date: payload.Data.Rankings.RankDate,
+					date: raw.Data.Rankings.RankDate,
 					player: player.PlayerId,
 					name: `${player.FirstName} ${player.LastName}`,
 					age: player.AgeAtRankDate,

@@ -3,33 +3,34 @@ const Fetcher = require('./fetcher');
 class Module extends Fetcher {
 	constructor(options) {
 		super(options);
+		this.player = null;
 	}
 
-	parse(payload, { player } = {}) {
-		let results = {};
+	parse(raw) {
+		const player = this.player;
 
 		if (!player) {
 			throw new Error('Player ID is required');
 		}
 
-		if (!payload) {
+		if (!raw) {
 			return null;
 		}
 
 		let result = {};
 
 		result.player = player.toUpperCase();
-		result.name = `${payload.FirstName ? payload.FirstName + ' ' : ''}${payload.LastName}`;
-		result.country = payload.NatlId;
-		result.age = payload.Age;
-		result.birthdate = payload.BirthDate ? payload.BirthDate.split('T')[0] : null;
-		result.height = payload.HeightCm > 0 ? payload.HeightCm : null;
-		result.weight = payload.WeightKg > 0 ? payload.WeightKg : null;
-		result.url = `https://www.atptour.com${payload.ScRelativeUrlPlayerProfile}`;
+		result.name = `${raw.FirstName ? raw.FirstName + ' ' : ''}${raw.LastName}`;
+		result.country = raw.NatlId;
+		result.age = raw.Age;
+		result.birthdate = raw.BirthDate ? raw.BirthDate.split('T')[0] : null;
+		result.height = raw.HeightCm > 0 ? raw.HeightCm : null;
+		result.weight = raw.WeightKg > 0 ? raw.WeightKg : null;
+		result.url = `https://www.atptour.com${raw.ScRelativeUrlPlayerProfile}`;
 
-		result.pro = payload.ProYear;
-		result.coach = payload.Coach;
-		result.active = payload.Active?.Description == 'Active';
+		result.pro = raw.ProYear;
+		result.coach = raw.Coach;
+		result.active = raw.Active?.Description == 'Active';
 
 		result.ranking = {};
 		result.matches = {};
@@ -43,27 +44,23 @@ class Module extends Fetcher {
 
 		result.ranking.current = {};
 		result.ranking.highest = {};
-		result.ranking.current.rank = payload.SglRank;
-		result.ranking.highest.rank = payload.SglHiRank;
-		result.ranking.highest.date = payload.SglHiRankDate;
+		result.ranking.current.rank = raw.SglRank;
+		result.ranking.highest.rank = raw.SglHiRank;
+		result.ranking.highest.date = raw.SglHiRankDate;
 
-		result.titles.ytd = payload.SglYtdTitles;
-		result.titles.career = payload.SglCareerTitles;
+		result.titles.ytd = raw.SglYtdTitles;
+		result.titles.career = raw.SglCareerTitles;
 
-		result.prize.ytd = payload.SglYtdPrizeFormatted ? payload.SglYtdPrizeFormatted.replace(/[^0-9-]/g, '') : null;
-		result.prize.career = payload.CareerPrizeFormatted ? payload.CareerPrizeFormatted.replace(/[^0-9-]/g, '') : null;
+		result.prize.ytd = raw.SglYtdPrizeFormatted ? raw.SglYtdPrizeFormatted.replace(/[^0-9-]/g, '') : null;
+		result.prize.career = raw.CareerPrizeFormatted ? raw.CareerPrizeFormatted.replace(/[^0-9-]/g, '') : null;
 
-		result.matches.ytd.wins = payload.SglYtdWon;
-		result.matches.ytd.losses = payload.SglYtdLost;
+		result.matches.ytd.wins = raw.SglYtdWon;
+		result.matches.ytd.losses = raw.SglYtdLost;
 
-		result.matches.career.wins = payload.SglCareerWon;
-		result.matches.career.losses = payload.SglCareerLost;
+		result.matches.career.wins = raw.SglCareerWon;
+		result.matches.career.losses = raw.SglCareerLost;
 
-		result.raw = payload;
-
-		if (!payload) {
-			return results;
-		}
+		result.raw = raw;
 
 		return result;
 	}
@@ -73,7 +70,9 @@ class Module extends Fetcher {
 			throw new Error('Player ID is required');
 		}
 
-		let url = `https://www.atptour.com/en/-/www/players/hero/${player}`;
+		this.player = String(player).toUpperCase();
+
+		let url = `https://www.atptour.com/en/-/www/players/hero/${this.player}`;
 		return await this.fetchATP(url);
 	}
 }

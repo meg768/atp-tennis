@@ -76,7 +76,7 @@ Rules:
 - Reset `src/fetch-calendar.js` to raw passthrough mode.
 - Separated responsibilities:
   - `fetch()` returns raw endpoint JSON.
-  - `parse(payload)` (instance method, not static) currently returns payload unchanged.
+  - `parse(raw)` (instance method, not static) currently returns raw unchanged.
 - Updated sandbox script to call `fetcher.parse(raw)` instead of static parse call.
 - Affected files:
   - `src/fetch-calendar.js`

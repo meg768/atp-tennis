@@ -5,8 +5,8 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	parse(payload) {
-		if (!payload || typeof payload !== 'object') {
+	parse(raw) {
+		if (!raw || typeof raw !== 'object') {
 			return [];
 		}
 
@@ -19,7 +19,7 @@ class Module extends Fetcher {
 
 		let extractStats = ({ type, field }) => {
 			let stats = {};
-			let leaderboard = payload[type]?.Leaderboard;
+			let leaderboard = raw[type]?.Leaderboard;
 
 			if (Array.isArray(leaderboard)) {
 				for (let item of leaderboard) {

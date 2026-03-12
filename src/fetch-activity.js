@@ -8,18 +8,18 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	parse(payload, { player, since = year } = {}) {
+	parse(raw, { player, since = year } = {}) {
 		let events = [];
 
 		if (!player) {
 			throw new Error('Player ID is required');
 		}
 
-		if (!payload || !Array.isArray(payload.Activity)) {
+		if (!raw || !Array.isArray(raw.Activity)) {
 			return null;
 		}
 
-		for (let activity of payload.Activity) {
+		for (let activity of raw.Activity) {
 			if (since != undefined && activity.EventYear < since) {
 				continue;
 			}
@@ -147,10 +147,10 @@ class Module extends Fetcher {
 
 		return {
 			player: player.toUpperCase(),
-			wins: payload.Won,
-			losses: payload.Lost,
-			titles: payload.Titles,
-			prize: payload.Prize,
+			wins: raw.Won,
+			losses: raw.Lost,
+			titles: raw.Titles,
+			prize: raw.Prize,
 			events: events
 		};
 	}

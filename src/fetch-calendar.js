@@ -5,8 +5,8 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	parse(payload) {
-		if (payload == null || typeof payload !== 'object') {
+	parse(raw) {
+		if (raw == null || typeof raw !== 'object') {
 			return { events: [] };
 		}
 
@@ -45,7 +45,7 @@ class Module extends Fetcher {
 			return year ? `${year}-${normalizedId}` : normalizedId;
 		}
 
-		const dateGroups = Array.isArray(payload?.TournamentDates) ? payload.TournamentDates : [];
+		const dateGroups = Array.isArray(raw?.TournamentDates) ? raw.TournamentDates : [];
 		const events = [];
 
 		for (const dateGroup of dateGroups) {

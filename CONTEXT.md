@@ -210,7 +210,7 @@ For fresh dev/prod environments:
     - `https://www.atptour.com/en/-/tournaments/calendar/tour`
   - Current behavior:
     - `fetch()` returns raw passthrough JSON from endpoint.
-    - `parse(payload)` is an instance method (not static) that currently returns:
+    - `parse(raw)` is an instance method (not static) that currently returns:
       - `{ events: [{ id, name, date, location, type }] }`
       - `id` format is `YYYY-Id` based on `TournamentDates[].DisplayDate` year (fallback: original `Id` if year is missing).
 - `serve` command now exposes endpoint `GET /api/calendar` (returns parsed `{ events: [...] }`).

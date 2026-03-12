@@ -180,8 +180,8 @@ class Module extends Fetcher {
 		};
 	}
 
-	async parse(payload) {
-		this.response = payload;
+	async parse(raw) {
+		this.response = raw;
 
 		if (!this.response) {
 			return [];

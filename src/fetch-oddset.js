@@ -14,7 +14,7 @@ class Module extends Fetcher {
 		this.requestTimeoutMs = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
 	}
 
-	parseRows(payload, { states = this.states } = {}) {
+	parseRows(raw, { states = this.states } = {}) {
 		const STATE_STARTED = 'STARTED';
 
 		function toDecimalOdds(odds) {
@@ -105,7 +105,7 @@ class Module extends Fetcher {
 		}
 
 		const trackedStates = new Set(states);
-		const rows = (payload?.events || [])
+		const rows = (raw?.events || [])
 			.filter(item => trackedStates.has(item.event?.state))
 			.map(toMatchRow);
 
@@ -114,7 +114,7 @@ class Module extends Fetcher {
 		return rows;
 	}
 
-	parse(payload, { states = this.states } = {}) {
+	parse(raw, { states = this.states } = {}) {
 		function toOutputRow(row) {
 			return {
 				start: row.start,
@@ -131,7 +131,7 @@ class Module extends Fetcher {
 			};
 		}
 
-		const rows = this.parseRows(payload, { states });
+		const rows = this.parseRows(raw, { states });
 		return rows.map(toOutputRow);
 	}
 
@@ -159,8 +159,8 @@ class Module extends Fetcher {
 	}
 
 	async fetchRows({ states = this.states, url = this.url, requestTimeoutMs = this.requestTimeoutMs } = {}) {
-		const payload = await this.fetch({ url, requestTimeoutMs });
-		return this.parseRows(payload, { states });
+		const raw = await this.fetch({ url, requestTimeoutMs });
+		return this.parseRows(raw, { states });
 	}
 
 	async fetch({ url = this.url, requestTimeoutMs = this.requestTimeoutMs } = {}) {

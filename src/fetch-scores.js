@@ -5,7 +5,7 @@ class Module extends Fetcher {
 		super(options);
 	}
 
-	parse(payload, { event } = {}) {
+	parse(raw, { event } = {}) {
 		function getMatchStatus(match) {
 			const statusText = [match.MatchStateReasonMessage, match.Message, match.ResultString]
 				.filter(Boolean)
@@ -31,21 +31,21 @@ class Module extends Fetcher {
 			throw new Error('Event ID is required');
 		}
 
-		if (!Array.isArray(payload?.Data) || payload.Data.length === 0) {
+		if (!Array.isArray(raw?.Data) || raw.Data.length === 0) {
 			throw new Error(`No information about event ${event} found.`);
 		}
 
-		let raw = payload.Data[0];
+		let eventData = raw.Data[0];
 
 		let result = {};
 
 		result.event = event;
-		result.date = raw.PlayStartDate;
-		result.name = raw.EventDisplayName;
-		result.type = raw.EventType;
+		result.date = eventData.PlayStartDate;
+		result.name = eventData.EventDisplayName;
+		result.type = eventData.EventType;
 		result.matches = [];
 
-		for (let match of raw.Matches) {
+		for (let match of eventData.Matches) {
 			// Skip doubles
 			if (match.IsDoubles) {
 				continue;

@@ -28,8 +28,8 @@ class Fetcher {
 		return await Gopher.fetch(url, options);
 	}
 
-	parse(payload) {
-		return payload;
+	parse(raw) {
+		return raw;
 	}
 
 	output({ fileName, json }) {

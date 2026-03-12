@@ -46,12 +46,12 @@ class Module extends Fetcher {
 		return `${year}-${months[monthName] || '01'}-${day.padStart(2, '0')}`;
 	}
 
-	parse(payload) {
-		if (!payload || !Array.isArray(payload.TournamentsList)) {
+	parse(raw) {
+		if (!raw || !Array.isArray(raw.TournamentsList)) {
 			return [];
 		}
 
-		return payload.TournamentsList.map(tournament => ({
+		return raw.TournamentsList.map(tournament => ({
 			name: tournament.Name,
 			title: tournament.Title,
 			location: tournament.Location,
