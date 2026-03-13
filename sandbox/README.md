@@ -13,6 +13,42 @@ Always writes both files to `sandbox/output/`:
 - `fetch-calendar.raw.json` (raw ATP payload)
 - Runs silently on success (no console output).
 
+## Test `fetch-activity`
+
+```bash
+./sandbox/fetch-activity.js
+```
+
+Always writes both files to `sandbox/output/`:
+- `fetch-activity.parsed.json` (parsed activity JSON from `src/fetch-activity.js`)
+- `fetch-activity.raw.json` (raw ATP payload)
+- Uses hardcoded sandbox input: `player=R0DG`, `since=2020`.
+- Runs silently on success (no console output).
+
+## Test `fetch-scores`
+
+```bash
+./sandbox/fetch-scores.js
+```
+
+Always writes both files to `sandbox/output/`:
+- `fetch-scores.parsed.json` (parsed scores JSON from `src/fetch-scores.js`)
+- `fetch-scores.raw.json` (raw ATP payload)
+- Uses hardcoded sandbox input: `event=2024-0339`.
+- Runs silently on success (no console output).
+
+## Test `fetch-rankings`
+
+```bash
+./sandbox/fetch-rankings.js
+```
+
+Always writes both files to `sandbox/output/`:
+- `fetch-rankings.parsed.json` (parsed rankings JSON from `src/fetch-rankings.js`)
+- `fetch-rankings.raw.json` (raw ATP payload)
+- Uses hardcoded sandbox input: `top=100`.
+- Runs silently on success (no console output).
+
 ## Sandbox Convention
 
 - Keep sandbox-specific notes and changes in this file.

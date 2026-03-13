@@ -215,6 +215,9 @@ For fresh dev/prod environments:
 - CLI command registration in `atp.js` has been trimmed further:
   - `import`, `serve`
   - all other command files were removed; sandbox is now the place for endpoint/debug testing
+- Import identity strategy decision:
+  - `fetch-activity` is for recursive player/event discovery only (graph traversal back in time).
+  - canonical `matches.id` should come from ATP archive scores only: `{eventYear}-{eventId}-{matchId}`.
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory
