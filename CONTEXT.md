@@ -178,7 +178,7 @@ For fresh dev/prod environments:
   - `updateRankings(rankings)` now clears only `players.points`, then restores `rank` and `points` for players in the fetched ranking list.
   - This preserves `players.rank` values fetched per player during import, so imported players outside the requested top list do not lose their ranking.
 - `src/fetch-rankings.js` now respects the requested `top` value instead of always fetching top 100.
-- `src/fetch-scores.js` now derives `matches.status` from ATP archive fields (`Status`, `MatchStateReasonMessage`, `Message`, `ResultString`) and import persists that status into `matches.status`.
+- `src/fetch-archive.js` now derives `matches.status` from ATP archive fields (`Status`, `MatchStateReasonMessage`, `Message`, `ResultString`) and import persists that status into `matches.status`.
 - `database/schema.sql` `sp_update_match_status` was updated to stop depending on missing SQL functions (`IS_MATCH_COMPLETED`, `NUMBER_OF_SETS_PLAYED`) and now:
   - preserves already known statuses (`Completed`, `Aborted`, `Walkover`)
   - uses `score` as fallback to derive `Walkover` / `Aborted` / `Completed`

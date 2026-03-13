@@ -2,7 +2,7 @@ let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 
 const ActivityFetcher = require('../src/fetch-activity');
-const EventFetcher = require('../src/fetch-scores');
+const ArchiveFetcher = require('../src/fetch-archive');
 const PlayerFetcher = require('../src/fetch-player');
 
 require('../src/logger')(); // 1 MB
@@ -56,16 +56,16 @@ class Import extends Command {
 		}
 	}
 
-	async importPlayer({ player, players = {}, events = {}, matches = {} }) {
+	async discoverEvents({ player, cache = {}, events = {}, activities = {} }) {
 		let opponents = [];
 
-		if (players[player]) {
+		if (cache[player]) {
 			return;
 		}
 
-		players[player] = true;
+		cache[player] = true;
 
-		const playerCount = Object.keys(players).length;
+		const playerCount = Object.keys(cache).length;
 		await this.log(`Processing player ${player} (${playerCount})...`);
 
 		let activityFetcher = new ActivityFetcher(this.fetcherOptions);
@@ -77,23 +77,17 @@ class Import extends Command {
 			return;
 		}
 
-		let matchCount = 0;
-
 		for (let event of activity.events) {
-			events[event.event] = {
-				id: event.event,
-				date: event.date,
-				name: event.name,
-				location: event.location,
-				type: event.type,
-				surface: event.surface,
-				url: event.url
-			};
+			// Strip matches from event data, they will be completed later with details from the archive fetcher
+			let { matches, ...entry } = event;
 
-			for (let match of event.matches) {
-				matches[match.match] = {
-					id: match.match,
-					event: event.event,
+			entry = { ...(events[entry.id] || {}), ...entry };
+
+			// Add activities with the details we have so far
+			for (let match of matches) {
+				activities[match.id] = {
+					id: match.id,
+					event: entry.id,
 					round: match.round,
 					winner: match.winner.player,
 					winner_rank: match.winner.rank ? match.winner.rank : null,
@@ -101,17 +95,17 @@ class Import extends Command {
 					loser_rank: match.loser.rank ? match.loser.rank : null
 				};
 
-				matchCount++;
-
 				if (match.opponent && !opponents.includes(match.opponent)) {
 					opponents.push(match.opponent);
 				}
 			}
+
+			events[entry.id] = entry;
 		}
 
 		if (opponents.length > 0) {
 			for (let opponent of opponents) {
-				await this.importPlayer({ player: opponent, players: players, events: events, matches: matches });
+				await this.discoverEvents({ player: opponent, cache: cache, events: events, activities: activities });
 			}
 		}
 	}
@@ -170,225 +164,210 @@ class Import extends Command {
 	}
 
 	async import(rankings) {
-		function formatScore(rawScore) {
-			if (!rawScore || typeof rawScore !== 'string') {
-				return rawScore;
-			}
-
-			let text = rawScore.trim();
-
-			text = text.replace(/\b(RET(?:['']?D)?|W\/O|WO|WALKOVER)\b\.?$/i, '').trim();
-
-			if (!text) {
-				return null;
-			}
-
-			const tokens = text.split(/\s+/);
-			return tokens.map(formatSetToken).join(' ');
-		}
-
-		function formatSetToken(token) {
-			if (token.includes('-')) {
-				return token;
-			}
-
-			const tieBreakMatch = token.match(/^(\d+)\((\d+)\)$/);
-			if (tieBreakMatch) {
-				const games = parseCompactGames(tieBreakMatch[1]);
-
-				if (!games) {
-					return token;
-				}
-
-				return `${games[0]}-${games[1]}(${tieBreakMatch[2]})`;
-			}
-
-			const games = parseCompactGames(token);
-
-			if (!games) {
-				return token;
-			}
-
-			return `${games[0]}-${games[1]}`;
-		}
-
-		function parseCompactGames(token) {
-			if (!/^\d+$/.test(token)) {
-				return null;
-			}
-
-			if (token.length === 2) {
-				return [token[0], token[1]];
-			}
-
-			if (token.length === 3) {
-				return [token[0], token.slice(1)];
-			}
-
-			if (token.length === 4) {
-				return [token.slice(0, 2), token.slice(2)];
-			}
-
-			return null;
-		}
-
-		// A function to convert match duration from "HH:MM:SS" to "HH:MM"
-		function formatDuration(duration) {
-			if (!duration) {
-				return null;
-			}
-
-			const parts = duration.split(':');
-
-			if (parts.length === 3) {
-				return `${parts[0]}:${parts[1]}`;
-			} else if (parts.length === 2) {
-				return duration;
-			} else {
-				return null;
-			}
-		}
-
 		let events = {};
-		let players = {};
+		let activities = {};
 		let matches = {};
 
 		await this.log(`Gathering activities from the top ranked ${this.argv.top} players since ${this.argv.since}...`);
 
 		let rankingProbe = new Probe();
+
 		for (let player of rankings.players) {
-			await this.importPlayer({ player: player.player, players: players, events: events, matches: matches });
-		}
-		await this.log(
-			`Activity gathering complete in ${rankingProbe.toString()}. Found ${Object.keys(players).length} players, ${Object.keys(events).length} events, ${Object.keys(matches).length} matches.`
-		);
-
-		// Complete matches with duration and scores
-		await this.log(`Gathering scores and duration from ${Object.entries(events).length} events...`);
-
-		let i = 0;
-		let total = Object.entries(events).length;
-		let eventProbe = new Probe();
-
-		for (let [eventID, event] of Object.entries(events)) {
-			i++;
-
-			if (i % 10 === 0 || i === 1 || i === total) {
-				await this.log(`Event ${i}/${total}: ${event.name || eventID}...`);
-			}
-
-			let eventFetcher = new EventFetcher(this.fetcherOptions);
-			let details = null;
-
-			try {
-				let detailsRaw = await eventFetcher.fetch({ event: eventID });
-				details = eventFetcher.parse(detailsRaw);
-			} catch (error) {
-				await this.log(`ERROR fetching event ${eventID}: ${error.message}`);
-				continue;
-			}
-
-			if (details && details.matches) {
-				for (let match of details.matches) {
-					let entry = matches[match.match] || {};
-
-					entry.id = match.match;
-					entry.event = eventID;
-					entry.round = match.round;
-					entry.winner = match.winner.player;
-					entry.loser = match.loser.player;
-					entry.score = formatScore(match.score);
-					entry.status = match.status;
-					entry.duration = formatDuration(match.duration);
-
-					matches[match.match] = entry;
-
-					players[match.winner.player] = match.winner.player;
-					players[match.loser.player] = match.loser.player;
-				}
-			}
+			await this.discoverEvents({ player: player.player, events: events, activities: activities });
 		}
 
-		await this.log(`Event fetching complete in ${eventProbe.toString()}.`);
+		// Gather up players involved in the matches to update their details later
+		let players = {};
 
 		// Save events
-		await this.log(`Saving ${Object.entries(events).length} events to database...`);
-		for (let [eventID, event] of Object.entries(events)) {
-			await this.mysql.upsert('events', event);
-		}
-		await this.log(`Events saved.`);
+		if (true) {
+			let probe = new Probe();
+			let array = Object.values(events);
+			let output = {};
 
-		// Save matches
-		await this.log(`Saving ${Object.entries(matches).length} matches to database...`);
-		let savedMatches = 0;
-		for (let [matchID, match] of Object.entries(matches)) {
-			await this.mysql.upsert('matches', match);
-			savedMatches++;
-			if (savedMatches % 1000 === 0) {
-				await this.log(`  Saved ${savedMatches}/${Object.entries(matches).length} matches...`);
-			}
-		}
-		await this.log(`Matches saved.`);
+			// Complete matches with duration and scores
+			await this.log(`Fetching scores from ${array.length} events...`);
 
-		// Get details about all involved players
-		players = Object.keys(players);
-		players.sort();
+			for (let i = 0; i < array.length; i++) {
+				let event = array[i];
+				let percent = Math.round((((i + 1) / array.length) * 100) / 1) * 1;
 
-		await this.log(`Updating ${players.length} players...`);
+				// Log every 10%
+				if (percent % 10 == 0) {
+					let message = `${percent}% completed...`;
 
-		let playerProbe = new Probe();
-		let pi = 0;
+					if (!output[percent]) {
+						await this.log(message);
+					}
+					output[percent] = message;
+				}
 
-		for (let player of players) {
-			pi++;
+				let details = null;
 
-			if (pi % 50 === 0 || pi === 1 || pi === players.length) {
-				await this.log(`Player ${pi}/${players.length}: ${player}`);
-			}
-
-			try {
-				let playerFetcher = new PlayerFetcher(this.fetcherOptions);
-				let detailsRaw = await playerFetcher.fetch({ player: player });
-				let details = playerFetcher.parse(detailsRaw);
-
-				if (!details) {
+				try {
+					let fetcher = new ArchiveFetcher(this.fetcherOptions);
+					let raw = await fetcher.fetch({ event: event.id });
+					details = fetcher.parse(raw);
+				} catch (error) {
+					await this.log(`ERROR fetching event ${event.id}: ${error.message}`);
 					continue;
 				}
 
-				await this.mysql.upsert('players', {
-					id: details.player,
-					name: details.name,
-					country: details.country,
-					age: details.age,
-					pro: details.pro,
-					birthdate: details.birthdate,
-					active: details.active,
-					height: details.height,
-					weight: details.weight,
+				if (details?.matches) {
+					for (let match of details.matches) {
+						let entry = {};
 
-					career_titles: details.titles.career,
-					ytd_titles: details.titles.ytd,
+						entry.id = match.id;
+						entry.event = event.id;
+						entry.round = match.round;
+						entry.winner = match.winner.player;
+						entry.loser = match.loser.player;
+						entry.score = match.score;
+						entry.status = match.status;
+						entry.duration = match.duration;
 
-					career_wins: details.matches.career.wins,
-					career_losses: details.matches.career.losses,
+						// Check if we already have some details about this match from the activity fetcher and complement it with the new details
+						let complement = activities[match.id];
 
-					ytd_wins: details.matches.ytd.wins,
-					ytd_losses: details.matches.ytd.losses,
+						if (complement) {
+							entry = { ...complement, ...entry };
+						}
 
-					ytd_prize: details.prize.ytd,
-					career_prize: details.prize.career,
+						matches[match.id] = entry;
 
-					url: details.url,
-					rank: details.ranking.current.rank,
-					highest_rank: details.ranking.highest.rank,
-					highest_rank_date: details.ranking.highest.rank ? details.ranking.highest.date : null
-				});
-			} catch (error) {
-				await this.log(`ERROR updating player ${player}: ${error.message}`);
+						players[match.winner.player] = match.winner.player;
+						players[match.loser.player] = match.loser.player;
+					}
+				}
 			}
+
+			await this.log(`Scores fetched in ${probe.toString()}.`);
 		}
 
-		await this.log(`Players updated in ${playerProbe.toString()}.`);
+		// Save events
+		if (true) {
+			let probe = new Probe();
+			let array = Object.values(events);
+			let output = {};
+
+			await this.log(`Saving ${array.length} events to database...`);
+
+			for (let i = 0; i < array.length; i++) {
+				let event = array[i];
+				await this.mysql.upsert('events', event);
+
+				// Calculate percent as integer and round off to nearest 10 for logging purposes
+				let percent = Math.round((((i + 1) / array.length) * 100) / 1) * 1;
+
+				// Log every 10%
+				if (percent % 10 == 0) {
+					let message = `${percent}% completed...`;
+
+					if (!output[percent]) {
+						await this.log(message);
+					}
+					output[percent] = message;
+				}
+			}
+
+			await this.log(`Events saved. Time taken: ${probe.toString()}.`);
+		}
+
+		// Save matches
+		if (true) {
+			let probe = new Probe();
+			let array = Object.values(matches);
+			let output = {};
+
+			await this.log(`Saving ${array.length} matches to database...`);
+
+			for (let i = 0; i < array.length; i++) {
+				let match = array[i];
+				await this.mysql.upsert('matches', match);
+
+				// Calculate percent as integer and round
+				let percent = Math.round((((i + 1) / array.length) * 100) / 1) * 1;
+
+				// Log every 10%
+				if (percent % 10 == 0) {
+					let message = `${percent}% completed...`;
+
+					if (!output[percent]) {
+						await this.log(message);
+					}
+					output[percent] = message;
+				}
+			}
+
+			await this.log(`Matches saved. Time taken: ${probe.toString()}.`);
+		}
+
+		// Update player details, rankings and ELO ratings after the import so they are up to date when viewing the imported matches
+
+		if (true) {
+			let probe = new Probe();
+			let array = Object.keys(players);
+			let output = {};
+
+			await this.log(`Updating player details for ${array.length} players...`);
+
+			for (let i = 0; i < array.length; i++) {
+				let player = array[i];
+				let percent = Math.round((((i + 1) / array.length) * 100) / 1) * 1;
+
+				// Log every 10%
+				if (percent % 10 == 0) {
+					let message = `${percent}% completed...`;
+
+					if (!output[percent]) {
+						await this.log(message);
+					}
+					output[percent] = message;
+				}
+
+				try {
+					let playerFetcher = new PlayerFetcher(this.fetcherOptions);
+					let detailsRaw = await playerFetcher.fetch({ player: player });
+					let details = playerFetcher.parse(detailsRaw);
+
+					if (!details) {
+						continue;
+					}
+
+					await this.mysql.upsert('players', {
+						id: details.player,
+						name: details.name,
+						country: details.country,
+						age: details.age,
+						pro: details.pro,
+						birthdate: details.birthdate,
+						active: details.active,
+						height: details.height,
+						weight: details.weight,
+
+						career_titles: details.titles.career,
+						ytd_titles: details.titles.ytd,
+
+						career_wins: details.matches.career.wins,
+						career_losses: details.matches.career.losses,
+
+						ytd_wins: details.matches.ytd.wins,
+						ytd_losses: details.matches.ytd.losses,
+
+						ytd_prize: details.prize.ytd,
+						career_prize: details.prize.career,
+
+						url: details.url,
+						rank: details.ranking.current.rank,
+						highest_rank: details.ranking.highest.rank,
+						highest_rank_date: details.ranking.highest.rank ? details.ranking.highest.date : null
+					});
+				} catch (error) {
+					await this.log(`ERROR updating player ${player}: ${error.message}`);
+				}
+			}
+			await this.log(`Player details updated. Time taken: ${probe.toString()}.`);
+		}
 	}
 
 	async run(argv) {
@@ -400,6 +379,7 @@ class Import extends Command {
 
 				if (argv.clean) {
 					await this.log(`Cleaning previous import...`);
+					await this.mysql.query('TRUNCATE TABLE log');
 					await this.mysql.query('TRUNCATE TABLE events');
 					await this.mysql.query('TRUNCATE TABLE players');
 					await this.mysql.query('TRUNCATE TABLE matches');
@@ -425,9 +405,6 @@ class Import extends Command {
 
 				await this.log(`Running sp_update...`);
 				await this.mysql.query(`CALL sp_update()`);
-
-				let importStatus = { date: new Date() };
-				await this.mysql.upsert('settings', { key: 'import.status', value: JSON.stringify(importStatus) });
 
 				await this.log(`Import finished in ${probe.toString()}.`);
 				this.mysql.disconnect();

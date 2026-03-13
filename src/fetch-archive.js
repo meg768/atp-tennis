@@ -9,6 +9,86 @@ class Module extends Fetcher {
 	parse(raw) {
 		const event = this.event;
 
+		function formatScore(rawScore) {
+			if (!rawScore || typeof rawScore !== 'string') {
+				return rawScore;
+			}
+
+			let text = rawScore.trim();
+
+			text = text.replace(/\b(RET(?:['']?D)?|W\/O|WO|WALKOVER)\b\.?$/i, '').trim();
+
+			if (!text) {
+				return null;
+			}
+
+			const tokens = text.split(/\s+/);
+			return tokens.map(formatSetToken).join(' ');
+		}
+
+		function formatSetToken(token) {
+			if (token.includes('-')) {
+				return token;
+			}
+
+			const tieBreakMatch = token.match(/^(\d+)\((\d+)\)$/);
+			if (tieBreakMatch) {
+				const games = parseCompactGames(tieBreakMatch[1]);
+
+				if (!games) {
+					return token;
+				}
+
+				return `${games[0]}-${games[1]}(${tieBreakMatch[2]})`;
+			}
+
+			const games = parseCompactGames(token);
+
+			if (!games) {
+				return token;
+			}
+
+			return `${games[0]}-${games[1]}`;
+		}
+
+		function parseCompactGames(token) {
+			if (!/^\d+$/.test(token)) {
+				return null;
+			}
+
+			if (token.length === 2) {
+				return [token[0], token[1]];
+			}
+
+			if (token.length === 3) {
+				return [token[0], token.slice(1)];
+			}
+
+			if (token.length === 4) {
+				return [token.slice(0, 2), token.slice(2)];
+			}
+
+			return null;
+		}
+
+		function formatDuration(duration) {
+			if (!duration) {
+				return null;
+			}
+
+			const parts = duration.split(':');
+
+			if (parts.length === 3) {
+				return `${parts[0]}:${parts[1]}`;
+			}
+
+			if (parts.length === 2) {
+				return duration;
+			}
+
+			return null;
+		}
+
 		function getMatchStatus(match) {
 			const statusText = [match.MatchStateReasonMessage, match.Message, match.ResultString]
 				.filter(Boolean)
@@ -42,7 +122,7 @@ class Module extends Fetcher {
 
 		let result = {};
 
-		result.event = event;
+		result.id = event;
 		result.date = eventData.PlayStartDate;
 		result.name = eventData.EventDisplayName;
 		result.type = eventData.EventType;
@@ -60,10 +140,10 @@ class Module extends Fetcher {
 			}
 
 			let item = {};
-			item.match = `${event}-${match.MatchId}`;
+			item.id = `${event}-${match.MatchId}`;
 			item.round = match.Round?.ShortName;
-			item.score = match.ResultString;
-			item.duration = match.MatchTime == '00:00:00' ? null : match.MatchTime;
+			item.score = formatScore(match.ResultString);
+			item.duration = formatDuration(match.MatchTime == '00:00:00' ? null : match.MatchTime);
 			item.court = match.CourtName ? match.CourtName : null;
 			item.umpire = match.UmpireFirstName && match.UmpireLastName ? `${match.UmpireFirstName} ${match.UmpireLastName}` : null;
 			item.sets = match.NumberOfSets;
@@ -93,9 +173,6 @@ class Module extends Fetcher {
 			item.loser.player = loser.PlayerId;
 			item.loser.name = `${loser.PlayerFirstNameFull} ${loser.PlayerLastName}`;
 			item.loser.country = loser.PlayerCountryCode;
-
-			// Generate my own match id
-			item.match = `${event}-${winner.PlayerId}-${loser.PlayerId}`;
 
 			result.matches.push(item);
 		}

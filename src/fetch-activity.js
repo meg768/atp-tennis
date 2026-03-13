@@ -32,7 +32,7 @@ class Module extends Fetcher {
 				let event = {};
 
 
-				event.event = `${activity.EventYear}-${tournament.EventId}`;
+				event.id = `${activity.EventYear}-${tournament.EventId}`;
 				event.url = tournament.TournamentUrl ? `http://atptour.com${tournament.TournamentUrl}` : null;
 				event.date = new Date(tournament.EventDate);
 				event.name = tournament.ScDisplayName;
@@ -111,7 +111,7 @@ class Module extends Fetcher {
 					}
 
 					if (match.OpponentId.length != 4) {
-						throw new Error(`Invalid opponent ID '${match.OpponentId}' in event ${event.event}.`);
+						throw new Error(`Invalid opponent ID '${match.OpponentId}' in event ${event.id}.`);
 					}
 
 					let me = {};
@@ -123,7 +123,7 @@ class Module extends Fetcher {
 					opponent.rank = match.OpponentRank;
 
 					let entry = {};
-					entry.match = `${activity.EventYear}-${tournament.EventId}-${match.MatchId}`;
+					entry.id = `${activity.EventYear}-${tournament.EventId}-${match.MatchId}`;
 					entry.round = match.Round?.ShortName;
 					entry.opponent = opponent.player;
 					entry.winner = {};
@@ -136,8 +136,6 @@ class Module extends Fetcher {
 						entry.loser = { ...me };
 						entry.winner = { ...opponent };
 					}
-					// Generate my own match ID
-					entry.match = `${activity.EventYear}-${tournament.EventId}-${entry.winner.player}-${entry.loser.player}`;
 
 					return entry;
 				});

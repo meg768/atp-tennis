@@ -25,15 +25,15 @@ Always writes both files to `sandbox/output/`:
 - Uses hardcoded sandbox input: `player=R0DG`, `since=2020`.
 - Runs silently on success (no console output).
 
-## Test `fetch-scores`
+## Test `fetch-archive`
 
 ```bash
-./sandbox/fetch-scores.js
+./sandbox/fetch-archive.js
 ```
 
 Always writes both files to `sandbox/output/`:
-- `fetch-scores.parsed.json` (parsed scores JSON from `src/fetch-scores.js`)
-- `fetch-scores.raw.json` (raw ATP payload)
+- `fetch-archive.parsed.json` (parsed archive JSON from `src/fetch-archive.js`)
+- `fetch-archive.raw.json` (raw ATP payload)
 - Uses hardcoded sandbox input: `event=2024-0339`.
 - Runs silently on success (no console output).
 

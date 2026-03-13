@@ -2,19 +2,19 @@
 
 const fs = require('fs');
 const path = require('path');
-const FetchScores = require('../src/fetch-scores');
+const FetchArchive = require('../src/fetch-archive');
 
 async function main() {
 	const outputDir = path.resolve(__dirname, 'output');
 	const scriptName = path.basename(__filename, '.js');
 	const parsedPath = path.join(outputDir, `${scriptName}.parsed.json`);
 	const rawPath = path.join(outputDir, `${scriptName}.raw.json`);
-	const fetcher = new FetchScores({ log: () => {} });
+	const fetcher = new FetchArchive({ log: () => {} });
 	const originalLog = console.log;
 	console.log = () => {};
 
 	try {
-		const raw = await fetcher.fetch({ event: '2024-0339' });
+		const raw = await fetcher.fetch({ event: '2026-404' });
 		const parsed = fetcher.parse(raw);
 
 		fs.mkdirSync(outputDir, { recursive: true });

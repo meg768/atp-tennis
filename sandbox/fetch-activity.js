@@ -14,7 +14,7 @@ async function main() {
 	console.log = () => {};
 
 	try {
-		const raw = await fetcher.fetch({ player: 'S0AG', since: 2020 });
+		const raw = await fetcher.fetch({ player: 'A0E2', since: 2026 });
 		const parsed = fetcher.parse(raw);
 
 		fs.mkdirSync(outputDir, { recursive: true });
