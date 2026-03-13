@@ -12,6 +12,7 @@ var App = function () {
             args.usage("Usage: $0 <command> [options]");
 
             args.command(require("./commands/import.js"));
+            args.command(require("./commands/import-codex.js"));
             args.command(require('./commands/serve.js'));
 
             args.help();

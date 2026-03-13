@@ -219,6 +219,44 @@ For fresh dev/prod environments:
   - `fetch-activity` is for recursive player/event discovery only (graph traversal back in time).
   - canonical `matches.id` should come from ATP archive scores only: `{eventYear}-{eventId}-{matchId}`.
 
+## Session Memory (2026-03-13)
+- New separate command added: `import-codex` (`commands/import-codex.js`).
+- Purpose:
+  - Proof-of-concept ATP-only import path isolated from the existing import flow.
+  - Uses separate env var `MYSQL_CODEX_DATABASE` instead of `MYSQL_DATABASE`.
+- Scope and constraints:
+  - All import logic lives in `commands/import-codex.js`.
+  - Existing import code and existing DB flow are intentionally left untouched.
+  - Designed to be easy to undo by removing the command and dropping the separate database.
+- `import-codex` behavior:
+  - Bootstraps its own schema in `MYSQL_CODEX_DATABASE`.
+  - Creates compatible tables for `events`, `matches`, `players`, `settings`, `log`.
+  - Recreates view `flatly`.
+  - Does not create/use stored procedures or SQL helper functions.
+  - Ignores `archive`, `queries`, `storage`, and does not recreate `currently`.
+- Data/import rules:
+  - ATP only; no Oddset.
+  - canonical `matches.id` is `{eventYear}-{eventId}-{matchId}` everywhere.
+  - ATP activity is used for player/event discovery.
+  - ATP results archive is authoritative for persisted match rows.
+  - Defaults:
+    - `top=100`
+    - `since=currentYear-1`
+    - `clean=false`
+    - `loop=0`
+    - `init=true`
+    - `stats=true`
+    - `elo=true`
+- Derived data handled in app code inside `import-codex`:
+  - `matches.status`
+  - `matches.duration`
+  - `players.serve_rating`, `players.return_rating`, `players.pressure_rating`
+  - `players.clay_factor`, `players.grass_factor`, `players.hard_factor`
+  - `players.elo_rank`, `players.elo_rank_clay`, `players.elo_rank_grass`, `players.elo_rank_hard`
+- Error handling rule:
+  - Continue on ATP/player/event-level errors and log them to table `log`.
+  - Fatal startup/DB errors still abort the run.
+
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory
 - Update this file when operational details, architecture, or priorities change
