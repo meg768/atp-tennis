@@ -863,8 +863,12 @@ class CodexImport extends Command {
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 		`);
 
-		await this.db.query(`
-			CREATE OR REPLACE VIEW flatly AS
+		await this.ensureFlatlyView();
+	}
+
+	async ensureFlatlyView() {
+		const sql = `
+			CREATE VIEW flatly AS
 			SELECT
 				m.id AS id,
 				e.date AS event_date,
@@ -888,7 +892,14 @@ class CodexImport extends Command {
 			LEFT JOIN players pl ON m.loser = pl.id
 			LEFT JOIN events e ON m.event = e.id
 			ORDER BY e.date, m.id
-		`);
+		`;
+
+		try {
+			await this.db.query('DROP VIEW IF EXISTS flatly');
+			await this.db.query(sql);
+		} catch (error) {
+			await this.logError('creating view flatly', error);
+		}
 	}
 
 	async cleanDatabase() {
