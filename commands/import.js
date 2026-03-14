@@ -316,13 +316,17 @@ class Import extends Command {
 				}
 
 				await this.log(`Starting import...`);
-				await this.log(`Gathering activities from the top ranked ${argv.top} players since ${argv.since}...`);
 
-				for (let player of players.players) {
-					await this.discover({ player: player.player, cache: cache, events: events, activities: activities, since: argv.since });
+				if (true) {
+					let probe = new Probe();
+					await this.log(`Gathering activities from the top ranked ${argv.top} players since ${argv.since}...`);
+					for (let player of players.players) {
+						await this.discover({ player: player.player, cache: cache, events: events, activities: activities, since: argv.since });
+					}
+					await this.log(
+						`Activities gathered in ${probe.toString()}. Players processed: ${Object.keys(cache).length}. Events discovered: ${Object.keys(events).length}. Matches discovered: ${Object.keys(activities).length}.`
+					);
 				}
-
-				await this.log(`Activities gathered in ${probe.toString()}. Players processed: ${Object.keys(cache).length}. Events discovered: ${Object.keys(events).length}. Matches discovered: ${Object.keys(activities).length}.`);
 
 				let { matches, players: details } = await this.fetchArchive({ events, activities });
 				await this.upsert({ table: 'events', rows: Object.values(events), label: 'events' });
