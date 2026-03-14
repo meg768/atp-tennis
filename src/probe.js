@@ -1,44 +1,60 @@
 class Probe {
-    constructor() {
-        this.startTime = null;
-        this.stopTime = null;
+	constructor() {
+		this.startTime = null;
+		this.stopTime = null;
 
-        this.start();
-    }
+		this.start();
+	}
 
-    start() {
-        this.startTime = new Date();
-    }
+	start() {
+		this.startTime = new Date();
+	}
 
-    stop() {
-        this.stopTime = new Date();
-    }
+	stop() {
+		this.stopTime = new Date();
+	}
 
-    toString() {
-        if (this.startTime == null) {
-            this.start();
-        }
+	toString() {
+		function formatUnit(value, unit) {
+			return `${value} ${unit}${value === 1 ? '' : 's'}`;
+		}
 
-        if (this.stopTime == null) {
-            this.stop();
-        }
+		if (this.startTime == null) {
+			this.start();
+		}
 
-        let then = this.startTime;
-        let now = this.stopTime;
-        let seconds = Math.round(((now - then) / 1000) * 10) / 10;
+		if (this.stopTime == null) {
+			this.stop();
+		}
 
-        if (seconds >= 10) {
-            seconds = Math.round(seconds);
-        }
+		let elapsedMs = this.stopTime - this.startTime;
+		let totalSeconds = elapsedMs / 1000;
 
-        let text = `${seconds} seconds`;
+		if (totalSeconds < 60) {
+			let seconds = Math.round(totalSeconds);
+			return formatUnit(seconds, 'second');
+		}
 
-        if (seconds >= 60) {
-            text = `${Math.round(seconds / 60)} minute(s)`;
-        }
+		let roundedSeconds = Math.round(totalSeconds);
+		let hours = Math.floor(roundedSeconds / 3600);
+		let minutes = Math.floor((roundedSeconds % 3600) / 60);
+		let seconds = roundedSeconds % 60;
+		let parts = [];
 
-        return text;
-    }
+		if (hours > 0) {
+			parts.push(formatUnit(hours, 'hour'));
+		}
+
+		if (minutes > 0) {
+			parts.push(formatUnit(minutes, 'minute'));
+		}
+
+		if (hours === 0 && seconds > 0) {
+			parts.push(formatUnit(seconds, 'second'));
+		}
+
+		return parts.join(' ');
+	}
 }
 
 module.exports = Probe;

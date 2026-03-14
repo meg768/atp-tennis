@@ -25,8 +25,6 @@ class UpdateRankings {
 				format: [player.rank, player.points, player.player]
 			});
 		}
-
-		await this.log('Rankings updated.');
 	}
 }
 

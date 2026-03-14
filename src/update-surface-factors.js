@@ -16,7 +16,6 @@ class UpdateSurfaceFactors {
 		let activeSet = new Set(activePlayers.map(player => player.id));
 
 		if (activeSet.size === 0) {
-			await this.log('Surface factors updated.');
 			return;
 		}
 
@@ -81,8 +80,6 @@ class UpdateSurfaceFactors {
 				format: [value.Clay, value.Grass, value.Hard, playerId]
 			});
 		}
-
-		await this.log('Surface factors updated.');
 	}
 }
 

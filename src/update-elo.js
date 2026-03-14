@@ -141,8 +141,6 @@ class UpdateELO {
 				format: [elo.rank, elo.id]
 			});
 		}
-
-		await this.log('ELO ratings updated.');
 	}
 }
 

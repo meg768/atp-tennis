@@ -1,12 +1,12 @@
 class UpdatePlayerStats {
-	constructor({ mysql, log, fetcherOptions } = {}) {
+	constructor({ mysql, log, fetchOptions } = {}) {
 		if (!mysql) {
 			throw new Error('MySQL instance is required.');
 		}
 
 		this.mysql = mysql;
 		this.log = typeof log === 'function' ? log : console.log;
-		this.fetcherOptions = fetcherOptions || {};
+		this.fetchOptions = fetchOptions || {};
 	}
 
 	async run() {
@@ -14,7 +14,7 @@ class UpdatePlayerStats {
 		await this.mysql.query('UPDATE players SET serve_rating = NULL, return_rating = NULL, pressure_rating = NULL');
 
 		let Fetcher = require('./fetch-stats.js');
-		let fetcher = new Fetcher(this.fetcherOptions);
+		let fetcher = new Fetcher(this.fetchOptions);
 		let raw = await fetcher.fetch();
 		let details = fetcher.parse(raw);
 
@@ -28,8 +28,6 @@ class UpdatePlayerStats {
 				format: [entry.serve, entry.return, entry.pressure, entry.player]
 			});
 		}
-
-		await this.log('Player stats updated.');
 	}
 }
 

@@ -252,6 +252,7 @@ For fresh dev/prod environments:
   - new `--light` mode forces a minimal import: current year only and `top=1`
   - progress logging now handles small/empty batches without relying on `Math.floor(array.length / 10)`
   - repeated import phases are now funneled through shared helpers (`processItems()`, `fetchScores()`, `saveRows()`, `updatePlayerDetails()`) to keep the legacy flow easier to maintain
+  - most import-specific helper functions now live locally inside `commands/import.js` `run()` for readability, instead of as class methods
   - surface factor calculation was moved out of `commands/import.js` into `src/update-surface-factors.js`, keeping the command file thinner
   - ELO execution is now also called through a thin module wrapper in `src/update-elo.js`, so `commands/import.js` only orchestrates
   - `src/update-elo.js` now assumes scores in DB are already normalized (`6-4 7-6(5)` style) and filters mainly on `status = 'Completed'`
@@ -259,6 +260,7 @@ For fresh dev/prod environments:
   - ranking sync is now also moved to `src/update-rankings.js`, further shrinking `commands/import.js`
   - update modules now share a consistent constructor shape with injected dependencies such as `mysql` and `log`
   - code style preference: keep helper functions local to the method/block that uses them whenever practical, instead of promoting small helpers to file scope
+  - code style preference: keep function parameter lists on one line when practical
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory
