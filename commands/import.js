@@ -309,7 +309,6 @@ class Import extends Command {
 				let players = await this.getPlayers({ top: argv.top });
 				let events = {};
 				let activities = {};
-				let cache = {};
 
 				if (!players || !Array.isArray(players.players) || players.players.length === 0) {
 					throw new Error(`No rankings returned for top ${argv.top}. Import aborted.`);
@@ -317,9 +316,16 @@ class Import extends Command {
 
 				await this.log(`Starting import...`);
 
+                // Discover events and matches by traversing player activities. 
+                // This is necessary to get the complete list of events and matches to be imported, 
+                // as well as to discover additional players that may not be in the top rankings 
+                // but are still relevant for the import.
 				if (true) {
 					let probe = new Probe();
-					await this.log(`Gathering activities from the top ranked ${argv.top} players since ${argv.since}...`);
+    				let cache = {};
+
+                    await this.log(`Gathering activities from the top ranked ${argv.top} players since ${argv.since}...`);
+
 					for (let player of players.players) {
 						await this.discover({ player: player.player, cache: cache, events: events, activities: activities, since: argv.since });
 					}
