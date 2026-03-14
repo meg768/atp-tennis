@@ -2,14 +2,14 @@
 
 const fs = require('fs');
 const path = require('path');
-const FetchRankings = require('../src/fetch-rankings');
+const FetchTopPlayers = require('../src/fetch-top-players');
 
 async function main() {
 	const outputDir = path.resolve(__dirname, 'output');
 	const scriptName = path.basename(__filename, '.js');
 	const parsedPath = path.join(outputDir, `${scriptName}.parsed.json`);
 	const rawPath = path.join(outputDir, `${scriptName}.raw.json`);
-	const fetcher = new FetchRankings({ log: () => {} });
+	const fetcher = new FetchTopPlayers({ log: () => {} });
 	const originalLog = console.log;
 	console.log = () => {};
 

@@ -4,6 +4,10 @@ let Command = require('../src/command.js');
 const ActivityFetcher = require('../src/fetch-activity');
 const ArchiveFetcher = require('../src/fetch-archive');
 const PlayerFetcher = require('../src/fetch-player');
+const UpdateELO = require('../src/update-elo');
+const UpdatePlayerStats = require('../src/update-player-stats');
+const UpdateRankings = require('../src/update-rankings');
+const UpdateSurfaceFactors = require('../src/update-surface-factors');
 
 require('../src/logger')(); // 1 MB
 
@@ -19,9 +23,9 @@ class Import extends Command {
 
 		args.option('loop', {
 			alias: 'l',
-			describe: 'Run again after specified number of days',
+			describe: 'Run again after specified number of hours',
 			type: 'number',
-			default: 0.33
+			default: 12
 		});
 
 		args.option('since', {
@@ -44,6 +48,12 @@ class Import extends Command {
 			type: 'boolean',
 			default: false
 		});
+
+		args.option('light', {
+			describe: 'Run a minimal import using the current year and top 1 player',
+			type: 'boolean',
+			default: false
+		});
 		args.help();
 	}
 
@@ -56,8 +66,69 @@ class Import extends Command {
 		}
 	}
 
+	getProgressInterval(total) {
+		if (!Number.isFinite(total) || total <= 0) {
+			return null;
+		}
+
+		return Math.max(1, Math.floor(total / 10));
+	}
+
+	async logProgress(index, total) {
+		let interval = this.getProgressInterval(total);
+
+		if (!interval) {
+			return;
+		}
+
+		let completed = index + 1;
+
+		if (completed % interval !== 0 && completed !== total) {
+			return;
+		}
+
+		let percent = Math.round((completed / total) * 100);
+		await this.log(`${percent}% completed...`);
+	}
+
+	async processItems({
+		items = [],
+		startMessage,
+		finishMessage,
+		progressPosition = 'after',
+		onItem
+	}) {
+		let probe = new Probe();
+
+		if (startMessage) {
+			await this.log(startMessage);
+		}
+
+		for (let i = 0; i < items.length; i++) {
+			let item = items[i];
+
+			if (progressPosition === 'before') {
+				await this.logProgress(i, items.length);
+			}
+
+			await onItem(item, i);
+
+			if (progressPosition !== 'before') {
+				await this.logProgress(i, items.length);
+			}
+		}
+
+		if (typeof finishMessage === 'function') {
+			await this.log(finishMessage(probe));
+		} else if (finishMessage) {
+			await this.log(finishMessage);
+		}
+	}
+
 	async discoverEvents({ player, cache = {}, events = {}, activities = {} }) {
 		let discover = async player => {
+			player = String(player).toUpperCase();
+
 			let opponents = [];
 
 			if (cache[player]) {
@@ -66,10 +137,16 @@ class Import extends Command {
 
 			cache[player] = true;
 
+			let activity = null;
 
-			let activityFetcher = new ActivityFetcher(this.fetcherOptions);
-			let activityRaw = await activityFetcher.fetch({ player: player, since: this.argv.since });
-			let activity = activityFetcher.parse(activityRaw);
+			try {
+				let activityFetcher = new ActivityFetcher(this.fetcherOptions);
+				let activityRaw = await activityFetcher.fetch({ player: player, since: this.argv.since });
+				activity = activityFetcher.parse(activityRaw);
+			} catch (error) {
+				await this.log(`ERROR fetching activity for player ${player}: ${error.message}`);
+				return;
+			}
 
 			if (!activity || !activity.events) {
 				await this.log(`No activity found for player ${player}, skipping.`);
@@ -112,102 +189,26 @@ class Import extends Command {
 		await discover(player);
 	}
 
-	async updateELO() {
-		let { updateELO } = require('../src/elo.js');
-		await updateELO({ mysql: this.mysql });
-	}
-
-	async updatePlayerStats() {
-		await this.mysql.query(`UPDATE players SET serve_rating = NULL, return_rating = NULL, pressure_rating = NULL`);
-
-		let Fetcher = require('../src/fetch-stats.js');
-		let fetcher = new Fetcher(this.fetcherOptions);
-		let raw = await fetcher.fetch();
-		let details = fetcher.parse(raw);
-
-		for (let entry of details) {
-			let sql = ``;
-			sql += `UPDATE players SET `;
-			sql += `serve_rating = ?, `;
-			sql += `return_rating = ?, `;
-			sql += `pressure_rating = ? `;
-			sql += `WHERE id = ?`;
-
-			let format = [entry.serve, entry.return, entry.pressure, entry.player];
-
-			await this.mysql.query({ sql, format });
-		}
-	}
-
-	async getTopPlayerRankings(top) {
-		let Fetcher = require('../src/fetch-rankings');
+	async getTopPlayers(top) {
+		let Fetcher = require('../src/fetch-top-players');
 		let fetcher = new Fetcher(this.fetcherOptions);
 		let raw = await fetcher.fetch({ top: top });
-		let rankings = fetcher.parse(raw);
+		let players = fetcher.parse(raw);
 
-		return rankings;
+		return players;
 	}
 
-	async updateRankings(rankings) {
-		if (!rankings || !Array.isArray(rankings.players)) {
-			return;
-		}
-
-		// Keep ranks fetched from each player's profile so imported players
-		// outside the requested top list do not lose their current ranking.
-		await this.mysql.query(`UPDATE players SET points = NULL`);
-
-		for (let player of rankings.players) {
-			await this.mysql.query({
-				sql: `UPDATE players SET rank = ?, points = ? WHERE id = ?`,
-				format: [player.rank, player.points, player.player]
-			});
-		}
-	}
-
-	async import(rankings) {
-		let events = {};
-		let activities = {};
+	async fetchScores(events, activities) {
 		let matches = {};
-
-		let rankingProbe = new Probe();
-
-		// Discover events and matches
-		if (true) {
-			let probe = new Probe();
-			let cache = {};
-
-			await this.log(`Gathering activities from the top ranked ${this.argv.top} players since ${this.argv.since}...`);
-
-			for (let player of rankings.players) {
-				await this.discoverEvents({ player: player.player, cache: cache, events: events, activities: activities });
-			}
-
-			await this.log(
-				`Activities gathered in ${probe.toString()}. Players processed: ${Object.keys(cache).length}. Events discovered: ${Object.keys(events).length}. Matches discovered: ${Object.keys(activities).length}.`
-			);
-		}
-
-		// Gather up players involved in the matches to update their details later
 		let players = {};
+		let array = Object.values(events);
 
-		// Save events
-		if (true) {
-			let probe = new Probe();
-			let array = Object.values(events);
-
-			// Complete matches with duration and scores
-			await this.log(`Fetching scores from ${array.length} events...`);
-
-			for (let i = 0; i < array.length; i++) {
-				let event = array[i];
-
-				// Log every once in a while
-				if (i % Math.floor(array.length / 10) == 0) {
-					let percent = Math.round((((i + 1) / array.length) * 100));
-					await this.log(`${percent}% completed...`);
-				}
-
+		await this.processItems({
+			items: array,
+			startMessage: `Fetching scores from ${array.length} events...`,
+			finishMessage: probe => `Scores fetched in ${probe.toString()}.`,
+			progressPosition: 'before',
+			onItem: async event => {
 				let details = null;
 
 				try {
@@ -216,7 +217,7 @@ class Import extends Command {
 					details = fetcher.parse(raw);
 				} catch (error) {
 					await this.log(`ERROR fetching event ${event.id}: ${error.message}`);
-					continue;
+					return;
 				}
 
 				if (details?.matches) {
@@ -246,76 +247,37 @@ class Import extends Command {
 					}
 				}
 			}
+		});
 
-			await this.log(`Scores fetched in ${probe.toString()}.`);
-		}
+		return { matches, players };
+	}
 
-		// Save events
-		if (true) {
-			let probe = new Probe();
-			let array = Object.values(events);
-
-			await this.log(`Saving ${array.length} events to database...`);
-
-			for (let i = 0; i < array.length; i++) {
-				let event = array[i];
-				await this.mysql.upsert('events', event);
-
-				// Log every once in a while
-				if (i % Math.floor(array.length / 10) == 0) {
-					let percent = Math.round(((i + 1) / array.length) * 100);
-					await this.log(`${percent}% completed...`);
-				}
+	async saveRows(table, rows, label) {
+		await this.processItems({
+			items: rows,
+			startMessage: `Saving ${rows.length} ${label} to database...`,
+			finishMessage: probe => `${label[0].toUpperCase()}${label.slice(1)} saved. Time taken: ${probe.toString()}.`,
+			onItem: async row => {
+				await this.mysql.upsert(table, row);
 			}
+		});
+	}
 
-			await this.log(`Events saved. Time taken: ${probe.toString()}.`);
-		}
+	async updatePlayerDetails(players) {
+		let array = Object.keys(players);
 
-		// Save matches
-		if (true) {
-			let probe = new Probe();
-			let array = Object.values(matches);
-
-			await this.log(`Saving ${array.length} matches to database...`);
-
-			for (let i = 0; i < array.length; i++) {
-				let match = array[i];
-				await this.mysql.upsert('matches', match);
-
-				// Log every once in a while
-				if (i % Math.floor(array.length / 10) == 0) {
-					let percent = Math.round(((i + 1) / array.length) * 100);
-					await this.log(`${percent}% completed...`);
-				}
-			}
-
-			await this.log(`Matches saved. Time taken: ${probe.toString()}.`);
-		}
-
-		// Update player details, rankings and ELO ratings after the import so they are up to date when viewing the imported matches
-
-		if (true) {
-			let probe = new Probe();
-			let array = Object.keys(players);
-
-			await this.log(`Updating player details for ${array.length} players...`);
-
-			for (let i = 0; i < array.length; i++) {
-				let player = array[i];
-
-				// Log every once in a while
-				if (i % Math.floor(array.length / 10) == 0) {
-					let percent = Math.round(((i + 1) / array.length) * 100);
-					await this.log(`${percent}% completed...`);
-				}
-
+		await this.processItems({
+			items: array,
+			startMessage: `Updating player details for ${array.length} players...`,
+			finishMessage: probe => `Player details updated. Time taken: ${probe.toString()}.`,
+			onItem: async player => {
 				try {
 					let playerFetcher = new PlayerFetcher(this.fetcherOptions);
 					let detailsRaw = await playerFetcher.fetch({ player: player });
 					let details = playerFetcher.parse(detailsRaw);
 
 					if (!details) {
-						continue;
+						return;
 					}
 
 					await this.mysql.upsert('players', {
@@ -350,14 +312,45 @@ class Import extends Command {
 					await this.log(`ERROR updating player ${player}: ${error.message}`);
 				}
 			}
-			await this.log(`Player details updated. Time taken: ${probe.toString()}.`);
+		});
+	}
+
+	async import(rankings) {
+		let events = {};
+		let activities = {};
+		let probe = new Probe();
+		let cache = {};
+
+		await this.log(`Gathering activities from the top ranked ${this.argv.top} players since ${this.argv.since}...`);
+
+		for (let player of rankings.players) {
+			await this.discoverEvents({ player: player.player, cache: cache, events: events, activities: activities });
 		}
+
+		await this.log(
+			`Activities gathered in ${probe.toString()}. Players processed: ${Object.keys(cache).length}. Events discovered: ${Object.keys(events).length}. Matches discovered: ${Object.keys(activities).length}.`
+		);
+
+		let { matches, players } = await this.fetchScores(events, activities);
+
+		await this.saveRows('events', Object.values(events), 'events');
+		await this.saveRows('matches', Object.values(matches), 'matches');
+
+		// Update player details, rankings and ELO ratings after the import so they are up to date when viewing the imported matches
+		await this.updatePlayerDetails(players);
 	}
 
 	async run(argv) {
 		this.argv = argv;
 		let work = async () => {
 			try {
+				if (argv.light) {
+					let year = new Date().getFullYear();
+					this.argv.since = year;
+					this.argv.top = 1;
+					await this.log(`Light mode enabled: importing current year ${year} using top 1 player.`);
+				}
+
 				await this.mysql.connect();
 				let probe = new Probe();
 
@@ -370,43 +363,45 @@ class Import extends Command {
 					await this.log(`Tables truncated.`);
 				}
 
-				let rankings = await this.getTopPlayerRankings(this.argv.top);
+					let rankings = await this.getTopPlayers(this.argv.top);
+
+				if (!rankings || !Array.isArray(rankings.players) || rankings.players.length === 0) {
+					throw new Error(`No rankings returned for top ${this.argv.top}. Import aborted.`);
+				}
 
 				await this.log(`Starting import...`);
 				await this.import(rankings);
 
-				await this.log(`Updating rankings...`);
-				await this.updateRankings(rankings);
-				await this.log(`Rankings updated.`);
+					let log = this.log.bind(this);
+					let updateRankings = new UpdateRankings({ mysql: this.mysql, log: log });
+					await updateRankings.run(rankings);
 
-				await this.log(`Updating player stats...`);
-				await this.updatePlayerStats();
-				await this.log(`Player stats updated.`);
+					let updatePlayerStats = new UpdatePlayerStats({ mysql: this.mysql, log: log, fetcherOptions: this.fetcherOptions });
+					await updatePlayerStats.run();
 
-				await this.log(`Updating ELO ratings...`);
-				await this.updateELO();
-				await this.log(`ELO ratings updated.`);
+					let updateELO = new UpdateELO({ mysql: this.mysql, log: log });
+					await updateELO.run();
 
-				await this.log(`Running sp_update...`);
-				await this.mysql.query(`CALL sp_update()`);
+					let updateSurfaceFactors = new UpdateSurfaceFactors({ mysql: this.mysql, log: log });
+					await updateSurfaceFactors.run();
 
-				await this.log(`Import finished in ${probe.toString()}.`);
-				this.mysql.disconnect();
+					await this.log(`Import finished in ${probe.toString()}.`);
 			} catch (error) {
 				await this.log(`FATAL ERROR: ${error.message}`);
 				console.error(error.stack);
 			} finally {
+				await this.mysql.disconnect();
 			}
 
 			if (argv.loop) {
 				let loop = argv.loop;
-				await this.log(`Waiting for next run in ${loop} days.`);
+				await this.log(`Waiting for next run in ${loop} hours.`);
 
 				setTimeout(
 					() => {
 						work();
 					},
-					loop * 24 * 60 * 60 * 1000
+					loop * 60 * 60 * 1000
 				);
 			}
 		};

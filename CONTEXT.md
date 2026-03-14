@@ -101,25 +101,21 @@ This is a deduplicated list from the current codebase.
 
 ## Database
 - Repo-managed DB artifact: `database/schema.sql` (only)
-- Runtime-required procedures/functions are managed directly in MariaDB (not versioned in this repo)
-- The import flow calls `sp_update()` after data ingestion
+- Legacy `import` no longer calls `sp_update()`; surface factors are now updated in app code via `src/update-surface-factors.js`
+- Legacy `import` ELO now reads directly from `matches` + `events` and does not depend on the `flatly` view
 
 ## MariaDB Prerequisites
 
 Before running a full import, MariaDB must already contain:
-- `sp_update`
-- Any routines/functions that `sp_update` depends on in your installation
-  - Common examples: `sp_log`, `sp_update_surface_factors`, `sp_update_match_status`, and helper SQL functions used by those procedures
+- Tables/views from `database/schema.sql`
 
 Failure behavior:
-- `node atp.js import ...` fails with a MariaDB error if `sp_update` (or required dependencies) is missing
+- `node atp.js import ...` fails with a MariaDB error if required schema tables are missing
 
 ## Environment Bootstrap Note
 
 For fresh dev/prod environments:
 1. Create tables/views from `database/schema.sql`
-2. Provision required routines/functions directly in MariaDB
-3. Run the first full import only after step 2 is complete
 
 ## Project Structure
 - `atp.js` - CLI entrypoint
@@ -178,7 +174,7 @@ For fresh dev/prod environments:
   - `getTopPlayerRankings(top)` fetches rankings once.
   - `updateRankings(rankings)` now clears only `players.points`, then restores `rank` and `points` for players in the fetched ranking list.
   - This preserves `players.rank` values fetched per player during import, so imported players outside the requested top list do not lose their ranking.
-- `src/fetch-rankings.js` now respects the requested `top` value instead of always fetching top 100.
+- `src/fetch-top-players.js` now respects the requested `top` value instead of always fetching top 100.
 - `src/fetch-archive.js` now derives `matches.status` from ATP archive fields (`Status`, `MatchStateReasonMessage`, `Message`, `ResultString`) and import persists that status into `matches.status`.
 - `database/schema.sql` `sp_update_match_status` was updated to stop depending on missing SQL functions (`IS_MATCH_COMPLETED`, `NUMBER_OF_SETS_PLAYED`) and now:
   - preserves already known statuses (`Completed`, `Aborted`, `Walkover`)
@@ -208,9 +204,12 @@ For fresh dev/prod environments:
 - `serve` command now exposes endpoint `GET /api/calendar` (returns parsed `{ events: [...] }`).
 - New test area added: `sandbox/`.
   - `sandbox/fetch-calendar.js` runs `fetch-calendar` with no parameters.
+  - `sandbox/fetch-oddset.js` runs `fetch-oddset` with default states (`STARTED`, `NOT_STARTED`).
   - It always writes:
     - `sandbox/output/fetch-calendar.parsed.json`
     - `sandbox/output/fetch-calendar.raw.json`
+    - `sandbox/output/fetch-oddset.parsed.json`
+    - `sandbox/output/fetch-oddset.raw.json`
   - `sandbox/README.md` documents the simplified sandbox flow.
   - Team convention: sandbox-specific iteration notes belong in `sandbox/README.md`, not top-level `LOG.md`.
 - CLI command registration in `atp.js` has been trimmed further:
@@ -219,44 +218,6 @@ For fresh dev/prod environments:
 - Import identity strategy decision:
   - `fetch-activity` is for recursive player/event discovery only (graph traversal back in time).
   - canonical `matches.id` should come from ATP archive scores only: `{eventYear}-{eventId}-{matchId}`.
-
-## Session Memory (2026-03-13)
-- New separate command added: `import-codex` (`commands/import-codex.js`).
-- Purpose:
-  - Proof-of-concept ATP-only import path isolated from the existing import flow.
-  - Uses separate env var `MYSQL_CODEX_DATABASE` instead of `MYSQL_DATABASE`.
-- Scope and constraints:
-  - All import logic lives in `commands/import-codex.js`.
-  - Existing import code and existing DB flow are intentionally left untouched.
-  - Designed to be easy to undo by removing the command and dropping the separate database.
-- `import-codex` behavior:
-  - Bootstraps its own schema in `MYSQL_CODEX_DATABASE`.
-  - Creates compatible tables for `events`, `matches`, `players`, `settings`, `log`.
-  - Recreates view `flatly`.
-  - Does not create/use stored procedures or SQL helper functions.
-  - Ignores `archive`, `queries`, `storage`, and does not recreate `currently`.
-- Data/import rules:
-  - ATP only; no Oddset.
-  - canonical `matches.id` is `{eventYear}-{eventId}-{matchId}` everywhere.
-  - ATP activity is used for player/event discovery.
-  - ATP results archive is authoritative for persisted match rows.
-  - Defaults:
-    - `top=100`
-    - `since=currentYear-1`
-    - `clean=false`
-    - `loop=0`
-    - `init=true`
-    - `stats=true`
-    - `elo=true`
-- Derived data handled in app code inside `import-codex`:
-  - `matches.status`
-  - `matches.duration`
-  - `players.serve_rating`, `players.return_rating`, `players.pressure_rating`
-  - `players.clay_factor`, `players.grass_factor`, `players.hard_factor`
-  - `players.elo_rank`, `players.elo_rank_clay`, `players.elo_rank_grass`, `players.elo_rank_hard`
-- Error handling rule:
-  - Continue on ATP/player/event-level errors and log them to table `log`.
-  - Fatal startup/DB errors still abort the run.
 
 ## Session Memory (2026-03-14)
 - Legacy ATP import flow in `commands/import.js` was refactored further around real ATP match identity:
@@ -282,6 +243,22 @@ For fresh dev/prod environments:
   - a real legacy import with `--since 2020` completed successfully
   - reported runtime was about 65 minutes
   - user considers `--since 2020` the practical target dataset; pre-2020 / Open Era imports are optional fun-history work rather than a requirement
+- The proof-of-concept `import-codex` command was removed again after its ideas were folded back into the maintained legacy import path.
+- Additional hardening was applied to `commands/import.js`:
+  - import now aborts before ranking updates if the fetched ranking list is empty, preventing a mass `players.points = NULL` write on bad ATP responses
+  - activity discovery now logs and skips per-player fetch failures instead of aborting the whole run immediately
+  - MySQL disconnect is now awaited in `finally`, so failed imports still close the connection cleanly
+  - `--loop` in legacy `import` now means hours between runs, with default `12`
+  - new `--light` mode forces a minimal import: current year only and `top=1`
+  - progress logging now handles small/empty batches without relying on `Math.floor(array.length / 10)`
+  - repeated import phases are now funneled through shared helpers (`processItems()`, `fetchScores()`, `saveRows()`, `updatePlayerDetails()`) to keep the legacy flow easier to maintain
+  - surface factor calculation was moved out of `commands/import.js` into `src/update-surface-factors.js`, keeping the command file thinner
+  - ELO execution is now also called through a thin module wrapper in `src/update-elo.js`, so `commands/import.js` only orchestrates
+  - `src/update-elo.js` now assumes scores in DB are already normalized (`6-4 7-6(5)` style) and filters mainly on `status = 'Completed'`
+  - ATP player stats sync is now also moved to `src/update-player-stats.js`, continuing the same thin-command pattern
+  - ranking sync is now also moved to `src/update-rankings.js`, further shrinking `commands/import.js`
+  - update modules now share a consistent constructor shape with injected dependencies such as `mysql` and `log`
+  - code style preference: keep helper functions local to the method/block that uses them whenever practical, instead of promoting small helpers to file scope
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory

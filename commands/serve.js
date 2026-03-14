@@ -73,7 +73,7 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
-				let Fetcher = require('../src/fetch-rankings.js');
+				let Fetcher = require('../src/fetch-top-players.js');
 				let fetcher = new Fetcher(options);
 				let raw = await fetcher.fetch(options);
 				return fetcher.parse(raw);

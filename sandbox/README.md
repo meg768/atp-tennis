@@ -37,15 +37,15 @@ Always writes both files to `sandbox/output/`:
 - Uses hardcoded sandbox input: `event=2024-0339`.
 - Runs silently on success (no console output).
 
-## Test `fetch-rankings`
+## Test `fetch-top-players`
 
 ```bash
-./sandbox/fetch-rankings.js
+./sandbox/fetch-top-players.js
 ```
 
 Always writes both files to `sandbox/output/`:
-- `fetch-rankings.parsed.json` (parsed rankings JSON from `src/fetch-rankings.js`)
-- `fetch-rankings.raw.json` (raw ATP payload)
+- `fetch-top-players.parsed.json` (parsed rankings JSON from `src/fetch-top-players.js`)
+- `fetch-top-players.raw.json` (raw ATP payload)
 - Uses hardcoded sandbox input: `top=100`.
 - Runs silently on success (no console output).
 
@@ -59,6 +59,18 @@ Always writes both files to `sandbox/output/`:
 - `fetch-player.parsed.json` (parsed player JSON from `src/fetch-player.js`)
 - `fetch-player.raw.json` (raw ATP payload)
 - Uses hardcoded sandbox input: `player=A0E2`.
+- Runs silently on success (no console output).
+
+## Test `fetch-oddset`
+
+```bash
+./sandbox/fetch-oddset.js
+```
+
+Always writes both files to `sandbox/output/`:
+- `fetch-oddset.parsed.json` (parsed odds JSON from `src/fetch-oddset.js`)
+- `fetch-oddset.raw.json` (raw Oddset payload)
+- Uses hardcoded sandbox input: default states `STARTED,NOT_STARTED`.
 - Runs silently on success (no console output).
 
 ## Sandbox Convention

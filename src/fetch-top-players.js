@@ -1,6 +1,6 @@
 const Fetcher = require('./fetcher');
 
-class FetchRankings extends Fetcher {
+class FetchTopPlayers extends Fetcher {
 	constructor(options) {
 		super(options);
 	}
@@ -34,4 +34,4 @@ class FetchRankings extends Fetcher {
 	}
 }
 
-module.exports = FetchRankings;
+module.exports = FetchTopPlayers;

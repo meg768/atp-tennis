@@ -1,0 +1,530 @@
+{
+  "events": [
+    {
+      "event": {
+        "id": 1026943969,
+        "name": "Alexander Zverev - Jannik Sinner",
+        "nameDelimiter": "-",
+        "englishName": "Alexander Zverev - Jannik Sinner",
+        "homeName": "Alexander Zverev",
+        "awayName": "Jannik Sinner",
+        "start": "2026-03-14T20:30:00Z",
+        "group": "Indian Wells",
+        "groupId": 2000050633,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000050633,
+            "name": "Indian Wells",
+            "englishName": "Indian Wells",
+            "termKey": "indian_wells"
+          }
+        ],
+        "nonLiveBoCount": 57,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "betOffers": [
+        {
+          "id": 2621178979,
+          "closed": "2026-03-14T20:30:00Z",
+          "criterion": {
+            "id": 1001159551,
+            "label": "Matchodds",
+            "englishLabel": "Match Odds",
+            "order": [
+              1
+            ]
+          },
+          "betOfferType": {
+            "id": 2,
+            "name": "Match",
+            "englishName": "Match"
+          },
+          "eventId": 1026943969,
+          "outcomes": [
+            {
+              "id": 4101873059,
+              "label": "Alexander Zverev",
+              "englishLabel": "Alexander Zverev",
+              "odds": 5400,
+              "participant": "Alexander Zverev",
+              "type": "OT_ONE",
+              "betOfferId": 2621178979,
+              "changedDate": "2026-03-14T09:47:42Z",
+              "participantId": 1001214598,
+              "oddsFractional": "22/5",
+              "oddsAmerican": "440",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 0
+            },
+            {
+              "id": 4101873060,
+              "label": "Jannik Sinner",
+              "englishLabel": "Jannik Sinner",
+              "odds": 1170,
+              "participant": "Jannik Sinner",
+              "type": "OT_TWO",
+              "betOfferId": 2621178979,
+              "changedDate": "2026-03-14T09:47:42Z",
+              "participantId": 1002871483,
+              "oddsFractional": "1/6",
+              "oddsAmerican": "-590",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 1
+            }
+          ],
+          "tags": [
+            "OFFERED_PREMATCH",
+            "BET_BUILDER",
+            "MAIN"
+          ],
+          "sortOrder": 1,
+          "cashOutStatus": "ENABLED"
+        },
+        {
+          "id": 2621203047,
+          "closed": "2026-03-14T20:30:00Z",
+          "criterion": {
+            "id": 1001427539,
+            "label": "Game handicap",
+            "englishLabel": "Game Handicap",
+            "order": [
+              1
+            ]
+          },
+          "betOfferType": {
+            "id": 1,
+            "name": "Handicap",
+            "englishName": "Handicap"
+          },
+          "eventId": 1026943969,
+          "outcomes": [
+            {
+              "id": 4101916865,
+              "label": "Alexander Zverev",
+              "englishLabel": "Alexander Zverev",
+              "odds": 1740,
+              "line": 4500,
+              "participant": "Alexander Zverev",
+              "type": "OT_ONE",
+              "betOfferId": 2621203047,
+              "changedDate": "2026-03-14T09:51:21Z",
+              "participantId": 1001214598,
+              "oddsFractional": "8/11",
+              "oddsAmerican": "-136",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 0
+            },
+            {
+              "id": 4101916862,
+              "label": "Jannik Sinner",
+              "englishLabel": "Jannik Sinner",
+              "odds": 2100,
+              "line": -4500,
+              "participant": "Jannik Sinner",
+              "type": "OT_TWO",
+              "betOfferId": 2621203047,
+              "changedDate": "2026-03-14T09:51:21Z",
+              "participantId": 1002871483,
+              "oddsFractional": "11/10",
+              "oddsAmerican": "110",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 1
+            }
+          ],
+          "tags": [
+            "OFFERED_PREMATCH",
+            "MAIN_LINE",
+            "BET_BUILDER"
+          ],
+          "sortOrder": 2,
+          "cashOutStatus": "ENABLED"
+        },
+        {
+          "id": 2621203060,
+          "closed": "2026-03-14T20:30:00Z",
+          "criterion": {
+            "id": 1001159891,
+            "label": "Antal game",
+            "englishLabel": "Total Games",
+            "order": [
+              1
+            ]
+          },
+          "betOfferType": {
+            "id": 6,
+            "name": "Över/Under",
+            "englishName": "Over/Under"
+          },
+          "eventId": 1026943969,
+          "outcomes": [
+            {
+              "id": 4101916903,
+              "label": "Över",
+              "englishLabel": "Over",
+              "odds": 1850,
+              "line": 21500,
+              "type": "OT_OVER",
+              "betOfferId": 2621203060,
+              "changedDate": "2026-03-14T09:47:42Z",
+              "oddsFractional": "17/20",
+              "oddsAmerican": "-118",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 0
+            },
+            {
+              "id": 4101916904,
+              "label": "Under",
+              "englishLabel": "Under",
+              "odds": 1960,
+              "line": 21500,
+              "type": "OT_UNDER",
+              "betOfferId": 2621203060,
+              "changedDate": "2026-03-14T09:47:42Z",
+              "oddsFractional": "19/20",
+              "oddsAmerican": "-105",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 1
+            }
+          ],
+          "tags": [
+            "OFFERED_PREMATCH",
+            "MAIN_LINE",
+            "BET_BUILDER"
+          ],
+          "sortOrder": 3,
+          "cashOutStatus": "ENABLED"
+        }
+      ]
+    },
+    {
+      "event": {
+        "id": 1026946636,
+        "name": "Carlos Alcaraz - Daniil Medvedev",
+        "nameDelimiter": "-",
+        "englishName": "Carlos Alcaraz - Daniil Medvedev",
+        "homeName": "Carlos Alcaraz",
+        "awayName": "Daniil Medvedev",
+        "start": "2026-03-14T22:00:00Z",
+        "group": "Indian Wells",
+        "groupId": 2000050633,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000050633,
+            "name": "Indian Wells",
+            "englishName": "Indian Wells",
+            "termKey": "indian_wells"
+          }
+        ],
+        "nonLiveBoCount": 60,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "betOffers": [
+        {
+          "id": 2621193529,
+          "closed": "2026-03-14T22:00:00Z",
+          "criterion": {
+            "id": 1001159551,
+            "label": "Matchodds",
+            "englishLabel": "Match Odds",
+            "order": [
+              1
+            ]
+          },
+          "betOfferType": {
+            "id": 2,
+            "name": "Match",
+            "englishName": "Match"
+          },
+          "eventId": 1026946636,
+          "outcomes": [
+            {
+              "id": 4101869877,
+              "label": "Carlos Alcaraz",
+              "englishLabel": "Carlos Alcaraz",
+              "odds": 1190,
+              "participant": "Carlos Alcaraz",
+              "type": "OT_ONE",
+              "betOfferId": 2621193529,
+              "changedDate": "2026-03-14T13:36:11Z",
+              "participantId": 1006148145,
+              "oddsFractional": "2/11",
+              "oddsAmerican": "-530",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 0
+            },
+            {
+              "id": 4101869878,
+              "label": "Daniil Medvedev",
+              "englishLabel": "Daniil Medvedev",
+              "odds": 5000,
+              "participant": "Daniil Medvedev",
+              "type": "OT_TWO",
+              "betOfferId": 2621193529,
+              "changedDate": "2026-03-14T13:36:11Z",
+              "participantId": 1002170460,
+              "oddsFractional": "4/1",
+              "oddsAmerican": "400",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 1
+            }
+          ],
+          "tags": [
+            "OFFERED_PREMATCH",
+            "BET_BUILDER",
+            "MAIN"
+          ],
+          "sortOrder": 1,
+          "cashOutStatus": "ENABLED"
+        },
+        {
+          "id": 2621193527,
+          "closed": "2026-03-14T22:00:00Z",
+          "criterion": {
+            "id": 1001427539,
+            "label": "Game handicap",
+            "englishLabel": "Game Handicap",
+            "order": [
+              1
+            ]
+          },
+          "betOfferType": {
+            "id": 1,
+            "name": "Handicap",
+            "englishName": "Handicap"
+          },
+          "eventId": 1026946636,
+          "outcomes": [
+            {
+              "id": 4101869872,
+              "label": "Carlos Alcaraz",
+              "englishLabel": "Carlos Alcaraz",
+              "odds": 1920,
+              "line": -4500,
+              "participant": "Carlos Alcaraz",
+              "type": "OT_ONE",
+              "betOfferId": 2621193527,
+              "changedDate": "2026-03-14T13:36:11Z",
+              "participantId": 1006148145,
+              "oddsFractional": "10/11",
+              "oddsAmerican": "-109",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 0
+            },
+            {
+              "id": 4101869874,
+              "label": "Daniil Medvedev",
+              "englishLabel": "Daniil Medvedev",
+              "odds": 1880,
+              "line": 4500,
+              "participant": "Daniil Medvedev",
+              "type": "OT_TWO",
+              "betOfferId": 2621193527,
+              "changedDate": "2026-03-14T13:36:11Z",
+              "participantId": 1002170460,
+              "oddsFractional": "22/25",
+              "oddsAmerican": "-114",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 1
+            }
+          ],
+          "tags": [
+            "OFFERED_PREMATCH",
+            "MAIN_LINE",
+            "BET_BUILDER"
+          ],
+          "sortOrder": 2,
+          "cashOutStatus": "ENABLED"
+        },
+        {
+          "id": 2621193521,
+          "closed": "2026-03-14T22:00:00Z",
+          "criterion": {
+            "id": 1001159891,
+            "label": "Antal game",
+            "englishLabel": "Total Games",
+            "order": [
+              1
+            ]
+          },
+          "betOfferType": {
+            "id": 6,
+            "name": "Över/Under",
+            "englishName": "Over/Under"
+          },
+          "eventId": 1026946636,
+          "outcomes": [
+            {
+              "id": 4101869859,
+              "label": "Över",
+              "englishLabel": "Over",
+              "odds": 1960,
+              "line": 21500,
+              "type": "OT_OVER",
+              "betOfferId": 2621193521,
+              "changedDate": "2026-03-14T13:36:11Z",
+              "oddsFractional": "19/20",
+              "oddsAmerican": "-105",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 0
+            },
+            {
+              "id": 4101869860,
+              "label": "Under",
+              "englishLabel": "Under",
+              "odds": 1850,
+              "line": 21500,
+              "type": "OT_UNDER",
+              "betOfferId": 2621193521,
+              "changedDate": "2026-03-14T13:36:11Z",
+              "oddsFractional": "17/20",
+              "oddsAmerican": "-118",
+              "status": "OPEN",
+              "cashOutStatus": "ENABLED",
+              "displayOrder": 1
+            }
+          ],
+          "tags": [
+            "OFFERED_PREMATCH",
+            "MAIN_LINE",
+            "BET_BUILDER"
+          ],
+          "sortOrder": 3,
+          "cashOutStatus": "ENABLED"
+        }
+      ]
+    }
+  ],
+  "terms": [
+    {
+      "type": "SPORT",
+      "id": "/tennis",
+      "termKey": "tennis",
+      "localizedName": "Tennis",
+      "parentId": "/",
+      "englishName": "Tennis"
+    },
+    {
+      "type": "REGION",
+      "id": "/tennis/atp",
+      "termKey": "atp",
+      "localizedName": "ATP",
+      "parentId": "/tennis",
+      "englishName": "ATP"
+    },
+    {
+      "type": "ATTRIBUTE",
+      "id": "/matches",
+      "termKey": "matches",
+      "localizedName": "matches",
+      "parentId": "",
+      "englishName": "matches"
+    }
+  ],
+  "activeTermIds": [
+    "/tennis/atp",
+    "/matches"
+  ],
+  "soonMode": "HOURLY",
+  "categoryGroups": [
+    {
+      "categoryGroupName": "list_view",
+      "categories": [
+        {
+          "id": 11939,
+          "englishName": "Set Handicap",
+          "localizedName": "Sethandicap"
+        },
+        {
+          "id": 11940,
+          "englishName": "Total Sets",
+          "localizedName": "Totala set"
+        }
+      ]
+    },
+    {
+      "categoryGroupName": "combined_layout",
+      "categories": [
+        {
+          "id": 5924,
+          "englishName": "match",
+          "localizedName": "Match "
+        },
+        {
+          "id": 5925,
+          "englishName": "handicap",
+          "localizedName": "Game handicap"
+        },
+        {
+          "id": 5926,
+          "englishName": "totals",
+          "localizedName": "Totala game"
+        }
+      ],
+      "localizedName": "Match, Gamehandicap & Totala game"
+    }
+  ],
+  "activeCategories": [
+    "5926",
+    "5924",
+    "5925"
+  ],
+  "activeEventTypes": [
+    "matches"
+  ],
+  "eventTypes": [
+    "competitions",
+    "matches"
+  ],
+  "defaultEventType": "matches"
+}
