@@ -22,6 +22,7 @@ MYSQL_USER=
 MYSQL_PORT=
 MYSQL_PASSWORD=
 MYSQL_DATABASE=
+MYSQL_CODEX_DATABASE=
 ```
 
 Note: variable names use the `MYSQL_` prefix for compatibility, but the target database is MariaDB.
@@ -256,6 +257,31 @@ For fresh dev/prod environments:
 - Error handling rule:
   - Continue on ATP/player/event-level errors and log them to table `log`.
   - Fatal startup/DB errors still abort the run.
+
+## Session Memory (2026-03-14)
+- Legacy ATP import flow in `commands/import.js` was refactored further around real ATP match identity:
+  - canonical `matches.id` is now intended to be `{eventYear}-{eventId}-{matchId}`
+  - `src/fetch-activity.js` now uses DB-style `id` naming for activity rows (`event.id`, `match.id`)
+  - `src/fetch-archive.js` is the renamed former `src/fetch-scores.js`
+  - `src/fetch-archive.js` now also owns archive-side score and duration normalization
+- Current import design in `commands/import.js`:
+  - `discoverEvents()` recursively traverses ATP activity
+  - activity is used for discovery plus enrichment of match-time `winner_rank` / `loser_rank`
+  - archive remains the authoritative source for persisted match rows
+  - activity enrichment is keyed by full `match.id`
+- Discovery/traversal state in the legacy import:
+  - `discoverEvents()` currently accepts a shared `cache` object from `import()`
+  - this is intentionally used to dedupe discovery across the full top-player loop
+  - the recursive implementation detail is now a local inner function `discover()`
+- The earlier synthetic winner/loser-based match IDs in the legacy import were replaced by ATP-based IDs.
+- Sandbox/testing updates:
+  - `sandbox/fetch-archive.js` replaces the old `sandbox/fetch-scores.js`
+  - new script added: `sandbox/fetch-player.js`
+  - sandbox scripts are intended to be executable directly
+- Runtime verification:
+  - a real legacy import with `--since 2020` completed successfully
+  - reported runtime was about 65 minutes
+  - user considers `--since 2020` the practical target dataset; pre-2020 / Open Era imports are optional fun-history work rather than a requirement
 
 ## Collaboration Notes
 - `CONTEXT.md` is the shared source of truth for project context and memory
