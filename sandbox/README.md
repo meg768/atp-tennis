@@ -49,6 +49,18 @@ Always writes both files to `sandbox/output/`:
 - Uses hardcoded sandbox input: `top=100`.
 - Runs silently on success (no console output).
 
+## Test `fetch-player`
+
+```bash
+./sandbox/fetch-player.js
+```
+
+Always writes both files to `sandbox/output/`:
+- `fetch-player.parsed.json` (parsed player JSON from `src/fetch-player.js`)
+- `fetch-player.raw.json` (raw ATP payload)
+- Uses hardcoded sandbox input: `player=A0E2`.
+- Runs silently on success (no console output).
+
 ## Sandbox Convention
 
 - Keep sandbox-specific notes and changes in this file.

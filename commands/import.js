@@ -57,57 +57,59 @@ class Import extends Command {
 	}
 
 	async discoverEvents({ player, cache = {}, events = {}, activities = {} }) {
-		let opponents = [];
+		let discover = async player => {
+			let opponents = [];
 
-		if (cache[player]) {
-			return;
-		}
+			if (cache[player]) {
+				return;
+			}
 
-		cache[player] = true;
+			cache[player] = true;
 
-		const playerCount = Object.keys(cache).length;
-		await this.log(`Processing player ${player} (${playerCount})...`);
 
-		let activityFetcher = new ActivityFetcher(this.fetcherOptions);
-		let activityRaw = await activityFetcher.fetch({ player: player, since: this.argv.since });
-		let activity = activityFetcher.parse(activityRaw);
+			let activityFetcher = new ActivityFetcher(this.fetcherOptions);
+			let activityRaw = await activityFetcher.fetch({ player: player, since: this.argv.since });
+			let activity = activityFetcher.parse(activityRaw);
 
-		if (!activity || !activity.events) {
-			await this.log(`No activity found for player ${player}, skipping.`);
-			return;
-		}
+			if (!activity || !activity.events) {
+				await this.log(`No activity found for player ${player}, skipping.`);
+				return;
+			}
 
-		for (let event of activity.events) {
-			// Strip matches from event data, they will be completed later with details from the archive fetcher
-			let { matches, ...entry } = event;
+			for (let event of activity.events) {
+				// Strip matches from event data, they will be completed later with details from the archive fetcher
+				let { matches, ...entry } = event;
 
-			entry = { ...(events[entry.id] || {}), ...entry };
+				entry = { ...(events[entry.id] || {}), ...entry };
 
-			// Add activities with the details we have so far
-			for (let match of matches) {
-				activities[match.id] = {
-					id: match.id,
-					event: entry.id,
-					round: match.round,
-					winner: match.winner.player,
-					winner_rank: match.winner.rank ? match.winner.rank : null,
-					loser: match.loser.player,
-					loser_rank: match.loser.rank ? match.loser.rank : null
-				};
+				// Add activities with the details we have so far
+				for (let match of matches) {
+					activities[match.id] = {
+						id: match.id,
+						event: entry.id,
+						round: match.round,
+						winner: match.winner.player,
+						winner_rank: match.winner.rank ? match.winner.rank : null,
+						loser: match.loser.player,
+						loser_rank: match.loser.rank ? match.loser.rank : null
+					};
 
-				if (match.opponent && !opponents.includes(match.opponent)) {
-					opponents.push(match.opponent);
+					if (match.opponent && !opponents.includes(match.opponent)) {
+						opponents.push(match.opponent);
+					}
+				}
+
+				events[entry.id] = entry;
+			}
+
+			if (opponents.length > 0) {
+				for (let opponent of opponents) {
+					await discover(opponent);
 				}
 			}
+		};
 
-			events[entry.id] = entry;
-		}
-
-		if (opponents.length > 0) {
-			for (let opponent of opponents) {
-				await this.discoverEvents({ player: opponent, cache: cache, events: events, activities: activities });
-			}
-		}
+		await discover(player);
 	}
 
 	async updateELO() {
@@ -168,12 +170,22 @@ class Import extends Command {
 		let activities = {};
 		let matches = {};
 
-		await this.log(`Gathering activities from the top ranked ${this.argv.top} players since ${this.argv.since}...`);
-
 		let rankingProbe = new Probe();
 
-		for (let player of rankings.players) {
-			await this.discoverEvents({ player: player.player, events: events, activities: activities });
+		// Discover events and matches
+		if (true) {
+			let probe = new Probe();
+			let cache = {};
+
+			await this.log(`Gathering activities from the top ranked ${this.argv.top} players since ${this.argv.since}...`);
+
+			for (let player of rankings.players) {
+				await this.discoverEvents({ player: player.player, cache: cache, events: events, activities: activities });
+			}
+
+			await this.log(
+				`Activities gathered in ${probe.toString()}. Players processed: ${Object.keys(cache).length}. Events discovered: ${Object.keys(events).length}. Matches discovered: ${Object.keys(activities).length}.`
+			);
 		}
 
 		// Gather up players involved in the matches to update their details later
@@ -183,23 +195,17 @@ class Import extends Command {
 		if (true) {
 			let probe = new Probe();
 			let array = Object.values(events);
-			let output = {};
 
 			// Complete matches with duration and scores
 			await this.log(`Fetching scores from ${array.length} events...`);
 
 			for (let i = 0; i < array.length; i++) {
 				let event = array[i];
-				let percent = Math.round((((i + 1) / array.length) * 100) / 1) * 1;
 
-				// Log every 10%
-				if (percent % 10 == 0) {
-					let message = `${percent}% completed...`;
-
-					if (!output[percent]) {
-						await this.log(message);
-					}
-					output[percent] = message;
+				// Log every once in a while
+				if (i % Math.floor(array.length / 10) == 0) {
+					let percent = Math.round((((i + 1) / array.length) * 100));
+					await this.log(`${percent}% completed...`);
 				}
 
 				let details = null;
@@ -248,7 +254,6 @@ class Import extends Command {
 		if (true) {
 			let probe = new Probe();
 			let array = Object.values(events);
-			let output = {};
 
 			await this.log(`Saving ${array.length} events to database...`);
 
@@ -256,17 +261,10 @@ class Import extends Command {
 				let event = array[i];
 				await this.mysql.upsert('events', event);
 
-				// Calculate percent as integer and round off to nearest 10 for logging purposes
-				let percent = Math.round((((i + 1) / array.length) * 100) / 1) * 1;
-
-				// Log every 10%
-				if (percent % 10 == 0) {
-					let message = `${percent}% completed...`;
-
-					if (!output[percent]) {
-						await this.log(message);
-					}
-					output[percent] = message;
+				// Log every once in a while
+				if (i % Math.floor(array.length / 10) == 0) {
+					let percent = Math.round(((i + 1) / array.length) * 100);
+					await this.log(`${percent}% completed...`);
 				}
 			}
 
@@ -277,7 +275,6 @@ class Import extends Command {
 		if (true) {
 			let probe = new Probe();
 			let array = Object.values(matches);
-			let output = {};
 
 			await this.log(`Saving ${array.length} matches to database...`);
 
@@ -285,17 +282,10 @@ class Import extends Command {
 				let match = array[i];
 				await this.mysql.upsert('matches', match);
 
-				// Calculate percent as integer and round
-				let percent = Math.round((((i + 1) / array.length) * 100) / 1) * 1;
-
-				// Log every 10%
-				if (percent % 10 == 0) {
-					let message = `${percent}% completed...`;
-
-					if (!output[percent]) {
-						await this.log(message);
-					}
-					output[percent] = message;
+				// Log every once in a while
+				if (i % Math.floor(array.length / 10) == 0) {
+					let percent = Math.round(((i + 1) / array.length) * 100);
+					await this.log(`${percent}% completed...`);
 				}
 			}
 
@@ -307,22 +297,16 @@ class Import extends Command {
 		if (true) {
 			let probe = new Probe();
 			let array = Object.keys(players);
-			let output = {};
 
 			await this.log(`Updating player details for ${array.length} players...`);
 
 			for (let i = 0; i < array.length; i++) {
 				let player = array[i];
-				let percent = Math.round((((i + 1) / array.length) * 100) / 1) * 1;
 
-				// Log every 10%
-				if (percent % 10 == 0) {
-					let message = `${percent}% completed...`;
-
-					if (!output[percent]) {
-						await this.log(message);
-					}
-					output[percent] = message;
+				// Log every once in a while
+				if (i % Math.floor(array.length / 10) == 0) {
+					let percent = Math.round(((i + 1) / array.length) * 100);
+					await this.log(`${percent}% completed...`);
 				}
 
 				try {
