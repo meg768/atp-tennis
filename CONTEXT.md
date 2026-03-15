@@ -22,7 +22,6 @@ MYSQL_USER=
 MYSQL_PORT=
 MYSQL_PASSWORD=
 MYSQL_DATABASE=
-MYSQL_CODEX_DATABASE=
 ```
 
 Note: variable names use the `MYSQL_` prefix for compatibility, but the target database is MariaDB.
@@ -103,6 +102,11 @@ This is a deduplicated list from the current codebase.
 - Repo-managed DB artifact: `database/schema.sql` (only)
 - Legacy `import` no longer calls `sp_update()`; surface factors are now updated in app code via `src/update-surface-factors.js`
 - Legacy `import` ELO now reads directly from `matches` + `events` and does not depend on the `flatly` view
+- `database/schema.sql` is now a dump of the current MariaDB schema and currently includes:
+  - tables: `events`, `log`, `matches`, `players`, `settings`
+  - view: `flatly`
+  - helper SQL functions: `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`
+  - no `sp_update*` stored procedures
 
 ## MariaDB Prerequisites
 
@@ -176,10 +180,17 @@ For fresh dev/prod environments:
   - This preserves `players.rank` values fetched per player during import, so imported players outside the requested top list do not lose their ranking.
 - `src/fetch-top-players.js` now respects the requested `top` value instead of always fetching top 100.
 - `src/fetch-archive.js` now derives `matches.status` from ATP archive fields (`Status`, `MatchStateReasonMessage`, `Message`, `ResultString`) and import persists that status into `matches.status`.
-- `database/schema.sql` `sp_update_match_status` was updated to stop depending on missing SQL functions (`IS_MATCH_COMPLETED`, `NUMBER_OF_SETS_PLAYED`) and now:
-  - preserves already known statuses (`Completed`, `Aborted`, `Walkover`)
-  - uses `score` as fallback to derive `Walkover` / `Aborted` / `Completed`
 - User reported a 2026 import run looked good after these changes.
+
+## Session Memory (2026-03-15)
+- `database/schema.sql` was refreshed from the live `atp` database as a Sequel Pro dump.
+- The checked-in schema no longer includes legacy `sp_update*` stored procedures.
+- `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, and `NUMBER_OF_TIE_BREAKS` are still expected to exist in MariaDB for client-side statistical queries.
+- Those helper functions were simplified to assume normalized `score` values such as `6-4 7-6(5)`.
+- README and context were updated to describe the current import flow accurately:
+  - post-import updates run in JS modules, not via `sp_update()`
+  - `import --loop` is documented in hours with default `12`
+  - `import --light` is documented as a supported option
 
 ## Session Memory (2026-03-12)
 - New module added: `src/fetch-oddset.js`.
@@ -243,7 +254,7 @@ For fresh dev/prod environments:
   - a real legacy import with `--since 2020` completed successfully
   - reported runtime was about 65 minutes
   - user considers `--since 2020` the practical target dataset; pre-2020 / Open Era imports are optional fun-history work rather than a requirement
-- The proof-of-concept `import-codex` command was removed again after its ideas were folded back into the maintained legacy import path.
+- An earlier proof-of-concept import path was removed again after its ideas were folded back into the maintained legacy import path.
 - Additional hardening was applied to `commands/import.js`:
   - import now aborts before ranking updates if the fetched ranking list is empty, preventing a mass `players.points = NULL` write on bad ATP responses
   - activity discovery now logs and skips per-player fetch failures instead of aborting the whole run immediately

@@ -11,7 +11,7 @@ Node.js (CommonJS) app that imports ATP data into MariaDB, updates player metric
 ## Requirements
 - Node.js 20+ (built-in `fetch` is used in multiple modules).
 - MariaDB with schema from `database/schema.sql`.
-- Stored procedures/functions required by your install, including `sp_update`.
+- MariaDB user permissions that allow creating the tables, view, and helper functions defined in the schema.
 
 ## Environment (`.env`)
 
@@ -38,7 +38,7 @@ node atp.js --help
 ```
 
 Available commands (from `atp.js`):
-- `import [options]` - Full import pipeline (rankings -> activity -> scores -> players -> stats -> ELO -> `sp_update()`).
+- `import [options]` - Full import pipeline (rankings -> activity -> scores -> players -> stats -> ELO -> surface factors).
 - `serve [options]` - Start local API server.
 
 ### Common Command Examples
@@ -49,7 +49,7 @@ node atp.js serve
 ```
 
 ### Important Options
-- `import`: `--top`, `--since`, `--clean`, `--loop` (days; default `0.33`).
+- `import`: `--top`, `--since`, `--clean`, `--loop` (hours; default `12`), `--light`.
 
 ## API Service
 
@@ -106,8 +106,10 @@ Reference docs:
 
 ## Database Notes
 - Schema in repo: `database/schema.sql`.
-- Import pipeline expects `sp_update` and its dependencies to exist in MariaDB.
-- `node atp.js import ...` fails if required routines/functions are missing.
+- The schema currently defines the core tables, the `flatly` view, and the `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, and `NUMBER_OF_TIE_BREAKS` helper functions.
+- Those helper functions are kept for client-side statistical SQL queries and assume normalized score strings such as `6-4 7-6(5)`.
+- The import pipeline does not call `sp_update()`; post-import updates are handled in application code.
+- `node atp.js import ...` fails if required schema objects are missing.
 
 ## Security and Caveats (From Current Source)
 - `POST /api/query` runs SQL from request input and DB config enables `multipleStatements=true`. Keep service private/trusted.
