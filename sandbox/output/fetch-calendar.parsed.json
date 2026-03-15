@@ -3,448 +3,448 @@
     {
       "id": "2026-9900",
       "name": "United Cup",
-      "date": "2 - 11 January, 2026",
+      "date": "2026-01-02",
       "location": "Perth-Sydney, Australia",
       "type": "United Cup"
     },
     {
       "id": "2026-339",
       "name": "Brisbane International presented by ANZ",
-      "date": "4 - 11 January, 2026",
+      "date": "2026-01-04",
       "location": "Brisbane, Australia",
       "type": "ATP-250"
     },
     {
       "id": "2026-336",
       "name": "Bank of China Hong Kong Tennis Open",
-      "date": "5 - 11 January, 2026",
+      "date": "2026-01-05",
       "location": "Hong Kong, Hong Kong",
       "type": "ATP-250"
     },
     {
       "id": "2026-8998",
       "name": "Adelaide International",
-      "date": "12 - 17 January, 2026",
+      "date": "2026-01-12",
       "location": "Adelaide, Australia",
       "type": "ATP-250"
     },
     {
       "id": "2026-301",
       "name": "ASB Classic",
-      "date": "12 - 17 January, 2026",
+      "date": "2026-01-12",
       "location": "Auckland, New Zealand",
       "type": "ATP-250"
     },
     {
       "id": "2026-580",
       "name": "Australian Open",
-      "date": "18 January - 1 February, 2026",
+      "date": "2026-01-18",
       "location": "Melbourne, Australia",
       "type": "Grand Slam"
     },
     {
       "id": "2026-375",
       "name": "Open Occitanie",
-      "date": "2 - 8 February, 2026",
+      "date": "2026-02-02",
       "location": "Montpellier, France",
       "type": "ATP-250"
     },
     {
       "id": "2026-8096",
       "name": "Davis Cup Qualifiers 1st Rd",
-      "date": "5 - 8 February, 2026",
+      "date": "2026-02-05",
       "location": "Multiple Locations",
       "type": "Davis Cup"
     },
     {
       "id": "2026-424",
       "name": "Nexo Dallas Open",
-      "date": "9 - 15 February, 2026",
+      "date": "2026-02-09",
       "location": "Dallas, United States",
       "type": "ATP-500"
     },
     {
       "id": "2026-407",
       "name": "ABN AMRO Open",
-      "date": "9 - 15 February, 2026",
+      "date": "2026-02-09",
       "location": "Rotterdam, Netherlands",
       "type": "ATP-500"
     },
     {
       "id": "2026-506",
       "name": "IEB+ Argentina Open",
-      "date": "9 - 15 February, 2026",
+      "date": "2026-02-09",
       "location": "Buenos Aires, Argentina",
       "type": "ATP-250"
     },
     {
       "id": "2026-451",
       "name": "Qatar ExxonMobil Open",
-      "date": "16 - 21 February, 2026",
+      "date": "2026-02-16",
       "location": "Doha, Qatar",
       "type": "ATP-500"
     },
     {
       "id": "2026-6932",
       "name": "Rio Open presented by Claro",
-      "date": "16 - 22 February, 2026",
+      "date": "2026-02-16",
       "location": "Rio de Janeiro, Brazil",
       "type": "ATP-500"
     },
     {
       "id": "2026-499",
       "name": "Delray Beach Open",
-      "date": "16 - 22 February, 2026",
+      "date": "2026-02-16",
       "location": "Delray Beach, United States",
       "type": "ATP-250"
     },
     {
       "id": "2026-495",
       "name": "Dubai Duty Free Tennis Championships",
-      "date": "23 - 28 February, 2026",
+      "date": "2026-02-23",
       "location": "Dubai, United Arab Emirates",
       "type": "ATP-500"
     },
     {
       "id": "2026-807",
       "name": "Abierto Mexicano Telcel presentado por HSBC",
-      "date": "23 - 28 February, 2026",
+      "date": "2026-02-23",
       "location": "Acapulco, Mexico",
       "type": "ATP-500"
     },
     {
       "id": "2026-8996",
       "name": "BCI Seguros Chile Open",
-      "date": "23 February - 1 March, 2026",
+      "date": "2026-02-23",
       "location": "Santiago, Chile",
       "type": "ATP-250"
     },
     {
       "id": "2026-404",
       "name": "BNP Paribas Open",
-      "date": "4 - 15 March, 2026",
+      "date": "2026-03-04",
       "location": "Indian Wells, United States",
       "type": "Masters"
     },
     {
       "id": "2026-403",
       "name": "Miami Open presented by Itau",
-      "date": "18 - 29 March, 2026",
+      "date": "2026-03-18",
       "location": "Miami, United States",
       "type": "Masters"
     },
     {
       "id": "2026-717",
       "name": "Fayez Sarofim & Co. U.S. Men's Clay Court Championship",
-      "date": "30 March - 5 April, 2026",
+      "date": "2026-03-30",
       "location": "Houston, United States",
       "type": "ATP-250"
     },
     {
       "id": "2026-360",
       "name": "Grand Prix Hassan II",
-      "date": "30 March - 5 April, 2026",
+      "date": "2026-03-30",
       "location": "Marrakech, Morocco",
       "type": "ATP-250"
     },
     {
       "id": "2026-4462",
       "name": "Tiriac Open presented by UniCredit Bank",
-      "date": "30 March - 5 April, 2026",
+      "date": "2026-03-30",
       "location": "Bucharest, Romania",
       "type": "ATP-250"
     },
     {
       "id": "2026-410",
       "name": "Rolex Monte-Carlo Masters",
-      "date": "5 - 12 April, 2026",
+      "date": "2026-04-05",
       "location": "Monte-Carlo, Monaco",
       "type": "Masters"
     },
     {
       "id": "2026-425",
       "name": "Barcelona Open Banc Sabadell",
-      "date": "13 - 19 April, 2026",
+      "date": "2026-04-13",
       "location": "Barcelona, Spain",
       "type": "ATP-500"
     },
     {
       "id": "2026-308",
       "name": "BMW Open by Bitpanda",
-      "date": "13 - 19 April, 2026",
+      "date": "2026-04-13",
       "location": "Munich, Germany",
       "type": "ATP-500"
     },
     {
       "id": "2026-1536",
       "name": "Mutua Madrid Open",
-      "date": "22 April - 3 May, 2026",
+      "date": "2026-04-22",
       "location": "Madrid, Spain",
       "type": "Masters"
     },
     {
       "id": "2026-416",
       "name": "Internazionali BNL d'Italia",
-      "date": "6 - 17 May, 2026",
+      "date": "2026-05-06",
       "location": "Rome, Italy",
       "type": "Masters"
     },
     {
       "id": "2026-414",
       "name": "Bitpanda Hamburg Open",
-      "date": "17 - 23 May, 2026",
+      "date": "2026-05-17",
       "location": "Hamburg, Germany",
       "type": "ATP-500"
     },
     {
       "id": "2026-322",
       "name": "Gonet Geneva Open",
-      "date": "17 - 23 May, 2026",
+      "date": "2026-05-17",
       "location": "Geneva, Switzerland",
       "type": "ATP-250"
     },
     {
       "id": "2026-520",
       "name": "Roland Garros",
-      "date": "24 May - 7 June, 2026",
+      "date": "2026-05-24",
       "location": "Paris, France",
       "type": "Grand Slam"
     },
     {
       "id": "2026-321",
       "name": "BOSS OPEN",
-      "date": "8 - 14 June, 2026",
+      "date": "2026-06-08",
       "location": "Stuttgart, Germany",
       "type": "ATP-250"
     },
     {
       "id": "2026-440",
       "name": "Libema Open",
-      "date": "8 - 14 June, 2026",
+      "date": "2026-06-08",
       "location": "'s-Hertogenbosch, Netherlands",
       "type": "ATP-250"
     },
     {
       "id": "2026-311",
       "name": "HSBC Championships",
-      "date": "15 - 21 June, 2026",
+      "date": "2026-06-15",
       "location": "London, Great Britain",
       "type": "ATP-500"
     },
     {
       "id": "2026-500",
       "name": "Terra Wortmann Open",
-      "date": "15 - 21 June, 2026",
+      "date": "2026-06-15",
       "location": "Halle, Germany",
       "type": "ATP-500"
     },
     {
       "id": "2026-8994",
       "name": "Vanda Pharmaceuticals Mallorca Championships",
-      "date": "21 - 27 June, 2026",
+      "date": "2026-06-21",
       "location": "Mallorca, Spain",
       "type": "ATP-250"
     },
     {
       "id": "2026-741",
       "name": "Lexus Eastbourne Open",
-      "date": "22 - 27 June, 2026",
+      "date": "2026-06-22",
       "location": "Eastbourne, Great Britain",
       "type": "ATP-250"
     },
     {
       "id": "2026-540",
       "name": "Wimbledon",
-      "date": "29 June - 12 July, 2026",
+      "date": "2026-06-29",
       "location": "London, Great Britain",
       "type": "Grand Slam"
     },
     {
       "id": "2026-316",
       "name": "Nordea Open",
-      "date": "13 - 19 July, 2026",
+      "date": "2026-07-13",
       "location": "Bastad, Sweden",
       "type": "ATP-250"
     },
     {
       "id": "2026-314",
       "name": "EFG Swiss Open Gstaad",
-      "date": "13 - 19 July, 2026",
+      "date": "2026-07-13",
       "location": "Gstaad, Switzerland",
       "type": "ATP-250"
     },
     {
       "id": "2026-439",
       "name": "Plava Laguna Croatia Open Umag",
-      "date": "13 - 19 July, 2026",
+      "date": "2026-07-13",
       "location": "Umag, Croatia",
       "type": "ATP-250"
     },
     {
       "id": "2026-319",
       "name": "Generali Open",
-      "date": "20 - 25 July, 2026",
+      "date": "2026-07-20",
       "location": "Kitzbuhel, Austria",
       "type": "ATP-250"
     },
     {
       "id": "2026-7290",
       "name": "Millennium Estoril Open",
-      "date": "20 - 26 July, 2026",
+      "date": "2026-07-20",
       "location": "Estoril, Portugal",
       "type": "ATP-250"
     },
     {
       "id": "2026-418",
       "name": "Mubadala Citi DC Open",
-      "date": "27 July - 2 August, 2026",
+      "date": "2026-07-27",
       "location": "Washington, United States",
       "type": "ATP-500"
     },
     {
       "id": "2026-7480",
       "name": "Mifel Tennis Open by Telcel Oppo",
-      "date": "27 July - 1 August, 2026",
+      "date": "2026-07-27",
       "location": "Los Cabos, Mexico",
       "type": "ATP-250"
     },
     {
       "id": "2026-421",
       "name": "National Bank Open presented by Rogers",
-      "date": "2 - 13 August, 2026",
+      "date": "2026-08-02",
       "location": "Montreal, Canada",
       "type": "Masters"
     },
     {
       "id": "2026-422",
       "name": "Cincinnati Open",
-      "date": "13 - 23 August, 2026",
+      "date": "2026-08-13",
       "location": "Cincinnati, United States",
       "type": "Masters"
     },
     {
       "id": "2026-6242",
       "name": "Winston-Salem Open",
-      "date": "23 - 29 August, 2026",
+      "date": "2026-08-23",
       "location": "Winston-Salem, United States",
       "type": "ATP-250"
     },
     {
       "id": "2026-560",
       "name": "US Open",
-      "date": "31 August - 13 September, 2026",
+      "date": "2026-08-31",
       "location": "New York, United States",
       "type": "Grand Slam"
     },
     {
       "id": "2026-8097",
       "name": "Davis Cup Qualifiers 2nd Rd",
-      "date": "17 - 20 September, 2026",
+      "date": "2026-09-17",
       "location": "Multiple Locations",
       "type": "Davis Cup"
     },
     {
       "id": "2026-7581",
       "name": "Chengdu Open",
-      "date": "23 - 29 September, 2026",
+      "date": "2026-09-23",
       "location": "Chengdu, China",
       "type": "ATP-250"
     },
     {
       "id": "2026-4713",
       "name": "Lynk & Co Hangzhou Open",
-      "date": "23 - 29 September, 2026",
+      "date": "2026-09-23",
       "location": "Hangzhou, China",
       "type": "ATP-250"
     },
     {
       "id": "2026-9210",
       "name": "Laver Cup",
-      "date": "25 - 27 September, 2026",
+      "date": "2026-09-25",
       "location": "London, Great Britain",
       "type": "Laver Cup"
     },
     {
       "id": "2026-747",
       "name": "China Open",
-      "date": "30 September - 6 October, 2026",
+      "date": "2026-09-30",
       "location": "Beijing, China",
       "type": "ATP-500"
     },
     {
       "id": "2026-329",
       "name": "Kinoshita Group Japan Open Tennis Championships",
-      "date": "30 September - 6 October, 2026",
+      "date": "2026-09-30",
       "location": "Tokyo, Japan",
       "type": "ATP-500"
     },
     {
       "id": "2026-5014",
       "name": "Rolex Shanghai Masters",
-      "date": "7 - 18 October, 2026",
+      "date": "2026-10-07",
       "location": "Shanghai, China",
       "type": "Masters"
     },
     {
       "id": "2026-9410",
       "name": "Almaty Open",
-      "date": "19 - 25 October, 2026",
+      "date": "2026-10-19",
       "location": "Almaty, Kazakhstan",
       "type": "ATP-250"
     },
     {
       "id": "2026-496",
       "name": "Grand Prix Auvergne-Rhone-Alpes",
-      "date": "19 - 25 October, 2026",
+      "date": "2026-10-19",
       "location": "Lyon, France",
       "type": "ATP-250"
     },
     {
       "id": "2026-7485",
       "name": "BNP Paribas Fortis European Open",
-      "date": "19 - 25 October, 2026",
+      "date": "2026-10-19",
       "location": "Brussels, Belgium",
       "type": "ATP-250"
     },
     {
       "id": "2026-337",
       "name": "Erste Bank Open",
-      "date": "26 October - 1 November, 2026",
+      "date": "2026-10-26",
       "location": "Vienna, Austria",
       "type": "ATP-500"
     },
     {
       "id": "2026-328",
       "name": "Swiss Indoors Basel",
-      "date": "26 October - 1 November, 2026",
+      "date": "2026-10-26",
       "location": "Basel, Switzerland",
       "type": "ATP-500"
     },
     {
       "id": "2026-352",
       "name": "Rolex Paris Masters",
-      "date": "2 - 8 November, 2026",
+      "date": "2026-11-02",
       "location": "Paris, France",
       "type": "Masters"
     },
     {
       "id": "2026-429",
       "name": "Bybit Stockholm Open",
-      "date": "8 - 14 November, 2026",
+      "date": "2026-11-08",
       "location": "Stockholm, Sweden",
       "type": "ATP-250"
     },
     {
       "id": "2026-605",
       "name": "Nitto ATP Finals",
-      "date": "15 - 22 November, 2026",
+      "date": "2026-11-15",
       "location": "Turin, Italy",
       "type": "World Championship"
     },
     {
       "id": "2026-8099",
       "name": "Davis Cup Finals",
-      "date": "23 - 29 November, 2026",
+      "date": "2026-11-23",
       "location": "Bologna, Italy",
       "type": "Davis Cup"
     }
