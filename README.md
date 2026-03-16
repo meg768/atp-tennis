@@ -86,7 +86,7 @@ curl -X POST http://127.0.0.1:3004/api/query \
 
 ### `/api/oddset` Query Parameters
 - `states`: comma-separated values, e.g. `STARTED,NOT_STARTED`
-- `raw`: truthy value to return raw upstream payload
+- `raw`: truthy value to return raw upstream payload bundle (`{ matches, open, errors }`)
 - `requestTimeoutMs`: request timeout in milliseconds
 - `url`: override upstream endpoint
 
@@ -96,8 +96,8 @@ curl -X POST http://127.0.0.1:3004/api/query \
 - `https://app.atptour.com/api/gateway/scores.resultsarchive?eventyear={eventYear}&eventid={eventID}`
 - `https://www.atptour.com/en/-/www/players/hero/{player}`
 - `https://www.atptour.com/en/-/www/StatsLeaderboard/{type}/52week/all/all/false?v=1`
-- `https://app.atptour.com/api/v2/gateway/livematches/website?scoringTournamentLevel=tour`
 - `https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true`
+- `https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/event/live/open.json?lang=sv_SE&market=SE&client_id=200&channel_id=1`
 - `https://www.atptour.com/en/-/tournaments/calendar/tour`
 
 Reference docs:

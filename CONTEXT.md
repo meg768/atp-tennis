@@ -230,6 +230,22 @@ For fresh dev/prod environments:
   - `fetch-activity` is for recursive player/event discovery only (graph traversal back in time).
   - canonical `matches.id` should come from ATP archive scores only: `{eventYear}-{eventId}-{matchId}`.
 
+## Session Memory (2026-03-16)
+- `src/fetch-oddset.js` no longer relies only on Oddset ATP `matches.json`.
+- `/api/oddset` now merges two Oddset/Kambi sources:
+  - Oddset ATP `matches.json` for ATP upcoming/live odds
+  - Oddset `event/live/open.json` as live fallback when ATP `matches.json` is empty/incomplete
+- This fixes the case where `matches.json` returns `events: []` while ATP live odds are still visible elsewhere in the app.
+- Current merge behavior:
+  - keep ATP upcoming rows from Oddset ATP `matches.json`
+  - add/override live ATP rows from Oddset live-open payload when Kambi path metadata marks them as ATP
+  - ATP-family filtering now accepts both `atp` and qualifier-style Kambi term keys such as `atp_qual_`
+  - prefer live-open odds over ATP `matches.json` odds for the same player pair
+  - ensure started matches emitted by `/api/oddset` always have non-null `score` (Kambi live score or fallback `Live`)
+- `GET /api/oddset?raw=1` now returns a source bundle instead of a single upstream payload:
+  - `{ matches, open, errors }`
+- `sandbox/fetch-oddset.js` now awaits the async oddset parser before writing output files.
+
 ## Session Memory (2026-03-14)
 - Legacy ATP import flow in `commands/import.js` was refactored further around real ATP match identity:
   - canonical `matches.id` is now intended to be `{eventYear}-{eventId}-{matchId}`

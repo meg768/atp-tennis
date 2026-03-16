@@ -15,7 +15,7 @@ async function main() {
 
 	try {
 		const raw = await fetcher.fetch();
-		const parsed = fetcher.parse(raw);
+		const parsed = await fetcher.parse(raw);
 
 		fs.mkdirSync(outputDir, { recursive: true });
 		fs.writeFileSync(parsedPath, `${JSON.stringify(parsed, null, 2)}\n`);
