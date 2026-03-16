@@ -245,6 +245,7 @@ For fresh dev/prod environments:
 - `GET /api/oddset?raw=1` now returns a source bundle instead of a single upstream payload:
   - `{ matches, open, errors }`
 - `sandbox/fetch-oddset.js` now awaits the async oddset parser before writing output files.
+- Team preference: when the user writes `commit`, it means `commit + push` (not commit only).
 
 ## Session Memory (2026-03-14)
 - Legacy ATP import flow in `commands/import.js` was refactored further around real ATP match identity:
