@@ -86,9 +86,19 @@ curl -X POST http://127.0.0.1:3004/api/query \
 
 ### `/api/oddset` Query Parameters
 - `states`: comma-separated values, e.g. `STARTED,NOT_STARTED`
-- `raw`: truthy value to return raw upstream payload bundle (`{ matches, open, errors }`)
+- `raw`: truthy value to return raw upstream payload bundle (`{ matches, open, upcoming, meta, errors }`)
 - `requestTimeoutMs`: request timeout in milliseconds
 - `url`: override upstream endpoint
+
+### `/api/oddset` Upstream Fallback Order
+- Primary: Oddset ATP `matches.json` for ATP live/upcoming odds.
+- Live fallback: Oddset `event/live/open.json` for ATP live rows when ATP `matches.json` is empty/incomplete.
+- Upcoming fallback: Oddset tennis-all `listView/tennis/all/all/all/matches.json` only when `NOT_STARTED` is requested and ATP `matches.json` has no upcoming rows.
+- All rows are filtered to the ATP family in code, not just by upstream URL naming:
+  - `termKey === 'atp'`
+  - `termKey.startsWith('atp_')`
+  - fallback name matching for ATP qualifier labels such as `ATP Qual.`
+- Parsed response shape stays the same: an array of rows with `id`, `start`, `tournament`, `state`, `score`, `playerA`, `playerB`.
 
 ## Data Sources Used in Code
 - `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank={top}`

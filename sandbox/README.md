@@ -73,6 +73,16 @@ Always writes both files to `sandbox/output/`:
 - Uses hardcoded sandbox input: default states `STARTED,NOT_STARTED`.
 - Runs silently on success (no console output).
 
+## Verify `oddset` Contract
+
+```bash
+node sandbox/verify-oddset.js
+```
+
+Writes one file to `sandbox/output/`:
+- `verify-oddset.report.json` (summary of counts, raw meta/errors, and one live/upcoming sample row)
+- Fails fast if rows are unsorted, if `NOT_STARTED` rows have non-null `score`, if non-ATP upcoming rows leak through, or if the parsed response shape is broken.
+
 ## Sandbox Convention
 
 - Keep sandbox-specific notes and changes in this file.

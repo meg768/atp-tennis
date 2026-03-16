@@ -2,14 +2,17 @@ const Fetcher = require('./fetcher');
 
 const ODDSET_ATP_MATCHES_URL =
 	'https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true';
+const ODDSET_TENNIS_MATCHES_URL =
+	'https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/all/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true';
 const ODDSET_LIVE_OPEN_URL =
 	'https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/event/live/open.json?lang=sv_SE&market=SE&client_id=200&channel_id=1';
 
 const ODDSET_CURRENT_STATES = ['STARTED', 'NOT_STARTED'];
 const DEFAULT_REQUEST_TIMEOUT_MS = 15000;
 const ODDS_SOURCE_PRIORITY = {
-	MATCHES: 1,
-	OPEN: 2
+	UPCOMING: 1,
+	OPEN: 2,
+	MATCHES: 3
 };
 
 function isPresent(value) {
@@ -192,11 +195,37 @@ function mergeRows(current, next) {
 	};
 }
 
-function isATPEventPath(path = []) {
-	return path.some(term => {
-		const termKey = String(term?.termKey || '').toLowerCase();
-		return termKey === 'atp' || termKey.startsWith('atp_');
-	});
+function normalizeCategoryToken(value = '') {
+	return String(value).trim().toLowerCase();
+}
+
+function isATPFamilyToken(value = '') {
+	const token = normalizeCategoryToken(value);
+
+	if (!token) {
+		return false;
+	}
+
+	return token === 'atp' || token.startsWith('atp_') || token === 'atp qual.' || token === 'atp qual' || token === 'atp qualifiers';
+}
+
+function isATPFamilyEvent(item) {
+	const eventPath = Array.isArray(item?.event?.path) ? item.event.path : [];
+
+	if (eventPath.length > 0) {
+		return eventPath.some(term =>
+			isATPFamilyToken(term?.termKey) ||
+			isATPFamilyToken(term?.name) ||
+			isATPFamilyToken(term?.englishName)
+		);
+	}
+
+	const itemPath = Array.isArray(item?.path) ? item.path : [];
+	return itemPath.some(term =>
+		isATPFamilyToken(term?.termKey) ||
+		isATPFamilyToken(term?.name) ||
+		isATPFamilyToken(term?.englishName)
+	);
 }
 
 class Module extends Fetcher {
@@ -204,37 +233,74 @@ class Module extends Fetcher {
 		super(options);
 		this.url = options.url ?? ODDSET_ATP_MATCHES_URL;
 		this.matchesUrl = options.matchesUrl ?? this.url;
+		this.upcomingUrl = options.upcomingUrl ?? ODDSET_TENNIS_MATCHES_URL;
 		this.openUrl = options.openUrl ?? ODDSET_LIVE_OPEN_URL;
 		this.states = options.states ?? ODDSET_CURRENT_STATES;
 		this.requestTimeoutMs = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
 	}
 
+	getTrackedStates() {
+		return new Set(this.states);
+	}
+
 	parseMatchesRows(raw) {
-		const trackedStates = new Set(this.states);
+		const trackedStates = this.getTrackedStates();
 
 		return (raw?.events || [])
+			.filter(item => item.event?.sport === 'TENNIS')
+			.filter(item => isATPFamilyEvent(item))
 			.filter(item => trackedStates.has(item.event?.state))
 			.map(item => toKambiRow(item, ODDS_SOURCE_PRIORITY.MATCHES))
 			.filter(Boolean);
 	}
 
 	parseOpenRows(raw) {
-		const trackedStates = new Set(this.states);
+		const trackedStates = this.getTrackedStates();
 
 		return (raw?.liveEvents || [])
 			.filter(item => item.event?.sport === 'TENNIS')
-			.filter(item => isATPEventPath(item.event?.path))
+			.filter(item => isATPFamilyEvent(item))
 			.filter(item => trackedStates.has(item.event?.state))
 			.map(item => toKambiRow(item, ODDS_SOURCE_PRIORITY.OPEN))
 			.filter(Boolean);
+	}
+
+	parseUpcomingRows(raw) {
+		const trackedStates = this.getTrackedStates();
+
+		if (!trackedStates.has('NOT_STARTED')) {
+			return [];
+		}
+
+		return (raw?.events || [])
+			.filter(item => item.event?.sport === 'TENNIS')
+			.filter(item => isATPFamilyEvent(item))
+			.filter(item => item.event?.state === 'NOT_STARTED')
+			.map(item => toKambiRow(item, ODDS_SOURCE_PRIORITY.UPCOMING))
+			.filter(Boolean);
+	}
+
+	hasMatchesUpcoming(raw) {
+		return this.parseMatchesRows(raw).some(row => row.state === 'NOT_STARTED');
+	}
+
+	shouldFetchUpcomingFallback(rawMatches) {
+		const trackedStates = this.getTrackedStates();
+
+		if (!trackedStates.has('NOT_STARTED')) {
+			return false;
+		}
+
+		return !this.hasMatchesUpcoming(rawMatches);
 	}
 
 	async parseRows(raw) {
 		const rowsByPlayers = new Map();
 		const matchRows = this.parseMatchesRows(raw?.matches);
 		const openRows = this.parseOpenRows(raw?.open);
+		const upcomingRows = this.parseUpcomingRows(raw?.upcoming);
 
-		for (const row of [...matchRows, ...openRows]) {
+		for (const row of [...matchRows, ...openRows, ...upcomingRows]) {
 			rowsByPlayers.set(row._playersKey, mergeRows(rowsByPlayers.get(row._playersKey), row));
 		}
 
@@ -299,9 +365,22 @@ class Module extends Fetcher {
 		return await this.parseRows(raw);
 	}
 
+	async fetchOptionalPayload(shouldFetch, config) {
+		if (!shouldFetch) {
+			return null;
+		}
+
+		try {
+			const value = await this.fetchPayload(config);
+			return { status: 'fulfilled', value };
+		} catch (reason) {
+			return { status: 'rejected', reason };
+		}
+	}
+
 	async fetch(options = {}) {
 		function getErrorMessage(result) {
-			if (result.status !== 'rejected') {
+			if (!result || result.status !== 'rejected') {
 				return null;
 			}
 
@@ -311,6 +390,7 @@ class Module extends Fetcher {
 		const {
 			url,
 			matchesUrl,
+			upcomingUrl,
 			openUrl,
 			states,
 			requestTimeoutMs
@@ -318,6 +398,7 @@ class Module extends Fetcher {
 
 		this.url = url ?? this.url;
 		this.matchesUrl = matchesUrl ?? url ?? this.matchesUrl;
+		this.upcomingUrl = upcomingUrl ?? this.upcomingUrl;
 		this.openUrl = openUrl ?? this.openUrl;
 		this.requestTimeoutMs = requestTimeoutMs ?? this.requestTimeoutMs;
 		this.states = Array.isArray(states) ? states : this.states;
@@ -333,17 +414,32 @@ class Module extends Fetcher {
 				label: 'Oddset live-open-endpoint'
 			})
 		]);
+		const matches = matchesResult.status === 'fulfilled' ? matchesResult.value : null;
+		const shouldUseUpcomingFallback = this.shouldFetchUpcomingFallback(matches);
+		const upcomingResult = await this.fetchOptionalPayload(shouldUseUpcomingFallback, {
+			url: this.upcomingUrl,
+			requestTimeoutMs: this.requestTimeoutMs,
+			label: 'Oddset tennis upcoming fallback-endpoint'
+		});
+
 		const raw = {
-			matches: matchesResult.status === 'fulfilled' ? matchesResult.value : null,
+			matches,
 			open: openResult.status === 'fulfilled' ? openResult.value : null,
+			upcoming: upcomingResult?.status === 'fulfilled' ? upcomingResult.value : null,
+			meta: {
+				requestedStates: this.states,
+				hasMatchesUpcoming: this.hasMatchesUpcoming(matches),
+				usedUpcomingFallback: shouldUseUpcomingFallback
+			},
 			errors: {
 				matches: getErrorMessage(matchesResult),
-				open: getErrorMessage(openResult)
+				open: getErrorMessage(openResult),
+				upcoming: getErrorMessage(upcomingResult)
 			}
 		};
 
-		if (!raw.matches && !raw.open) {
-			const errors = [raw.errors.matches, raw.errors.open].filter(Boolean).join(' | ');
+		if (!raw.matches && !raw.open && !raw.upcoming) {
+			const errors = [raw.errors.matches, raw.errors.open, raw.errors.upcoming].filter(Boolean).join(' | ');
 			throw new Error(errors || 'Kunde inte na nagon Oddset-kalla');
 		}
 

@@ -232,19 +232,28 @@ For fresh dev/prod environments:
 
 ## Session Memory (2026-03-16)
 - `src/fetch-oddset.js` no longer relies only on Oddset ATP `matches.json`.
-- `/api/oddset` now merges two Oddset/Kambi sources:
+- `/api/oddset` now merges up to three Oddset/Kambi sources:
   - Oddset ATP `matches.json` for ATP upcoming/live odds
   - Oddset `event/live/open.json` as live fallback when ATP `matches.json` is empty/incomplete
+  - Oddset tennis-all `listView/tennis/all/all/all/matches.json` as upcoming fallback when ATP `matches.json` has no `NOT_STARTED` rows
 - This fixes the case where `matches.json` returns `events: []` while ATP live odds are still visible elsewhere in the app.
+- This also fixes the case where ATP `matches.json` has live rows but no upcoming rows, while Kambi still exposes upcoming tennis odds elsewhere.
 - Current merge behavior:
   - keep ATP upcoming rows from Oddset ATP `matches.json`
   - add/override live ATP rows from Oddset live-open payload when Kambi path metadata marks them as ATP
+  - add tennis-wide upcoming rows only when `NOT_STARTED` is requested and ATP `matches.json` has no upcoming rows
   - ATP-family filtering now accepts both `atp` and qualifier-style Kambi term keys such as `atp_qual_`
-  - prefer live-open odds over ATP `matches.json` odds for the same player pair
+  - ATP-family filtering is now applied explicitly to all oddset sources in code, including upcoming fallback rows
+  - prefer ATP `matches.json` odds over fallback sources for the same player pair
+  - prefer live-open odds over tennis-wide upcoming fallback for the same player pair
   - ensure started matches emitted by `/api/oddset` always have non-null `score` (Kambi live score or fallback `Live`)
 - `GET /api/oddset?raw=1` now returns a source bundle instead of a single upstream payload:
-  - `{ matches, open, errors }`
+  - `{ matches, open, upcoming, meta, errors }`
 - `sandbox/fetch-oddset.js` now awaits the async oddset parser before writing output files.
+- New sandbox verifier added: `node sandbox/verify-oddset.js`
+  - validates oddset row sorting
+  - validates `score === null` for `NOT_STARTED`
+  - writes `sandbox/output/verify-oddset.report.json`
 - Team preference: when the user writes `commit`, it means `commit + push` (not commit only).
 
 ## Session Memory (2026-03-14)
