@@ -14,6 +14,59 @@ Node.js project for fetching ATP data from `atptour.com`, storing it in MariaDB,
 - Updates player stats (serve/return/pressure) and ELO ratings
 - Exposes a lightweight API via the `serve` command
 
+## Domain Context
+- Primary tennis data focus is the Open Era (`1968-present`).
+- Older historical data can exist, but it is lower priority than the modern ATP dataset.
+- Core database entities are:
+  - `players`
+  - `matches`
+  - `events`
+- Important analysis view:
+  - `flatly`
+- `flatly` is treated as a convenience join layer for analysis and downstream SQL, even when some import/runtime code paths no longer depend on it directly.
+
+## Website And Query Context
+- The broader ATP statistics site around this project includes pages such as:
+  - `/query`
+  - `/events`
+  - `/live`
+  - `/currently`
+  - `/head-to-head`
+- SQL queries are stored as files with metadata headers (title, description, SQL) and are loaded into the web app automatically.
+- SQL results may be rendered directly in the UI.
+- The React/UI side uses project-specific components such as:
+  - `Page`
+  - `Page.Menu`
+  - `Page.Content`
+  - `Table`
+- The wider project also includes a `MarkdownProcessor` concept that finds SQL blocks in markdown, executes them, and injects markdown tables.
+
+## ATP Reverse Engineering Context
+- Endpoint exploration is an active part of the project, especially around:
+  - tournament endpoints
+  - results archive endpoints
+  - draw endpoints
+  - player entry lists
+- Example discovered ATP endpoint pattern:
+  - `https://www.atptour.com/-/ls/playerdrawpath/grouped/{year}/{eventId}/{playerId}`
+
+## Import And Operations Context
+- A representative full import command is:
+  - `./atp.js import --since 1968 --clean`
+- The import tool is expected to:
+  - fetch ATP data
+  - import into MariaDB
+  - apply retry logic on failures
+  - log progress clearly
+- Example remote log monitoring command used in this project context:
+  - `ssh pi@pi-kato "tail -f /home/pi/atp-tennis/import.log"`
+
+## Database Conventions
+- Database column names should be in English.
+- User-facing UI labels should be in Swedish with an initial capital letter.
+- The wider MariaDB environment may contain additional custom helper functions beyond those checked into `database/schema.sql`, for example:
+  - `NUMBER_OF_SETS_PLAYED(score)`
+
 ## Tech Stack
 - Node.js (CommonJS)
 - MariaDB (via MySQL-compatible `mysql` package)
@@ -306,10 +359,18 @@ For fresh dev/prod environments:
   - validates `score === null` for `NOT_STARTED`
   - writes `sandbox/output/verify-oddset.report.json`
 - Team preference: when the user writes `commit`, it means `commit + push` (not commit only).
+- `AUTHOR.md` is a shared personal profile and should not contain project-specific details for this repository.
+- Project-specific context that was previously mixed into `AUTHOR.md` belongs in `CODEX.md` instead, so repository memory stays local to the repo.
+- Added persistent memory for:
+  - ATP domain focus (`1968-present`, `players` / `matches` / `events`, `flatly`)
+  - website/query concepts (`/query`, metadata-backed SQL files, `MarkdownProcessor`)
+  - ATP reverse-engineering interests and database/UI naming conventions
+  - import/operations context such as the full import example and `pi-kato` log monitoring
 
 ## Collaboration Notes
 - `CODEX.md` is the shared source of truth for Codex instructions, project context, and session memory
 - Update this file when operational details, architecture, priorities, or collaboration conventions change
+- Keep `AUTHOR.md` limited to stable personal/developer profile information; store all repository-specific memory and conventions in `CODEX.md`
 - The change log now also lives in this file; append new entries there instead of maintaining a separate `LOG.md`
 - Commit command policy (user shorthand):
   - When the user says `commit`, interpret it as: stage all + commit + push.
@@ -331,6 +392,23 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-03-18 22:35 CET
+- Clarified repository memory ownership:
+  - `AUTHOR.md` is personal/shared profile only
+  - `CODEX.md` is where project-specific memory belongs
+- Affected files:
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-18 22:20 CET
+- Moved ATP project-specific context out of shared `AUTHOR.md` semantics and into repository-local memory in `CODEX.md`.
+- Added durable notes about domain focus, key tables/view, website/query concepts, reverse-engineering interests, and naming conventions.
+- Affected files:
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
 
 ### 2026-03-18 17:10 CET
 - Moved the running change log into `CODEX.md` and removed `LOG.md`.
