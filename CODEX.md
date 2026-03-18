@@ -361,6 +361,11 @@ For fresh dev/prod environments:
 - Team preference: when the user writes `commit`, it means `commit + push` (not commit only).
 - `AUTHOR.md` is a shared personal profile and should not contain project-specific details for this repository.
 - Project-specific context that was previously mixed into `AUTHOR.md` belongs in `CODEX.md` instead, so repository memory stays local to the repo.
+- User wants a few simple assistant shorthand commands for a mostly-`main` workflow:
+  - `status`
+  - `commit`
+  - `backup`
+  - `restore`
 - Added persistent memory for:
   - ATP domain focus (`1968-present`, `players` / `matches` / `events`, `flatly`)
   - website/query concepts (`/query`, metadata-backed SQL files, `MarkdownProcessor`)
@@ -372,17 +377,44 @@ For fresh dev/prod environments:
 - Update this file when operational details, architecture, priorities, or collaboration conventions change
 - Keep `AUTHOR.md` limited to stable personal/developer profile information; store all repository-specific memory and conventions in `CODEX.md`
 - The change log now also lives in this file; append new entries there instead of maintaining a separate `LOG.md`
-- Commit command policy (user shorthand):
-  - When the user says `commit`, interpret it as: stage all + commit + push.
-  - Standard sequence:
-    - `git add -A`
-    - generate an automatic concise commit message from current changes
-    - `git commit -m "..."`
-    - `git push origin <current-branch>`
-  - Defaults:
-    - remote: `origin`
-    - branch: current checked-out branch
-    - no force push by default
+- User shorthand commands:
+  - `status`
+    - Show a concise git overview for learning/debugging:
+      - current branch
+      - `git status --short`
+      - latest commits
+    - Does not change files or git history.
+  - `commit`
+    - Interpret as: stage all + commit + push.
+    - Standard sequence:
+      - `git add -A`
+      - generate an automatic concise commit message from current changes
+      - `git commit -m "..."`
+      - `git push origin <current-branch>`
+    - Defaults:
+      - remote: `origin`
+      - branch: current checked-out branch
+      - no force push by default
+  - `backup`
+    - Create a GitHub fallback point for the current branch.
+    - Standard sequence:
+      - if the worktree is dirty: `git add -A` + create an automatic backup commit
+      - update backup branch `backup/<current-branch>` to current `HEAD`
+      - push current branch if a backup commit was created
+      - force-push `backup/<current-branch>` to `origin`
+    - Purpose:
+      - mark "everything is good here"
+      - allow later destructive restore back to that point
+  - `restore`
+    - Restore the current branch back to the latest remote backup branch `origin/backup/<current-branch>`.
+    - Standard sequence:
+      - `git fetch origin`
+      - `git reset --hard origin/backup/<current-branch>`
+      - `git push --force-with-lease origin <current-branch>`
+    - Effect:
+      - removes uncommitted local changes
+      - removes commits made after the latest `backup`
+    - Treat this as intentionally destructive and only run it when the user explicitly says `restore`
 
 ## Change Log
 
@@ -392,6 +424,18 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-03-18 22:55 CET
+- Added simple user shorthand command semantics for a mostly-`main` workflow:
+  - `status`
+  - `commit`
+  - `backup`
+  - `restore`
+- Defined `backup`/`restore` around remote backup branches named `backup/<current-branch>`.
+- Affected files:
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
 
 ### 2026-03-18 22:35 CET
 - Clarified repository memory ownership:
