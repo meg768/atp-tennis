@@ -1,4 +1,10 @@
-# ATP Tennis
+# CODEX
+
+This file is the single source of truth for Codex instructions, project context, and session memory in this repository.
+
+When updating project memory, architecture notes, operational details, priorities, or collaboration conventions, update this file directly.
+
+## ATP Tennis
 
 Node.js project for fetching ATP data from `atptour.com`, storing it in MariaDB, and exposing data through CLI commands and a local API service.
 
@@ -139,9 +145,6 @@ For fresh dev/prod environments:
 
 ## Priority Backlog
 1. Critical: unauthenticated SQL execution via `/api/query` with `multipleStatements=true`
-2. High: ELO calculation uses `^` (bitwise XOR) where exponentiation is expected
-3. High: potential null dereference in live score parsing
-4. Medium: possible naming conflict in SQL surface-factor procedure
 
 ## Session Memory (2026-02-26)
 - Live monitoring command is `monitor` (`commands/monitor.js`, registered in `atp.js`).
@@ -182,16 +185,6 @@ For fresh dev/prod environments:
 - `src/fetch-archive.js` now derives `matches.status` from ATP archive fields (`Status`, `MatchStateReasonMessage`, `Message`, `ResultString`) and import persists that status into `matches.status`.
 - User reported a 2026 import run looked good after these changes.
 
-## Session Memory (2026-03-15)
-- `database/schema.sql` was refreshed from the live `atp` database as a Sequel Pro dump.
-- The checked-in schema no longer includes legacy `sp_update*` stored procedures.
-- `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, and `NUMBER_OF_TIE_BREAKS` are still expected to exist in MariaDB for client-side statistical queries.
-- Those helper functions were simplified to assume normalized `score` values such as `6-4 7-6(5)`.
-- README and context were updated to describe the current import flow accurately:
-  - post-import updates run in JS modules, not via `sp_update()`
-  - `import --loop` is documented in hours with default `12`
-  - `import --light` is documented as a supported option
-
 ## Session Memory (2026-03-12)
 - New module added: `src/fetch-oddset.js`.
 - Purpose: fetch ATP match odds from Kambi/Svenska Spel endpoint:
@@ -222,39 +215,13 @@ For fresh dev/prod environments:
     - `sandbox/output/fetch-oddset.parsed.json`
     - `sandbox/output/fetch-oddset.raw.json`
   - `sandbox/README.md` documents the simplified sandbox flow.
-  - Team convention: sandbox-specific iteration notes belong in `sandbox/README.md`, not top-level `LOG.md`.
+- Team convention: sandbox-specific iteration notes belong in `sandbox/README.md`, not in the top-level change log section in `CODEX.md`.
 - CLI command registration in `atp.js` has been trimmed further:
   - `import`, `serve`
   - all other command files were removed; sandbox is now the place for endpoint/debug testing
 - Import identity strategy decision:
   - `fetch-activity` is for recursive player/event discovery only (graph traversal back in time).
   - canonical `matches.id` should come from ATP archive scores only: `{eventYear}-{eventId}-{matchId}`.
-
-## Session Memory (2026-03-16)
-- `src/fetch-oddset.js` no longer relies only on Oddset ATP `matches.json`.
-- `/api/oddset` now merges up to three Oddset/Kambi sources:
-  - Oddset ATP `matches.json` for ATP upcoming/live odds
-  - Oddset `event/live/open.json` as live fallback when ATP `matches.json` is empty/incomplete
-  - Oddset tennis-all `listView/tennis/all/all/all/matches.json` as upcoming fallback when ATP `matches.json` has no `NOT_STARTED` rows
-- This fixes the case where `matches.json` returns `events: []` while ATP live odds are still visible elsewhere in the app.
-- This also fixes the case where ATP `matches.json` has live rows but no upcoming rows, while Kambi still exposes upcoming tennis odds elsewhere.
-- Current merge behavior:
-  - keep ATP upcoming rows from Oddset ATP `matches.json`
-  - add/override live ATP rows from Oddset live-open payload when Kambi path metadata marks them as ATP
-  - add tennis-wide upcoming rows only when `NOT_STARTED` is requested and ATP `matches.json` has no upcoming rows
-  - ATP-family filtering now accepts both `atp` and qualifier-style Kambi term keys such as `atp_qual_`
-  - ATP-family filtering is now applied explicitly to all oddset sources in code, including upcoming fallback rows
-  - prefer ATP `matches.json` odds over fallback sources for the same player pair
-  - prefer live-open odds over tennis-wide upcoming fallback for the same player pair
-  - ensure started matches emitted by `/api/oddset` always have non-null `score` (Kambi live score or fallback `Live`)
-- `GET /api/oddset?raw=1` now returns a source bundle instead of a single upstream payload:
-  - `{ matches, open, upcoming, meta, errors }`
-- `sandbox/fetch-oddset.js` now awaits the async oddset parser before writing output files.
-- New sandbox verifier added: `node sandbox/verify-oddset.js`
-  - validates oddset row sorting
-  - validates `score === null` for `NOT_STARTED`
-  - writes `sandbox/output/verify-oddset.report.json`
-- Team preference: when the user writes `commit`, it means `commit + push` (not commit only).
 
 ## Session Memory (2026-03-14)
 - Legacy ATP import flow in `commands/import.js` was refactored further around real ATP match identity:
@@ -299,10 +266,51 @@ For fresh dev/prod environments:
   - code style preference: keep helper functions local to the method/block that uses them whenever practical, instead of promoting small helpers to file scope
   - code style preference: keep function parameter lists on one line when practical
 
+## Session Memory (2026-03-15)
+- `database/schema.sql` was refreshed from the live `atp` database as a Sequel Pro dump.
+- The checked-in schema no longer includes legacy `sp_update*` stored procedures.
+- `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, and `NUMBER_OF_TIE_BREAKS` are still expected to exist in MariaDB for client-side statistical queries.
+- Those helper functions were simplified to assume normalized `score` values such as `6-4 7-6(5)`.
+- README and project context were updated to describe the current import flow accurately:
+  - post-import updates run in JS modules, not via `sp_update()`
+  - `import --loop` is documented in hours with default `12`
+  - `import --light` is documented as a supported option
+
+## Session Memory (2026-03-16)
+- `src/fetch-oddset.js` no longer relies only on Oddset ATP `matches.json`.
+- `/api/oddset` now merges up to three Oddset/Kambi sources:
+  - Oddset ATP `matches.json` for ATP upcoming/live odds
+  - Oddset `event/live/open.json` as live fallback when ATP `matches.json` is empty/incomplete
+  - Oddset tennis-all `listView/tennis/all/all/all/matches.json` as upcoming fallback when ATP `matches.json` has no `NOT_STARTED` rows
+- This fixes the case where `matches.json` returns `events: []` while ATP live odds are still visible elsewhere in the app.
+- This also fixes the case where ATP `matches.json` has live rows but no upcoming rows, while Kambi still exposes upcoming tennis odds elsewhere.
+
+## Session Memory (2026-03-18)
+- Repository instruction file was renamed from `AGENTS.md` to `CODEX.md`.
+- Project context and session memory were consolidated into `CODEX.md`; `CONTEXT.md` was removed.
+- Repository is now Codex-only for in-repo instructions/context; no separate cross-assistant memory file is maintained.
+- Current merge behavior:
+  - keep ATP upcoming rows from Oddset ATP `matches.json`
+  - add/override live ATP rows from Oddset live-open payload when Kambi path metadata marks them as ATP
+  - add tennis-wide upcoming rows only when `NOT_STARTED` is requested and ATP `matches.json` has no upcoming rows
+  - ATP-family filtering now accepts both `atp` and qualifier-style Kambi term keys such as `atp_qual_`
+  - ATP-family filtering is now applied explicitly to all oddset sources in code, including upcoming fallback rows
+  - prefer ATP `matches.json` odds over fallback sources for the same player pair
+  - prefer live-open odds over tennis-wide upcoming fallback for the same player pair
+  - ensure started matches emitted by `/api/oddset` always have non-null `score` (Kambi live score or fallback `Live`)
+- `GET /api/oddset?raw=1` now returns a source bundle instead of a single upstream payload:
+  - `{ matches, open, upcoming, meta, errors }`
+- `sandbox/fetch-oddset.js` now awaits the async oddset parser before writing output files.
+- New sandbox verifier added: `node sandbox/verify-oddset.js`
+  - validates oddset row sorting
+  - validates `score === null` for `NOT_STARTED`
+  - writes `sandbox/output/verify-oddset.report.json`
+- Team preference: when the user writes `commit`, it means `commit + push` (not commit only).
+
 ## Collaboration Notes
-- `CONTEXT.md` is the shared source of truth for project context and memory
-- Update this file when operational details, architecture, or priorities change
-- `LOG.md` is the running change log for repository edits; append new entries as changes are made
+- `CODEX.md` is the shared source of truth for Codex instructions, project context, and session memory
+- Update this file when operational details, architecture, priorities, or collaboration conventions change
+- The change log now also lives in this file; append new entries there instead of maintaining a separate `LOG.md`
 - Commit command policy (user shorthand):
   - When the user says `commit`, interpret it as: stage all + commit + push.
   - Standard sequence:
@@ -314,11 +322,138 @@ For fresh dev/prod environments:
     - remote: `origin`
     - branch: current checked-out branch
     - no force push by default
-    - no automatic merge/rebase by default
-  - Error handling:
-    - if there are no changes: report a clear no-op (`nothing to commit`)
-    - if commit fails: report the concrete git error
-    - if push fails with non-fast-forward: stop and ask user before any rebase/merge/force action
-    - if push fails for auth/network/remote reasons: report the concrete git error and stop
-  - Success confirmation after push:
-    - report commit hash, branch, and push target (`origin/<branch>`)
+
+## Change Log
+
+Running change log for the project.
+
+Rules:
+- Add new entries at the top.
+- Each entry should include date/time, summary, affected files, and commit hash (when available).
+- History before this section exists in `git log`.
+
+### 2026-03-18 17:10 CET
+- Moved the running change log into `CODEX.md` and removed `LOG.md`.
+- Updated remaining references so repository documentation now points to `CODEX.md` only.
+- Affected files:
+  - `CODEX.md`
+  - `LOG.md` (removed)
+  - `sandbox/README.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-18 17:00 CET
+- Consolidated project instructions/context into `CODEX.md` and removed `CONTEXT.md`.
+- Updated active documentation to point to `CODEX.md` as the only in-repo source of truth for Codex.
+- Affected files:
+  - `CODEX.md`
+  - `CONTEXT.md` (removed)
+  - `README.md`
+  - `LOG.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 21:28 CET
+- Simplified `/api/calendar` endpoint behavior in `serve`:
+  - removed `raw` query handling.
+  - endpoint now always returns parsed `{ events: [...] }`.
+- Updated docs/context to remove `/api/calendar?raw` usage.
+- Affected files:
+  - `commands/serve.js`
+  - `README.md`
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 21:24 CET
+- Added new API endpoint in `serve`:
+  - `GET /api/calendar`
+  - default response returns parsed calendar data (`{ events: [...] }`) from `fetch-calendar`.
+  - `raw` query parameter returns raw upstream payload.
+- Updated docs/context for new endpoint:
+  - `README.md`
+  - `CODEX.md`
+- Affected files:
+  - `commands/serve.js`
+  - `README.md`
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 21:16 CET
+- Updated `fetch-calendar` event ID format in parsed output:
+  - `id` now uses year prefix from `DisplayDate` as `YYYY-Id` (example: `2026-9900`).
+  - fallback keeps original `Id` when year cannot be extracted.
+- Affected files:
+  - `src/fetch-calendar.js`
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 20:57 CET
+- Renamed parsed calendar array key from `tournaments` to `events`.
+- `src/fetch-calendar.js` parser now returns:
+  - `{ events: [{ name }] }`
+- Affected files:
+  - `src/fetch-calendar.js`
+  - `sandbox/README.md`
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 20:49 CET
+- Updated `src/fetch-calendar.js` parser to return simplified shape:
+  - `{ tournaments: [{ name }] }`
+- `fetch()` remains raw endpoint passthrough.
+- Affected files:
+  - `src/fetch-calendar.js`
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 20:27 CET
+- Reset `src/fetch-calendar.js` to raw passthrough mode.
+- Separated responsibilities:
+  - `fetch()` returns raw endpoint JSON.
+  - `parse(raw)` (instance method, not static) currently returns raw unchanged.
+- Updated sandbox script to call `fetcher.parse(raw)` instead of static parse call.
+- Affected files:
+  - `src/fetch-calendar.js`
+  - `sandbox/fetch-calendar.js`
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 20:02 CET
+- Added new fetch class `src/fetch-calendar.js` following existing fetcher pattern.
+- Affected files:
+  - `src/fetch-calendar.js`
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 02:42 CET
+- Removed a legacy documentation file and verified that no references to it remain in the repository.
+- Affected files:
+  - legacy documentation file (removed)
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 02:41 CET
+- Created the running project change log.
+- Affected files:
+  - `LOG.md`
+- Commit:
+  - (not committed yet)
+
+### 2026-03-12 (earlier today)
+- Added a new fetcher for oddset data and wired it into the server endpoint (`GET /api/oddset`).
+- Synced README with actual code status (CLI, API, options, data sources, and caveats).
+- Affected files:
+  - `src/fetch-oddset.js`
+  - `commands/serve.js`
+  - `README.md`
+  - `CODEX.md`
+- Commit:
+  - `d8b07a5` (README-sync)
+  - older related changes are available in `git log`

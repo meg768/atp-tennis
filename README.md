@@ -131,4 +131,4 @@ Reference docs:
 - `database/` - SQL schema
 
 ## Collaboration
-- Shared project memory lives in `CONTEXT.md`.
+- Shared project memory and Codex instructions live in `CODEX.md`.

@@ -86,5 +86,5 @@ Writes one file to `sandbox/output/`:
 ## Sandbox Convention
 
 - Keep sandbox-specific notes and changes in this file.
-- Avoid adding sandbox iteration notes to top-level `LOG.md`.
+- Avoid adding sandbox iteration notes to the top-level change log section in `CODEX.md`.
 - For sandbox scripts, use unique output names based on script filename.
