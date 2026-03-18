@@ -4,7 +4,9 @@
     "description": "",
     "main": "atp.js",
     "scripts": {
+        "git-backup": "branch=$(git branch --show-current) && if [ -n \"$(git status --short)\" ]; then git add -A && git commit -m 'backup'; fi && git push origin \"$branch\" && git push --force origin HEAD:refs/heads/backup/$branch",
         "git-commit": "git add -A && git commit -m '-' && git push",
+        "git-restore": "branch=$(git branch --show-current) && git fetch origin && git reset --hard origin/backup/$branch && git push --force-with-lease origin \"$branch\"",
         "show-atp-log": "ssh pi@pi-kato 'tail -f ~/atp-tennis/atp.log'",
         "reboot-server": "ssh pi@pi-kato 'sudo reboot'",
         "restart-service": "ssh root@pi-kato 'cd /home/pi/atp-tennis && git pull && pm2 restart atp-service'",
