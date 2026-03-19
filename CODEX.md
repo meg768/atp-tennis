@@ -366,6 +366,7 @@ For fresh dev/prod environments:
   - `commit`
   - `backup`
   - `restore`
+  - `delete-backup`
 - Added persistent memory for:
   - ATP domain focus (`1968-present`, `players` / `matches` / `events`, `flatly`)
   - website/query concepts (`/query`, metadata-backed SQL files, `MarkdownProcessor`)
@@ -415,6 +416,14 @@ For fresh dev/prod environments:
       - removes uncommitted local changes
       - removes commits made after the latest `backup`
     - Treat this as intentionally destructive and only run it when the user explicitly says `restore`
+  - `delete-backup`
+    - Delete the remote backup branch for the current branch when the user is fully satisfied and no longer wants that fallback point.
+    - Standard sequence:
+      - `git push origin --delete backup/<current-branch>`
+      - `git fetch origin --prune`
+    - Effect:
+      - removes the current branch's backup point from GitHub
+      - future `restore` will not work until a new `backup` is created
 
 ## Change Log
 
@@ -424,6 +433,15 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-03-18 23:20 CET
+- Added npm script `git-delete-backup` for removing the remote backup branch when a fallback point is no longer needed.
+- Updated `CODEX.md` shorthand command memory to include `delete-backup`.
+- Affected files:
+  - `package.json`
+  - `CODEX.md`
+- Commit:
+  - (not committed yet)
 
 ### 2026-03-18 22:55 CET
 - Added simple user shorthand command semantics for a mostly-`main` workflow:
