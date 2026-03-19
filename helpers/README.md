@@ -27,6 +27,7 @@ Behavior:
 - Writes an empty string when the player has been checked but no Wikipedia page was found
 - Uses conservative pacing plus retry/backoff on Wikipedia `429` responses
 - Loads `.env` from the repo root even when the script is run from inside `helpers/`
+- Appends run output to `helpers/update-player-wikipedia.log`
 
 Column semantics for `players.wikipedia`:
 - `NULL` = not processed yet

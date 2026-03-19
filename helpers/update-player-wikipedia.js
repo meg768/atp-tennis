@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
+const fs = require('fs');
 const path = require('path');
+const util = require('util');
 
 require('dotenv').config({
 	path: path.resolve(__dirname, '..', '.env')
@@ -12,6 +14,7 @@ const mysql = require('../src/mysql.js');
 
 const USER_AGENT = 'atp-tennis/1.0 (wikipedia helper)';
 const TENNIS_PATTERN = /\b(tennis|atp|grand slam|masters 1000|challenger)\b/i;
+const LOG_FILE = __filename.replace(/\.js$/, '.log');
 const requestState = {
 	minIntervalMs: 1200,
 	maxRetries: 5,
@@ -21,6 +24,33 @@ const requestState = {
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function formatLogPart(value) {
+	if (typeof value === 'string') {
+		return value;
+	}
+
+	if (value instanceof Error) {
+		return value.stack || value.message;
+	}
+
+	return util.inspect(value, { depth: null, breakLength: Infinity });
+}
+
+function writeLog(level, values) {
+	const line = `[${new Date().toISOString()}] [${level}] ${values.map(formatLogPart).join(' ')}`;
+	fs.appendFileSync(LOG_FILE, `${line}\n`);
+}
+
+function log(...values) {
+	console.log(...values);
+	writeLog('INFO', values);
+}
+
+function logError(...values) {
+	console.error(...values);
+	writeLog('ERROR', values);
 }
 
 function setRequestConfig({ minIntervalMs, maxRetries, retryBaseMs }) {
@@ -151,7 +181,7 @@ async function fetchJSON(url) {
 			const jitterMs = Math.min(1000, Math.floor(Math.random() * 500));
 			const waitMs = backoffMs + jitterMs;
 
-			console.log(`Rate limited by Wikipedia, waiting ${Math.ceil(waitMs / 1000)}s before retrying...`);
+			log(`Rate limited by Wikipedia, waiting ${Math.ceil(waitMs / 1000)}s before retrying...`);
 			requestState.nextRequestAt = Date.now() + waitMs;
 			continue;
 		}
@@ -357,6 +387,9 @@ async function main() {
 		retryBaseMs: Math.max(1000, argv.retryBackoff)
 	});
 
+	mysql.log = log;
+	mysql.error = logError;
+
 	await mysql.connect();
 
 	try {
@@ -367,7 +400,7 @@ async function main() {
 		});
 
 		if (players.length === 0) {
-			console.log('No players matched the selection.');
+			log('No players matched the selection.');
 			return;
 		}
 
@@ -375,7 +408,7 @@ async function main() {
 		let found = 0;
 		let missing = 0;
 
-		console.log(`Checking Wikipedia for ${players.length} player(s)...`);
+		log(`Checking Wikipedia for ${players.length} player(s)...`);
 
 		for (const player of players) {
 			try {
@@ -383,7 +416,7 @@ async function main() {
 
 				if (!match) {
 					missing++;
-					console.log(`MISS  ${player.id}  ${player.name}`);
+					log(`MISS  ${player.id}  ${player.name}`);
 
 					if (!argv.dryRun) {
 						await updatePlayerWikipedia({
@@ -398,11 +431,11 @@ async function main() {
 				found++;
 
 				if (match.url.length > 100) {
-					console.log(`SKIP  ${player.id}  ${player.name}  URL too long for column (${match.url.length})`);
+					log(`SKIP  ${player.id}  ${player.name}  URL too long for column (${match.url.length})`);
 					continue;
 				}
 
-				console.log(`HIT   ${player.id}  ${player.name}  ->  ${match.url}  [score=${match.score}, source=${match.source}]`);
+				log(`HIT   ${player.id}  ${player.name}  ->  ${match.url}  [score=${match.score}, source=${match.source}]`);
 
 				if (!argv.dryRun) {
 					await updatePlayerWikipedia({
@@ -412,27 +445,27 @@ async function main() {
 					updated++;
 				}
 			} catch (error) {
-				console.error(`ERROR ${player.id}  ${player.name}: ${error.message}`);
+				logError(`ERROR ${player.id}  ${player.name}: ${error.message}`);
 			}
 		}
 
-		console.log('');
-		console.log(`Found: ${found}`);
-		console.log(`Updated: ${argv.dryRun ? 0 : updated}`);
-		console.log(`Missing: ${missing}`);
-		console.log(`Mode: ${argv.dryRun ? 'dry-run' : 'write'}`);
+		log('');
+		log(`Found: ${found}`);
+		log(`Updated: ${argv.dryRun ? 0 : updated}`);
+		log(`Missing: ${missing}`);
+		log(`Mode: ${argv.dryRun ? 'dry-run' : 'write'}`);
 	} finally {
 		await mysql.disconnect();
 	}
 }
 
 main().catch(async error => {
-	console.error(error.stack || error.message);
+	logError(error.stack || error.message);
 
 	try {
 		await mysql.disconnect();
 	} catch (disconnectError) {
-		console.error(disconnectError.message);
+		logError(disconnectError.message);
 	}
 
 	process.exit(1);
