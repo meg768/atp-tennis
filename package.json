@@ -13,6 +13,7 @@
         "restart-service": "ssh root@pi-kato 'cd /home/pi/atp-tennis && git pull && pm2 restart atp-service'",
         "restart-import": "ssh root@pi-kato 'cd /home/pi/atp-tennis && git pull && pm2 restart atp-import'",
         "run serve": "./atp.js serve",
+        "update-wikipedia": "node helpers/update-player-wikipedia.js",
         "goto-github": "open https://github.com/meg768/atp-tennis"
     },
     "author": "",

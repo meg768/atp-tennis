@@ -51,6 +51,36 @@ node atp.js serve
 ### Important Options
 - `import`: `--top`, `--since`, `--clean`, `--loop` (hours; default `12`), `--light`.
 
+## Helper Scripts
+
+Wikipedia helper for players:
+
+```bash
+./helpers/update-player-wikipedia.js --limit 25
+./helpers/update-player-wikipedia.js --dry-run --limit 10
+./helpers/update-player-wikipedia.js --player A0E2 --dry-run
+npm run update-wikipedia -- --limit 25
+```
+
+Behavior:
+- Prioritizes players in this order:
+  - current top 100 by `rank`
+  - historically strongest players by `highest_rank`, `career_titles`, `career_wins`, and `career_prize`
+  - everyone else
+- Default mode only processes rows where `players.wikipedia IS NULL`.
+- Stores a Wikipedia URL when a match is found.
+- Stores an empty string when a player has been checked but no Wikipedia page was found.
+- `NULL` therefore means "not processed yet".
+- Uses conservative request pacing plus retry/backoff for Wikipedia `429` responses.
+- Loads `.env` from the project root even when run from inside `helpers/`.
+
+Important options:
+- `--limit`: process the next N unprocessed players.
+- `--player`: process one specific player by id or exact name.
+- `--dry-run`: print matches without writing to the database.
+- `--overwrite`: re-check players even if `wikipedia` is already non-`NULL`.
+- `--delay`, `--retries`, `--retry-backoff`: tune Wikipedia rate-limit behavior.
+
 ## API Service
 
 Start:
@@ -117,6 +147,10 @@ Reference docs:
 ## Database Notes
 - Schema in repo: `database/schema.sql`.
 - The schema currently defines the core tables, the `flatly` view, and the `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, and `NUMBER_OF_TIE_BREAKS` helper functions.
+- `players.wikipedia` is used by the Wikipedia helper script with this convention:
+  - `NULL` = not processed yet
+  - `''` = processed but no Wikipedia page found
+  - `https://...` = Wikipedia page found
 - Those helper functions are kept for client-side statistical SQL queries and assume normalized score strings such as `6-4 7-6(5)`.
 - The import pipeline does not call `sp_update()`; post-import updates are handled in application code.
 - `node atp.js import ...` fails if required schema objects are missing.
@@ -128,6 +162,7 @@ Reference docs:
 - `atp.js` - CLI entrypoint
 - `commands/` - command handlers
 - `src/` - fetchers, parsers, DB/ELO logic
+- `helpers/` - ad hoc maintenance scripts such as Wikipedia/flags helpers
 - `database/` - SQL schema
 
 ## Collaboration
