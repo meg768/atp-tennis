@@ -108,30 +108,7 @@ node atp.js serve
 
 ## Helper Scripts
 
-Player Wikipedia backfill helper:
-
-```bash
-./helpers/update-player-wikipedia.js --limit 25
-./helpers/update-player-wikipedia.js --dry-run --limit 10
-./helpers/update-player-wikipedia.js --player A0E2 --dry-run
-npm run update-wikipedia -- --limit 25
-```
-
-Behavior:
-- Prioritizes players in this order:
-  - current top 100 by `rank`
-  - historically strongest players by `highest_rank`, `career_titles`, `career_wins`, and `career_prize`
-  - everyone else
-- Default mode only processes rows where `players.wikipedia IS NULL`
-- Writes a Wikipedia URL when found
-- Writes an empty string when the player has been checked but no Wikipedia page was found
-- Uses conservative pacing plus retry/backoff on Wikipedia `429` responses
-- Loads `.env` from the repo root even when the script is run from inside `helpers/`
-
-Column semantics for `players.wikipedia`:
-- `NULL` = not processed yet
-- `''` = processed, no page found
-- `https://...` = page found
+Manual maintenance scripts are documented in `helpers/README.md`.
 
 ## Start API Service
 
@@ -193,7 +170,6 @@ This is a deduplicated list from the current codebase.
   - view: `flatly`
   - helper SQL functions: `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`
   - no `sp_update*` stored procedures
-- `players.wikipedia` is maintained by `helpers/update-player-wikipedia.js`, not by the import pipeline
 
 ## MariaDB Prerequisites
 
@@ -212,7 +188,7 @@ For fresh dev/prod environments:
 - `atp.js` - CLI entrypoint
 - `commands/` - CLI commands
 - `src/` - fetchers, MySQL layer, ELO, helper modules
-- `helpers/` - executable maintenance scripts (`fetch-flags`, `update-player-wikipedia`)
+- `helpers/` - executable maintenance scripts documented in `helpers/README.md`
 - `database/` - schema (`database/schema.sql`)
 
 ## Current Status
@@ -347,22 +323,6 @@ For fresh dev/prod environments:
   - update modules now share a consistent constructor shape with injected dependencies such as `mysql` and `log`
 - code style preference: keep helper functions local to the method/block that uses them whenever practical, instead of promoting small helpers to file scope
 - code style preference: keep function parameter lists on one line when practical
-
-## Session Memory (2026-03-19)
-- Added `helpers/update-player-wikipedia.js` to backfill `players.wikipedia`.
-- The helper is intended to be run manually in small batches as needed, not as part of the main import pipeline.
-- Processing order is:
-  - current top 100 first by `rank`
-  - then historically strongest players by `highest_rank`, `career_titles`, `career_wins`, `career_prize`
-  - then the rest
-- Default selection is `WHERE wikipedia IS NULL`, so reruns continue from the next unprocessed player.
-- `players.wikipedia` semantics are:
-  - `NULL` = not processed yet
-  - `''` = processed, no Wikipedia page found
-  - `https://...` = page found
-- The helper now loads `.env` from the repo root explicitly, so it works both from repo root and from inside `helpers/`.
-- Wikipedia requests now use slower pacing plus retry/backoff for `429 Too Many Requests`.
-- `package.json` includes npm script `update-wikipedia`.
 
 ## Session Memory (2026-03-15)
 - `database/schema.sql` was refreshed from the live `atp` database as a Sequel Pro dump.
