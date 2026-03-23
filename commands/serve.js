@@ -103,6 +103,15 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/api/odds/:playerA/:playerB', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query, request.params);
+				let GetOdds = require('../src/get-odds.js');
+				let getOdds = new GetOdds({ mysql: this.mysql });
+				return await getOdds.run(options);
+			});
+		});
+
 		app.get('/api/calendar', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Fetcher = require('../src/fetch-calendar.js');

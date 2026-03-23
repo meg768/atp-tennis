@@ -4,8 +4,9 @@ Simple helper for comparing two players and calculating decimal odds from ELO.
 
 ## Files
 
-- `run.js` - executable helper script
+- `run.js` - executable helper script that resolves players locally and calls `/api/odds`
 - `compute-odds.js` - pure odds calculation from ELO values
+- `sinner-alcaraz.js` - fixed endpoint test for Sinner vs Alcaraz
 
 ## Usage
 
@@ -14,6 +15,8 @@ node helpers/compute-odds/run.js "Jannik Sinner" Alcaraz
 node helpers/compute-odds/run.js --hard S0AG C0AZ
 node helpers/compute-odds/run.js --clay "Jannik Sinner" Alcaraz
 node helpers/compute-odds/run.js --grass S0AG C0AZ
+./helpers/compute-odds/sinner-alcaraz.js
+./helpers/compute-odds/sinner-alcaraz.js --hard
 ```
 
 ## Behavior
@@ -23,10 +26,11 @@ node helpers/compute-odds/run.js --grass S0AG C0AZ
 - Prints the chosen match for each input so it is easy to see what the script resolved
 - Uses `elo_rank` by default
 - Uses `elo_rank_hard`, `elo_rank_clay`, or `elo_rank_grass` when `--hard`, `--clay`, or `--grass` is provided
-- Calculates win probability using the standard Elo logistic formula
-- Prints both fair odds and a Svenska Spel comparison using a fixed 5% margin
+- Calls the local `/api/odds` endpoint after resolving the two players
+- Prints the returned odds together with the resolved players and chosen surface
 - Factor weights are normalized internally, so they do not need to sum to `1`
 - You can think in weights such as `80, 10, 10` or `10, 20, 30`
+- `sinner-alcaraz.js` also calls the local `/api/odds` endpoint directly
 
 ## Notes
 

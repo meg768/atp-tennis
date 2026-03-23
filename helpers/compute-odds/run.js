@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const http = require('http');
 const path = require('path');
 
 require('dotenv').config({
@@ -7,13 +8,14 @@ require('dotenv').config({
 });
 
 const mysql = require('../../src/mysql.js');
-const ComputeOdds = require('./compute-odds.js');
+const DEFAULT_PORT = 3004;
 
 function printUsage() {
-	console.log('Usage: ./helpers/compute-odds/run.js [--hard|--clay|--grass] [playerA] [playerB]');
+	console.log('Usage: ./helpers/compute-odds/run.js [--hard|--clay|--grass] [--port=3004] [playerA] [playerB]');
 	console.log('Example: ./helpers/compute-odds/run.js "Jannik Sinner" Alcaraz');
 	console.log('Example: ./helpers/compute-odds/run.js --clay "Jannik Sinner" Alcaraz');
 	console.log('You can use ATP player ids or player names.');
+	console.log('The ATP service must already be running.');
 }
 
 function isHelpFlag(value) {
@@ -28,20 +30,24 @@ function formatElo(value) {
 	return Number.isFinite(Number(value)) ? Number(value).toFixed(1) : '-';
 }
 
-function formatProbability(value) {
-	return Number.isFinite(Number(value)) ? `${(Number(value) * 100).toFixed(1)}%` : '-';
-}
-
 function formatOdds(value) {
 	return Number.isFinite(Number(value)) && Number(value) > 0 ? Number(value).toFixed(2) : '-';
 }
 
-function toProbability(odds) {
-	if (!Number.isFinite(Number(odds)) || Number(odds) <= 0) {
-		return null;
+function getPort(args) {
+	const option = args.find(arg => arg.startsWith('--port='));
+
+	if (!option) {
+		return DEFAULT_PORT;
 	}
 
-	return 1 / Number(odds);
+	const value = Number(option.split('=')[1]);
+
+	if (!Number.isInteger(value) || value <= 0) {
+		throw new Error('port must be a positive integer.');
+	}
+
+	return value;
 }
 
 function getSurfaceOptions(args) {
@@ -142,9 +148,39 @@ async function resolvePlayer(label, search) {
 	return player;
 }
 
+function getJson(url) {
+	return new Promise((resolve, reject) => {
+		const request = http.get(url, response => {
+			let body = '';
+
+			response.setEncoding('utf8');
+			response.on('data', chunk => {
+				body += chunk;
+			});
+			response.on('end', () => {
+				try {
+					const json = JSON.parse(body || 'null');
+
+					if (response.statusCode >= 400) {
+						const message = json?.error || `Request failed with status ${response.statusCode}.`;
+						return reject(new Error(message));
+					}
+
+					resolve(json);
+				} catch (error) {
+					reject(error);
+				}
+			});
+		});
+
+		request.on('error', error => {
+			reject(error);
+		});
+	});
+}
+
 async function main() {
 	const args = process.argv.slice(2);
-	const computeOdds = new ComputeOdds();
 
 	if (args.some(isHelpFlag)) {
 		printUsage();
@@ -153,6 +189,7 @@ async function main() {
 	}
 
 	const surface = getSurfaceOptions(args);
+	const port = getPort(args);
 	const terms = args.filter(arg => !arg.startsWith('--'));
 
 	if (terms.length < 2) {
@@ -178,31 +215,29 @@ async function main() {
 			throw new Error('Choose two different players.');
 		}
 
-		const [oddsA, oddsB] = await computeOdds.compute({
-			playerA,
-			playerB,
-			surface: surface.surface,
-			margin: 0,
-			mysql
-		});
-		const [svenskaSpelOddsA, svenskaSpelOddsB] = await computeOdds.compute({
-			playerA,
-			playerB,
-			surface: surface.surface,
-			margin: 0.05,
-			mysql
-		});
-		const probabilityA = toProbability(oddsA);
-		const probabilityB = toProbability(oddsB);
+		const params = new URLSearchParams();
+
+		if (surface.surface) {
+			params.set('surface', surface.surface);
+		}
+
+		const query = params.toString() ? `?${params.toString()}` : '';
+		const url = `http://127.0.0.1:${port}/api/odds/${encodeURIComponent(playerA.id)}/${encodeURIComponent(playerB.id)}${query}`;
+		const result = await getJson(url);
+
+		if (!Array.isArray(result) || result.length < 2) {
+			throw new Error('Expected odds endpoint to return [oddsA, oddsB].');
+		}
+
+		const [oddsA, oddsB] = result;
 
 		console.log('');
 		console.log(`${playerA.name} vs ${playerB.name}`);
 		console.log(`Surface: ${surface.surface || 'All'}`);
 		console.log(`Rank: ${formatRank(playerA.rank)} - ${formatRank(playerB.rank)}`);
 		console.log(`ELO: ${formatElo(playerA[surface.field])} - ${formatElo(playerB[surface.field])}`);
-		console.log(`Probability: ${formatProbability(probabilityA)} - ${formatProbability(probabilityB)}`);
-		console.log(`Fair odds: ${playerA.name} ${formatOdds(oddsA)} - ${formatOdds(oddsB)} ${playerB.name}`);
-		console.log(`Svenska Spel (5%): ${playerA.name} ${formatOdds(svenskaSpelOddsA)} - ${formatOdds(svenskaSpelOddsB)} ${playerB.name}`);
+		console.log(`Odds: ${playerA.name} ${formatOdds(oddsA)} - ${formatOdds(oddsB)} ${playerB.name}`);
+		console.log(`Endpoint: ${url}`);
 	} finally {
 		await mysql.disconnect();
 	}
