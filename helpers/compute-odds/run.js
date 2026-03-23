@@ -57,7 +57,7 @@ function getSurfaceOptions(args) {
 		throw new Error('Choose only one of --hard, --clay or --grass.');
 	}
 
-	return selected.length === 1 ? options[selected[0]] : { surface: 'All', field: 'elo_rank' };
+	return selected.length === 1 ? options[selected[0]] : { surface: null, field: 'elo_rank' };
 }
 
 async function findPlayers(term) {
@@ -178,14 +178,26 @@ async function main() {
 			throw new Error('Choose two different players.');
 		}
 
-		const [oddsA, oddsB] = computeOdds.compute(playerA, playerB, surface.field);
-		const [svenskaSpelOddsA, svenskaSpelOddsB] = computeOdds.compute(playerA, playerB, surface.field, 0.05);
+		const [oddsA, oddsB] = await computeOdds.compute({
+			playerA,
+			playerB,
+			surface: surface.surface,
+			margin: 0,
+			mysql
+		});
+		const [svenskaSpelOddsA, svenskaSpelOddsB] = await computeOdds.compute({
+			playerA,
+			playerB,
+			surface: surface.surface,
+			margin: 0.05,
+			mysql
+		});
 		const probabilityA = toProbability(oddsA);
 		const probabilityB = toProbability(oddsB);
 
 		console.log('');
 		console.log(`${playerA.name} vs ${playerB.name}`);
-		console.log(`Surface: ${surface.surface}`);
+		console.log(`Surface: ${surface.surface || 'All'}`);
 		console.log(`Rank: ${formatRank(playerA.rank)} - ${formatRank(playerB.rank)}`);
 		console.log(`ELO: ${formatElo(playerA[surface.field])} - ${formatElo(playerB[surface.field])}`);
 		console.log(`Probability: ${formatProbability(probabilityA)} - ${formatProbability(probabilityB)}`);

@@ -25,6 +25,8 @@ node helpers/compute-odds/run.js --grass S0AG C0AZ
 - Uses `elo_rank_hard`, `elo_rank_clay`, or `elo_rank_grass` when `--hard`, `--clay`, or `--grass` is provided
 - Calculates win probability using the standard Elo logistic formula
 - Prints both fair odds and a Svenska Spel comparison using a fixed 5% margin
+- Factor weights are normalized internally, so they do not need to sum to `1`
+- You can think in weights such as `80, 10, 10` or `10, 20, 30`
 
 ## Notes
 
