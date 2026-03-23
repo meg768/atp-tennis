@@ -4,6 +4,29 @@ Maintenance scripts that are run manually when needed.
 
 ## Scripts
 
+### `compute-odds/`
+
+Simple odds helper based only on ELO ratings.
+
+Examples:
+
+```bash
+node helpers/compute-odds/run.js "Jannik Sinner" Alcaraz
+node helpers/compute-odds/run.js S0AG C0AZ
+node helpers/compute-odds/run.js --hard S0AG C0AZ
+node helpers/compute-odds/run.js --clay "Jannik Sinner" Alcaraz
+node helpers/compute-odds/run.js --grass S0AG C0AZ
+```
+
+Behavior:
+- Matches the two input values against `players.id` or `players.name`
+- Prefers exact ATP id match, then exact name, then prefix match, then broader name match
+- Prints the chosen player ids/names so it is easy to see what the script matched
+- Uses `elo_rank` by default, or `elo_rank_hard` / `elo_rank_clay` / `elo_rank_grass` when `--hard` / `--clay` / `--grass` is provided
+- Calculates win probability from ELO using the standard logistic formula
+- Prints both fair decimal odds and a simple Svenska Spel comparison with a fixed 5% margin
+- See [helpers/compute-odds/README.md](/Users/magnus/Documents/GitHub/atp-tennis/helpers/compute-odds/README.md) for local details
+
 ### `update-player-wikipedia.js`
 
 Backfills `players.wikipedia` in MariaDB.
