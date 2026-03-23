@@ -9,61 +9,6 @@ class UpdateELO {
 	}
 
 	async compute() {
-		function isCompletedSet(a, b) {
-			const high = Math.max(a, b);
-			const low = Math.min(a, b);
-			const diff = high - low;
-
-			if (high < 6) {
-				return false;
-			}
-
-			if (high === 6) {
-				return diff >= 2;
-			}
-
-			if (high === 7) {
-				return low === 5 || low === 6;
-			}
-
-			return diff === 2;
-		}
-
-		function parseSetToken(token) {
-			const match = token.match(/^(\d+)-(\d+)(?:\(\d+\))?$/);
-			if (!match) {
-				return null;
-			}
-
-			return [parseInt(match[1], 10), parseInt(match[2], 10)];
-		}
-
-		function hasCompletedScore(score) {
-			if (typeof score !== 'string' || score.trim() === '') {
-				return false;
-			}
-
-			let completedSets = 0;
-
-			for (const token of score.trim().split(/\s+/)) {
-				const games = parseSetToken(token);
-
-				if (!games) {
-					return false;
-				}
-
-				const [winnerGames, loserGames] = games;
-
-				if (!isCompletedSet(winnerGames, loserGames)) {
-					return false;
-				}
-
-				completedSets++;
-			}
-
-			return completedSets >= 2;
-		}
-
 		let elo = {};
 		let count = {};
 		let matches = await this.mysql.query(`
@@ -71,7 +16,6 @@ class UpdateELO {
 				m.id,
 				m.winner AS winner_id,
 				m.loser AS loser_id,
-				m.score,
 				e.type AS event_type
 			FROM matches m
 			JOIN events e ON e.id = m.event
@@ -80,8 +24,6 @@ class UpdateELO {
 				AND m.winner IS NOT NULL
 				AND m.loser IS NOT NULL
 				AND m.status = 'Completed'
-				AND m.score IS NOT NULL
-				AND m.score <> ''
 			ORDER BY e.date ASC, m.id ASC
 		`);
 
@@ -89,10 +31,6 @@ class UpdateELO {
 			let { winner_id: playerA, loser_id: playerB } = match;
 
 			if (!playerA || !playerB) {
-				continue;
-			}
-
-			if (!hasCompletedScore(match.score)) {
 				continue;
 			}
 
