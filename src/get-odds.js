@@ -54,6 +54,73 @@ class EloFactor extends OddsFactor {
 	}
 }
 
+
+// FatigueFactor estimates player fatigue based on recent match load.
+// It counts the number of completed matches each player has played
+// over the last N days and applies an exponential decay:
+//
+//   fatigue = exp(-DECAY * matches)
+//
+// Fewer matches → higher fatigue score (more rested).
+// More matches → lower fatigue score (more tired).
+//
+// The two fatigue scores are then normalized into probabilities.
+//
+// Tunable parameters:
+// - DAYS controls how far back to look (default 7 days).
+// - DECAY controls how strongly fatigue impacts performance.
+//   Higher values penalize frequent play more aggressively.
+//
+// This factor should remain fairly light (e.g. 5% weight),
+// as it captures short-term effects that complement ELO and form.
+class FatigueFactor extends OddsFactor {
+	async compute() {
+		const { playerA, playerB, mysql } = this.context;
+
+		if (!mysql) {
+			throw new Error('FatigueFactor requires a mysql connection.');
+		}
+
+		const DAYS = 7;
+		const DECAY = 0.15;
+
+		async function getMatchesLastDays(player) {
+			const rows = await mysql.query({
+				sql: `
+					SELECT COUNT(*) AS matches
+					FROM matches m
+					JOIN events e ON e.id = m.event
+					WHERE
+						m.status = 'Completed'
+						AND e.date IS NOT NULL
+						AND e.date >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
+						AND (m.winner = ? OR m.loser = ?)
+				`,
+				format: [DAYS, player, player]
+			});
+
+			return Number(rows[0]?.matches || 0);
+		}
+
+		const matchesA = await getMatchesLastDays(playerA.id);
+		const matchesB = await getMatchesLastDays(playerB.id);
+
+		const fatigueA = Math.exp(-DECAY * matchesA);
+		const fatigueB = Math.exp(-DECAY * matchesB);
+
+		const total = fatigueA + fatigueB;
+
+		if (!Number.isFinite(total) || total <= 0) {
+			return [0.5, 0.5];
+		}
+
+		const probabilityA = fatigueA / total;
+		const probabilityB = fatigueB / total;
+
+		return [probabilityA, probabilityB];
+	}
+}
+
 // RankFactor converts the current ATP ranking into a linear probability.
 // Lower rank is better, so rank #1 gets an advantage over rank #2, #10, etc.
 // The probability is centered around 50% and scaled by the relative gap:
@@ -61,6 +128,7 @@ class EloFactor extends OddsFactor {
 class RankFactor extends OddsFactor {
 	compute() {
 		const { playerA, playerB } = this.context;
+
 		const rankA = Number(playerA.rank);
 		const rankB = Number(playerB.rank);
 
@@ -68,9 +136,16 @@ class RankFactor extends OddsFactor {
 			throw new Error('Both players must have a positive current rank.');
 		}
 
-		const difference = rankB - rankA;
-		const total = rankA + rankB;
-		const probabilityA = 0.5 + difference / (2 * total);
+		// Log-skalning: jämnar ut skillnader i rank
+		// (skillnaden mellan 5 och 20 är större än 105 och 120)
+		const score = Math.log(rankB) - Math.log(rankA);
+
+		// Logistisk funktion för att mappa till sannolikhet
+		let probabilityA = 1 / (1 + Math.exp(-score));
+
+		// Clamp för säkerhet
+		probabilityA = Math.max(0.01, Math.min(0.99, probabilityA));
+
 		const probabilityB = 1 - probabilityA;
 
 		return [probabilityA, probabilityB];
@@ -260,10 +335,11 @@ class GetOdds {
 	async compute({ playerA, playerB, surface = null, margin = 0 } = {}) {
 		const context = { playerA, playerB, surface, mysql: this.mysql };
 		const factors = [
-			{ factor: new EloFactor(context), weight: 70 },
-			{ factor: new RankFactor(context), weight: 10 },
-			{ factor: new FormFactor(context), weight: 10 },
-			{ factor: new HeadToHeadFactor(context), weight: 10 }
+			{ factor: new EloFactor(context), weight: 72 },
+			{ factor: new RankFactor(context), weight: 7 },
+			{ factor: new FormFactor(context), weight: 7 },
+			{ factor: new FatigueFactor(context), weight: 7 },
+			{ factor: new HeadToHeadFactor(context), weight: 7 }
 		];
 
 		let sumA = 0;
@@ -271,9 +347,10 @@ class GetOdds {
 		let totalWeight = 0;
 
 		for (const entry of factors) {
-			const [probabilityA, probabilityB] = await entry.factor.compute();
-			sumA += probabilityA * entry.weight;
-			sumB += probabilityB * entry.weight;
+			const [factorProbabilityA, factorProbabilityB] = await entry.factor.compute();
+
+			sumA += factorProbabilityA * entry.weight;
+			sumB += factorProbabilityB * entry.weight;
 			totalWeight += entry.weight;
 		}
 
@@ -284,11 +361,20 @@ class GetOdds {
 		const probabilityA = sumA / totalWeight;
 		const probabilityB = sumB / totalWeight;
 
-		if (Number(margin) === 0) {
-			return [this.toDecimalOdds(probabilityA), this.toDecimalOdds(probabilityB)];
+		const totalProbability = probabilityA + probabilityB;
+
+		if (!Number.isFinite(totalProbability) || totalProbability <= 0) {
+			throw new Error('Could not calculate valid probabilities.');
 		}
 
-		return [this.applyMargin(probabilityA, margin), this.applyMargin(probabilityB, margin)];
+		const normalizedProbabilityA = probabilityA / totalProbability;
+		const normalizedProbabilityB = probabilityB / totalProbability;
+
+		if (Number(margin) === 0) {
+			return [this.toDecimalOdds(normalizedProbabilityA), this.toDecimalOdds(normalizedProbabilityB)];
+		}
+
+		return [this.applyMargin(normalizedProbabilityA, margin), this.applyMargin(normalizedProbabilityB, margin)];
 	}
 
 	async run({ playerA, playerB, surface = null } = {}) {
