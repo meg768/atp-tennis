@@ -135,6 +135,7 @@ Examples:
 curl http://127.0.0.1:3004/ok
 curl http://127.0.0.1:3004/api/ping
 curl http://127.0.0.1:3004/api/rankings
+curl "http://127.0.0.1:3004/api/oddset?states=STARTED"
 curl "http://127.0.0.1:3004/api/oddset?states=STARTED,NOT_STARTED"
 curl http://127.0.0.1:3004/api/calendar
 curl -X POST http://127.0.0.1:3004/api/query \
@@ -347,6 +348,11 @@ For fresh dev/prod environments:
 - Repository instruction file was renamed from `AGENTS.md` to `CODEX.md`.
 - Project context and session memory were consolidated into `CODEX.md`; `CONTEXT.md` was removed.
 - Repository is now Codex-only for in-repo instructions/context; no separate cross-assistant memory file is maintained.
+- `/api/oddset` is the canonical Oddset endpoint for both live-only and mixed live/upcoming consumers.
+- `src/fetch-oddset.js` now owns `states` normalization itself:
+  - comma-separated strings such as `STARTED,NOT_STARTED` are accepted
+  - array input is normalized to uppercase trimmed state tokens
+  - empty/invalid input falls back to the default `['STARTED', 'NOT_STARTED']`
 - Current merge behavior:
   - keep ATP upcoming rows from Oddset ATP `matches.json`
   - add/override live ATP rows from Oddset live-open payload when Kambi path metadata marks them as ATP

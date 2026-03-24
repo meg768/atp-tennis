@@ -15,6 +15,22 @@ const ODDS_SOURCE_PRIORITY = {
 	MATCHES: 3
 };
 
+function normalizeStates(states) {
+	if (typeof states === 'string') {
+		states = states.split(',');
+	}
+
+	if (!Array.isArray(states)) {
+		return [...ODDSET_CURRENT_STATES];
+	}
+
+	const normalized = states
+		.map(value => String(value).trim().toUpperCase())
+		.filter(Boolean);
+
+	return normalized.length > 0 ? normalized : [...ODDSET_CURRENT_STATES];
+}
+
 function isPresent(value) {
 	return value !== null && value !== undefined && value !== '';
 }
@@ -235,7 +251,7 @@ class Module extends Fetcher {
 		this.matchesUrl = options.matchesUrl ?? this.url;
 		this.upcomingUrl = options.upcomingUrl ?? ODDSET_TENNIS_MATCHES_URL;
 		this.openUrl = options.openUrl ?? ODDSET_LIVE_OPEN_URL;
-		this.states = options.states ?? ODDSET_CURRENT_STATES;
+		this.states = normalizeStates(options.states);
 		this.requestTimeoutMs = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
 	}
 
@@ -401,7 +417,7 @@ class Module extends Fetcher {
 		this.upcomingUrl = upcomingUrl ?? this.upcomingUrl;
 		this.openUrl = openUrl ?? this.openUrl;
 		this.requestTimeoutMs = requestTimeoutMs ?? this.requestTimeoutMs;
-		this.states = Array.isArray(states) ? states : this.states;
+		this.states = states != undefined ? normalizeStates(states) : this.states;
 		const [matchesResult, openResult] = await Promise.allSettled([
 			this.fetchPayload({
 				url: this.matchesUrl,

@@ -81,6 +81,7 @@ curl http://127.0.0.1:3004/ok
 curl http://127.0.0.1:3004/api/ping
 curl http://127.0.0.1:3004/api/live
 curl http://127.0.0.1:3004/api/rankings
+curl "http://127.0.0.1:3004/api/oddset?states=STARTED"
 curl "http://127.0.0.1:3004/api/oddset?states=STARTED,NOT_STARTED"
 curl http://127.0.0.1:3004/api/calendar
 curl -X POST http://127.0.0.1:3004/api/query \
@@ -93,6 +94,11 @@ curl -X POST http://127.0.0.1:3004/api/query \
 - `raw`: truthy value to return raw upstream payload bundle (`{ matches, open, upcoming, meta, errors }`)
 - `requestTimeoutMs`: request timeout in milliseconds
 - `url`: override upstream endpoint
+
+`/api/oddset` is the canonical Oddset endpoint for this project:
+- use `states=STARTED` for live-only consumers
+- use `states=STARTED,NOT_STARTED` for mixed live/upcoming consumers
+- the backend normalizes the `states` parameter before fetching/merging upstream data
 
 ### `/api/oddset` Upstream Fallback Order
 - Primary: Oddset ATP `matches.json` for ATP live/upcoming odds.
