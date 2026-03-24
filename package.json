@@ -10,8 +10,8 @@
         "git-restore": "branch=$(git branch --show-current) && git fetch origin && git reset --hard origin/backup/$branch && git push --force-with-lease origin \"$branch\"",
         "show-atp-log": "ssh pi@pi-kato 'tail -f ~/atp-tennis/atp.log'",
         "reboot-server": "ssh pi@pi-kato 'sudo reboot'",
-        "restart-service": "ssh root@pi-kato 'cd /home/pi/atp-tennis && git pull && pm2 restart atp-service'",
-        "restart-import": "ssh root@pi-kato 'cd /home/pi/atp-tennis && git pull && pm2 restart atp-import'",
+        "restart-atp-service": "ssh root@pi-kato 'cd /home/pi/atp-tennis && git pull && pm2 restart atp-service'",
+        "restart-atp-import": "ssh root@pi-kato 'cd /home/pi/atp-tennis && git pull && pm2 restart atp-import'",
         "run serve": "./atp.js serve",
         "update-wikipedia": "node helpers/update-player-wikipedia.js",
         "goto-github": "open https://github.com/meg768/atp-tennis"
