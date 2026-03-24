@@ -8,6 +8,11 @@ When updating project memory, architecture notes, operational details, prioritie
 
 Node.js project for fetching ATP data from `atptour.com`, storing it in MariaDB, and exposing data through CLI commands and a local API service.
 
+## Cross-Repo Context
+- The frontend for this backend lives in the sibling repository `../vitel`.
+- `atp-tennis` is the canonical backend for `vitel` in local development and project discussions unless explicitly stated otherwise.
+- Oddset ownership lives here: frontend clients should consume Oddset data through `GET /api/oddset` instead of calling Kambi/Svenska Spel directly.
+
 ## What This Project Does
 - Imports rankings, activity, match results, and player details from ATP endpoints
 - Stores and updates data in MariaDB (`events`, `matches`, `players`, etc.)
