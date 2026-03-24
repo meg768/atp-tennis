@@ -56,6 +56,10 @@ function createPlayersKey(playerAName, playerBName) {
 	return [playerA, playerB].sort().join('::');
 }
 
+function isLikelyDoublesParticipant(name = '') {
+	return String(name).includes('/');
+}
+
 function toDecimalOdds(odds) {
 	if (typeof odds !== 'number') {
 		return null;
@@ -140,6 +144,11 @@ function toKambiRow(item, sourcePriority) {
 	const two = offer.outcomes?.find(outcome => outcome.type === 'OT_TWO');
 	const playerA = one?.label || event.homeName || '-';
 	const playerB = two?.label || event.awayName || '-';
+
+	if (isLikelyDoublesParticipant(playerA) || isLikelyDoublesParticipant(playerB)) {
+		return null;
+	}
+
 	const playersKey = createPlayersKey(playerA, playerB);
 
 	if (!playersKey) {
