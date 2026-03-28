@@ -132,7 +132,7 @@ The service listens on `127.0.0.1:3004` (localhost).
 - `GET /api/calendar`
 - `POST /api/query`
 
-`/api/query` executes SQL directly against the database and should only be exposed in a trusted network.
+`/api/query` allows read-only SQL only and should still only be exposed in a trusted network.
 
 Examples:
 
@@ -208,7 +208,7 @@ For fresh dev/prod environments:
 - endpoint/fetch testing is expected to happen under `sandbox/`
 
 ## Priority Backlog
-1. Critical: unauthenticated SQL execution via `/api/query` with `multipleStatements=true`
+1. Important: `/api/query` is now read-only, but still provides broad unauthenticated database read access on a trusted network
 
 ## Session Memory (2026-02-26)
 - Live monitoring command is `monitor` (`commands/monitor.js`, registered in `atp.js`).

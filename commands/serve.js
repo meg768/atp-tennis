@@ -1,5 +1,6 @@
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
+let assertReadOnlySQL = require('../src/assert-read-only-sql.js');
 
 const compression = require('compression');
 
@@ -47,8 +48,15 @@ class Module extends Command {
 		});
 
 		api.post('/query', (req, res) => {
+			const params = { ...req.body, ...req.query };
+
+			try {
+				assertReadOnlySQL(params.sql);
+			} catch (error) {
+				return res.status(400).json({ error: error.message });
+			}
+
 			this.execute(req, res, async () => {
-				const params = { ...req.body, ...req.query };
 				const probe = new Probe();
 				const result = await this.mysql.query(params);
 				this.log(`/query executed in ${probe.toString()}`);

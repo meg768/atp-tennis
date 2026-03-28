@@ -134,7 +134,9 @@ Reference docs:
 - `node atp.js import ...` fails if required schema objects are missing.
 
 ## Security and Caveats (From Current Source)
-- `POST /api/query` runs SQL from request input and DB config enables `multipleStatements=true`. Keep service private/trusted.
+- `POST /api/query` keeps `multipleStatements=true`, but now accepts read-only SQL only (`SELECT`, `WITH`, `SHOW`, `DESCRIBE`, `EXPLAIN`).
+- Write/admin statements such as `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, `TRUNCATE`, `SET`, and `CALL` are rejected with `400`.
+- Keep the service private/trusted anyway, since `/api/query` still exposes broad read access to the database.
 
 ## Project Structure
 - `atp.js` - CLI entrypoint
