@@ -112,6 +112,16 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/api/head-to-head/:playerA/:playerB', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query, request.params);
+				let FetchHeadToHead = require('../src/fetch-head-to-head.js');
+				let fetchHeadToHead = new FetchHeadToHead({ mysql: this.mysql });
+				let raw = await fetchHeadToHead.fetch(options);
+				return fetchHeadToHead.parse(raw);
+			});
+		});
+
 		app.get('/api/calendar', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Fetcher = require('../src/fetch-calendar.js');

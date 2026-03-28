@@ -73,6 +73,19 @@ Always writes both files to `sandbox/output/`:
 - Uses hardcoded sandbox input: default states `STARTED,NOT_STARTED`.
 - Runs silently on success (no console output).
 
+## Test `fetch-head-to-head`
+
+```bash
+./sandbox/fetch-head-to-head.js
+```
+
+Always writes both files to `sandbox/output/`:
+- `fetch-head-to-head.parsed.json` (normalized H2H JSON with overall stats, by-surface breakdown and recent matches)
+- `fetch-head-to-head.raw.json` (raw query bundle before parse)
+- Uses hardcoded sandbox input: `playerA=S0AG`, `playerB=A0E2`, `limit=5`.
+- Requires local DB access via `.env`.
+- Runs silently on success (no console output).
+
 ## Verify `oddset` Contract
 
 ```bash
