@@ -282,7 +282,7 @@ class HeadToHeadFactor extends OddsFactor {
 	}
 }
 
-class FetchOdds {
+class ComputeOdds {
 	constructor(options = {}) {
 		this.mysql = options.mysql;
 	}
@@ -409,4 +409,4 @@ class FetchOdds {
 	}
 }
 
-module.exports = FetchOdds;
+module.exports = ComputeOdds;

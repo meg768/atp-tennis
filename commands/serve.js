@@ -109,9 +109,9 @@ class Module extends Command {
 		app.get('/api/odds/:playerA/:playerB', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let FetchOdds = require('../src/fetch-odds.js');
-				let fetchOdds = new FetchOdds({ mysql: this.mysql });
-				return await fetchOdds.run(options);
+				let ComputeOdds = require('../src/compute-odds.js');
+				let computeOdds = new ComputeOdds({ mysql: this.mysql });
+				return await computeOdds.run(options);
 			});
 		});
 

@@ -73,6 +73,17 @@ Always writes both files to `sandbox/output/`:
 - Uses hardcoded sandbox input: default states `STARTED,NOT_STARTED`.
 - Runs silently on success (no console output).
 
+## Test `compute-odds`
+
+```bash
+./sandbox/compute-odds.js
+```
+
+Writes one JSON object to `stdout`:
+- includes `input`, resolved `playerA` / `playerB`, and calculated `odds` from `src/compute-odds.js`
+- uses hardcoded sandbox input: `playerA=S0AG`, `playerB=A0E2`, `surface=Hard`
+- requires local DB access via `.env`
+
 ## Test `fetch-head-to-head`
 
 ```bash
