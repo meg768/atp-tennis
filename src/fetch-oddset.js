@@ -15,22 +15,6 @@ const ODDS_SOURCE_PRIORITY = {
 	MATCHES: 3
 };
 
-function normalizeStates(states) {
-	if (typeof states === 'string') {
-		states = states.split(',');
-	}
-
-	if (!Array.isArray(states)) {
-		return [...ODDSET_CURRENT_STATES];
-	}
-
-	const normalized = states
-		.map(value => String(value).trim().toUpperCase())
-		.filter(Boolean);
-
-	return normalized.length > 0 ? normalized : [...ODDSET_CURRENT_STATES];
-}
-
 function isPresent(value) {
 	return value !== null && value !== undefined && value !== '';
 }
@@ -260,43 +244,28 @@ class Module extends Fetcher {
 		this.matchesUrl = options.matchesUrl ?? this.url;
 		this.upcomingUrl = options.upcomingUrl ?? ODDSET_TENNIS_MATCHES_URL;
 		this.openUrl = options.openUrl ?? ODDSET_LIVE_OPEN_URL;
-		this.states = normalizeStates(options.states);
 		this.requestTimeoutMs = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
 	}
 
-	getTrackedStates() {
-		return new Set(this.states);
-	}
-
 	parseMatchesRows(raw) {
-		const trackedStates = this.getTrackedStates();
-
 		return (raw?.events || [])
 			.filter(item => item.event?.sport === 'TENNIS')
 			.filter(item => isATPFamilyEvent(item))
-			.filter(item => trackedStates.has(item.event?.state))
+			.filter(item => ODDSET_CURRENT_STATES.includes(item.event?.state))
 			.map(item => toKambiRow(item, ODDS_SOURCE_PRIORITY.MATCHES))
 			.filter(Boolean);
 	}
 
 	parseOpenRows(raw) {
-		const trackedStates = this.getTrackedStates();
-
 		return (raw?.liveEvents || [])
 			.filter(item => item.event?.sport === 'TENNIS')
 			.filter(item => isATPFamilyEvent(item))
-			.filter(item => trackedStates.has(item.event?.state))
+			.filter(item => ODDSET_CURRENT_STATES.includes(item.event?.state))
 			.map(item => toKambiRow(item, ODDS_SOURCE_PRIORITY.OPEN))
 			.filter(Boolean);
 	}
 
 	parseUpcomingRows(raw) {
-		const trackedStates = this.getTrackedStates();
-
-		if (!trackedStates.has('NOT_STARTED')) {
-			return [];
-		}
-
 		return (raw?.events || [])
 			.filter(item => item.event?.sport === 'TENNIS')
 			.filter(item => isATPFamilyEvent(item))
@@ -310,12 +279,6 @@ class Module extends Fetcher {
 	}
 
 	shouldFetchUpcomingFallback(rawMatches) {
-		const trackedStates = this.getTrackedStates();
-
-		if (!trackedStates.has('NOT_STARTED')) {
-			return false;
-		}
-
 		return !this.hasMatchesUpcoming(rawMatches);
 	}
 
@@ -417,7 +380,6 @@ class Module extends Fetcher {
 			matchesUrl,
 			upcomingUrl,
 			openUrl,
-			states,
 			requestTimeoutMs
 		} = options;
 
@@ -426,7 +388,6 @@ class Module extends Fetcher {
 		this.upcomingUrl = upcomingUrl ?? this.upcomingUrl;
 		this.openUrl = openUrl ?? this.openUrl;
 		this.requestTimeoutMs = requestTimeoutMs ?? this.requestTimeoutMs;
-		this.states = states != undefined ? normalizeStates(states) : this.states;
 		const [matchesResult, openResult] = await Promise.allSettled([
 			this.fetchPayload({
 				url: this.matchesUrl,
@@ -452,7 +413,6 @@ class Module extends Fetcher {
 			open: openResult.status === 'fulfilled' ? openResult.value : null,
 			upcoming: upcomingResult?.status === 'fulfilled' ? upcomingResult.value : null,
 			meta: {
-				requestedStates: this.states,
 				hasMatchesUpcoming: this.hasMatchesUpcoming(matches),
 				usedUpcomingFallback: shouldUseUpcomingFallback
 			},

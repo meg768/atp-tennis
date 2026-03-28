@@ -84,8 +84,8 @@ curl http://127.0.0.1:3004/api/ping
 curl http://127.0.0.1:3004/api/live
 curl http://127.0.0.1:3004/api/rankings
 curl "http://127.0.0.1:3004/api/search-player?query=Sinner&limit=5"
-curl "http://127.0.0.1:3004/api/oddset?states=STARTED"
-curl "http://127.0.0.1:3004/api/oddset?states=STARTED,NOT_STARTED"
+curl "http://127.0.0.1:3004/api/oddset"
+curl "http://127.0.0.1:3004/api/oddset?raw=1"
 curl "http://127.0.0.1:3004/api/head-to-head/S0AG/C0AZ?limit=5"
 curl http://127.0.0.1:3004/api/calendar
 curl -X POST http://127.0.0.1:3004/api/query \
@@ -94,20 +94,18 @@ curl -X POST http://127.0.0.1:3004/api/query \
 ```
 
 ### `/api/oddset` Query Parameters
-- `states`: comma-separated values, e.g. `STARTED,NOT_STARTED`
 - `raw`: truthy value to return raw upstream payload bundle (`{ matches, open, upcoming, meta, errors }`)
 - `requestTimeoutMs`: request timeout in milliseconds
 - `url`: override upstream endpoint
 
 `/api/oddset` is the canonical Oddset endpoint for this project:
-- use `states=STARTED` for live-only consumers
-- use `states=STARTED,NOT_STARTED` for mixed live/upcoming consumers
-- the backend normalizes the `states` parameter before fetching/merging upstream data
+- it always returns the current ATP-family Oddset rows for both live and upcoming matches
+- clients can filter on the returned `state` field when they only want live or only upcoming rows
 
 ### `/api/oddset` Upstream Fallback Order
 - Primary: Oddset ATP `matches.json` for ATP live/upcoming odds.
 - Live fallback: Oddset `event/live/open.json` for ATP live rows when ATP `matches.json` is empty/incomplete.
-- Upcoming fallback: Oddset tennis-all `listView/tennis/all/all/all/matches.json` only when `NOT_STARTED` is requested and ATP `matches.json` has no upcoming rows.
+- Upcoming fallback: Oddset tennis-all `listView/tennis/all/all/all/matches.json` when ATP `matches.json` has no upcoming rows.
 - All rows are filtered to the ATP family in code, not just by upstream URL naming:
   - `termKey === 'atp'`
   - `termKey.startsWith('atp_')`

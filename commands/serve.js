@@ -94,13 +94,6 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
-				if (typeof options.states === 'string') {
-					options.states = options.states
-						.split(',')
-						.map(value => value.trim())
-						.filter(Boolean);
-				}
-
 				let Fetcher = require('../src/fetch-oddset.js');
 				let fetcher = new Fetcher(options);
 				let raw = await fetcher.fetch(options);
