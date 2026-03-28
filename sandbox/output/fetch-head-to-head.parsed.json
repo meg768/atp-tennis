@@ -1,0 +1,155 @@
+{
+  "playerA": {
+    "searchTerm": "S0AG",
+    "id": "S0AG",
+    "name": "Jannik Sinner",
+    "country": "ITA",
+    "rank": 2,
+    "bestGuess": false
+  },
+  "playerB": {
+    "searchTerm": "A0E2",
+    "id": "A0E2",
+    "name": "Carlos Alcaraz",
+    "country": "ESP",
+    "rank": 1,
+    "bestGuess": false
+  },
+  "filters": {
+    "surface": null,
+    "limit": 5
+  },
+  "overall": {
+    "winsA": 6,
+    "winsB": 9,
+    "totalMatches": 15,
+    "leader": "B"
+  },
+  "bySurface": [
+    {
+      "surface": "Hard",
+      "winsA": 3,
+      "winsB": 6,
+      "totalMatches": 9
+    },
+    {
+      "surface": "Clay",
+      "winsA": 1,
+      "winsB": 3,
+      "totalMatches": 4
+    },
+    {
+      "surface": "Grass",
+      "winsA": 2,
+      "winsB": 0,
+      "totalMatches": 2
+    }
+  ],
+  "recentMatches": [
+    {
+      "id": "2025-605-MS001",
+      "date": "2025-11-09T23:00:00.000Z",
+      "event": {
+        "id": "2025-605",
+        "name": "Nitto ATP Finals",
+        "surface": "Hard"
+      },
+      "round": "F",
+      "score": "7-6(4) 7-5",
+      "status": "Completed",
+      "duration": "02:15",
+      "winner": {
+        "id": "S0AG",
+        "name": "Jannik Sinner"
+      },
+      "loser": {
+        "id": "A0E2",
+        "name": "Carlos Alcaraz"
+      }
+    },
+    {
+      "id": "2025-560-MS001",
+      "date": "2025-08-24T22:00:00.000Z",
+      "event": {
+        "id": "2025-560",
+        "name": "US Open",
+        "surface": "Hard"
+      },
+      "round": "F",
+      "score": "6-2 3-6 6-1 6-4",
+      "status": "Completed",
+      "duration": "02:42",
+      "winner": {
+        "id": "A0E2",
+        "name": "Carlos Alcaraz"
+      },
+      "loser": {
+        "id": "S0AG",
+        "name": "Jannik Sinner"
+      }
+    },
+    {
+      "id": "2025-540-MS001",
+      "date": "2025-06-29T22:00:00.000Z",
+      "event": {
+        "id": "2025-540",
+        "name": "Wimbledon",
+        "surface": "Grass"
+      },
+      "round": "F",
+      "score": "4-6 6-4 6-4 6-4",
+      "status": "Completed",
+      "duration": "03:04",
+      "winner": {
+        "id": "S0AG",
+        "name": "Jannik Sinner"
+      },
+      "loser": {
+        "id": "A0E2",
+        "name": "Carlos Alcaraz"
+      }
+    },
+    {
+      "id": "2025-520-MS001",
+      "date": "2025-05-25T22:00:00.000Z",
+      "event": {
+        "id": "2025-520",
+        "name": "Roland Garros",
+        "surface": "Clay"
+      },
+      "round": "F",
+      "score": "4-6 6-7(4) 6-4 7-6(3) 7-6(2)",
+      "status": "Completed",
+      "duration": "05:29",
+      "winner": {
+        "id": "A0E2",
+        "name": "Carlos Alcaraz"
+      },
+      "loser": {
+        "id": "S0AG",
+        "name": "Jannik Sinner"
+      }
+    },
+    {
+      "id": "2025-416-MS001",
+      "date": "2025-05-04T22:00:00.000Z",
+      "event": {
+        "id": "2025-416",
+        "name": "Rome",
+        "surface": "Clay"
+      },
+      "round": "F",
+      "score": "7-6(5) 6-1",
+      "status": "Completed",
+      "duration": "01:44",
+      "winner": {
+        "id": "A0E2",
+        "name": "Carlos Alcaraz"
+      },
+      "loser": {
+        "id": "S0AG",
+        "name": "Jannik Sinner"
+      }
+    }
+  ]
+}

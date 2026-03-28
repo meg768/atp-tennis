@@ -1,0 +1,30 @@
+{
+  "query": "Sinner",
+  "limit": 5,
+  "candidates": [
+    {
+      "id": "S0AG",
+      "name": "Jannik Sinner",
+      "country": "ITA",
+      "rank": 2,
+      "active": 1,
+      "elo_rank": 2475,
+      "elo_rank_hard": 2418,
+      "elo_rank_clay": 2172,
+      "elo_rank_grass": 2008,
+      "match_score": 4
+    },
+    {
+      "id": "S367",
+      "name": "Martin Sinner",
+      "country": "GER",
+      "rank": null,
+      "active": 0,
+      "elo_rank": 1615,
+      "elo_rank_hard": 1583,
+      "elo_rank_clay": 1513,
+      "elo_rank_grass": 1287,
+      "match_score": 4
+    }
+  ]
+}
