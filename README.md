@@ -74,6 +74,10 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/calendar`
 - `POST /api/query`
 
+## MCP
+
+Det finns nu en separat MCP-wrapper i [mcp/README.md](./mcp/README.md).
+
 Examples:
 
 ```bash
