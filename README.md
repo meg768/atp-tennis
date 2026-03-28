@@ -70,6 +70,7 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/ping`
 - `GET /api/live`
 - `GET /api/rankings`
+- `GET /api/search-player`
 - `GET /api/oddset`
 - `GET /api/head-to-head/:playerA/:playerB`
 - `GET /api/calendar`
@@ -82,6 +83,7 @@ curl http://127.0.0.1:3004/ok
 curl http://127.0.0.1:3004/api/ping
 curl http://127.0.0.1:3004/api/live
 curl http://127.0.0.1:3004/api/rankings
+curl "http://127.0.0.1:3004/api/search-player?query=Sinner&limit=5"
 curl "http://127.0.0.1:3004/api/oddset?states=STARTED"
 curl "http://127.0.0.1:3004/api/oddset?states=STARTED,NOT_STARTED"
 curl "http://127.0.0.1:3004/api/head-to-head/S0AG/C0AZ?limit=5"

@@ -80,6 +80,16 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/api/search-player', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query);
+				let Fetcher = require('../src/fetch-search-player.js');
+				let fetcher = new Fetcher({ mysql: this.mysql });
+				let raw = await fetcher.fetch(options);
+				return fetcher.parse(raw);
+			});
+		});
+
 		app.get('/api/oddset', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
@@ -106,9 +116,9 @@ class Module extends Command {
 		app.get('/api/odds/:playerA/:playerB', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let GetOdds = require('../src/get-odds.js');
-				let getOdds = new GetOdds({ mysql: this.mysql });
-				return await getOdds.run(options);
+				let FetchOdds = require('../src/fetch-odds.js');
+				let fetchOdds = new FetchOdds({ mysql: this.mysql });
+				return await fetchOdds.run(options);
 			});
 		});
 

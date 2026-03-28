@@ -1,46 +1,12 @@
+const searchPlayers = require('./search-players.js');
+
 class FetchHeadToHead {
 	constructor(options = {}) {
 		this.mysql = options.mysql;
 	}
 
 	async findPlayers(term) {
-		const normalized = String(term || '').trim();
-
-		if (!normalized) {
-			return [];
-		}
-
-		return await this.mysql.query({
-			sql: `
-				SELECT
-					id,
-					name,
-					country,
-					rank,
-					active,
-					CASE
-						WHEN UPPER(id) = UPPER(?) THEN 1
-						WHEN LOWER(name) = LOWER(?) THEN 2
-						WHEN LOWER(name) LIKE LOWER(?) THEN 3
-						WHEN LOWER(name) LIKE LOWER(?) THEN 4
-						ELSE 5
-					END AS match_score
-				FROM players
-				WHERE
-					UPPER(id) = UPPER(?)
-					OR LOWER(name) = LOWER(?)
-					OR LOWER(name) LIKE LOWER(?)
-					OR LOWER(name) LIKE LOWER(?)
-				ORDER BY
-					match_score ASC,
-					(active = 1) DESC,
-					(rank IS NULL) ASC,
-					rank ASC,
-					name ASC
-				LIMIT 5
-			`,
-			format: [normalized, normalized, `${normalized}%`, `%${normalized}%`, normalized, normalized, `${normalized}%`, `%${normalized}%`]
-		});
+		return await searchPlayers(this.mysql, term, 5);
 	}
 
 	async resolvePlayer(label, term) {
