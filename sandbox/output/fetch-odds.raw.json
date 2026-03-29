@@ -1,0 +1,29 @@
+{
+  "input": {
+    "playerA": "S0AG",
+    "playerB": "A0E2",
+    "surface": "Hard"
+  },
+  "playerA": {
+    "id": "S0AG",
+    "name": "Jannik Sinner",
+    "country": "ITA",
+    "rank": 2,
+    "elo_rank": 2475,
+    "elo_rank_hard": 2418,
+    "elo_rank_clay": 2172,
+    "elo_rank_grass": 2008,
+    "active": 1
+  },
+  "playerB": {
+    "id": "A0E2",
+    "name": "Carlos Alcaraz",
+    "country": "ESP",
+    "rank": 1,
+    "elo_rank": 2399,
+    "elo_rank_hard": 2262,
+    "elo_rank_clay": 2287,
+    "elo_rank_grass": 2094,
+    "active": 1
+  }
+}
