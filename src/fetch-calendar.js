@@ -30,6 +30,15 @@ class Module extends Fetcher {
 			return map[key] ?? String(value);
 		}
 
+		function normalizeSurface(value) {
+			if (value == null) {
+				return null;
+			}
+
+			const text = String(value).trim();
+			return text === '' ? null : text;
+		}
+
 		function extractYear(displayDate) {
 			const value = typeof displayDate === 'string' ? displayDate : '';
 			const match = value.match(/\b(\d{4})\b/);
@@ -114,7 +123,8 @@ class Module extends Fetcher {
 					name: item.Name,
 					date: extractStartDate(item.FormattedDate),
 					location: item.Location ?? null,
-					type: normalizeType(item.Type)
+					type: normalizeType(item.Type),
+					surface: normalizeSurface(item.Surface)
 				});
 			}
 		}

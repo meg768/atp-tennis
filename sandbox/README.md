@@ -9,7 +9,7 @@ Quick test area for fetch modules.
 ```
 
 Always writes both files to `sandbox/output/`:
-- `fetch-calendar.parsed.json` (simplified JSON: `{ events: [{ id, name, date, location, type }] }`, where `id` is `YYYY-Id`, e.g. `2026-9900`)
+- `fetch-calendar.parsed.json` (simplified JSON: `{ events: [{ id, name, date, location, type, surface }] }`, where `id` is `YYYY-Id`, e.g. `2026-9900`)
 - `fetch-calendar.raw.json` (raw ATP payload)
 - Runs silently on success (no console output).
 
