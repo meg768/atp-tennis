@@ -111,6 +111,32 @@ Always writes both files to `sandbox/output/`:
 - Runs silently on success (no console output).
 - Note: this sandbox script exercises the current application-side search path in `src/search-players.js`; it does not call the MariaDB `PLAYER_SEARCH` procedure.
 
+## Test `fetch-player-search`
+
+```bash
+node sandbox/fetch-player-search.js
+```
+
+Always writes both files to `sandbox/output/`:
+- `fetch-player-search.parsed.json` (same raw `CALL PLAYER_SEARCH(?)` result, written for convenience)
+- `fetch-player-search.raw.json` (raw `CALL PLAYER_SEARCH(?)` result bundle)
+- Uses hardcoded sandbox input: `query=Borg`.
+- Requires local DB access via `.env`.
+- Runs silently on success (no console output).
+
+## Test `fetch-player-lookup`
+
+```bash
+node sandbox/fetch-player-lookup.js
+```
+
+Always writes both files to `sandbox/output/`:
+- `fetch-player-lookup.parsed.json` (same raw `SELECT PLAYER_LOOKUP(...)` result, written for convenience)
+- `fetch-player-lookup.raw.json` (raw `SELECT PLAYER_LOOKUP(...)` result)
+- Uses hardcoded sandbox input: `query=Borg`.
+- Requires local DB access via `.env`.
+- Runs silently on success (no console output).
+
 ## Verify `oddset` Contract
 
 ```bash

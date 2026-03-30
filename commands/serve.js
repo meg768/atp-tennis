@@ -98,6 +98,38 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/api/player-search', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query);
+				let term = String(options.term ?? '').trim();
+
+				if (!term) {
+					return [];
+				}
+
+				return await this.mysql.query({
+					sql: 'CALL PLAYER_SEARCH(?)',
+					format: [term]
+				});
+			});
+		});
+
+		app.get('/api/player-lookup', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query);
+				let query = String(options.searchTerm ?? options.query ?? options.term ?? '').trim();
+
+				if (!query) {
+					return [];
+				}
+
+				return await this.mysql.query({
+					sql: 'SELECT PLAYER_LOOKUP(?) AS id',
+					format: [query]
+				});
+			});
+		});
+
 		app.get('/api/oddset', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
