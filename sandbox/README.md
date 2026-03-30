@@ -109,6 +109,7 @@ Always writes both files to `sandbox/output/`:
 - Uses hardcoded sandbox input: `query=Sinner`, `limit=5`.
 - Requires local DB access via `.env`.
 - Runs silently on success (no console output).
+- Note: this sandbox script exercises the current application-side search path in `src/search-players.js`; it does not call the MariaDB `PLAYER_SEARCH` procedure.
 
 ## Verify `oddset` Contract
 

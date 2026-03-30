@@ -12,10 +12,10 @@ Examples:
 
 ```bash
 node helpers/compute-odds/run.js "Jannik Sinner" Alcaraz
-node helpers/compute-odds/run.js S0AG C0AZ
-node helpers/compute-odds/run.js --hard S0AG C0AZ
+node helpers/compute-odds/run.js S0AG A0E2
+node helpers/compute-odds/run.js --hard S0AG A0E2
 node helpers/compute-odds/run.js --clay "Jannik Sinner" Alcaraz
-node helpers/compute-odds/run.js --grass S0AG C0AZ
+node helpers/compute-odds/run.js --grass S0AG A0E2
 ```
 
 Behavior:

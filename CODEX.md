@@ -168,19 +168,25 @@ This is a deduplicated list from the current codebase.
 - `https://www.atptour.com/en/~/media/images/flags/{COUNTRY}.svg` (flags, `helpers/fetch-flags.js`)
 
 ## Database
-- Repo-managed DB artifact: `database/schema.sql` (only)
+- Repo-managed DB artifacts:
+  - `database/schema.sql`
+  - `database/functions/*.sql`
+  - `database/procedures/*.sql`
 - Legacy `import` no longer calls `sp_update()`; surface factors are now updated in app code via `src/update-surface-factors.js`
 - Legacy `import` ELO now reads directly from `matches` + `events` and does not depend on the `flatly` view
 - `database/schema.sql` is now a dump of the current MariaDB schema and currently includes:
   - tables: `events`, `log`, `matches`, `players`, `settings`
   - view: `flatly`
-  - helper SQL functions: `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`
-  - no `sp_update*` stored procedures
+  - helper SQL functions: `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`, `PLAYER_LOOKUP`
+  - stored procedure: `PLAYER_SEARCH`
+  - no legacy `sp_update*` stored procedures
 
 ## MariaDB Prerequisites
 
 Before running a full import, MariaDB must already contain:
 - Tables/views from `database/schema.sql`
+- Repo-managed functions from `database/functions/`
+- Repo-managed procedures from `database/procedures/` when used
 
 Failure behavior:
 - `node atp.js import ...` fails with a MariaDB error if required schema tables are missing
@@ -189,6 +195,8 @@ Failure behavior:
 
 For fresh dev/prod environments:
 1. Create tables/views from `database/schema.sql`
+2. Apply SQL files from `database/functions/`
+3. Apply SQL files from `database/procedures/` when needed
 
 ## Project Structure
 - `atp.js` - CLI entrypoint

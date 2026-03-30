@@ -12,9 +12,9 @@ Simple helper for comparing two players and calculating decimal odds from ELO.
 
 ```bash
 node helpers/compute-odds/run.js "Jannik Sinner" Alcaraz
-node helpers/compute-odds/run.js --hard S0AG C0AZ
+node helpers/compute-odds/run.js --hard S0AG A0E2
 node helpers/compute-odds/run.js --clay "Jannik Sinner" Alcaraz
-node helpers/compute-odds/run.js --grass S0AG C0AZ
+node helpers/compute-odds/run.js --grass S0AG A0E2
 ./helpers/compute-odds/sinner-alcaraz.js
 ./helpers/compute-odds/sinner-alcaraz.js --hard
 ```
