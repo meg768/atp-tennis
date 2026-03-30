@@ -1,6 +1,7 @@
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 let assertReadOnlySQL = require('../src/assert-read-only-sql.js');
+let packageJSON = require('../package.json');
 
 const compression = require('compression');
 
@@ -65,7 +66,10 @@ class Module extends Command {
 		});
 
 		app.get('/api/ping', (req, res) => {
-			res.json({ message: 'pong' });
+			res.json({
+				message: 'pong',
+				version: packageJSON.version
+			});
 		});
 
 		app.get('/api/live', async (request, response) => {

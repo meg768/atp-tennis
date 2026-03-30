@@ -137,6 +137,7 @@ The service listens on `127.0.0.1:3004` (localhost).
 - `POST /api/query`
 
 `/api/query` allows read-only SQL only and should still only be exposed in a trusted network.
+`/api/ping` returns both `message` and backend `version`, which makes it useful for quick deploy verification.
 
 Examples:
 

@@ -91,6 +91,8 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/calendar`
 - `POST /api/query`
 
+`/api/ping` returns both `message` and backend `version`, which makes it useful for quick deploy verification.
+
 Examples:
 
 ```bash
