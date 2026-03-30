@@ -10,8 +10,10 @@ Node.js project for fetching ATP data from `atptour.com`, storing it in MariaDB,
 
 ## Cross-Repo Context
 - The frontend for this backend lives in the sibling repository `../vitel`.
+- The MCP bridge for this backend lives in the sibling repository `../atp-tennis-mcp`.
 - `atp-tennis` is the canonical backend for `vitel` in local development and project discussions unless explicitly stated otherwise.
 - Oddset ownership lives here: frontend clients should consume Oddset data through `GET /api/oddset` instead of calling Kambi/Svenska Spel directly.
+- This Codex thread is now treated as the main shared conversation across `atp-tennis`, `atp-tennis-mcp`, and `vitel`. Cross-repo changes can be coordinated from here.
 
 ## What This Project Does
 - Imports rankings, activity, match results, and player details from ATP endpoints
@@ -128,6 +130,8 @@ The service listens on `127.0.0.1:3004` (localhost).
 - `GET /api/ping`
 - `GET /api/live`
 - `GET /api/rankings`
+- `GET /api/player-search`
+- `GET /api/player-lookup`
 - `GET /api/oddset`
 - `GET /api/calendar`
 - `POST /api/query`
@@ -258,6 +262,15 @@ For fresh dev/prod environments:
 - User reported a 2026 import run looked good after these changes.
 
 ## Session Memory (2026-03-12)
+
+## Session Memory (2026-03-30)
+- New backend player endpoints are now the preferred path:
+  - `GET /api/player-search?term=...` returns the raw MariaDB result from `CALL PLAYER_SEARCH(?)`
+  - `GET /api/player-lookup?term=...` returns the raw MariaDB result from `SELECT PLAYER_LOOKUP(?) AS id`
+- Legacy `GET /api/search-player` is being phased out in favor of the two endpoints above.
+- `PLAYER_SEARCH` is the primary DB search primitive and returns up to 5 rows with `id`, `name`, `country`, `rank`, and `active`.
+- `PLAYER_LOOKUP` is the scalar DB helper that returns the best matching player id.
+- Hosted backend verification on `https://tennis.egelberg.se/` confirmed both `/api/player-search` and `/api/player-lookup` are now live and working after the server-side function update.
 - New module added: `src/fetch-oddset.js`.
 - Purpose: fetch ATP match odds from Kambi/Svenska Spel endpoint:
   - `https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true`
