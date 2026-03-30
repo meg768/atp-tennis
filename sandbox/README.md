@@ -97,20 +97,6 @@ Always writes both files to `sandbox/output/`:
 - Requires local DB access via `.env`.
 - Runs silently on success (no console output).
 
-## Test `fetch-search-player`
-
-```bash
-node sandbox/fetch-search-player.js
-```
-
-Always writes both files to `sandbox/output/`:
-- `fetch-search-player.parsed.json` (normalized player search result with best match and candidate list)
-- `fetch-search-player.raw.json` (raw candidate rows before parse)
-- Uses hardcoded sandbox input: `query=Sinner`, `limit=5`.
-- Requires local DB access via `.env`.
-- Runs silently on success (no console output).
-- Note: this sandbox script exercises the current application-side search path in `src/search-players.js`; it does not call the MariaDB `PLAYER_SEARCH` procedure.
-
 ## Test `fetch-player-search`
 
 ```bash

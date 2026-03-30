@@ -92,16 +92,6 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/search-player', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query);
-				let Fetcher = require('../src/fetch-search-player.js');
-				let fetcher = new Fetcher({ mysql: this.mysql });
-				let raw = await fetcher.fetch(options);
-				return fetcher.parse(raw);
-			});
-		});
-
 		app.get('/api/player-search', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);

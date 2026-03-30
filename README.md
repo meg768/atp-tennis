@@ -82,7 +82,6 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/ping`
 - `GET /api/live`
 - `GET /api/rankings`
-- `GET /api/search-player`
 - `GET /api/player-search`
 - `GET /api/player-lookup`
 - `GET /api/oddset`
@@ -101,7 +100,6 @@ curl http://127.0.0.1:3004/api/ping
 curl http://127.0.0.1:3004/api/live
 curl http://127.0.0.1:3004/api/rankings
 curl "http://127.0.0.1:3004/api/rankings?top=25"
-curl "http://127.0.0.1:3004/api/search-player?query=Sinner&limit=5"
 curl "http://127.0.0.1:3004/api/player-search?term=Borg"
 curl "http://127.0.0.1:3004/api/player-lookup?query=Borg"
 curl "http://127.0.0.1:3004/api/oddset"
@@ -118,11 +116,6 @@ curl -X POST http://127.0.0.1:3004/api/query \
 
 ### `/api/rankings` Query Parameters
 - `top`: positive integer, defaults to `100`
-
-### `/api/search-player` Query Parameters
-- `query`: primary search term
-- `term`: alias for `query`
-- `limit`: positive integer, defaults to `5`
 
 ### `/api/player-search` Query Parameters
 - `term`: player search term
@@ -168,7 +161,7 @@ Notes:
 Notes:
 - `playerA` and `playerB` must be ATP player ids already present in the local database.
 - The endpoint returns a two-item array with decimal odds after a fixed 5% margin.
-- Use `/api/search-player` first if you need to resolve a name to an id.
+- Use `/api/player-lookup` or `/api/player-search` first if you need to resolve a name to an id.
 
 ### `/api/head-to-head/:playerA/:playerB` Query Parameters
 - `surface`: optional surface filter
@@ -205,7 +198,6 @@ Reference docs:
 - Those helper functions are kept for client-side statistical SQL queries and assume normalized score strings such as `6-4 7-6(5)`.
 - The import pipeline does not call `sp_update()`; post-import updates are handled in application code.
 - `node atp.js import ...` fails if required schema objects are missing.
-- `/api/search-player` still uses application-side search logic in `src/search-players.js`.
 - `/api/player-search` goes directly to MariaDB with `CALL PLAYER_SEARCH(?)` and returns the raw procedure result.
 - `/api/player-lookup` goes directly to MariaDB with `SELECT PLAYER_LOOKUP(...)` and returns the raw function result.
 

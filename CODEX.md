@@ -268,10 +268,13 @@ For fresh dev/prod environments:
 - New backend player endpoints are now the preferred path:
   - `GET /api/player-search?term=...` returns the raw MariaDB result from `CALL PLAYER_SEARCH(?)`
   - `GET /api/player-lookup?term=...` returns the raw MariaDB result from `SELECT PLAYER_LOOKUP(?) AS id`
-- Legacy `GET /api/search-player` is being phased out in favor of the two endpoints above.
+- Legacy `GET /api/search-player` has been removed from the backend in favor of the two endpoints above.
 - `PLAYER_SEARCH` is the primary DB search primitive and returns up to 5 rows with `id`, `name`, `country`, `rank`, and `active`.
 - `PLAYER_LOOKUP` is the scalar DB helper that returns the best matching player id.
 - Hosted backend verification on `https://tennis.egelberg.se/` confirmed both `/api/player-search` and `/api/player-lookup` are now live and working after the server-side function update.
+- `GET /api/ping` now returns both `message` and backend `version`.
+- Backend version was bumped to `1.0.1`.
+- `npm run restart-atp-service` was run successfully on `pi-kato`; `git pull` completed and PM2 shows `atp-service` online at version `1.0.1`.
 - New module added: `src/fetch-oddset.js`.
 - Purpose: fetch ATP match odds from Kambi/Svenska Spel endpoint:
   - `https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true`
