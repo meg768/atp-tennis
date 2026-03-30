@@ -72,7 +72,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/live', async (request, response) => {
+		app.get('/api/matches/live', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Fetcher = require('../src/fetch-live.js');
 				let fetcher = new Fetcher();
@@ -81,7 +81,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/rankings', async (request, response) => {
+		app.get('/api/player/rankings', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
@@ -92,7 +92,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/player-search', async (request, response) => {
+		app.get('/api/player/search', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 				let term = String(options.term ?? '').trim();
@@ -108,7 +108,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/player-lookup', async (request, response) => {
+		app.get('/api/player/lookup', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 				let query = String(options.searchTerm ?? options.query ?? options.term ?? '').trim();
@@ -140,7 +140,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/odds/:playerA/:playerB', async (request, response) => {
+		app.get('/api/players/odds/:playerA/:playerB', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
 				let ComputeOdds = require('../src/compute-odds.js');
@@ -149,7 +149,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/head-to-head/:playerA/:playerB', async (request, response) => {
+		app.get('/api/players/head-to-head/:playerA/:playerB', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
 				let FetchHeadToHead = require('../src/fetch-head-to-head.js');
@@ -159,7 +159,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/calendar', async (request, response) => {
+		app.get('/api/events/calendar', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Fetcher = require('../src/fetch-calendar.js');
 				let fetcher = new Fetcher();

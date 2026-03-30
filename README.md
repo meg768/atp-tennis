@@ -80,14 +80,14 @@ Bind address: `127.0.0.1:3004`
 Endpoints (from `commands/serve.js`):
 - `GET /ok`
 - `GET /api/ping`
-- `GET /api/live`
-- `GET /api/rankings`
-- `GET /api/player-search`
-- `GET /api/player-lookup`
+- `GET /api/matches/live`
+- `GET /api/player/rankings`
+- `GET /api/player/search`
+- `GET /api/player/lookup`
 - `GET /api/oddset`
-- `GET /api/odds/:playerA/:playerB`
-- `GET /api/head-to-head/:playerA/:playerB`
-- `GET /api/calendar`
+- `GET /api/players/odds/:playerA/:playerB`
+- `GET /api/players/head-to-head/:playerA/:playerB`
+- `GET /api/events/calendar`
 - `POST /api/query`
 
 `/api/ping` returns both `message` and backend `version`, which makes it useful for quick deploy verification.
@@ -97,34 +97,34 @@ Examples:
 ```bash
 curl http://127.0.0.1:3004/ok
 curl http://127.0.0.1:3004/api/ping
-curl http://127.0.0.1:3004/api/live
-curl http://127.0.0.1:3004/api/rankings
-curl "http://127.0.0.1:3004/api/rankings?top=25"
-curl "http://127.0.0.1:3004/api/player-search?term=Borg"
-curl "http://127.0.0.1:3004/api/player-lookup?query=Borg"
+curl http://127.0.0.1:3004/api/matches/live
+curl http://127.0.0.1:3004/api/player/rankings
+curl "http://127.0.0.1:3004/api/player/rankings?top=25"
+curl "http://127.0.0.1:3004/api/player/search?term=Borg"
+curl "http://127.0.0.1:3004/api/player/lookup?query=Borg"
 curl "http://127.0.0.1:3004/api/oddset"
 curl "http://127.0.0.1:3004/api/oddset?raw=1"
-curl "http://127.0.0.1:3004/api/odds/S0AG/A0E2"
-curl "http://127.0.0.1:3004/api/odds/S0AG/A0E2?surface=Hard"
-curl "http://127.0.0.1:3004/api/head-to-head/S0AG/A0E2?limit=5"
-curl "http://127.0.0.1:3004/api/head-to-head/S0AG/A0E2?surface=Clay&limit=5"
-curl http://127.0.0.1:3004/api/calendar
+curl "http://127.0.0.1:3004/api/players/odds/S0AG/A0E2"
+curl "http://127.0.0.1:3004/api/players/odds/S0AG/A0E2?surface=Hard"
+curl "http://127.0.0.1:3004/api/players/head-to-head/S0AG/A0E2?limit=5"
+curl "http://127.0.0.1:3004/api/players/head-to-head/S0AG/A0E2?surface=Clay&limit=5"
+curl http://127.0.0.1:3004/api/events/calendar
 curl -X POST http://127.0.0.1:3004/api/query \
   -H "Content-Type: application/json" \
   -d '{"sql":"SELECT 1"}'
 ```
 
-### `/api/rankings` Query Parameters
+### `/api/player/rankings` Query Parameters
 - `top`: positive integer, defaults to `100`
 
-### `/api/player-search` Query Parameters
+### `/api/player/search` Query Parameters
 - `term`: player search term
 
 Notes:
 - This endpoint goes directly to MariaDB with `CALL PLAYER_SEARCH(?)`.
 - It returns the raw MariaDB procedure result from `CALL PLAYER_SEARCH(?)`.
 
-### `/api/player-lookup` Query Parameters
+### `/api/player/lookup` Query Parameters
 - `query`: primary search term
 - `term`: alias for `query`
 - `searchTerm`: alias for `query`
@@ -155,15 +155,15 @@ Notes:
 - fallback name matching for ATP qualifier labels such as `ATP Qual.`
 - Parsed response shape stays the same: an array of rows with `id`, `start`, `tournament`, `state`, `score`, `playerA`, `playerB`.
 
-### `/api/odds/:playerA/:playerB` Query Parameters
+### `/api/players/odds/:playerA/:playerB` Query Parameters
 - `surface`: optional surface selector (`Hard`, `Clay`, `Grass`)
 
 Notes:
 - `playerA` and `playerB` must be ATP player ids already present in the local database.
 - The endpoint returns a two-item array with decimal odds after a fixed 5% margin.
-- Use `/api/player-lookup` or `/api/player-search` first if you need to resolve a name to an id.
+- Use `/api/player/lookup` or `/api/player/search` first if you need to resolve a name to an id.
 
-### `/api/head-to-head/:playerA/:playerB` Query Parameters
+### `/api/players/head-to-head/:playerA/:playerB` Query Parameters
 - `surface`: optional surface filter
 - `limit`: integer from `1` to `50`, defaults to `10`
 
@@ -198,8 +198,8 @@ Reference docs:
 - Those helper functions are kept for client-side statistical SQL queries and assume normalized score strings such as `6-4 7-6(5)`.
 - The import pipeline does not call `sp_update()`; post-import updates are handled in application code.
 - `node atp.js import ...` fails if required schema objects are missing.
-- `/api/player-search` goes directly to MariaDB with `CALL PLAYER_SEARCH(?)` and returns the raw procedure result.
-- `/api/player-lookup` goes directly to MariaDB with `SELECT PLAYER_LOOKUP(...)` and returns the raw function result.
+- `/api/player/search` goes directly to MariaDB with `CALL PLAYER_SEARCH(?)` and returns the raw procedure result.
+- `/api/player/lookup` goes directly to MariaDB with `SELECT PLAYER_LOOKUP(...)` and returns the raw function result.
 
 ## Security and Caveats (From Current Source)
 - `POST /api/query` keeps `multipleStatements=true`, but now accepts read-only SQL only (`SELECT`, `WITH`, `SHOW`, `DESCRIBE`, `EXPLAIN`).

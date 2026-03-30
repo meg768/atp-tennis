@@ -222,7 +222,7 @@ async function main() {
 		}
 
 		const query = params.toString() ? `?${params.toString()}` : '';
-		const url = `http://127.0.0.1:${port}/api/odds/${encodeURIComponent(playerA.id)}/${encodeURIComponent(playerB.id)}${query}`;
+		const url = `http://127.0.0.1:${port}/api/players/odds/${encodeURIComponent(playerA.id)}/${encodeURIComponent(playerB.id)}${query}`;
 		const result = await getJson(url);
 
 		if (!Array.isArray(result) || result.length < 2) {

@@ -128,12 +128,14 @@ The service listens on `127.0.0.1:3004` (localhost).
 ### API Endpoints
 - `GET /ok`
 - `GET /api/ping`
-- `GET /api/live`
-- `GET /api/rankings`
-- `GET /api/player-search`
-- `GET /api/player-lookup`
+- `GET /api/matches/live`
+- `GET /api/player/rankings`
+- `GET /api/player/search`
+- `GET /api/player/lookup`
 - `GET /api/oddset`
-- `GET /api/calendar`
+- `GET /api/players/odds/:playerA/:playerB`
+- `GET /api/players/head-to-head/:playerA/:playerB`
+- `GET /api/events/calendar`
 - `POST /api/query`
 
 `/api/query` allows read-only SQL only and should still only be exposed in a trusted network.
@@ -144,10 +146,10 @@ Examples:
 ```bash
 curl http://127.0.0.1:3004/ok
 curl http://127.0.0.1:3004/api/ping
-curl http://127.0.0.1:3004/api/rankings
+curl http://127.0.0.1:3004/api/player/rankings
 curl "http://127.0.0.1:3004/api/oddset?states=STARTED"
 curl "http://127.0.0.1:3004/api/oddset?states=STARTED,NOT_STARTED"
-curl http://127.0.0.1:3004/api/calendar
+curl http://127.0.0.1:3004/api/events/calendar
 curl -X POST http://127.0.0.1:3004/api/query \
   -H "Content-Type: application/json" \
   -d '{"sql":"SELECT 1"}'
@@ -266,12 +268,12 @@ For fresh dev/prod environments:
 
 ## Session Memory (2026-03-30)
 - New backend player endpoints are now the preferred path:
-  - `GET /api/player-search?term=...` returns the raw MariaDB result from `CALL PLAYER_SEARCH(?)`
-  - `GET /api/player-lookup?term=...` returns the raw MariaDB result from `SELECT PLAYER_LOOKUP(?) AS id`
+  - `GET /api/player/search?term=...` returns the raw MariaDB result from `CALL PLAYER_SEARCH(?)`
+  - `GET /api/player/lookup?term=...` returns the raw MariaDB result from `SELECT PLAYER_LOOKUP(?) AS id`
 - Legacy `GET /api/search-player` has been removed from the backend in favor of the two endpoints above.
 - `PLAYER_SEARCH` is the primary DB search primitive and returns up to 5 rows with `id`, `name`, `country`, `rank`, and `active`.
 - `PLAYER_LOOKUP` is the scalar DB helper that returns the best matching player id.
-- Hosted backend verification on `https://tennis.egelberg.se/` confirmed both `/api/player-search` and `/api/player-lookup` are now live and working after the server-side function update.
+- Hosted backend verification on `https://tennis.egelberg.se/` confirmed both `/api/player/search` and `/api/player/lookup` are now live and working after the server-side function update.
 - `GET /api/ping` now returns both `message` and backend `version`.
 - Backend version was bumped to `1.0.1`.
 - `npm run restart-atp-service` was run successfully on `pi-kato`; `git pull` completed and PM2 shows `atp-service` online at version `1.0.1`.
