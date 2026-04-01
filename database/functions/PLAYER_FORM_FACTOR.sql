@@ -2,10 +2,11 @@ DELIMITER ;;
 
 DROP FUNCTION IF EXISTS `PLAYER_FORM_FACTOR`;;
 
-CREATE FUNCTION `PLAYER_FORM_FACTOR` (playerID VARCHAR(32), weeks INT) RETURNS DECIMAL(10, 4) DETERMINISTIC
+CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_FORM_FACTOR`(playerID VARCHAR(32)) RETURNS decimal(10,4)
+    DETERMINISTIC
 BEGIN
 /*
-PLAYER_FORM_FACTOR(playerID, weeks)
+PLAYER_FORM_FACTOR(playerID)
 
 Purpose
 - Return one numeric form signal in the range 0..1 for a single player.
@@ -16,13 +17,13 @@ Why this is a function
 - It returns one scalar value.
 - It is intended to be usable inside regular SQL queries.
 - Example usage:
-SELECT PLAYER_FORM_FACTOR('S0AG', 8);
-SELECT id, name, PLAYER_FORM_FACTOR(id, 8) AS form_factor FROM players;
+SELECT PLAYER_FORM_FACTOR('S0AG');
+SELECT id, name, PLAYER_FORM_FACTOR(id) AS form_factor FROM players;
 
 High-level model
 1. Look only at completed matches for the player.
 2. Ignore matches without a known event date.
-3. Restrict the sample to the last N weeks.
+3. Restrict the sample to the last 8 weeks.
 4. Weight newer matches higher than older matches inside that window.
 5. Shrink the result toward 0.5 so tiny samples do not look too extreme.
 
@@ -33,7 +34,7 @@ Why this exists
 
 Exact weighting choice
 - match_weight = POW(0.5, days_ago / window_days)
-- window_days = weeks * 7
+- window_days = 8 * 7
 
 Interpretation of the weighting
 - A match played today has weight 1.0.
@@ -57,7 +58,6 @@ Why 16/8 was chosen
 
 Inputs and edge cases
 - Invalid playerID => NULL
-- weeks <= 0 => NULL
 - Unknown playerID => NULL
 - Valid player with no matches in the window => 0.5000
 
@@ -65,7 +65,7 @@ Things you may want to tune later
 - Recency curve:
 change POW(0.5, ...) to another decay function
 - Window behavior:
-use more or fewer weeks
+change the hardcoded 8-week window in this function
 - Prior strength:
 replace +8 / +16 with something lighter or heavier
 - Match filtering:
@@ -83,11 +83,10 @@ DECLARE v_weighted_matches DECIMAL(12, 6) DEFAULT 0;
 DECLARE v_weighted_wins DECIMAL(12, 6) DEFAULT 0;
 
 DECLARE v_window_days DECIMAL(12, 6) DEFAULT 0;
+DECLARE v_weeks INT DEFAULT 8;
 
 IF playerID IS NULL
-OR TRIM(playerID) = ''
-OR weeks IS NULL
-OR weeks <= 0 THEN RETURN NULL;
+OR TRIM(playerID) = '' THEN RETURN NULL;
 
 ELSEIF NOT EXISTS (
     SELECT
@@ -101,7 +100,7 @@ ELSEIF NOT EXISTS (
 END IF;
 
 SET
-    v_window_days = weeks * 7;
+    v_window_days = v_weeks * 7;
 
 SELECT
     COALESCE(SUM(match_weight), 0) AS weighted_matches,
@@ -129,7 +128,7 @@ FROM
         WHERE
             m.status = 'Completed'
             AND e.date IS NOT NULL
-            AND e.date >= DATE_SUB(CURDATE(), INTERVAL weeks WEEK)
+            AND e.date >= DATE_SUB(CURDATE(), INTERVAL v_weeks WEEK)
             AND (
                 m.winner = playerID
                 OR m.loser = playerID

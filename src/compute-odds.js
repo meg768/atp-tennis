@@ -8,6 +8,17 @@ class OddsFactor {
 	compute() {
 		throw new Error('compute() must be implemented by the factor.');
 	}
+
+	async querySingleValue(sql, format) {
+		const { mysql } = this.context;
+
+		if (!mysql) {
+			throw new Error(`${this.constructor.name} requires a mysql connection.`);
+		}
+
+		const rows = await mysql.query({ sql, format });
+		return rows[0] ? Object.values(rows[0])[0] : null;
+	}
 }
 
 // EloFactor is the base strength model in the odds calculation.
@@ -55,96 +66,19 @@ class EloFactor extends OddsFactor {
 }
 
 
-// FatigueFactor estimates player fatigue based on recent match load.
-// It counts the number of completed matches each player has played
-// over the last N days and applies an exponential decay:
-//
-//   fatigue = exp(-DECAY * matches)
-//
-// Fewer matches → higher fatigue score (more rested).
-// More matches → lower fatigue score (more tired).
-//
-// The two fatigue scores are then normalized into probabilities.
-//
-// Tunable parameters:
-// - DAYS controls how far back to look (default 7 days).
-// - DECAY controls how strongly fatigue impacts performance.
-//   Higher values penalize frequent play more aggressively.
-//
-// This factor should remain fairly light (e.g. 5% weight),
-// as it captures short-term effects that complement ELO and form.
-class FatigueFactor extends OddsFactor {
-	async compute() {
-		const { playerA, playerB, mysql } = this.context;
-
-		if (!mysql) {
-			throw new Error('FatigueFactor requires a mysql connection.');
-		}
-
-		const DAYS = 7;
-		const DECAY = 0.15;
-
-		async function getMatchesLastDays(player) {
-			const rows = await mysql.query({
-				sql: `
-					SELECT COUNT(*) AS matches
-					FROM matches m
-					JOIN events e ON e.id = m.event
-					WHERE
-						m.status = 'Completed'
-						AND e.date IS NOT NULL
-						AND e.date >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
-						AND (m.winner = ? OR m.loser = ?)
-				`,
-				format: [DAYS, player, player]
-			});
-
-			return Number(rows[0]?.matches || 0);
-		}
-
-		const matchesA = await getMatchesLastDays(playerA.id);
-		const matchesB = await getMatchesLastDays(playerB.id);
-
-		const fatigueA = Math.exp(-DECAY * matchesA);
-		const fatigueB = Math.exp(-DECAY * matchesB);
-
-		const total = fatigueA + fatigueB;
-
-		if (!Number.isFinite(total) || total <= 0) {
-			return [0.5, 0.5];
-		}
-
-		const probabilityA = fatigueA / total;
-		const probabilityB = fatigueB / total;
-
-		return [probabilityA, probabilityB];
-	}
-}
-
-// RankFactor converts the current ATP ranking into a linear probability.
-// Lower rank is better, so rank #1 gets an advantage over rank #2, #10, etc.
-// The probability is centered around 50% and scaled by the relative gap:
-// 0.5 + (rankB - rankA) / (2 * (rankA + rankB)).
+// RankFactor delegates ranking logic to MariaDB via
+// PLAYER_RANK_FACTOR(playerID, opponentID).
 class RankFactor extends OddsFactor {
-	compute() {
+	async compute() {
 		const { playerA, playerB } = this.context;
+		const probabilityA = Number(await this.querySingleValue(
+			'SELECT PLAYER_RANK_FACTOR(?, ?) AS rank_factor',
+			[playerA.id, playerB.id]
+		));
 
-		const rankA = Number(playerA.rank);
-		const rankB = Number(playerB.rank);
-
-		if (!Number.isFinite(rankA) || rankA <= 0 || !Number.isFinite(rankB) || rankB <= 0) {
-			throw new Error('Both players must have a positive current rank.');
+		if (!Number.isFinite(probabilityA) || probabilityA <= 0 || probabilityA >= 1) {
+			throw new Error('Could not calculate rank factor.');
 		}
-
-		// Log-skalning: jämnar ut skillnader i rank
-		// (skillnaden mellan 5 och 20 är större än 105 och 120)
-		const score = Math.log(rankB) - Math.log(rankA);
-
-		// Logistisk funktion för att mappa till sannolikhet
-		let probabilityA = 1 / (1 + Math.exp(-score));
-
-		// Clamp för säkerhet
-		probabilityA = Math.max(0.01, Math.min(0.99, probabilityA));
 
 		const probabilityB = 1 - probabilityA;
 
@@ -152,131 +86,49 @@ class RankFactor extends OddsFactor {
 	}
 }
 
-// FormFactor measures recent form from the latest 10 completed matches.
-// If a specific surface is selected, only matches on that surface are used.
-// The factor uses a smoothed win rate: (wins + 1) / (matches + 2).
+// FormFactor delegates recent-form logic to MariaDB via
+// PLAYER_FORM_FACTOR(playerID).
+// The function returns one scalar form value per player (0..1),
+// and this factor normalizes the two player values into a probability pair.
 class FormFactor extends OddsFactor {
 	async compute() {
-		const { playerA, playerB, mysql, surface } = this.context;
-
-		if (!mysql) {
-			throw new Error('FormFactor requires a mysql connection.');
-		}
-
-		async function getRecentForm(player, surface) {
-			let sql = `
-				SELECT
-					m.winner,
-					m.loser
-				FROM matches m
-				JOIN events e ON e.id = m.event
-				WHERE
-					m.status = 'Completed'
-					AND e.date IS NOT NULL
-					AND (m.winner = ? OR m.loser = ?)
-			`;
-
-			let format = [player, player];
-
-			if (surface) {
-				sql += ` AND e.surface = ?`;
-				format.push(surface);
-			}
-
-			sql += ` ORDER BY e.date DESC, m.id DESC LIMIT 10`;
-
-			const rows = await mysql.query({ sql, format });
-			const matches = rows.length;
-			const wins = rows.filter(row => row.winner === player).length;
-			const rate = (wins + 1) / (matches + 2);
-
-			return { rate };
-		}
-
-		const formA = await getRecentForm(playerA.id, surface);
-		const formB = await getRecentForm(playerB.id, surface);
-		const totalRate = formA.rate + formB.rate;
+		const { playerA, playerB } = this.context;
+		const formA = Number(await this.querySingleValue(
+			'SELECT PLAYER_FORM_FACTOR(?) AS form_factor',
+			[playerA.id]
+		));
+		const formB = Number(await this.querySingleValue(
+			'SELECT PLAYER_FORM_FACTOR(?) AS form_factor',
+			[playerB.id]
+		));
+		const totalRate = formA + formB;
 
 		if (!Number.isFinite(totalRate) || totalRate <= 0) {
-			return [0.5, 0.5];
+			throw new Error('Could not calculate form factor probabilities.');
 		}
 
-		const probabilityA = formA.rate / totalRate;
+		const probabilityA = formA / totalRate;
 		const probabilityB = 1 - probabilityA;
 
 		return [probabilityA, probabilityB];
 	}
 }
 
-// HeadToHeadFactor measures the recent inbordes moten between the two players.
-// If a specific surface is selected, only head-to-head matches on that surface
-// are used. Otherwise all surfaces are included.
-//
-// Tunable parameters:
-// - YEARS controls how far back in time the head-to-head history should go.
-// - WIN_OFFSET and MATCH_OFFSET control the smoothing:
-//   (wins + WIN_OFFSET) / (matches + MATCH_OFFSET)
-// - Returning [0.5, 0.5] when there is no history keeps the factor neutral.
-//
-// This factor should usually stay fairly light, because head-to-head data can
-// be noisy when the sample is small or old.
+// HeadToHeadFactor delegates matchup-history logic to MariaDB via
+// PLAYER_HEAD_TO_HEAD_FACTOR(playerID, opponentID, surface).
 class HeadToHeadFactor extends OddsFactor {
 	async compute() {
-		const { playerA, playerB, mysql, surface } = this.context;
+		const { playerA, playerB, surface } = this.context;
+		const probabilityA = Number(await this.querySingleValue(
+			'SELECT PLAYER_HEAD_TO_HEAD_FACTOR(?, ?, ?) AS head_to_head_factor',
+			[playerA.id, playerB.id, surface]
+		));
 
-		if (!mysql) {
-			throw new Error('HeadToHeadFactor requires a mysql connection.');
+		if (!Number.isFinite(probabilityA) || probabilityA <= 0 || probabilityA >= 1) {
+			throw new Error('Could not calculate head-to-head factor.');
 		}
 
-		const YEARS = 2;
-		const WIN_OFFSET = 1;
-		const MATCH_OFFSET = 2;
-
-		let sql = `
-			SELECT
-				m.winner,
-				m.loser
-			FROM matches m
-			JOIN events e ON e.id = m.event
-			WHERE
-				m.status = 'Completed'
-				AND e.date IS NOT NULL
-				AND e.date >= DATE_SUB(CURDATE(), INTERVAL ${YEARS} YEAR)
-				AND (
-					(m.winner = ? AND m.loser = ?)
-					OR
-					(m.winner = ? AND m.loser = ?)
-				)
-		`;
-
-		const format = [playerA.id, playerB.id, playerB.id, playerA.id];
-
-		if (surface) {
-			sql += ` AND e.surface = ?`;
-			format.push(surface);
-		}
-
-		sql += ` ORDER BY e.date DESC, m.id DESC`;
-
-		const rows = await mysql.query({ sql, format });
-		const matches = rows.length;
-
-		if (matches === 0) {
-			return [0.5, 0.5];
-		}
-
-		const winsA = rows.filter(row => row.winner === playerA.id).length;
-		const winsB = rows.filter(row => row.winner === playerB.id).length;
-		const rateA = (winsA + WIN_OFFSET) / (matches + MATCH_OFFSET);
-		const rateB = (winsB + WIN_OFFSET) / (matches + MATCH_OFFSET);
-		const totalRate = rateA + rateB;
-
-		if (!Number.isFinite(totalRate) || totalRate <= 0) {
-			return [0.5, 0.5];
-		}
-
-		const probabilityA = rateA / totalRate;
-		const probabilityB = rateB / totalRate;
+		const probabilityB = 1 - probabilityA;
 
 		return [probabilityA, probabilityB];
 	}
@@ -335,11 +187,10 @@ class ComputeOdds {
 	async compute({ playerA, playerB, surface = null, margin = 0 } = {}) {
 		const context = { playerA, playerB, surface, mysql: this.mysql };
 		const factors = [
-			{ factor: new EloFactor(context), weight: 72 },
-			{ factor: new RankFactor(context), weight: 7 },
-			{ factor: new FormFactor(context), weight: 7 },
-			{ factor: new FatigueFactor(context), weight: 7 },
-			{ factor: new HeadToHeadFactor(context), weight: 7 }
+			{ factor: new EloFactor(context), weight: 70 },
+			{ factor: new RankFactor(context), weight: 10 },
+			{ factor: new FormFactor(context), weight: 10 },
+			{ factor: new HeadToHeadFactor(context), weight: 10 }
 		];
 
 		let sumA = 0;
