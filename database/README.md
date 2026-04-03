@@ -62,6 +62,7 @@ but returns only one id.
 ### `procedures/*.sql`
 
 One stored procedure per file. Current procedures:
+- `PLAYER_ODDS_DEBUG.sql`
 - `PLAYER_ODDS.sql`
 - `PLAYER_SEARCH.sql`
 
@@ -80,6 +81,9 @@ matches.
 `PLAYER_ODDS.sql` returns two rows of decimal odds for a matchup, one row per
 player, resolves free-text player inputs through `PLAYER_LOOKUP.sql`, and
 contains the blended odds logic directly in the procedure.
+
+`PLAYER_ODDS_DEBUG.sql` returns the same matchup shape as `PLAYER_ODDS.sql`, but
+lets you pass custom factor weights for ad hoc tuning in SQL tools.
 
 ## How It Is Used
 
