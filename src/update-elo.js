@@ -10,6 +10,23 @@ class UpdateELO {
 
 	async compute(surface) {
 		const surfaces = ['Hard', 'Clay', 'Grass'];
+		const roundOrderSQL = `
+			CASE m.round
+				WHEN 'RR' THEN 10
+				WHEN 'R128' THEN 20
+				WHEN 'R64' THEN 30
+				WHEN 'R56' THEN 35
+				WHEN 'R48' THEN 40
+				WHEN 'R32' THEN 50
+				WHEN 'R24' THEN 55
+				WHEN 'R16' THEN 60
+				WHEN 'QF' THEN 70
+				WHEN 'SF' THEN 80
+				WHEN 'BR' THEN 85
+				WHEN 'F' THEN 90
+				ELSE 999
+			END
+		`;
 
 		if (surface != undefined && !surfaces.includes(surface)) {
 			throw new Error(`Unsupported surface '${surface}'.`);
@@ -39,7 +56,7 @@ class UpdateELO {
 			format.push(surface);
 		}
 
-		sql += ` ORDER BY e.date ASC, m.id ASC`;
+		sql += ` ORDER BY e.date ASC, m.event ASC, ${roundOrderSQL} ASC, m.id ASC`;
 
 		let matches = await this.mysql.query({ sql, format });
 
@@ -89,6 +106,24 @@ class UpdateELO {
 		let hard = await this.compute('Hard');
 		let clay = await this.compute('Clay');
 		let grass = await this.compute('Grass');
+
+		function blendWithOverall(surfaceRatings) {
+			let surfaceById = new Map(surfaceRatings.map(entry => [entry.id, entry.rank]));
+
+			return all.map(entry => {
+				let overallRank = entry.rank;
+				let surfaceRank = surfaceById.get(entry.id);
+
+				return {
+					id: entry.id,
+					rank: surfaceRank == undefined ? overallRank : (overallRank + surfaceRank) / 2
+				};
+			});
+		}
+
+		hard = blendWithOverall(hard);
+		clay = blendWithOverall(clay);
+		grass = blendWithOverall(grass);
 
 		await this.mysql.query('UPDATE players SET elo_rank = NULL, elo_rank_hard = NULL, elo_rank_clay = NULL, elo_rank_grass = NULL');
 
