@@ -24,7 +24,6 @@ One SQL function per file. Current functions:
 - `PLAYER_ELO_FACTOR.sql`
 - `PLAYER_FATIGUE_FACTOR.sql`
 - `PLAYER_LOOKUP.sql`
-- `PLAYER_ODDS_FACTOR.sql`
 - `PLAYER_RANK_FACTOR.sql`
 - `PLAYER_HEAD_TO_HEAD_FACTOR.sql`
 
@@ -79,7 +78,8 @@ uses the same matching rules as `PLAYER_LOOKUP.sql`, and always returns at most
 matches.
 
 `PLAYER_ODDS.sql` returns two rows of decimal odds for a matchup, one row per
-player, and resolves free-text player inputs through `PLAYER_LOOKUP.sql`.
+player, resolves free-text player inputs through `PLAYER_LOOKUP.sql`, and
+contains the blended odds logic directly in the procedure.
 
 ## How It Is Used
 
