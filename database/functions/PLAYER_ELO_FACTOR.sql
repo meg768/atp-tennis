@@ -44,7 +44,7 @@ BEGIN
     - Invalid playerID => NULL
     - Invalid opponentID => NULL
     - Same player and opponent => NULL
-    - Missing selected ELO on either side => NULL
+    - Missing usable ELO on either side => NULL
     */
 
     DECLARE v_surface VARCHAR(50) DEFAULT NULL;
@@ -72,9 +72,9 @@ BEGIN
 
     SELECT
         CASE
-            WHEN v_surface = 'HARD' THEN elo_rank_hard
-            WHEN v_surface = 'CLAY' THEN elo_rank_clay
-            WHEN v_surface = 'GRASS' THEN elo_rank_grass
+            WHEN v_surface = 'HARD' THEN COALESCE(elo_rank_hard, elo_rank)
+            WHEN v_surface = 'CLAY' THEN COALESCE(elo_rank_clay, elo_rank)
+            WHEN v_surface = 'GRASS' THEN COALESCE(elo_rank_grass, elo_rank)
             ELSE elo_rank
         END
     INTO v_elo_player
@@ -84,9 +84,9 @@ BEGIN
 
     SELECT
         CASE
-            WHEN v_surface = 'HARD' THEN elo_rank_hard
-            WHEN v_surface = 'CLAY' THEN elo_rank_clay
-            WHEN v_surface = 'GRASS' THEN elo_rank_grass
+            WHEN v_surface = 'HARD' THEN COALESCE(elo_rank_hard, elo_rank)
+            WHEN v_surface = 'CLAY' THEN COALESCE(elo_rank_clay, elo_rank)
+            WHEN v_surface = 'GRASS' THEN COALESCE(elo_rank_grass, elo_rank)
             ELSE elo_rank
         END
     INTO v_elo_opponent
