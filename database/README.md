@@ -21,6 +21,7 @@ One SQL function per file. Current functions:
 - `NUMBER_OF_SETS.sql`
 - `NUMBER_OF_TIE_BREAKS.sql`
 - `PLAYER_FORM_FACTOR.sql`
+- `PLAYER_ELO_FACTOR.sql`
 - `PLAYER_FATIGUE_FACTOR.sql`
 - `PLAYER_LOOKUP.sql`
 - `PLAYER_RANK_FACTOR.sql`

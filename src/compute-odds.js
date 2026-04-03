@@ -21,44 +21,20 @@ class OddsFactor {
 	}
 }
 
-// EloFactor is the base strength model in the odds calculation.
-// It picks the correct ELO column from the selected surface:
-// - null => elo_rank
-// - Hard => elo_rank_hard
-// - Clay => elo_rank_clay
-// - Grass => elo_rank_grass
-// It then converts the two ELO values into a probability pair with the
-// standard Elo logistic formula. A higher ELO gives a higher win chance,
-// and the two returned probabilities always sum to 1.
+// EloFactor delegates ELO logic to MariaDB via
+// PLAYER_ELO_FACTOR(playerID, opponentID, surface).
 class EloFactor extends OddsFactor {
-	compute() {
+	async compute() {
 		const { playerA, playerB, surface } = this.context;
+		const probabilityA = Number(await this.querySingleValue(
+			'SELECT PLAYER_ELO_FACTOR(?, ?, ?) AS elo_factor',
+			[playerA.id, playerB.id, surface]
+		));
 
-		function getField(surface) {
-			if (surface === 'Hard') {
-				return 'elo_rank_hard';
-			}
-
-			if (surface === 'Clay') {
-				return 'elo_rank_clay';
-			}
-
-			if (surface === 'Grass') {
-				return 'elo_rank_grass';
-			}
-
-			return 'elo_rank';
+		if (!Number.isFinite(probabilityA) || probabilityA <= 0 || probabilityA >= 1) {
+			throw new Error('Could not calculate Elo factor.');
 		}
 
-		const field = getField(surface);
-		const eloA = Number(playerA[field]);
-		const eloB = Number(playerB[field]);
-
-		if (!Number.isFinite(eloA) || !Number.isFinite(eloB)) {
-			throw new Error(`Both players must have a value in ${field}.`);
-		}
-
-		const probabilityA = 1 / (1 + Math.pow(10, (eloB - eloA) / 400));
 		const probabilityB = 1 - probabilityA;
 
 		return [probabilityA, probabilityB];
