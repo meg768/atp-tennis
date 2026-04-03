@@ -80,7 +80,7 @@ Always writes both files to `sandbox/output/`:
 ```
 
 Writes one JSON object to `stdout`:
-- includes `input`, resolved `playerA` / `playerB`, and calculated `odds` from `src/compute-odds.js`
+- includes `input`, resolved `playerA` / `playerB`, and calculated `odds` from `CALL PLAYER_ODDS(...)`
 - uses hardcoded sandbox input: `playerA=S0AG`, `playerB=A0E2`, `surface=Hard`
 - requires local DB access via `.env`
 

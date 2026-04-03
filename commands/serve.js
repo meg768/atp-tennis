@@ -143,9 +143,30 @@ class Module extends Command {
 		app.get('/api/players/odds/:playerA/:playerB', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let ComputeOdds = require('../src/compute-odds.js');
-				let computeOdds = new ComputeOdds({ mysql: this.mysql });
-				return await computeOdds.run(options);
+				let playerA = String(options.playerA || '').trim();
+				let playerB = String(options.playerB || '').trim();
+				let surface = options.surface == null ? null : String(options.surface).trim();
+
+				if (!playerA || !playerB) {
+					throw new Error('playerA and playerB parameters are required.');
+				}
+
+				if (playerA.toUpperCase() === playerB.toUpperCase()) {
+					throw new Error('playerA and playerB must be different.');
+				}
+
+				let rows = await this.mysql.query({
+					sql: 'CALL PLAYER_ODDS(?, ?, ?)',
+					format: [playerA, playerB, surface || null]
+				});
+
+				rows = Array.isArray(rows) && Array.isArray(rows[0]) ? rows[0] : rows;
+
+				if (!Array.isArray(rows) || rows.length !== 2) {
+					throw new Error('Could not calculate odds.');
+				}
+
+				return rows.map(row => row.odds);
 			});
 		});
 

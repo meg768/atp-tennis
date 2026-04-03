@@ -24,6 +24,7 @@ One SQL function per file. Current functions:
 - `PLAYER_ELO_FACTOR.sql`
 - `PLAYER_FATIGUE_FACTOR.sql`
 - `PLAYER_LOOKUP.sql`
+- `PLAYER_ODDS_FACTOR.sql`
 - `PLAYER_RANK_FACTOR.sql`
 - `PLAYER_HEAD_TO_HEAD_FACTOR.sql`
 
@@ -62,6 +63,7 @@ but returns only one id.
 ### `procedures/*.sql`
 
 One stored procedure per file. Current procedures:
+- `PLAYER_ODDS.sql`
 - `PLAYER_SEARCH.sql`
 
 Procedure files follow the same repo conventions as the function files:
@@ -75,6 +77,9 @@ search term. It is the primary lookup/search interface for player resolution,
 uses the same matching rules as `PLAYER_LOOKUP.sql`, and always returns at most
 `5` rows. Exact last-name matches are ranked ahead of generic prefix/contains
 matches.
+
+`PLAYER_ODDS.sql` returns two rows of decimal odds for a matchup, one row per
+player, and resolves free-text player inputs through `PLAYER_LOOKUP.sql`.
 
 ## How It Is Used
 

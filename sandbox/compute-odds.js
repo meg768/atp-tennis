@@ -7,7 +7,6 @@ require('dotenv').config({
 });
 
 const mysql = require('../src/mysql.js');
-const ComputeOdds = require('../src/compute-odds.js');
 
 async function main() {
 	const input = {
@@ -15,7 +14,6 @@ async function main() {
 		playerB: 'A0E2',
 		surface: 'Hard'
 	};
-	const computeOdds = new ComputeOdds({ mysql });
 
 	mysql.log = () => {};
 	mysql.error = () => {};
@@ -23,13 +21,25 @@ async function main() {
 	await mysql.connect();
 
 	try {
-		const playerA = await computeOdds.getPlayer(input.playerA);
-		const playerB = await computeOdds.getPlayer(input.playerB);
-		const odds = await computeOdds.run(input);
+		const playerA = await mysql.query({
+			sql: 'SELECT id, name, country, rank, active FROM players WHERE UPPER(id) = UPPER(?) LIMIT 1',
+			format: [input.playerA]
+		});
+		const playerB = await mysql.query({
+			sql: 'SELECT id, name, country, rank, active FROM players WHERE UPPER(id) = UPPER(?) LIMIT 1',
+			format: [input.playerB]
+		});
+		let odds = await mysql.query({
+			sql: 'CALL PLAYER_ODDS(?, ?, ?)',
+			format: [input.playerA, input.playerB, input.surface]
+		});
+
+		odds = Array.isArray(odds) && Array.isArray(odds[0]) ? odds[0] : odds;
+
 		const result = {
 			input,
-			playerA,
-			playerB,
+			playerA: playerA[0] || null,
+			playerB: playerB[0] || null,
 			odds
 		};
 
