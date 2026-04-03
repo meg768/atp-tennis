@@ -353,147 +353,113 @@ BEGIN
     RETURN total_tie_breaks;
 END;
 
--- Create syntax for FUNCTION 'PLAYER_FATIGUE_FACTOR'
-CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_FATIGUE_FACTOR`(playerID VARCHAR(32),
-    weeks INT
+-- Create syntax for FUNCTION 'PLAYER_ELO_FACTOR'
+CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_ELO_FACTOR`(playerID VARCHAR(32),
+    opponentID VARCHAR(32),
+    surface VARCHAR(50)
 ) RETURNS decimal(10,4)
     DETERMINISTIC
 BEGIN
     /*
-    PLAYER_FATIGUE_FACTOR(playerID, weeks)
+    PLAYER_ELO_FACTOR(playerID, opponentID, surface)
 
     Purpose
-    - Return one numeric fatigue/restedness signal in the range 0..1 for a single player.
-    - Higher means more rested.
-    - Lower means more recent workload.
+    - Return one ELO-based win signal in the range 0..1 for playerID against
+      opponentID.
+    - Higher means the ELO signal favors playerID.
+    - Lower means the ELO signal favors opponentID.
+    - 0.5 is neutral.
 
     Why this is a function
     - It returns one scalar value.
     - It is intended to be usable inside regular SQL queries.
     - Example usage:
-      SELECT PLAYER_FATIGUE_FACTOR('S0AG', 1);
-      SELECT id, name, PLAYER_FATIGUE_FACTOR(id, 1) AS fatigue_factor FROM players;
-
-    High-level model
-    1. Look only at completed matches for the player.
-    2. Ignore matches without a known event date.
-    3. Restrict the sample to the last N weeks.
-    4. Weight newer matches higher than older matches inside that window.
-    5. Estimate workload from the match itself:
-       - every match adds a base load
-       - extra sets add extra load
-       - tie-break sets add a small extra load
-    6. Convert total workload into a 0..1 restedness factor.
+      SELECT PLAYER_ELO_FACTOR('S0AG', 'A0E2', NULL);
+      SELECT PLAYER_ELO_FACTOR('S0AG', 'A0E2', 'Hard');
 
     Why this exists
-    - Match congestion matters in tennis.
-    - A player who has played several recent matches should usually be treated as a bit less fresh.
-    - The workload signal should be simple, local, and deterministic.
+    - The odds model already has an ELO-based factor.
+    - Keeping the same core logic in MariaDB avoids duplicated business logic.
 
-    Exact weighting choice
-    - match_weight = POW(0.5, days_ago / window_days)
-    - window_days = weeks * 7
+    Surface behavior
+    - NULL or empty surface => use overall `elo_rank`
+    - Hard => use `elo_rank_hard`
+    - Clay => use `elo_rank_clay`
+    - Grass => use `elo_rank_grass`
+    - Any other surface value falls back to overall `elo_rank`
 
-    Interpretation of the weighting
-    - A match played today has weight 1.0.
-    - A match at the edge of the window has weight about 0.5.
-    - Newer workload matters more than older workload.
-
-    Exact workload choice
-    - match_load =
-        match_weight *
-        (
-          1.0
-          + 0.4 * extra_sets
-          + 0.15 * tie_breaks
-        )
-    - extra_sets = GREATEST(NUMBER_OF_SETS(score) - 2, 0)
-    - tie_breaks = NUMBER_OF_TIE_BREAKS(score)
-
-    Interpretation of the workload
-    - Every match adds a baseline workload.
-    - Longer matches increase the load.
-    - Tie-break-heavy matches increase the load a little more.
-
-    Exact conversion to restedness
-    - fatigue_factor = 1 / (1 + total_load / 4)
-
-    Interpretation of the restedness scale
-    - No recent matches => 1.0
-    - One recent straight-sets match => still fairly rested
-    - Several recent matches => lower value
-    - This is intentionally a simple first version, not a physiology model
+    Exact formula
+    - probability = 1 / (1 + POW(10, (elo_opponent - elo_player) / 400))
 
     Inputs and edge cases
     - Invalid playerID => NULL
-    - weeks <= 0 => NULL
-    - Unknown playerID => NULL
-    - Valid player with no matches in the window => 1.0000
-
-    Things you may want to tune later
-    - Recency curve:
-      change POW(0.5, ...) to another decay function
-    - Window behavior:
-      use more or fewer weeks
-    - Workload weights:
-      change base match load, extra set penalty, or tie-break penalty
-    - Duration:
-      add match duration if you want a stronger load signal
-    - Travel:
-      add travel or surface-switch penalties outside this function if needed
-
-    Non-goals in the current version
-    - No travel adjustment
-    - No time-zone adjustment
-    - No surface-switch adjustment
-    - No direct use of match duration yet
+    - Invalid opponentID => NULL
+    - Same player and opponent => NULL
+    - Missing usable ELO on either side => NULL
     */
 
-    DECLARE v_total_load DECIMAL(12,6) DEFAULT 0;
-    DECLARE v_window_days DECIMAL(12,6) DEFAULT 0;
+    DECLARE v_surface VARCHAR(50) DEFAULT NULL;
+    DECLARE v_elo_player DOUBLE DEFAULT NULL;
+    DECLARE v_elo_opponent DOUBLE DEFAULT NULL;
+    DECLARE v_probability DOUBLE DEFAULT NULL;
 
-    IF playerID IS NULL OR TRIM(playerID) = '' OR weeks IS NULL OR weeks <= 0 THEN
-        RETURN NULL;
-    ELSEIF NOT EXISTS (
-        SELECT 1
-        FROM players
-        WHERE id = playerID
-    ) THEN
+    IF playerID IS NULL OR TRIM(playerID) = '' OR opponentID IS NULL OR TRIM(opponentID) = '' THEN
         RETURN NULL;
     END IF;
 
-    SET v_window_days = weeks * 7;
+    IF UPPER(playerID) = UPPER(opponentID) THEN
+        RETURN NULL;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM players WHERE id = playerID) THEN
+        RETURN NULL;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM players WHERE id = opponentID) THEN
+        RETURN NULL;
+    END IF;
+
+    SET v_surface = UPPER(NULLIF(TRIM(surface), ''));
 
     SELECT
-        COALESCE(SUM(match_load), 0)
-    INTO
-        v_total_load
-    FROM (
-        SELECT
-            POW(0.5, GREATEST(DATEDIFF(CURDATE(), e.date), 0) / v_window_days) *
-            (
-                1
-                + 0.4 * GREATEST(COALESCE(NUMBER_OF_SETS(m.score), 2) - 2, 0)
-                + 0.15 * COALESCE(NUMBER_OF_TIE_BREAKS(m.score), 0)
-            ) AS match_load
-        FROM matches m
-        JOIN events e ON e.id = m.event
-        WHERE
-            m.status = 'Completed'
-            AND e.date IS NOT NULL
-            AND e.date >= DATE_SUB(CURDATE(), INTERVAL weeks WEEK)
-            AND (m.winner = playerID OR m.loser = playerID)
-    ) recent_matches;
+        CASE
+            WHEN v_surface = 'HARD' THEN COALESCE(elo_rank_hard, elo_rank)
+            WHEN v_surface = 'CLAY' THEN COALESCE(elo_rank_clay, elo_rank)
+            WHEN v_surface = 'GRASS' THEN COALESCE(elo_rank_grass, elo_rank)
+            ELSE elo_rank
+        END
+    INTO v_elo_player
+    FROM players
+    WHERE id = playerID
+    LIMIT 1;
 
-    RETURN ROUND(1 / (1 + v_total_load / 4), 4);
+    SELECT
+        CASE
+            WHEN v_surface = 'HARD' THEN COALESCE(elo_rank_hard, elo_rank)
+            WHEN v_surface = 'CLAY' THEN COALESCE(elo_rank_clay, elo_rank)
+            WHEN v_surface = 'GRASS' THEN COALESCE(elo_rank_grass, elo_rank)
+            ELSE elo_rank
+        END
+    INTO v_elo_opponent
+    FROM players
+    WHERE id = opponentID
+    LIMIT 1;
+
+    IF v_elo_player IS NULL OR v_elo_opponent IS NULL THEN
+        RETURN NULL;
+    END IF;
+
+    SET v_probability = 1 / (1 + POW(10, (v_elo_opponent - v_elo_player) / 400));
+
+    RETURN ROUND(v_probability, 4);
 END;
 
 -- Create syntax for FUNCTION 'PLAYER_FORM_FACTOR'
-CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_FORM_FACTOR`(playerID VARCHAR(32), weeks INT) RETURNS decimal(10,4)
+CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_FORM_FACTOR`(playerID VARCHAR(32)) RETURNS decimal(10,4)
     DETERMINISTIC
 BEGIN
 /*
-PLAYER_FORM_FACTOR(playerID, weeks)
+PLAYER_FORM_FACTOR(playerID)
 
 Purpose
 - Return one numeric form signal in the range 0..1 for a single player.
@@ -504,13 +470,13 @@ Why this is a function
 - It returns one scalar value.
 - It is intended to be usable inside regular SQL queries.
 - Example usage:
-SELECT PLAYER_FORM_FACTOR('S0AG', 8);
-SELECT id, name, PLAYER_FORM_FACTOR(id, 8) AS form_factor FROM players;
+SELECT PLAYER_FORM_FACTOR('S0AG');
+SELECT id, name, PLAYER_FORM_FACTOR(id) AS form_factor FROM players;
 
 High-level model
 1. Look only at completed matches for the player.
 2. Ignore matches without a known event date.
-3. Restrict the sample to the last N weeks.
+3. Restrict the sample to the last 8 weeks.
 4. Weight newer matches higher than older matches inside that window.
 5. Shrink the result toward 0.5 so tiny samples do not look too extreme.
 
@@ -521,7 +487,7 @@ Why this exists
 
 Exact weighting choice
 - match_weight = POW(0.5, days_ago / window_days)
-- window_days = weeks * 7
+- window_days = 8 * 7
 
 Interpretation of the weighting
 - A match played today has weight 1.0.
@@ -545,7 +511,6 @@ Why 16/8 was chosen
 
 Inputs and edge cases
 - Invalid playerID => NULL
-- weeks <= 0 => NULL
 - Unknown playerID => NULL
 - Valid player with no matches in the window => 0.5000
 
@@ -553,7 +518,7 @@ Things you may want to tune later
 - Recency curve:
 change POW(0.5, ...) to another decay function
 - Window behavior:
-use more or fewer weeks
+change the hardcoded 8-week window in this function
 - Prior strength:
 replace +8 / +16 with something lighter or heavier
 - Match filtering:
@@ -571,11 +536,10 @@ DECLARE v_weighted_matches DECIMAL(12, 6) DEFAULT 0;
 DECLARE v_weighted_wins DECIMAL(12, 6) DEFAULT 0;
 
 DECLARE v_window_days DECIMAL(12, 6) DEFAULT 0;
+DECLARE v_weeks INT DEFAULT 8;
 
 IF playerID IS NULL
-OR TRIM(playerID) = ''
-OR weeks IS NULL
-OR weeks <= 0 THEN RETURN NULL;
+OR TRIM(playerID) = '' THEN RETURN NULL;
 
 ELSEIF NOT EXISTS (
     SELECT
@@ -589,7 +553,7 @@ ELSEIF NOT EXISTS (
 END IF;
 
 SET
-    v_window_days = weeks * 7;
+    v_window_days = v_weeks * 7;
 
 SELECT
     COALESCE(SUM(match_weight), 0) AS weighted_matches,
@@ -617,7 +581,7 @@ FROM
         WHERE
             m.status = 'Completed'
             AND e.date IS NOT NULL
-            AND e.date >= DATE_SUB(CURDATE(), INTERVAL weeks WEEK)
+            AND e.date >= DATE_SUB(CURDATE(), INTERVAL v_weeks WEEK)
             AND (
                 m.winner = playerID
                 OR m.loser = playerID
@@ -737,86 +701,63 @@ BEGIN
 END;
 
 -- Create syntax for FUNCTION 'PLAYER_LOOKUP'
-CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_LOOKUP`(searchTerm VARCHAR(255),
-    maxResults INT
-) RETURNS longtext CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_LOOKUP`(searchTerm VARCHAR(255)
+) RETURNS varchar(32) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
     DETERMINISTIC
 BEGIN
     /*
-    PLAYER_LOOKUP(searchTerm, maxResults)
+    PLAYER_LOOKUP(searchTerm)
 
     Purpose
-    - Return a JSON array of ranked player candidates for a search term.
-    - Best match is always the first array element.
+    - Return the best matching player id for a search term.
+    - This follows the same matching and ranking rules as `PLAYER_SEARCH`.
 
-    Inputs
+    Input
     - searchTerm:
       ATP player id or free-text player name
-    - maxResults:
-      maximum number of candidates to return
 
     Output
-    - JSON array of candidate objects
-    - Empty JSON array when no match is found
+    - Best matching `players.id`
+    - `NULL` when no match is found
 
     Matching rules
     - Exact player id match first
     - Exact player name match second
-    - Prefix name match third
-    - Broader contains match fourth
+    - Exact last name match third
+    - Prefix name match fourth
+    - Broader contains match fifth
 
     Ordering
     - Best match_score first
     - Active players before inactive players
     - Ranked players before unranked players
     - Better ATP rank first
-    - Players with ELO before players without ELO
-    - Higher ELO first
     - Name as final tiebreaker
 
     Validation
-    - Empty searchTerm returns `[]`
-    - Invalid `maxResults` falls back to `5`
+    - Empty searchTerm returns `NULL`
 
     Example usage
-    - SELECT PLAYER_LOOKUP('S0AG', 5);
-    - SELECT PLAYER_LOOKUP('Sinner', 5);
+    - SELECT PLAYER_LOOKUP('S0AG');
+    - SELECT PLAYER_LOOKUP('Sinner');
     */
 
     DECLARE normalizedTerm VARCHAR(255) DEFAULT TRIM(COALESCE(searchTerm, ''));
-    DECLARE normalizedLimit INT DEFAULT COALESCE(maxResults, 5);
     DECLARE prefixTerm VARCHAR(256);
     DECLARE containsTerm VARCHAR(257);
-    DECLARE resultJson LONGTEXT DEFAULT NULL;
+    DECLARE resultPlayerID VARCHAR(32) DEFAULT NULL;
 
     IF normalizedTerm = '' THEN
-        RETURN JSON_ARRAY();
-    END IF;
-
-    IF normalizedLimit < 1 OR normalizedLimit > 50 THEN
-        SET normalizedLimit = 5;
+        RETURN NULL;
     END IF;
 
     SET prefixTerm = CONCAT(normalizedTerm, '%');
     SET containsTerm = CONCAT('%', normalizedTerm, '%');
 
     SELECT
-        JSON_ARRAYAGG(
-            JSON_OBJECT(
-                'id', id,
-                'name', name,
-                'country', country,
-                'rank', rank,
-                'active', active,
-                'elo_rank', elo_rank,
-                'elo_rank_hard', elo_rank_hard,
-                'elo_rank_clay', elo_rank_clay,
-                'elo_rank_grass', elo_rank_grass,
-                'match_score', match_score
-            )
-        )
+        id
     INTO
-        resultJson
+        resultPlayerID
     FROM (
         SELECT
             id,
@@ -824,16 +765,13 @@ BEGIN
             country,
             rank,
             active,
-            elo_rank,
-            elo_rank_hard,
-            elo_rank_clay,
-            elo_rank_grass,
             CASE
                 WHEN UPPER(id) = UPPER(normalizedTerm) THEN 1
                 WHEN LOWER(name) = LOWER(normalizedTerm) THEN 2
-                WHEN LOWER(name) LIKE LOWER(prefixTerm) THEN 3
-                WHEN LOWER(name) LIKE LOWER(containsTerm) THEN 4
-                ELSE 5
+                WHEN LOWER(SUBSTRING_INDEX(name, ' ', -1)) = LOWER(normalizedTerm) THEN 3
+                WHEN LOWER(name) LIKE LOWER(prefixTerm) THEN 4
+                WHEN LOWER(name) LIKE LOWER(containsTerm) THEN 5
+                ELSE 6
             END AS match_score
         FROM players
         WHERE
@@ -846,14 +784,412 @@ BEGIN
             (active = 1) DESC,
             (rank IS NULL) ASC,
             rank ASC,
-            (elo_rank IS NULL) ASC,
-            elo_rank DESC,
             name ASC
-        LIMIT normalizedLimit
+        LIMIT 1
     ) ranked_candidates;
 
-    RETURN COALESCE(resultJson, JSON_ARRAY());
+    RETURN resultPlayerID;
 END;
+
+-- Create syntax for PROCEDURE 'PLAYER_ODDS'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `PLAYER_ODDS`(
+    IN playerA VARCHAR(255),
+    IN playerB VARCHAR(255),
+    IN surface VARCHAR(50)
+)
+BEGIN
+    /*
+    PLAYER_ODDS(playerA, playerB, surface)
+
+    Purpose
+    - Return two rows of decimal odds for a matchup.
+    - One row is returned per player.
+    - The underlying model matches the current odds pipeline:
+      Elo 70%, rank 10%, form 10%, head-to-head 10%,
+      followed by a fixed 5% margin when converting to decimal odds.
+
+    Inputs
+    - playerA:
+      ATP id or free-text player name for the first player
+    - playerB:
+      ATP id or free-text player name for the second player
+    - surface:
+      Optional surface selector such as 'Hard', 'Clay', or 'Grass'
+
+    Output columns
+    - player
+    - name
+    - odds
+    - factor
+    - elo_factor
+    - rank_factor
+    - form_factor
+    - head_to_head_factor
+
+    Notes
+    - Player inputs are resolved through PLAYER_LOOKUP(...)
+    - The procedure returns an empty result set when either player
+      cannot be resolved or when both resolve to the same player.
+
+    Example usage
+    - CALL PLAYER_ODDS('Tien', 'Burruchaga', 'Clay');
+    - CALL PLAYER_ODDS('T0HA', 'B0FV', 'Clay');
+    */
+
+    DECLARE resolvedPlayerA VARCHAR(32) DEFAULT NULL;
+    DECLARE resolvedPlayerB VARCHAR(32) DEFAULT NULL;
+    DECLARE normalizedSurface VARCHAR(50) DEFAULT NULL;
+    DECLARE eloFactorA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE rankFactorA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE formPlayerA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE formPlayerB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE formFactorA DOUBLE DEFAULT NULL;
+    DECLARE headToHeadFactorA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE eloFactorB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE rankFactorB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE formFactorB DOUBLE DEFAULT NULL;
+    DECLARE headToHeadFactorB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE factorA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE factorB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE pricedFactorA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE pricedFactorB DECIMAL(10,4) DEFAULT NULL;
+
+    SET resolvedPlayerA = PLAYER_LOOKUP(playerA);
+    SET resolvedPlayerB = PLAYER_LOOKUP(playerB);
+    SET normalizedSurface = NULLIF(TRIM(surface), '');
+
+    IF resolvedPlayerA IS NULL
+        OR resolvedPlayerB IS NULL
+        OR UPPER(resolvedPlayerA) = UPPER(resolvedPlayerB)
+    THEN
+        SELECT
+            id AS player,
+            name AS name,
+            CAST(NULL AS DECIMAL(10,2)) AS odds,
+            CAST(NULL AS DECIMAL(10,4)) AS factor,
+            CAST(NULL AS DECIMAL(10,4)) AS elo_factor,
+            CAST(NULL AS DECIMAL(10,4)) AS rank_factor,
+            CAST(NULL AS DECIMAL(10,4)) AS form_factor,
+            CAST(NULL AS DECIMAL(10,4)) AS head_to_head_factor
+        FROM players
+        WHERE 1 = 0;
+    ELSE
+        SET eloFactorA = PLAYER_ELO_FACTOR(resolvedPlayerA, resolvedPlayerB, normalizedSurface);
+        SET rankFactorA = PLAYER_RANK_FACTOR(resolvedPlayerA, resolvedPlayerB);
+        SET formPlayerA = PLAYER_FORM_FACTOR(resolvedPlayerA);
+        SET formPlayerB = PLAYER_FORM_FACTOR(resolvedPlayerB);
+        SET headToHeadFactorA = PLAYER_HEAD_TO_HEAD_FACTOR(resolvedPlayerA, resolvedPlayerB, normalizedSurface);
+
+        IF eloFactorA IS NULL
+            OR rankFactorA IS NULL
+            OR formPlayerA IS NULL
+            OR formPlayerB IS NULL
+            OR headToHeadFactorA IS NULL
+            OR formPlayerA + formPlayerB <= 0
+        THEN
+            SELECT
+                id AS player,
+                name AS name,
+                CAST(NULL AS DECIMAL(10,2)) AS odds,
+                CAST(NULL AS DECIMAL(10,4)) AS factor,
+                CAST(NULL AS DECIMAL(10,4)) AS elo_factor,
+                CAST(NULL AS DECIMAL(10,4)) AS rank_factor,
+                CAST(NULL AS DECIMAL(10,4)) AS form_factor,
+                CAST(NULL AS DECIMAL(10,4)) AS head_to_head_factor
+            FROM players
+            WHERE 1 = 0;
+        ELSE
+            SET formFactorA = formPlayerA / (formPlayerA + formPlayerB);
+            SET eloFactorB = 1 - eloFactorA;
+            SET rankFactorB = 1 - rankFactorA;
+            SET formFactorB = 1 - formFactorA;
+            SET headToHeadFactorB = 1 - headToHeadFactorA;
+
+            SET factorA = (
+                eloFactorA * 70
+                + rankFactorA * 10
+                + formFactorA * 10
+                + headToHeadFactorA * 10
+            ) / 100;
+
+            IF factorA IS NULL OR factorA <= 0 OR factorA >= 1 THEN
+                SELECT
+                    id AS player,
+                    name AS name,
+                    CAST(NULL AS DECIMAL(10,2)) AS odds,
+                    CAST(NULL AS DECIMAL(10,4)) AS factor,
+                    CAST(NULL AS DECIMAL(10,4)) AS elo_factor,
+                    CAST(NULL AS DECIMAL(10,4)) AS rank_factor,
+                    CAST(NULL AS DECIMAL(10,4)) AS form_factor,
+                    CAST(NULL AS DECIMAL(10,4)) AS head_to_head_factor
+                FROM players
+                WHERE 1 = 0;
+            ELSE
+                SET factorB = 1 - factorA;
+                SET pricedFactorA = factorA * 1.05;
+                SET pricedFactorB = factorB * 1.05;
+
+                IF factorB <= 0 OR factorB >= 1 THEN
+                    SELECT
+                        id AS player,
+                        name AS name,
+                        CAST(NULL AS DECIMAL(10,2)) AS odds,
+                        CAST(NULL AS DECIMAL(10,4)) AS factor,
+                        CAST(NULL AS DECIMAL(10,4)) AS elo_factor,
+                        CAST(NULL AS DECIMAL(10,4)) AS rank_factor,
+                        CAST(NULL AS DECIMAL(10,4)) AS form_factor,
+                        CAST(NULL AS DECIMAL(10,4)) AS head_to_head_factor
+                    FROM players
+                    WHERE 1 = 0;
+                ELSE
+                    SELECT
+                        p.id AS player,
+                        p.name AS name,
+                        ROUND(1 / pricedFactorA, 2) AS odds,
+                        ROUND(factorA, 4) AS factor,
+                        ROUND(eloFactorA * 0.70, 4) AS elo_factor,
+                        ROUND(rankFactorA * 0.10, 4) AS rank_factor,
+                        ROUND(formFactorA * 0.10, 4) AS form_factor,
+                        ROUND(headToHeadFactorA * 0.10, 4) AS head_to_head_factor
+                    FROM players p
+                    WHERE p.id = resolvedPlayerA
+
+                    UNION ALL
+
+                    SELECT
+                        p.id AS player,
+                        p.name AS name,
+                        ROUND(1 / pricedFactorB, 2) AS odds,
+                        ROUND(factorB, 4) AS factor,
+                        ROUND(eloFactorB * 0.70, 4) AS elo_factor,
+                        ROUND(rankFactorB * 0.10, 4) AS rank_factor,
+                        ROUND(formFactorB * 0.10, 4) AS form_factor,
+                        ROUND(headToHeadFactorB * 0.10, 4) AS head_to_head_factor
+                    FROM players p
+                    WHERE p.id = resolvedPlayerB;
+                END IF;
+            END IF;
+        END IF;
+    END IF;
+END;;
+DELIMITER ;
+
+-- Create syntax for PROCEDURE 'PLAYER_ODDS_DEBUG'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `PLAYER_ODDS_DEBUG`(
+    IN playerA VARCHAR(255),
+    IN playerB VARCHAR(255),
+    IN surface VARCHAR(50),
+    IN eloWeight DOUBLE,
+    IN rankWeight DOUBLE,
+    IN formWeight DOUBLE,
+    IN headToHeadWeight DOUBLE
+)
+BEGIN
+    /*
+    PLAYER_ODDS_DEBUG(playerA, playerB, surface, eloWeight, rankWeight,
+    formWeight, headToHeadWeight)
+
+    Purpose
+    - Return two rows of odds/debug output for a matchup while allowing
+      ad hoc experimentation with factor weights and margin.
+    - One row is returned per player.
+
+    Inputs
+    - playerA, playerB:
+      ATP ids or free-text player names
+    - surface:
+      Optional surface selector such as 'Hard', 'Clay', or 'Grass'
+    - eloWeight, rankWeight, formWeight, headToHeadWeight:
+      Non-negative factor weights
+
+    Output columns
+    - player
+    - name
+    - odds
+    - factor
+    - elo_factor
+    - rank_factor
+    - form_factor
+    - head_to_head_factor
+
+    Notes
+    - Player inputs are resolved through PLAYER_LOOKUP(...)
+    - Factor columns are weighted contributions, not raw probabilities
+    - factor is the normalized blended probability after dividing by the
+      total weight
+
+    Example usage
+    - CALL PLAYER_ODDS_DEBUG('Tien', 'Burruchaga', 'Clay', 70, 10, 10, 10);
+    - CALL PLAYER_ODDS_DEBUG('Tien', 'Burruchaga', 'Clay', 60, 20, 10, 10);
+    */
+
+    DECLARE defaultMargin DOUBLE DEFAULT 0.05;
+    DECLARE resolvedPlayerA VARCHAR(32) DEFAULT NULL;
+    DECLARE resolvedPlayerB VARCHAR(32) DEFAULT NULL;
+    DECLARE normalizedSurface VARCHAR(50) DEFAULT NULL;
+    DECLARE totalWeight DOUBLE DEFAULT NULL;
+
+    DECLARE eloFactorA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE rankFactorA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE formPlayerA DECIMAL(10,4) DEFAULT NULL;
+    DECLARE formPlayerB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE formFactorA DOUBLE DEFAULT NULL;
+    DECLARE headToHeadFactorA DECIMAL(10,4) DEFAULT NULL;
+
+    DECLARE eloFactorB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE rankFactorB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE formFactorB DOUBLE DEFAULT NULL;
+    DECLARE headToHeadFactorB DECIMAL(10,4) DEFAULT NULL;
+
+    DECLARE weightedEloA DOUBLE DEFAULT NULL;
+    DECLARE weightedRankA DOUBLE DEFAULT NULL;
+    DECLARE weightedFormA DOUBLE DEFAULT NULL;
+    DECLARE weightedHeadToHeadA DOUBLE DEFAULT NULL;
+
+    DECLARE weightedEloB DOUBLE DEFAULT NULL;
+    DECLARE weightedRankB DOUBLE DEFAULT NULL;
+    DECLARE weightedFormB DOUBLE DEFAULT NULL;
+    DECLARE weightedHeadToHeadB DOUBLE DEFAULT NULL;
+
+    DECLARE factorA DOUBLE DEFAULT NULL;
+    DECLARE factorB DOUBLE DEFAULT NULL;
+    DECLARE pricedFactorA DOUBLE DEFAULT NULL;
+    DECLARE pricedFactorB DOUBLE DEFAULT NULL;
+
+    SET resolvedPlayerA = PLAYER_LOOKUP(playerA);
+    SET resolvedPlayerB = PLAYER_LOOKUP(playerB);
+    SET normalizedSurface = NULLIF(TRIM(surface), '');
+    SET totalWeight = COALESCE(eloWeight, 0)
+        + COALESCE(rankWeight, 0)
+        + COALESCE(formWeight, 0)
+        + COALESCE(headToHeadWeight, 0);
+
+    IF resolvedPlayerA IS NULL
+        OR resolvedPlayerB IS NULL
+        OR UPPER(resolvedPlayerA) = UPPER(resolvedPlayerB)
+        OR totalWeight <= 0
+    THEN
+        SELECT
+            id AS player,
+            name AS name,
+            CAST(NULL AS DECIMAL(10,2)) AS odds,
+            CAST(NULL AS DECIMAL(10,4)) AS factor,
+            CAST(NULL AS DECIMAL(10,4)) AS elo_factor,
+            CAST(NULL AS DECIMAL(10,4)) AS rank_factor,
+            CAST(NULL AS DECIMAL(10,4)) AS form_factor,
+            CAST(NULL AS DECIMAL(10,4)) AS head_to_head_factor
+        FROM players
+        WHERE 1 = 0;
+    ELSE
+        SET eloFactorA = PLAYER_ELO_FACTOR(resolvedPlayerA, resolvedPlayerB, normalizedSurface);
+        SET rankFactorA = PLAYER_RANK_FACTOR(resolvedPlayerA, resolvedPlayerB);
+        SET formPlayerA = PLAYER_FORM_FACTOR(resolvedPlayerA);
+        SET formPlayerB = PLAYER_FORM_FACTOR(resolvedPlayerB);
+        SET headToHeadFactorA = PLAYER_HEAD_TO_HEAD_FACTOR(resolvedPlayerA, resolvedPlayerB, normalizedSurface);
+
+        IF eloFactorA IS NULL
+            OR rankFactorA IS NULL
+            OR formPlayerA IS NULL
+            OR formPlayerB IS NULL
+            OR headToHeadFactorA IS NULL
+            OR formPlayerA + formPlayerB <= 0
+        THEN
+            SELECT
+                id AS player,
+                name AS name,
+                CAST(NULL AS DECIMAL(10,2)) AS odds,
+                CAST(NULL AS DECIMAL(10,4)) AS factor,
+                CAST(NULL AS DECIMAL(10,4)) AS elo_factor,
+                CAST(NULL AS DECIMAL(10,4)) AS rank_factor,
+                CAST(NULL AS DECIMAL(10,4)) AS form_factor,
+                CAST(NULL AS DECIMAL(10,4)) AS head_to_head_factor
+            FROM players
+            WHERE 1 = 0;
+        ELSE
+            SET formFactorA = formPlayerA / (formPlayerA + formPlayerB);
+            SET eloFactorB = 1 - eloFactorA;
+            SET rankFactorB = 1 - rankFactorA;
+            SET formFactorB = 1 - formFactorA;
+            SET headToHeadFactorB = 1 - headToHeadFactorA;
+
+            SET weightedEloA = eloFactorA * COALESCE(eloWeight, 0);
+            SET weightedRankA = rankFactorA * COALESCE(rankWeight, 0);
+            SET weightedFormA = formFactorA * COALESCE(formWeight, 0);
+            SET weightedHeadToHeadA = headToHeadFactorA * COALESCE(headToHeadWeight, 0);
+
+            SET weightedEloB = eloFactorB * COALESCE(eloWeight, 0);
+            SET weightedRankB = rankFactorB * COALESCE(rankWeight, 0);
+            SET weightedFormB = formFactorB * COALESCE(formWeight, 0);
+            SET weightedHeadToHeadB = headToHeadFactorB * COALESCE(headToHeadWeight, 0);
+
+            SET factorA = (
+                weightedEloA
+                + weightedRankA
+                + weightedFormA
+                + weightedHeadToHeadA
+            ) / totalWeight;
+
+            SET factorB = (
+                weightedEloB
+                + weightedRankB
+                + weightedFormB
+                + weightedHeadToHeadB
+            ) / totalWeight;
+
+            IF factorA <= 0 OR factorA >= 1 OR factorB <= 0 OR factorB >= 1 THEN
+                SELECT
+                    id AS player,
+                    name AS name,
+                    CAST(NULL AS DECIMAL(10,2)) AS odds,
+                    CAST(NULL AS DECIMAL(10,4)) AS factor,
+                    CAST(NULL AS DECIMAL(10,4)) AS elo_factor,
+                    CAST(NULL AS DECIMAL(10,4)) AS rank_factor,
+                    CAST(NULL AS DECIMAL(10,4)) AS form_factor,
+                    CAST(NULL AS DECIMAL(10,4)) AS head_to_head_factor
+                FROM players
+                WHERE 1 = 0;
+            ELSE
+                SET pricedFactorA = factorA * (1 + defaultMargin);
+                SET pricedFactorB = factorB * (1 + defaultMargin);
+
+                SELECT
+                    p.id AS player,
+                    p.name AS name,
+                    ROUND(
+                        CASE WHEN pricedFactorA >= 1 THEN 1.01 ELSE 1 / pricedFactorA END,
+                        2
+                    ) AS odds,
+                    ROUND(factorA, 4) AS factor,
+                    ROUND(weightedEloA / totalWeight, 4) AS elo_factor,
+                    ROUND(weightedRankA / totalWeight, 4) AS rank_factor,
+                    ROUND(weightedFormA / totalWeight, 4) AS form_factor,
+                    ROUND(weightedHeadToHeadA / totalWeight, 4) AS head_to_head_factor
+                FROM players p
+                WHERE p.id = resolvedPlayerA
+
+                UNION ALL
+
+                SELECT
+                    p.id AS player,
+                    p.name AS name,
+                    ROUND(
+                        CASE WHEN pricedFactorB >= 1 THEN 1.01 ELSE 1 / pricedFactorB END,
+                        2
+                    ) AS odds,
+                    ROUND(factorB, 4) AS factor,
+                    ROUND(weightedEloB / totalWeight, 4) AS elo_factor,
+                    ROUND(weightedRankB / totalWeight, 4) AS rank_factor,
+                    ROUND(weightedFormB / totalWeight, 4) AS form_factor,
+                    ROUND(weightedHeadToHeadB / totalWeight, 4) AS head_to_head_factor
+                FROM players p
+                WHERE p.id = resolvedPlayerB;
+            END IF;
+        END IF;
+    END IF;
+END;;
+DELIMITER ;
 
 -- Create syntax for FUNCTION 'PLAYER_RANK_FACTOR'
 CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_RANK_FACTOR`(playerID VARCHAR(32),
