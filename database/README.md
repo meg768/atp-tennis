@@ -20,12 +20,9 @@ One SQL function per file. Current functions:
 - `NUMBER_OF_GAMES.sql`
 - `NUMBER_OF_SETS.sql`
 - `NUMBER_OF_TIE_BREAKS.sql`
-- `PLAYER_FORM_FACTOR.sql`
-- `PLAYER_ELO_FACTOR.sql`
 - `PLAYER_FATIGUE_FACTOR.sql`
 - `PLAYER_LOOKUP.sql`
-- `PLAYER_RANK_FACTOR.sql`
-- `PLAYER_HEAD_TO_HEAD_FACTOR.sql`
+- `PLAYER_WIN_FACTOR.sql`
 
 Each function file includes an in-file `/* ... */` comment block that explains:
 - purpose
@@ -40,21 +37,6 @@ Each function file is also formatted so it can be pasted directly into Sequel Pr
 - omits `DEFINER`
 - ends with `DELIMITER ;`
 
-`PLAYER_FORM_FACTOR.sql` is intentionally documented in detail in the file itself.
-It currently uses:
-- completed matches only
-- a recency-weighted window over the last `weeks`
-- neutral baseline `0.5`
-- conservative smoothing equivalent to 16 weighted 50/50 matches
-
-This is meant to make later tuning easier without having to rediscover the original reasoning.
-The function file also uses an in-file `/* ... */` block for the full design rationale.
-It is also formatted for direct paste/run in Sequel Pro:
-- starts with `DELIMITER ;;`
-- uses `DROP FUNCTION IF EXISTS ... ;;`
-- omits `DEFINER`
-- ends with `DELIMITER ;`
-
 `PLAYER_LOOKUP.sql` returns the single best matching `players.id` for a search
 term. It follows the same matching and ranking rules as `PLAYER_SEARCH.sql`,
 but returns only one id.
@@ -62,7 +44,6 @@ but returns only one id.
 ### `procedures/*.sql`
 
 One stored procedure per file. Current procedures:
-- `PLAYER_ODDS_DEBUG.sql`
 - `PLAYER_ODDS.sql`
 - `PLAYER_SEARCH.sql`
 
@@ -78,12 +59,14 @@ uses the same matching rules as `PLAYER_LOOKUP.sql`, and always returns at most
 `5` rows. Exact last-name matches are ranked ahead of generic prefix/contains
 matches.
 
-`PLAYER_ODDS.sql` returns two rows of decimal odds for a matchup, one row per
-player, resolves free-text player inputs through `PLAYER_LOOKUP.sql`, and
-contains the blended odds logic directly in the procedure.
+`PLAYER_WIN_FACTOR.sql` is the self-contained source of truth for matchup win
+probability. It documents the full factor model inside the function itself and
+is intended to replace ad hoc probability blending elsewhere.
 
-`PLAYER_ODDS_DEBUG.sql` returns the same matchup shape as `PLAYER_ODDS.sql`, but
-lets you pass custom factor weights for ad hoc tuning in SQL tools.
+`PLAYER_ODDS.sql` returns two rows of decimal odds for a matchup, one row per
+player, resolves free-text player inputs through `PLAYER_LOOKUP.sql`, and now
+delegates the fair win probability to `PLAYER_WIN_FACTOR.sql` before applying a
+fixed margin.
 
 ## How It Is Used
 

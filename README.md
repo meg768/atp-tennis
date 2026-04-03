@@ -161,6 +161,7 @@ Notes:
 Notes:
 - `playerA` and `playerB` must be ATP player ids already present in the local database.
 - The endpoint delegates to `CALL PLAYER_ODDS(?, ?, ?)` in MariaDB and returns a two-item array with decimal odds after a fixed 5% margin.
+- `PLAYER_ODDS` now delegates win probability to `PLAYER_WIN_FACTOR(...)`, which is the single source of truth for the model.
 - Use `/api/player/lookup` or `/api/player/search` first if you need to resolve a name to an id.
 
 ### `/api/players/head-to-head/:playerA/:playerB` Query Parameters
@@ -190,7 +191,7 @@ Reference docs:
 - Schema in repo: `database/schema.sql`.
 - Repo-managed SQL functions live in `database/functions/`.
 - Repo-managed SQL procedures live in `database/procedures/`.
-- The database layer currently relies on score helper functions (`NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`) plus model-oriented functions such as `PLAYER_ELO_FACTOR`, `PLAYER_FORM_FACTOR`, `PLAYER_FATIGUE_FACTOR`, `PLAYER_RANK_FACTOR`, and `PLAYER_HEAD_TO_HEAD_FACTOR`.
+- The database layer currently relies on score helper functions (`NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`) plus `PLAYER_WIN_FACTOR(...)` as the self-contained source of truth for matchup win probability.
 - Lookup helpers now also exist in MariaDB:
   - `PLAYER_LOOKUP(searchTerm)` returns the single best matching `players.id`
   - `CALL PLAYER_SEARCH(searchTerm)` returns up to 5 ranked candidate rows
