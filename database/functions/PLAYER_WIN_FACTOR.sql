@@ -35,16 +35,16 @@ BEGIN
 
     Factor overview
     - Factor: Elo
-      Weight: 55%
+      Weight: 50%
       Role: core model factor
     - Factor: Ranking
-      Weight: 20%
+      Weight: 15%
       Role: stable quality adjustment factor
     - Factor: Head To Head
-      Weight: 10%
+      Weight: 15%
       Role: small adjustment factor
     - Factor: Form
-      Weight: 15%
+      Weight: 20%
       Role: recent performance adjustment factor
 
     Factor rules
@@ -65,7 +65,7 @@ BEGIN
     - Use the players' rating difference as the main signal.
 
     Weight
-    - 55%
+    - 50%
 
     Criteria
     - Hard => use elo_rank_hard, falling back to elo_rank
@@ -84,11 +84,11 @@ BEGIN
     - Add a stable quality adjustment based on current ATP ranking.
 
     Weight
-    - 20%
+    - 15%
 
     Raw factor scale
     - 100 Elo points
-    - At 20% weight, the maximum effect is +/-20 Elo points
+    - At 15% weight, the maximum effect is +/-15 Elo points
 
     Criteria
     - Use the current ATP rank from the players table.
@@ -116,11 +116,11 @@ BEGIN
       other recently.
 
     Weight
-    - 10%
+    - 15%
 
     Raw factor scale
     - 100 Elo points
-    - At 10% weight, the maximum effect is +/-10 Elo points
+    - At 15% weight, the maximum effect is +/-15 Elo points
 
     Criteria
     - Look only at completed matches between the two players.
@@ -146,11 +146,11 @@ BEGIN
     - Add a small adjustment based on recent match results.
 
     Weight
-    - 15%
+    - 20%
 
     Raw factor scale
     - 100 Elo points
-    - At 15% weight, the maximum effect is +/-15 Elo points
+    - At 20% weight, the maximum effect is +/-20 Elo points
 
     Criteria
     - Look only at completed matches for each player separately.
@@ -166,13 +166,61 @@ BEGIN
     - A match at the edge of the window has weight about 0.5
 
     Smoothing
-    - form_factor = (weighted_wins + 4) / (weighted_matches + 8)
+    - base_form_factor = (weighted_wins + 4) / (weighted_matches + 8)
     - No matches => 0.5
     - Small samples remain close to neutral
+
+    Quality-of-results adjustment
+    - The Form factor also rewards recent wins against better-ranked opponents.
+    - It also penalizes recent losses against worse-ranked opponents.
+    - "Better-ranked" means a lower ranking number.
+    - Match-time ranks are taken from winner_rank and loser_rank in the matches
+      table.
+    - Only matches with positive known ranks contribute to the quality signal.
+    - Upset wins and bad losses are scaled with a log transform and capped so
+      one match cannot dominate the factor.
+
+    Quality formula
+    - per_match_quality_score:
+      - positive for a win against a better-ranked opponent
+      - negative for a loss against a worse-ranked opponent
+      - zero otherwise
+    - quality_factor = 0.5 + 0.5 * (weighted_quality_score / (weighted_matches + 2))
+    - quality_factor is clamped to the range 0.0..1.0
+
+    Set-dominance adjustment
+    - The Form factor also rewards more decisive recent match results.
+    - Straight-set wins are worth more than narrow wins.
+    - Straight-set losses are worse than narrow losses.
+    - The score string is parsed through NUMBER_OF_SETS(score).
+    - The dominance signal uses completed match scores with 2 to 5 sets.
+
+    Set-dominance formula
+    - For best-of-3 style results:
+      - 2-0 win => +1.0000
+      - 2-1 win => +0.5000
+      - 1-2 loss => -0.5000
+      - 0-2 loss => -1.0000
+    - For best-of-5 style results:
+      - 3-0 win => +1.0000
+      - 3-1 win => +0.6667
+      - 3-2 win => +0.3333
+      - 2-3 loss => -0.3333
+      - 1-3 loss => -0.6667
+      - 0-3 loss => -1.0000
+    - dominance_factor = 0.5 + 0.5 * (weighted_dominance_score / (weighted_matches + 2))
+    - dominance_factor is clamped to the range 0.0..1.0
+
+    Form blend
+    - final_form_factor =
+      (base_form_factor * 60%)
+      + (quality_factor * 25%)
+      + (dominance_factor * 15%)
 
     Inclusion rule
     - If neither player has any qualifying recent matches in the sample,
       the Form factor is excluded entirely.
+    - If the resulting form edge is neutral, the Form factor is also excluded.
     - Otherwise the Form factor is included.
 
     Exact formula
@@ -183,13 +231,13 @@ BEGIN
     - rank_raw_gap = rank_edge * 100
     - h2h_edge = (h2h_factor - 0.5) * 2
     - h2h_raw_gap = h2h_edge * 100
-    - form_edge = form_factor_player - form_factor_opponent
+    - form_edge = final_form_factor_player - final_form_factor_opponent
     - form_raw_gap = form_edge * 100
     - weighted_gap_sum =
-      (elo_raw_gap * 55)
-      + (rank_raw_gap * 20 if included)
-      + (h2h_raw_gap * 10 if included)
-      + (form_raw_gap * 15 if included)
+      (elo_raw_gap * 50)
+      + (rank_raw_gap * 15 if included)
+      + (h2h_raw_gap * 15 if included)
+      + (form_raw_gap * 20 if included)
     - active_weight_sum = sum of active factor weights
     - adjusted_gap = weighted_gap_sum / active_weight_sum
     - probability = 1 / (1 + POW(10, -adjusted_gap / 400))
@@ -217,12 +265,12 @@ BEGIN
     DECLARE v_surface VARCHAR(50) DEFAULT NULL;
     DECLARE v_elo_player DOUBLE DEFAULT NULL;
     DECLARE v_elo_opponent DOUBLE DEFAULT NULL;
-    DECLARE v_elo_factor_weight DOUBLE DEFAULT 55;
-    DECLARE v_rank_factor_weight DOUBLE DEFAULT 20;
+    DECLARE v_elo_factor_weight DOUBLE DEFAULT 50;
+    DECLARE v_rank_factor_weight DOUBLE DEFAULT 15;
     DECLARE v_rank_factor_raw_elo DOUBLE DEFAULT 100;
-    DECLARE v_h2h_factor_weight DOUBLE DEFAULT 10;
+    DECLARE v_h2h_factor_weight DOUBLE DEFAULT 15;
     DECLARE v_h2h_factor_raw_elo DOUBLE DEFAULT 100;
-    DECLARE v_form_factor_weight DOUBLE DEFAULT 15;
+    DECLARE v_form_factor_weight DOUBLE DEFAULT 20;
     DECLARE v_form_factor_raw_elo DOUBLE DEFAULT 100;
     DECLARE v_rank_player INT DEFAULT NULL;
     DECLARE v_rank_opponent INT DEFAULT NULL;
@@ -243,8 +291,21 @@ BEGIN
     DECLARE v_form_wins_player DOUBLE DEFAULT 0;
     DECLARE v_form_matches_opponent DOUBLE DEFAULT 0;
     DECLARE v_form_wins_opponent DOUBLE DEFAULT 0;
+    DECLARE v_form_quality_score_player DOUBLE DEFAULT 0;
+    DECLARE v_form_quality_score_opponent DOUBLE DEFAULT 0;
+    DECLARE v_form_dominance_score_player DOUBLE DEFAULT 0;
+    DECLARE v_form_dominance_score_opponent DOUBLE DEFAULT 0;
+    DECLARE v_form_base_weight DOUBLE DEFAULT 0.60;
+    DECLARE v_form_quality_weight DOUBLE DEFAULT 0.25;
+    DECLARE v_form_dominance_weight DOUBLE DEFAULT 0.15;
     DECLARE v_form_factor_player DOUBLE DEFAULT 0.5;
     DECLARE v_form_factor_opponent DOUBLE DEFAULT 0.5;
+    DECLARE v_form_base_factor_player DOUBLE DEFAULT 0.5;
+    DECLARE v_form_base_factor_opponent DOUBLE DEFAULT 0.5;
+    DECLARE v_form_quality_factor_player DOUBLE DEFAULT 0.5;
+    DECLARE v_form_quality_factor_opponent DOUBLE DEFAULT 0.5;
+    DECLARE v_form_dominance_factor_player DOUBLE DEFAULT 0.5;
+    DECLARE v_form_dominance_factor_opponent DOUBLE DEFAULT 0.5;
     DECLARE v_form_edge DOUBLE DEFAULT 0;
     DECLARE v_form_raw_gap DOUBLE DEFAULT 0;
     DECLARE v_include_form TINYINT(1) DEFAULT 0;
@@ -365,14 +426,86 @@ BEGIN
 
     SELECT
         COALESCE(SUM(match_weight), 0) AS weighted_matches,
-        COALESCE(SUM(CASE WHEN is_win = 1 THEN match_weight ELSE 0 END), 0) AS weighted_wins
+        COALESCE(SUM(CASE WHEN is_win = 1 THEN match_weight ELSE 0 END), 0) AS weighted_wins,
+        COALESCE(SUM(match_weight * quality_score), 0) AS weighted_quality_score,
+        COALESCE(SUM(match_weight * dominance_score), 0) AS weighted_dominance_score
     INTO
         v_form_matches_player,
-        v_form_wins_player
+        v_form_wins_player,
+        v_form_quality_score_player,
+        v_form_dominance_score_player
     FROM (
         SELECT
             CASE WHEN m.winner = playerID THEN 1 ELSE 0 END AS is_win,
-            POW(0.5, GREATEST(DATEDIFF(CURDATE(), e.date), 0) / v_form_window_days) AS match_weight
+            POW(0.5, GREATEST(DATEDIFF(CURDATE(), e.date), 0) / v_form_window_days) AS match_weight,
+            CASE
+                WHEN m.winner = playerID
+                    AND m.winner_rank IS NOT NULL
+                    AND m.loser_rank IS NOT NULL
+                    AND m.winner_rank > 0
+                    AND m.loser_rank > 0
+                    AND m.winner_rank > m.loser_rank
+                THEN LEAST(1, (LN(m.winner_rank) - LN(m.loser_rank)) / LN(4))
+                WHEN m.loser = playerID
+                    AND m.winner_rank IS NOT NULL
+                    AND m.loser_rank IS NOT NULL
+                    AND m.winner_rank > 0
+                    AND m.loser_rank > 0
+                    AND m.loser_rank < m.winner_rank
+                THEN -LEAST(1, (LN(m.winner_rank) - LN(m.loser_rank)) / LN(4))
+                ELSE 0
+            END AS quality_score,
+            CASE
+                WHEN NUMBER_OF_SETS(m.score) BETWEEN 2 AND 5 THEN
+                    CASE
+                        WHEN m.winner = playerID THEN
+                            (
+                                (
+                                    CASE
+                                        WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                        ELSE 3
+                                    END
+                                ) - (
+                                    NUMBER_OF_SETS(m.score) - (
+                                        CASE
+                                            WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                            ELSE 3
+                                        END
+                                    )
+                                )
+                            ) / (
+                                CASE
+                                    WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                    ELSE 3
+                                END
+                            )
+                        WHEN m.loser = playerID THEN
+                            -(
+                                (
+                                    (
+                                        CASE
+                                            WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                            ELSE 3
+                                        END
+                                    ) - (
+                                        NUMBER_OF_SETS(m.score) - (
+                                            CASE
+                                                WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                                ELSE 3
+                                            END
+                                        )
+                                    )
+                                ) / (
+                                    CASE
+                                        WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                        ELSE 3
+                                    END
+                                )
+                            )
+                        ELSE 0
+                    END
+                ELSE 0
+            END AS dominance_score
         FROM matches m
         JOIN events e ON e.id = m.event
         WHERE
@@ -384,14 +517,86 @@ BEGIN
 
     SELECT
         COALESCE(SUM(match_weight), 0) AS weighted_matches,
-        COALESCE(SUM(CASE WHEN is_win = 1 THEN match_weight ELSE 0 END), 0) AS weighted_wins
+        COALESCE(SUM(CASE WHEN is_win = 1 THEN match_weight ELSE 0 END), 0) AS weighted_wins,
+        COALESCE(SUM(match_weight * quality_score), 0) AS weighted_quality_score,
+        COALESCE(SUM(match_weight * dominance_score), 0) AS weighted_dominance_score
     INTO
         v_form_matches_opponent,
-        v_form_wins_opponent
+        v_form_wins_opponent,
+        v_form_quality_score_opponent,
+        v_form_dominance_score_opponent
     FROM (
         SELECT
             CASE WHEN m.winner = opponentID THEN 1 ELSE 0 END AS is_win,
-            POW(0.5, GREATEST(DATEDIFF(CURDATE(), e.date), 0) / v_form_window_days) AS match_weight
+            POW(0.5, GREATEST(DATEDIFF(CURDATE(), e.date), 0) / v_form_window_days) AS match_weight,
+            CASE
+                WHEN m.winner = opponentID
+                    AND m.winner_rank IS NOT NULL
+                    AND m.loser_rank IS NOT NULL
+                    AND m.winner_rank > 0
+                    AND m.loser_rank > 0
+                    AND m.winner_rank > m.loser_rank
+                THEN LEAST(1, (LN(m.winner_rank) - LN(m.loser_rank)) / LN(4))
+                WHEN m.loser = opponentID
+                    AND m.winner_rank IS NOT NULL
+                    AND m.loser_rank IS NOT NULL
+                    AND m.winner_rank > 0
+                    AND m.loser_rank > 0
+                    AND m.loser_rank < m.winner_rank
+                THEN -LEAST(1, (LN(m.winner_rank) - LN(m.loser_rank)) / LN(4))
+                ELSE 0
+            END AS quality_score,
+            CASE
+                WHEN NUMBER_OF_SETS(m.score) BETWEEN 2 AND 5 THEN
+                    CASE
+                        WHEN m.winner = opponentID THEN
+                            (
+                                (
+                                    CASE
+                                        WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                        ELSE 3
+                                    END
+                                ) - (
+                                    NUMBER_OF_SETS(m.score) - (
+                                        CASE
+                                            WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                            ELSE 3
+                                        END
+                                    )
+                                )
+                            ) / (
+                                CASE
+                                    WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                    ELSE 3
+                                END
+                            )
+                        WHEN m.loser = opponentID THEN
+                            -(
+                                (
+                                    (
+                                        CASE
+                                            WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                            ELSE 3
+                                        END
+                                    ) - (
+                                        NUMBER_OF_SETS(m.score) - (
+                                            CASE
+                                                WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                                ELSE 3
+                                            END
+                                        )
+                                    )
+                                ) / (
+                                    CASE
+                                        WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
+                                        ELSE 3
+                                    END
+                                )
+                            )
+                        ELSE 0
+                    END
+                ELSE 0
+            END AS dominance_score
         FROM matches m
         JOIN events e ON e.id = m.event
         WHERE
@@ -402,15 +607,42 @@ BEGIN
     ) recent_opponent_matches;
 
     IF v_form_matches_player > 0 OR v_form_matches_opponent > 0 THEN
-        SET v_include_form = 1;
-        SET v_form_factor_player = (v_form_wins_player + 4) / (v_form_matches_player + 8);
-        SET v_form_factor_opponent = (v_form_wins_opponent + 4) / (v_form_matches_opponent + 8);
+        SET v_form_base_factor_player = (v_form_wins_player + 4) / (v_form_matches_player + 8);
+        SET v_form_base_factor_opponent = (v_form_wins_opponent + 4) / (v_form_matches_opponent + 8);
+        SET v_form_quality_factor_player = 0.5 + 0.5 * (v_form_quality_score_player / (v_form_matches_player + 2));
+        SET v_form_quality_factor_opponent = 0.5 + 0.5 * (v_form_quality_score_opponent / (v_form_matches_opponent + 2));
+        SET v_form_dominance_factor_player = 0.5 + 0.5 * (v_form_dominance_score_player / (v_form_matches_player + 2));
+        SET v_form_dominance_factor_opponent = 0.5 + 0.5 * (v_form_dominance_score_opponent / (v_form_matches_opponent + 2));
+        SET v_form_quality_factor_player = GREATEST(0, LEAST(1, v_form_quality_factor_player));
+        SET v_form_quality_factor_opponent = GREATEST(0, LEAST(1, v_form_quality_factor_opponent));
+        SET v_form_dominance_factor_player = GREATEST(0, LEAST(1, v_form_dominance_factor_player));
+        SET v_form_dominance_factor_opponent = GREATEST(0, LEAST(1, v_form_dominance_factor_opponent));
+        SET v_form_factor_player = (v_form_base_factor_player * v_form_base_weight)
+            + (v_form_quality_factor_player * v_form_quality_weight)
+            + (v_form_dominance_factor_player * v_form_dominance_weight);
+        SET v_form_factor_opponent = (v_form_base_factor_opponent * v_form_base_weight)
+            + (v_form_quality_factor_opponent * v_form_quality_weight)
+            + (v_form_dominance_factor_opponent * v_form_dominance_weight);
         SET v_form_edge = v_form_factor_player - v_form_factor_opponent;
         SET v_form_raw_gap = v_form_edge * v_form_factor_raw_elo;
+
+        IF ABS(v_form_edge) < 0.0001 THEN
+            SET v_include_form = 0;
+            SET v_form_edge = 0;
+            SET v_form_raw_gap = 0;
+        ELSE
+            SET v_include_form = 1;
+        END IF;
     ELSE
         SET v_include_form = 0;
         SET v_form_factor_player = NULL;
         SET v_form_factor_opponent = NULL;
+        SET v_form_base_factor_player = NULL;
+        SET v_form_base_factor_opponent = NULL;
+        SET v_form_quality_factor_player = NULL;
+        SET v_form_quality_factor_opponent = NULL;
+        SET v_form_dominance_factor_player = NULL;
+        SET v_form_dominance_factor_opponent = NULL;
         SET v_form_edge = 0;
         SET v_form_raw_gap = 0;
     END IF;
