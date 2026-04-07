@@ -9,10 +9,7 @@ const compression = require('compression');
 
 const MISSING_FLAG_SVG = [
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 85 57" width="85" height="57">',
-	'<rect width="85" height="57" rx="0" fill="#F8FAFC"/>',
-	'<rect x="18" y="9" width="4.5" height="38" rx="2.25" fill="#B7C2CF"/>',
-	'<path d="M23 12.5c8-3 16 2 24 0 5-1 9-2 14 0v18c-5-2-9-1-14 0-8 2-16-3-24 0z" fill="#FFFFFF" stroke="#D8DEE6" stroke-width="1.2" stroke-linejoin="round"/>',
-	'<path d="M23 12.5c8-3 16 2 24 0 5-1 9-2 14 0" fill="none" stroke="#E7ECF2" stroke-width="1"/>',
+	'<rect width="85" height="57" rx="0" fill="#FFFFFF"/>',
 	'</svg>'
 ].join('');
 
@@ -151,7 +148,7 @@ class Module extends Command {
 						params: {
 							code: 'string, required, ATP-style three-letter country code such as CZE or ITA'
 						},
-						description: 'Returns a country flag SVG from the local flags directory. If a flag asset is missing, returns a neutral white fallback flag SVG.',
+						description: 'Returns a country flag SVG from the local flags directory. If a flag asset is missing, returns a plain white fallback SVG.',
 						response: {
 							shape: 'raw svg'
 						}
