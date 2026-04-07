@@ -2,6 +2,7 @@ let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
 let assertReadOnlySQL = require('../src/assert-read-only-sql.js');
 let packageJSON = require('../package.json');
+const path = require('path');
 
 const compression = require('compression');
 
@@ -69,6 +70,170 @@ class Module extends Command {
 			res.json({
 				message: 'pong',
 				version: packageJSON.version
+			});
+		});
+
+		app.get('/api/meta/schema.sql', (request, response) => {
+			response.type('application/sql');
+			response.setHeader('Content-Disposition', 'inline; filename="schema.sql"');
+			return response.sendFile(path.resolve(__dirname, '../database/schema.sql'));
+		});
+
+		// Keep this endpoint in sync manually whenever service endpoints or payloads change.
+		app.get('/api/meta/endpoints', (request, response) => {
+			return response.status(200).json({
+				version: packageJSON.version,
+				notes: [
+					'Endpoints are described as paths only.',
+					'Resolve them relative to the current host where this service is running.'
+				],
+				endpoints: {
+					'/ok': {
+						method: 'GET',
+						description: 'Simple health check.',
+						response: {
+							shape: 'object',
+							example: { message: 'I am OK' }
+						}
+					},
+					'/api/ping': {
+						method: 'GET',
+						description: 'Lightweight liveness payload with service version.',
+						response: {
+							shape: 'object',
+							fields: {
+								message: 'string',
+								version: 'string'
+							}
+						}
+					},
+					'/api/meta/schema.sql': {
+						method: 'GET',
+						description: 'Returns the raw database schema SQL file, including comments and DDL.'
+					},
+					'/api/meta/endpoints': {
+						method: 'GET',
+						description: 'Returns machine-readable metadata about the service endpoints.'
+					},
+					'/api/matches/live': {
+						method: 'GET',
+						description: 'Normalized ATP live matches from ATP Tour live data.'
+					},
+					'/api/player/rankings': {
+						method: 'GET',
+						query: {
+							top: 'number, optional'
+						},
+						description: 'Current ATP rankings. Defaults to top 100.'
+					},
+					'/api/player/search': {
+						method: 'GET',
+						query: {
+							term: 'string, required'
+						},
+						description: 'Searches player candidates through PLAYER_SEARCH.',
+						response: {
+							shape: 'array'
+						}
+					},
+					'/api/player/lookup': {
+						method: 'GET',
+						query: {
+							query: 'string, required',
+							term: 'string, optional alias',
+							searchTerm: 'string, optional alias'
+						},
+						description: 'Resolves a best-match player id through PLAYER_LOOKUP.',
+						response: {
+							shape: 'array',
+							example: [{ id: 'RH16' }]
+						}
+					},
+					'/api/oddset': {
+						method: 'GET',
+						query: {
+							raw: 'boolean-like, optional'
+						},
+						description: 'Normalized Oddset ATP match feed. With raw=1, returns the raw upstream payload.',
+						response: {
+							shape: 'array',
+							fields: {
+								id: 'number',
+								start: 'string (ISO datetime)',
+								tournament: 'string',
+								state: 'string',
+								score: 'string|null',
+								playerA: {
+									name: 'string',
+									odds: 'number|null'
+								},
+								playerB: {
+									name: 'string',
+									odds: 'number|null'
+								}
+							}
+						}
+					},
+					'/api/players/odds/:playerA/:playerB': {
+						method: 'GET',
+						params: {
+							playerA: 'string, required',
+							playerB: 'string, required'
+						},
+						query: {
+							surface: 'string, optional'
+						},
+						description: 'Returns model prices for a specific matchup.',
+						response: {
+							shape: 'array',
+							example: [1.63, 2.29],
+							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
+						}
+					},
+					'/api/players/head-to-head/:playerA/:playerB': {
+						method: 'GET',
+						params: {
+							playerA: 'string, required',
+							playerB: 'string, required'
+						},
+						query: {
+							limit: 'number, optional',
+							surface: 'string, optional'
+						},
+						description: 'Resolved player metadata, overall H2H, surface splits, and recent meetings.',
+						response: {
+							shape: 'object',
+							fields: {
+								playerA: 'object',
+								playerB: 'object',
+								filters: 'object',
+								overall: 'object',
+								bySurface: 'array',
+								recentMatches: 'array'
+							}
+						}
+					},
+					'/api/events/calendar': {
+						method: 'GET',
+						description: 'Normalized ATP calendar.',
+						response: {
+							shape: 'object',
+							fields: {
+								events: 'array'
+							}
+						}
+					},
+					'/api/query': {
+						method: 'POST',
+						body: {
+							sql: 'string, required, read-only SQL only'
+						},
+						description: 'Runs read-only SQL against the ATP database.',
+						response: {
+							shape: 'array'
+						}
+					}
+				}
 			});
 		});
 
