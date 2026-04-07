@@ -3,6 +3,7 @@ let Command = require('../src/command.js');
 let assertReadOnlySQL = require('../src/assert-read-only-sql.js');
 let packageJSON = require('../package.json');
 const path = require('path');
+const fs = require('fs');
 
 const compression = require('compression');
 
@@ -79,6 +80,28 @@ class Module extends Command {
 			return response.sendFile(path.resolve(__dirname, '../database/schema.sql'));
 		});
 
+		app.get('/api/flags/:code.svg', (request, response) => {
+			let code = String(request.params.code || '')
+				.trim()
+				.replace(/[^a-z]/gi, '')
+				.toUpperCase();
+
+			if (!code) {
+				return response.status(400).json({ error: 'Flag code is required.' });
+			}
+
+			let flagPath = path.resolve(__dirname, `../flags/${code}.svg`);
+
+			if (!fs.existsSync(flagPath)) {
+				return response.status(404).json({ error: `Flag not found for code ${code}.` });
+			}
+
+			response.type('image/svg+xml');
+			response.setHeader('Content-Disposition', `inline; filename="${code}.svg"`);
+			response.setHeader('Cache-Control', 'public, max-age=86400');
+			return response.sendFile(flagPath);
+		});
+
 		// Keep this endpoint in sync manually whenever service endpoints or payloads change.
 		app.get('/api/meta/endpoints', (request, response) => {
 			return response.status(200).json({
@@ -110,6 +133,16 @@ class Module extends Command {
 					'/api/meta/schema.sql': {
 						method: 'GET',
 						description: 'Returns the raw database schema SQL file, including comments and DDL.'
+					},
+					'/api/flags/:code.svg': {
+						method: 'GET',
+						params: {
+							code: 'string, required, ATP-style three-letter country code such as CZE or ITA'
+						},
+						description: 'Returns a country flag SVG from the local flags directory.',
+						response: {
+							shape: 'raw svg'
+						}
 					},
 					'/api/meta/endpoints': {
 						method: 'GET',

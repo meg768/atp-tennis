@@ -80,6 +80,9 @@ Bind address: `127.0.0.1:3004`
 Endpoints (from `commands/serve.js`):
 - `GET /ok`
 - `GET /api/ping`
+- `GET /api/meta/schema.sql`
+- `GET /api/meta/endpoints`
+- `GET /api/flags/:code.svg`
 - `GET /api/matches/live`
 - `GET /api/player/rankings`
 - `GET /api/player/search`
@@ -97,6 +100,9 @@ Examples:
 ```bash
 curl http://127.0.0.1:3004/ok
 curl http://127.0.0.1:3004/api/ping
+curl http://127.0.0.1:3004/api/meta/schema.sql
+curl http://127.0.0.1:3004/api/meta/endpoints
+curl http://127.0.0.1:3004/api/flags/ITA.svg
 curl http://127.0.0.1:3004/api/matches/live
 curl http://127.0.0.1:3004/api/player/rankings
 curl "http://127.0.0.1:3004/api/player/rankings?top=25"
