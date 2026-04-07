@@ -7,6 +7,13 @@ const fs = require('fs');
 
 const compression = require('compression');
 
+const MISSING_FLAG_SVG = [
+	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 85 57" width="85" height="57">',
+	'<rect width="85" height="57" rx="0" fill="#FFFFFF"/>',
+	'<rect x="0.5" y="0.5" width="84" height="56" fill="none" stroke="#D8DEE6"/>',
+	'</svg>'
+].join('');
+
 class Module extends Command {
 	constructor() {
 		super({ command: 'serve [options]', description: 'Start ATP service' });
@@ -93,7 +100,10 @@ class Module extends Command {
 			let flagPath = path.resolve(__dirname, `../flags/${code}.svg`);
 
 			if (!fs.existsSync(flagPath)) {
-				return response.status(404).json({ error: `Flag not found for code ${code}.` });
+				response.type('image/svg+xml');
+				response.setHeader('Content-Disposition', `inline; filename="${code}.svg"`);
+				response.setHeader('Cache-Control', 'public, max-age=3600');
+				return response.status(200).send(MISSING_FLAG_SVG);
 			}
 
 			response.type('image/svg+xml');
@@ -139,7 +149,7 @@ class Module extends Command {
 						params: {
 							code: 'string, required, ATP-style three-letter country code such as CZE or ITA'
 						},
-						description: 'Returns a country flag SVG from the local flags directory.',
+						description: 'Returns a country flag SVG from the local flags directory. If a flag asset is missing, returns a neutral white fallback flag SVG.',
 						response: {
 							shape: 'raw svg'
 						}

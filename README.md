@@ -83,6 +83,7 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/meta/schema.sql`
 - `GET /api/meta/endpoints`
 - `GET /api/flags/:code.svg`
+  Missing assets return a neutral white fallback flag SVG instead of a 404.
 - `GET /api/matches/live`
 - `GET /api/player/rankings`
 - `GET /api/player/search`
