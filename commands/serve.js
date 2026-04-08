@@ -232,6 +232,21 @@ class Module extends Command {
 							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
 						}
 					},
+					'/api/tennis-abstract/odds': {
+						method: 'GET',
+						query: {
+							playerA: 'string, required, ATP id or player name',
+							playerB: 'string, required, ATP id or player name',
+							surface: 'string, optional, Hard/Clay/Grass',
+							bestOf: 'number, optional, defaults to 3'
+						},
+						description: 'Returns Tennis Abstract-inspired matchup odds with a 5% margin added to the model probabilities.',
+						response: {
+							shape: 'array',
+							example: [1.68, 2.24],
+							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
+						}
+					},
 					'/api/players/head-to-head/:playerA/:playerB': {
 						method: 'GET',
 						params: {
@@ -384,6 +399,16 @@ class Module extends Command {
 				let fetchHeadToHead = new FetchHeadToHead({ mysql: this.mysql });
 				let raw = await fetchHeadToHead.fetch(options);
 				return fetchHeadToHead.parse(raw);
+			});
+		});
+
+		app.get('/api/tennis-abstract/odds', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query, request.params);
+				let FetchTennisAbstractOdds = require('../src/fetch-tennis-abstract-odds.js');
+				let fetchTennisAbstractOdds = new FetchTennisAbstractOdds({ mysql: this.mysql, log: this.log });
+				let raw = await fetchTennisAbstractOdds.fetch(options);
+				return fetchTennisAbstractOdds.parse(raw);
 			});
 		});
 

@@ -90,6 +90,7 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/player/lookup`
 - `GET /api/oddset`
 - `GET /api/players/odds/:playerA/:playerB`
+- `GET /api/tennis-abstract/odds`
 - `GET /api/players/head-to-head/:playerA/:playerB`
 - `GET /api/events/calendar`
 - `POST /api/query`
@@ -113,6 +114,7 @@ curl "http://127.0.0.1:3004/api/oddset"
 curl "http://127.0.0.1:3004/api/oddset?raw=1"
 curl "http://127.0.0.1:3004/api/players/odds/S0AG/A0E2"
 curl "http://127.0.0.1:3004/api/players/odds/S0AG/A0E2?surface=Hard"
+curl "http://127.0.0.1:3004/api/tennis-abstract/odds?playerA=Casper%20Ruud&playerB=Corentin%20Moutet&surface=Clay"
 curl "http://127.0.0.1:3004/api/players/head-to-head/S0AG/A0E2?limit=5"
 curl "http://127.0.0.1:3004/api/players/head-to-head/S0AG/A0E2?surface=Clay&limit=5"
 curl http://127.0.0.1:3004/api/events/calendar
