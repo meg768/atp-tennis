@@ -67,7 +67,7 @@ class FetchTennisAbstractOdds {
 	parseRatingsRow(html, playerName) {
 		const slug = slugifyPlayerName(playerName);
 		const marker = `player.cgi?p=${slug}`;
-		const markerIndex = html.indexOf(marker);
+		const markerIndex = html.toLowerCase().indexOf(marker.toLowerCase());
 
 		if (markerIndex === -1) {
 			throw new Error(`Could not parse Tennis Abstract Elo report row for ${playerName}.`);
