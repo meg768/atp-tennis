@@ -89,9 +89,9 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/player/search`
 - `GET /api/player/lookup`
 - `GET /api/oddset`
-- `GET /api/players/odds/:playerA/:playerB`
+- `GET /api/players/odds`
 - `GET /api/tennis-abstract/odds`
-- `GET /api/players/head-to-head/:playerA/:playerB`
+- `GET /api/players/head-to-head`
 - `GET /api/events/calendar`
 - `POST /api/query`
 
@@ -112,11 +112,11 @@ curl "http://127.0.0.1:3004/api/player/search?term=Borg"
 curl "http://127.0.0.1:3004/api/player/lookup?query=Borg"
 curl "http://127.0.0.1:3004/api/oddset"
 curl "http://127.0.0.1:3004/api/oddset?raw=1"
-curl "http://127.0.0.1:3004/api/players/odds/S0AG/A0E2"
-curl "http://127.0.0.1:3004/api/players/odds/S0AG/A0E2?surface=Hard"
+curl "http://127.0.0.1:3004/api/players/odds?playerA=S0AG&playerB=A0E2"
+curl "http://127.0.0.1:3004/api/players/odds?playerA=Jannik%20Sinner&playerB=Alexander%20Bublik&surface=Hard"
 curl "http://127.0.0.1:3004/api/tennis-abstract/odds?playerA=Casper%20Ruud&playerB=Corentin%20Moutet&surface=Clay"
-curl "http://127.0.0.1:3004/api/players/head-to-head/S0AG/A0E2?limit=5"
-curl "http://127.0.0.1:3004/api/players/head-to-head/S0AG/A0E2?surface=Clay&limit=5"
+curl "http://127.0.0.1:3004/api/players/head-to-head?playerA=S0AG&playerB=A0E2&limit=5"
+curl "http://127.0.0.1:3004/api/players/head-to-head?playerA=Jannik%20Sinner&playerB=Alexander%20Bublik&surface=Clay&limit=5"
 curl http://127.0.0.1:3004/api/events/calendar
 curl -X POST http://127.0.0.1:3004/api/query \
   -H "Content-Type: application/json" \
@@ -164,22 +164,27 @@ Notes:
 - fallback name matching for ATP qualifier labels such as `ATP Qual.`
 - Parsed response shape stays the same: an array of rows with `id`, `start`, `tournament`, `state`, `score`, `playerA`, `playerB`.
 
-### `/api/players/odds/:playerA/:playerB` Query Parameters
+### `/api/players/odds` Query Parameters
+- `playerA`: required ATP player id or player name
+- `playerB`: required ATP player id or player name
 - `surface`: optional surface selector (`Hard`, `Clay`, `Grass`)
 
 Notes:
-- `playerA` and `playerB` must be ATP player ids already present in the local database.
+- `playerA` and `playerB` can be ATP player ids or free-text player names.
 - The endpoint delegates to `CALL PLAYER_ODDS(?, ?, ?)` in MariaDB and returns a two-item array with decimal odds after a fixed 5% margin.
 - `PLAYER_ODDS` now delegates win probability to `PLAYER_WIN_FACTOR(...)`, which is the single source of truth for the model.
-- Use `/api/player/lookup` or `/api/player/search` first if you need to resolve a name to an id.
+- Legacy path-style calls to `/api/players/odds/:playerA/:playerB` are still accepted for backwards compatibility.
 
-### `/api/players/head-to-head/:playerA/:playerB` Query Parameters
+### `/api/players/head-to-head` Query Parameters
+- `playerA`: required ATP player id or player name
+- `playerB`: required ATP player id or player name
 - `surface`: optional surface filter
 - `limit`: integer from `1` to `50`, defaults to `10`
 
 Notes:
 - `playerA` and `playerB` can be ids or names; the endpoint resolves them against the local player table.
 - The response includes resolved player metadata, overall record, surface breakdown, and recent meetings.
+- Legacy path-style calls to `/api/players/head-to-head/:playerA/:playerB` are still accepted for backwards compatibility.
 
 ## Data Sources Used in Code
 - `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank={top}`

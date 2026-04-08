@@ -216,16 +216,14 @@ class Module extends Command {
 							}
 						}
 					},
-					'/api/players/odds/:playerA/:playerB': {
+					'/api/players/odds': {
 						method: 'GET',
-						params: {
-							playerA: 'string, required',
-							playerB: 'string, required'
-						},
 						query: {
+							playerA: 'string, required, ATP id or player name',
+							playerB: 'string, required, ATP id or player name',
 							surface: 'string, optional'
 						},
-						description: 'Returns model prices for a specific matchup.',
+						description: 'Returns model prices for a specific matchup. Legacy path params are still accepted for backwards compatibility.',
 						response: {
 							shape: 'array',
 							example: [1.63, 2.29],
@@ -247,17 +245,15 @@ class Module extends Command {
 							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
 						}
 					},
-					'/api/players/head-to-head/:playerA/:playerB': {
+					'/api/players/head-to-head': {
 						method: 'GET',
-						params: {
-							playerA: 'string, required',
-							playerB: 'string, required'
-						},
 						query: {
+							playerA: 'string, required, ATP id or player name',
+							playerB: 'string, required, ATP id or player name',
 							limit: 'number, optional',
 							surface: 'string, optional'
 						},
-						description: 'Resolved player metadata, overall H2H, surface splits, and recent meetings.',
+						description: 'Resolved player metadata, overall H2H, surface splits, and recent meetings. Legacy path params are still accepted for backwards compatibility.',
 						response: {
 							shape: 'object',
 							fields: {
@@ -362,7 +358,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/players/odds/:playerA/:playerB', async (request, response) => {
+		const handlePlayerOdds = async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
 				let playerA = String(options.playerA || '').trim();
@@ -390,9 +386,12 @@ class Module extends Command {
 
 				return rows.map(row => row.odds);
 			});
-		});
+		};
 
-		app.get('/api/players/head-to-head/:playerA/:playerB', async (request, response) => {
+		app.get('/api/players/odds', handlePlayerOdds);
+		app.get('/api/players/odds/:playerA/:playerB', handlePlayerOdds);
+
+		const handleHeadToHead = async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
 				let FetchHeadToHead = require('../src/fetch-head-to-head.js');
@@ -400,7 +399,10 @@ class Module extends Command {
 				let raw = await fetchHeadToHead.fetch(options);
 				return fetchHeadToHead.parse(raw);
 			});
-		});
+		};
+
+		app.get('/api/players/head-to-head', handleHeadToHead);
+		app.get('/api/players/head-to-head/:playerA/:playerB', handleHeadToHead);
 
 		app.get('/api/tennis-abstract/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
