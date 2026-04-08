@@ -223,7 +223,7 @@ class Module extends Command {
 							playerB: 'string, required, ATP id or player name',
 							surface: 'string, optional'
 						},
-						description: 'Returns model prices for a specific matchup. Legacy path params are still accepted for backwards compatibility.',
+						description: 'Returns model prices for a specific matchup.',
 						response: {
 							shape: 'array',
 							example: [1.63, 2.29],
@@ -253,7 +253,7 @@ class Module extends Command {
 							limit: 'number, optional',
 							surface: 'string, optional'
 						},
-						description: 'Resolved player metadata, overall H2H, surface splits, and recent meetings. Legacy path params are still accepted for backwards compatibility.',
+						description: 'Resolved player metadata, overall H2H, surface splits, and recent meetings.',
 						response: {
 							shape: 'object',
 							fields: {
@@ -389,7 +389,6 @@ class Module extends Command {
 		};
 
 		app.get('/api/players/odds', handlePlayerOdds);
-		app.get('/api/players/odds/:playerA/:playerB', handlePlayerOdds);
 
 		const handleHeadToHead = async (request, response) => {
 			return this.execute(request, response, async () => {
@@ -402,7 +401,6 @@ class Module extends Command {
 		};
 
 		app.get('/api/players/head-to-head', handleHeadToHead);
-		app.get('/api/players/head-to-head/:playerA/:playerB', handleHeadToHead);
 
 		app.get('/api/tennis-abstract/odds', async (request, response) => {
 			return this.execute(request, response, async () => {

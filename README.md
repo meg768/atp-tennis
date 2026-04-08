@@ -173,7 +173,6 @@ Notes:
 - `playerA` and `playerB` can be ATP player ids or free-text player names.
 - The endpoint delegates to `CALL PLAYER_ODDS(?, ?, ?)` in MariaDB and returns a two-item array with decimal odds after a fixed 5% margin.
 - `PLAYER_ODDS` now delegates win probability to `PLAYER_WIN_FACTOR(...)`, which is the single source of truth for the model.
-- Legacy path-style calls to `/api/players/odds/:playerA/:playerB` are still accepted for backwards compatibility.
 
 ### `/api/players/head-to-head` Query Parameters
 - `playerA`: required ATP player id or player name
@@ -184,7 +183,6 @@ Notes:
 Notes:
 - `playerA` and `playerB` can be ids or names; the endpoint resolves them against the local player table.
 - The response includes resolved player metadata, overall record, surface breakdown, and recent meetings.
-- Legacy path-style calls to `/api/players/head-to-head/:playerA/:playerB` are still accepted for backwards compatibility.
 
 ## Data Sources Used in Code
 - `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank={top}`
