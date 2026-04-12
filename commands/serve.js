@@ -216,6 +216,24 @@ class Module extends Command {
 							}
 						}
 					},
+					'/api/oddset/odds': {
+						method: 'GET',
+						query: {
+							playerA: 'string, required, ATP id or player name',
+							playerB: 'string, required, ATP id or player name',
+							requestTimeoutMs: 'number, optional',
+							url: 'string, optional upstream override',
+							matchesUrl: 'string, optional primary ATP matches override',
+							openUrl: 'string, optional live-open fallback override',
+							upcomingUrl: 'string, optional tennis-all upcoming override'
+						},
+						description: 'Returns Svenska Spel Oddset decimal odds for a specific matchup.',
+						response: {
+							shape: 'array',
+							example: [1.6, 2.33],
+							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
+						}
+					},
 					'/api/players/odds': {
 						method: 'GET',
 						query: {
@@ -358,7 +376,17 @@ class Module extends Command {
 			});
 		});
 
-		const handlePlayerOdds = async (request, response) => {
+		app.get('/api/oddset/odds', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let options = Object.assign({}, request.body, request.query, request.params);
+				let FetchOddsetOdds = require('../src/fetch-oddset-odds.js');
+				let fetchOddsetOdds = new FetchOddsetOdds({ mysql: this.mysql, log: this.log });
+				let raw = await fetchOddsetOdds.fetch(options);
+				return fetchOddsetOdds.parse(raw);
+			});
+		});
+
+		app.get('/api/players/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
 				let playerA = String(options.playerA || '').trim();
@@ -386,11 +414,9 @@ class Module extends Command {
 
 				return rows.map(row => row.odds);
 			});
-		};
+		});
 
-		app.get('/api/players/odds', handlePlayerOdds);
-
-		const handleHeadToHead = async (request, response) => {
+		app.get('/api/players/head-to-head', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
 				let FetchHeadToHead = require('../src/fetch-head-to-head.js');
@@ -398,9 +424,7 @@ class Module extends Command {
 				let raw = await fetchHeadToHead.fetch(options);
 				return fetchHeadToHead.parse(raw);
 			});
-		};
-
-		app.get('/api/players/head-to-head', handleHeadToHead);
+		});
 
 		app.get('/api/tennis-abstract/odds', async (request, response) => {
 			return this.execute(request, response, async () => {

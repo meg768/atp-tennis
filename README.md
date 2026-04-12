@@ -89,6 +89,7 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/player/search`
 - `GET /api/player/lookup`
 - `GET /api/oddset`
+- `GET /api/oddset/odds`
 - `GET /api/players/odds`
 - `GET /api/tennis-abstract/odds`
 - `GET /api/players/head-to-head`
@@ -112,6 +113,7 @@ curl "http://127.0.0.1:3004/api/player/search?term=Borg"
 curl "http://127.0.0.1:3004/api/player/lookup?query=Borg"
 curl "http://127.0.0.1:3004/api/oddset"
 curl "http://127.0.0.1:3004/api/oddset?raw=1"
+curl "http://127.0.0.1:3004/api/oddset/odds?playerA=Learner%20Tien&playerB=Roman%20Andres%20Burruchaga"
 curl "http://127.0.0.1:3004/api/players/odds?playerA=S0AG&playerB=A0E2"
 curl "http://127.0.0.1:3004/api/players/odds?playerA=Jannik%20Sinner&playerB=Alexander%20Bublik&surface=Hard"
 curl "http://127.0.0.1:3004/api/tennis-abstract/odds?playerA=Casper%20Ruud&playerB=Corentin%20Moutet&surface=Clay"
@@ -163,6 +165,20 @@ Notes:
   - `termKey.startsWith('atp_')`
 - fallback name matching for ATP qualifier labels such as `ATP Qual.`
 - Parsed response shape stays the same: an array of rows with `id`, `start`, `tournament`, `state`, `score`, `playerA`, `playerB`.
+
+### `/api/oddset/odds` Query Parameters
+- `playerA`: required ATP player id or player name
+- `playerB`: required ATP player id or player name
+- `requestTimeoutMs`: request timeout in milliseconds
+- `url`: optional upstream override
+- `matchesUrl`: optional primary ATP matches override
+- `openUrl`: optional live-open fallback override
+- `upcomingUrl`: optional tennis-all upcoming override
+
+Notes:
+- `playerA` and `playerB` can be ATP ids or free-text player names.
+- The endpoint resolves both players locally, finds the matching row in the normalized Oddset feed, and returns a two-item array with Svenska Spels decimal odds.
+- Index `0` is `playerA` odds and index `1` is `playerB` odds.
 
 ### `/api/players/odds` Query Parameters
 - `playerA`: required ATP player id or player name
