@@ -84,19 +84,6 @@ Writes one JSON object to `stdout`:
 - uses hardcoded sandbox input: `playerA=S0AG`, `playerB=A0E2`, `surface=Hard`
 - requires local DB access via `.env`
 
-## Test `fetch-head-to-head`
-
-```bash
-./sandbox/fetch-head-to-head.js
-```
-
-Always writes both files to `sandbox/output/`:
-- `fetch-head-to-head.parsed.json` (normalized H2H JSON with overall stats, by-surface breakdown and recent matches)
-- `fetch-head-to-head.raw.json` (raw query bundle before parse)
-- Uses hardcoded sandbox input: `playerA=S0AG`, `playerB=A0E2`, `limit=5`.
-- Requires local DB access via `.env`.
-- Runs silently on success (no console output).
-
 ## Test `fetch-player-search`
 
 ```bash

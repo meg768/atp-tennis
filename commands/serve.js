@@ -265,27 +265,6 @@ class Module extends Command {
 							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
 						}
 					},
-					'/api/players/head-to-head': {
-						method: 'GET',
-						query: {
-							playerA: 'string, required, ATP id or player name',
-							playerB: 'string, required, ATP id or player name',
-							limit: 'number, optional',
-							surface: 'string, optional'
-						},
-						description: 'Resolved player metadata, overall H2H, surface splits, and recent meetings.',
-						response: {
-							shape: 'object',
-							fields: {
-								playerA: 'object',
-								playerB: 'object',
-								filters: 'object',
-								overall: 'object',
-								bySurface: 'array',
-								recentMatches: 'array'
-							}
-						}
-					},
 					'/api/events/calendar': {
 						method: 'GET',
 						description: 'Normalized ATP calendar.',
@@ -415,16 +394,6 @@ class Module extends Command {
 				}
 
 				return rows.map(row => row.odds);
-			});
-		});
-
-		app.get('/api/players/head-to-head', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let options = Object.assign({}, request.body, request.query, request.params);
-				let FetchHeadToHead = require('../src/fetch-head-to-head.js');
-				let fetchHeadToHead = new FetchHeadToHead({ mysql: this.mysql });
-				let raw = await fetchHeadToHead.fetch(options);
-				return fetchHeadToHead.parse(raw);
 			});
 		});
 
