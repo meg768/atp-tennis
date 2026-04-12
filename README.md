@@ -165,6 +165,7 @@ Notes:
   - `termKey.startsWith('atp_')`
 - fallback name matching for ATP qualifier labels such as `ATP Qual.`
 - Parsed response shape stays the same: an array of rows with `id`, `start`, `tournament`, `state`, `score`, `playerA`, `playerB`.
+- Each nested player object now also includes resolved ATP `id` when available.
 
 ### `/api/oddset/odds` Query Parameters
 - `playerA`: required ATP player id or player name

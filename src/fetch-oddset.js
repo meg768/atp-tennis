@@ -1,4 +1,5 @@
 const Fetcher = require('./fetcher');
+const searchPlayers = require('./search-players.js');
 
 const ODDSET_ATP_MATCHES_URL =
 	'https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true';
@@ -240,11 +241,45 @@ function isATPFamilyEvent(item) {
 class Module extends Fetcher {
 	constructor(options = {}) {
 		super(options);
+		this.mysql = options.mysql ?? null;
 		this.url = options.url ?? ODDSET_ATP_MATCHES_URL;
 		this.matchesUrl = options.matchesUrl ?? this.url;
 		this.upcomingUrl = options.upcomingUrl ?? ODDSET_TENNIS_MATCHES_URL;
 		this.openUrl = options.openUrl ?? ODDSET_LIVE_OPEN_URL;
 		this.requestTimeoutMs = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
+	}
+
+	async resolvePlayerId(name) {
+		if (!this.mysql) {
+			return null;
+		}
+
+		const rows = await searchPlayers(this.mysql, name, 5);
+		return rows[0]?.id ?? null;
+	}
+
+	async attachPlayerIds(rows = []) {
+		if (!this.mysql || rows.length === 0) {
+			return rows.map(row => ({
+				...row,
+				playerAId: null,
+				playerBId: null
+			}));
+		}
+
+		const uniqueNames = [...new Set(
+			rows.flatMap(row => [row?.playerA, row?.playerB].map(name => String(name || '').trim())).filter(Boolean)
+		)];
+		const idEntries = await Promise.all(
+			uniqueNames.map(async name => [name, await this.resolvePlayerId(name)])
+		);
+		const playerIdByName = Object.fromEntries(idEntries);
+
+		return rows.map(row => ({
+			...row,
+			playerAId: playerIdByName[String(row.playerA || '').trim()] ?? null,
+			playerBId: playerIdByName[String(row.playerB || '').trim()] ?? null
+		}));
 	}
 
 	parseMatchesRows(raw) {
@@ -311,17 +346,19 @@ class Module extends Fetcher {
 				state: row.state,
 				score: row.score,
 				playerA: {
+					id: row.playerAId,
 					name: row.playerA,
 					odds: row.oddsA
 				},
 				playerB: {
+					id: row.playerBId,
 					name: row.playerB,
 					odds: row.oddsB
 				}
 			};
 		}
 
-		const rows = await this.parseRows(raw);
+		const rows = await this.attachPlayerIds(await this.parseRows(raw));
 		return rows.map(toOutputRow);
 	}
 

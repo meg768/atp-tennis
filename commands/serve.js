@@ -206,10 +206,12 @@ class Module extends Command {
 								state: 'string',
 								score: 'string|null',
 								playerA: {
+									id: 'string|null',
 									name: 'string',
 									odds: 'number|null'
 								},
 								playerB: {
+									id: 'string|null',
 									name: 'string',
 									odds: 'number|null'
 								}
@@ -365,7 +367,7 @@ class Module extends Command {
 				let options = Object.assign({}, request.body, request.query);
 
 				let Fetcher = require('../src/fetch-oddset.js');
-				let fetcher = new Fetcher(options);
+				let fetcher = new Fetcher({ ...options, mysql: this.mysql, log: this.log });
 				let raw = await fetcher.fetch(options);
 
 				if (options.raw != undefined && (options.raw == '' || options.raw != 0)) {
