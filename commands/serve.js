@@ -73,10 +73,12 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/ping', (req, res) => {
-			res.json({
-				message: 'pong',
-				version: packageJSON.version
+		app.get('/api/ping', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let ApiPing = require('../src/api-ping.js');
+				let apiPing = new ApiPing({ version: packageJSON.version });
+				let raw = await apiPing.fetch();
+				return apiPing.parse(raw);
 			});
 		});
 
@@ -111,190 +113,21 @@ class Module extends Command {
 			return response.sendFile(flagPath);
 		});
 
-		// Keep this endpoint in sync manually whenever service endpoints or payloads change.
-		app.get('/api/meta/endpoints', (request, response) => {
-			return response.status(200).json({
-				version: packageJSON.version,
-				notes: [
-					'Endpoints are described as paths only.',
-					'Resolve them relative to the current host where this service is running.'
-				],
-				endpoints: {
-					'/ok': {
-						method: 'GET',
-						description: 'Simple health check.',
-						response: {
-							shape: 'object',
-							example: { message: 'I am OK' }
-						}
-					},
-					'/api/ping': {
-						method: 'GET',
-						description: 'Lightweight liveness payload with service version.',
-						response: {
-							shape: 'object',
-							fields: {
-								message: 'string',
-								version: 'string'
-							}
-						}
-					},
-					'/api/meta/schema.sql': {
-						method: 'GET',
-						description: 'Returns the raw database schema SQL file, including comments and DDL.'
-					},
-					'/api/flags/:code.svg': {
-						method: 'GET',
-						params: {
-							code: 'string, required, ATP-style three-letter country code such as CZE or ITA'
-						},
-						description: 'Returns a country flag SVG from the local flags directory. If a flag asset is missing, returns a plain white fallback SVG.',
-						response: {
-							shape: 'raw svg'
-						}
-					},
-					'/api/meta/endpoints': {
-						method: 'GET',
-						description: 'Returns machine-readable metadata about the service endpoints.'
-					},
-					'/api/matches/live': {
-						method: 'GET',
-						description: 'Normalized ATP live matches from ATP Tour live data.'
-					},
-					'/api/player/rankings': {
-						method: 'GET',
-						query: {
-							top: 'number, optional'
-						},
-						description: 'Current ATP rankings. Defaults to top 100.'
-					},
-					'/api/player/search': {
-						method: 'GET',
-						query: {
-							term: 'string, required'
-						},
-						description: 'Searches player candidates through PLAYER_SEARCH.',
-						response: {
-							shape: 'array'
-						}
-					},
-					'/api/player/lookup': {
-						method: 'GET',
-						query: {
-							query: 'string, required',
-							term: 'string, optional alias',
-							searchTerm: 'string, optional alias'
-						},
-						description: 'Resolves a best-match player id through PLAYER_LOOKUP.',
-						response: {
-							shape: 'array',
-							example: [{ id: 'RH16' }]
-						}
-					},
-					'/api/oddset': {
-						method: 'GET',
-						query: {
-							raw: 'boolean-like, optional'
-						},
-						description: 'Normalized Oddset ATP match feed. With raw=1, returns the raw upstream payload.',
-						response: {
-							shape: 'array',
-							fields: {
-								id: 'number',
-								start: 'string (ISO datetime)',
-								tournament: 'string',
-								state: 'string',
-								score: 'string|null',
-								playerA: {
-									id: 'string|null',
-									name: 'string',
-									odds: 'number|null'
-								},
-								playerB: {
-									id: 'string|null',
-									name: 'string',
-									odds: 'number|null'
-								}
-							}
-						}
-					},
-					'/api/oddset/odds': {
-						method: 'GET',
-						query: {
-							playerA: 'string, required, ATP id or player name',
-							playerB: 'string, required, ATP id or player name',
-							requestTimeoutMs: 'number, optional',
-							url: 'string, optional upstream override',
-							matchesUrl: 'string, optional primary ATP matches override',
-							openUrl: 'string, optional live-open fallback override',
-							upcomingUrl: 'string, optional tennis-all upcoming override'
-						},
-						description: 'Returns Svenska Spel Oddset decimal odds for a specific matchup.',
-						response: {
-							shape: 'array',
-							example: [1.6, 2.33],
-							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
-						}
-					},
-					'/api/odds': {
-						method: 'GET',
-						query: {
-							playerA: 'string, required, ATP id or player name',
-							playerB: 'string, required, ATP id or player name',
-							surface: 'string, optional'
-						},
-						description: 'Returns model prices for a specific matchup.',
-						response: {
-							shape: 'array',
-							example: [1.63, 2.29],
-							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
-						}
-					},
-					'/api/tennis-abstract/odds': {
-						method: 'GET',
-						query: {
-							playerA: 'string, required, ATP id or player name',
-							playerB: 'string, required, ATP id or player name',
-							surface: 'string, optional, Hard/Clay/Grass',
-							bestOf: 'number, optional, defaults to 3'
-						},
-						description: 'Returns Tennis Abstract-inspired matchup odds with a 5% margin added to the model probabilities.',
-						response: {
-							shape: 'array',
-							example: [1.68, 2.24],
-							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
-						}
-					},
-					'/api/events/calendar': {
-						method: 'GET',
-						description: 'Normalized ATP calendar.',
-						response: {
-							shape: 'object',
-							fields: {
-								events: 'array'
-							}
-						}
-					},
-					'/api/query': {
-						method: 'POST',
-						body: {
-							sql: 'string, required, read-only SQL only'
-						},
-						description: 'Runs read-only SQL against the ATP database.',
-						response: {
-							shape: 'array'
-						}
-					}
-				}
+		app.get('/api/meta/endpoints', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let ApiMetaEndpoints = require('../src/api-meta-endpoints.js');
+				let apiMetaEndpoints = new ApiMetaEndpoints({ version: packageJSON.version });
+				let raw = await apiMetaEndpoints.fetch();
+				return apiMetaEndpoints.parse(raw);
 			});
 		});
 
 		app.get('/api/matches/live', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let Fetcher = require('../src/fetch-live.js');
-				let fetcher = new Fetcher();
-				let raw = await fetcher.fetch();
-				return await fetcher.parse(raw);
+				let ApiMatchesLive = require('../src/api-matches-live.js');
+				let apiMatchesLive = new ApiMatchesLive();
+				let raw = await apiMatchesLive.fetch();
+				return await apiMatchesLive.parse(raw);
 			});
 		});
 
@@ -302,42 +135,30 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
-				let Fetcher = require('../src/fetch-top-players.js');
-				let fetcher = new Fetcher(options);
-				let raw = await fetcher.fetch(options);
-				return fetcher.parse(raw);
+				let ApiPlayerRankings = require('../src/api-player-rankings.js');
+				let apiPlayerRankings = new ApiPlayerRankings(options);
+				let raw = await apiPlayerRankings.fetch(options);
+				return apiPlayerRankings.parse(raw);
 			});
 		});
 
 		app.get('/api/player/search', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
-				let term = String(options.term ?? '').trim();
-
-				if (!term) {
-					return [];
-				}
-
-				return await this.mysql.query({
-					sql: 'CALL PLAYER_SEARCH(?)',
-					format: [term]
-				});
+				let ApiPlayerSearch = require('../src/api-player-search.js');
+				let apiPlayerSearch = new ApiPlayerSearch({ mysql: this.mysql });
+				let raw = await apiPlayerSearch.fetch(options);
+				return apiPlayerSearch.parse(raw);
 			});
 		});
 
 		app.get('/api/player/lookup', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
-				let query = String(options.searchTerm ?? options.query ?? options.term ?? '').trim();
-
-				if (!query) {
-					return [];
-				}
-
-				return await this.mysql.query({
-					sql: 'SELECT PLAYER_LOOKUP(?) AS id',
-					format: [query]
-				});
+				let ApiPlayerLookup = require('../src/api-player-lookup.js');
+				let apiPlayerLookup = new ApiPlayerLookup({ mysql: this.mysql });
+				let raw = await apiPlayerLookup.fetch(options);
+				return apiPlayerLookup.parse(raw);
 			});
 		});
 
@@ -345,74 +166,54 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
-				let Fetcher = require('../src/fetch-oddset.js');
-				let fetcher = new Fetcher({ ...options, mysql: this.mysql, log: this.log });
-				let raw = await fetcher.fetch(options);
+				let ApiOddset = require('../src/api-oddset.js');
+				let apiOddset = new ApiOddset({ ...options, mysql: this.mysql, log: this.log });
+				let raw = await apiOddset.fetch(options);
 
 				if (options.raw != undefined && (options.raw == '' || options.raw != 0)) {
 					return raw;
 				}
 
-				return fetcher.parse(raw);
+				return apiOddset.parse(raw);
 			});
 		});
 
 		app.get('/api/oddset/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let FetchOddsetOdds = require('../src/fetch-oddset-odds.js');
-				let fetchOddsetOdds = new FetchOddsetOdds({ mysql: this.mysql, log: this.log });
-				let raw = await fetchOddsetOdds.fetch(options);
-				return fetchOddsetOdds.parse(raw);
+				let ApiOddsetOdds = require('../src/api-oddset-odds.js');
+				let apiOddsetOdds = new ApiOddsetOdds({ mysql: this.mysql, log: this.log });
+				let raw = await apiOddsetOdds.fetch(options);
+				return apiOddsetOdds.parse(raw);
 			});
 		});
 
 		app.get('/api/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let playerA = String(options.playerA || '').trim();
-				let playerB = String(options.playerB || '').trim();
-				let surface = options.surface == null ? null : String(options.surface).trim();
-
-				if (!playerA || !playerB) {
-					throw new Error('playerA and playerB parameters are required.');
-				}
-
-				if (playerA.toUpperCase() === playerB.toUpperCase()) {
-					throw new Error('playerA and playerB must be different.');
-				}
-
-				let rows = await this.mysql.query({
-					sql: 'CALL PLAYER_ODDS(?, ?, ?)',
-					format: [playerA, playerB, surface || null]
-				});
-
-				rows = Array.isArray(rows) && Array.isArray(rows[0]) ? rows[0] : rows;
-
-				if (!Array.isArray(rows) || rows.length !== 2) {
-					throw new Error('Could not calculate odds.');
-				}
-
-				return rows.map(row => row.odds);
+				let ApiOdds = require('../src/api-odds.js');
+				let apiOdds = new ApiOdds({ mysql: this.mysql });
+				let raw = await apiOdds.fetch(options);
+				return apiOdds.parse(raw);
 			});
 		});
 
 		app.get('/api/tennis-abstract/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let FetchTennisAbstractOdds = require('../src/fetch-tennis-abstract-odds.js');
-				let fetchTennisAbstractOdds = new FetchTennisAbstractOdds({ mysql: this.mysql, log: this.log });
-				let raw = await fetchTennisAbstractOdds.fetch(options);
-				return fetchTennisAbstractOdds.parse(raw);
+				let ApiTennisAbstractOdds = require('../src/api-tennis-abstract-odds.js');
+				let apiTennisAbstractOdds = new ApiTennisAbstractOdds({ mysql: this.mysql, log: this.log });
+				let raw = await apiTennisAbstractOdds.fetch(options);
+				return apiTennisAbstractOdds.parse(raw);
 			});
 		});
 
 		app.get('/api/events/calendar', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let Fetcher = require('../src/fetch-calendar.js');
-				let fetcher = new Fetcher();
-				let raw = await fetcher.fetch();
-				return fetcher.parse(raw);
+				let ApiEventsCalendar = require('../src/api-events-calendar.js');
+				let apiEventsCalendar = new ApiEventsCalendar();
+				let raw = await apiEventsCalendar.fetch();
+				return apiEventsCalendar.parse(raw);
 			});
 		});
 /*

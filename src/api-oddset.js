@@ -1,4 +1,4 @@
-const Fetcher = require('./fetcher');
+const Api = require('./api');
 const searchPlayers = require('./search-players.js');
 
 const ODDSET_ATP_MATCHES_URL =
@@ -238,10 +238,9 @@ function isATPFamilyEvent(item) {
 	);
 }
 
-class Module extends Fetcher {
+class ApiOddset extends Api {
 	constructor(options = {}) {
 		super(options);
-		this.mysql = options.mysql ?? null;
 		this.url = options.url ?? ODDSET_ATP_MATCHES_URL;
 		this.matchesUrl = options.matchesUrl ?? this.url;
 		this.upcomingUrl = options.upcomingUrl ?? ODDSET_TENNIS_MATCHES_URL;
@@ -469,4 +468,4 @@ class Module extends Fetcher {
 	}
 }
 
-module.exports = Module;
+module.exports = ApiOddset;

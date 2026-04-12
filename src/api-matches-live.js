@@ -1,8 +1,8 @@
-const Fetcher = require('./fetcher');
+const Api = require('./api');
 const jp = require('jsonpath');
 
-class Module extends Fetcher {
-	constructor(options) {
+class ApiMatchesLive extends Api {
+	constructor(options = {}) {
 		super(options);
 		this.response = null;
 	}
@@ -261,4 +261,4 @@ class Module extends Fetcher {
 	}
 }
 
-module.exports = Module;
+module.exports = ApiMatchesLive;

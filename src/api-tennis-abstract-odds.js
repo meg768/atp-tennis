@@ -1,3 +1,4 @@
+const Api = require('./api');
 const searchPlayers = require('./search-players.js');
 
 const SURFACE_KEYS = {
@@ -28,11 +29,7 @@ function eloProbability(eloA, eloB) {
 	return 1 / (1 + (10 ** ((eloB - eloA) / 400)));
 }
 
-class FetchTennisAbstractOdds {
-	constructor(options = {}) {
-		this.mysql = options.mysql;
-		this.log = options.log || console.log;
-	}
+class ApiTennisAbstractOdds extends Api {
 
 	normalizeSurface(surface) {
 		const normalized = String(surface || '').trim().toLowerCase();
@@ -155,4 +152,4 @@ class FetchTennisAbstractOdds {
 	}
 }
 
-module.exports = FetchTennisAbstractOdds;
+module.exports = ApiTennisAbstractOdds;

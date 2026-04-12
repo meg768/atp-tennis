@@ -1,10 +1,6 @@
-const Fetcher = require('./fetcher');
+const Api = require('./api');
 
-class Module extends Fetcher {
-	constructor(options = {}) {
-		super(options);
-	}
-
+class ApiEventsCalendar extends Api {
 	parse(raw) {
 		if (raw == null || typeof raw !== 'object') {
 			return { events: [] };
@@ -143,4 +139,4 @@ class Module extends Fetcher {
 	}
 }
 
-module.exports = Module;
+module.exports = ApiEventsCalendar;

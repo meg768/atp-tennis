@@ -1,5 +1,6 @@
+const Api = require('./api');
 const searchPlayers = require('./search-players.js');
-const FetchOddset = require('./fetch-oddset.js');
+const ApiOddset = require('./api-oddset.js');
 
 function normalizeName(name = '') {
 	return String(name)
@@ -22,11 +23,7 @@ function createPlayersKey(playerAName, playerBName) {
 	return [playerA, playerB].sort().join('::');
 }
 
-class FetchOddsetOdds {
-	constructor(options = {}) {
-		this.mysql = options.mysql;
-		this.log = options.log || console.log;
-	}
+class ApiOddsetOdds extends Api {
 
 	async resolvePlayer(term) {
 		const rows = await searchPlayers(this.mysql, term, 5);
@@ -59,8 +56,8 @@ class FetchOddsetOdds {
 			throw new Error('playerA and playerB resolved to the same player.');
 		}
 
-		const fetchOddset = new FetchOddset(options);
-		const rows = await fetchOddset.fetchRows(options);
+		const apiOddset = new ApiOddset(options);
+		const rows = await apiOddset.fetchRows(options);
 		const requestedKey = createPlayersKey(resolvedA.name, resolvedB.name);
 
 		const row = rows.find(candidate => createPlayersKey(candidate.playerA, candidate.playerB) === requestedKey);
@@ -86,4 +83,4 @@ class FetchOddsetOdds {
 	}
 }
 
-module.exports = FetchOddsetOdds;
+module.exports = ApiOddsetOdds;
