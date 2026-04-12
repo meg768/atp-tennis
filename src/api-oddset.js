@@ -248,6 +248,16 @@ class ApiOddset extends Api {
 		this.requestTimeoutMs = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
 	}
 
+	usesRawResponse(options = null) {
+		options = this.resolveOptions(options);
+		return options.raw != undefined && (options.raw == '' || options.raw != 0);
+	}
+
+	async run() {
+		let raw = await this.fetch();
+		return this.usesRawResponse() ? raw : await this.parse(raw);
+	}
+
 	async resolvePlayerId(name) {
 		if (!this.mysql) {
 			return null;
@@ -384,7 +394,7 @@ class ApiOddset extends Api {
 		}
 	}
 
-	async fetchRows(options = {}) {
+	async fetchRows(options = null) {
 		const raw = await this.fetch(options);
 		return await this.parseRows(raw);
 	}
@@ -402,7 +412,7 @@ class ApiOddset extends Api {
 		}
 	}
 
-	async fetch(options = {}) {
+	async fetch(options = null) {
 		function getErrorMessage(result) {
 			if (!result || result.status !== 'rejected') {
 				return null;
@@ -410,6 +420,8 @@ class ApiOddset extends Api {
 
 			return result.reason instanceof Error ? result.reason.message : String(result.reason);
 		}
+
+		options = this.resolveOptions(options);
 
 		const {
 			url,

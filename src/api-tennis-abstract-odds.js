@@ -110,7 +110,8 @@ class ApiTennisAbstractOdds extends Api {
 		};
 	}
 
-	async fetch({ playerA, playerB, surface = null, bestOf = 3 } = {}) {
+	async fetch(options = null) {
+		let { playerA, playerB, surface = null, bestOf = 3 } = this.resolveOptions(options);
 		playerA = String(playerA || '').trim();
 		playerB = String(playerB || '').trim();
 		const ratingKey = this.normalizeSurface(surface);

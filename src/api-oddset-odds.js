@@ -35,7 +35,8 @@ class ApiOddsetOdds extends Api {
 		return rows[0];
 	}
 
-	async fetch(options = {}) {
+	async fetch(options = null) {
+		options = this.resolveOptions(options);
 		let playerA = String(options.playerA || '').trim();
 		let playerB = String(options.playerB || '').trim();
 
@@ -56,7 +57,7 @@ class ApiOddsetOdds extends Api {
 			throw new Error('playerA and playerB resolved to the same player.');
 		}
 
-		const apiOddset = new ApiOddset(options);
+		const apiOddset = new ApiOddset({ mysql: this.mysql, log: this.log });
 		const rows = await apiOddset.fetchRows(options);
 		const requestedKey = createPlayersKey(resolvedA.name, resolvedB.name);
 

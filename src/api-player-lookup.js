@@ -1,8 +1,8 @@
 const Api = require('./api');
 
 class ApiPlayerLookup extends Api {
-
-	async fetch(options = {}) {
+	async fetch(options = null) {
+		options = this.resolveOptions(options);
 		let query = String(options.searchTerm ?? options.query ?? options.term ?? '').trim();
 
 		if (!query) {

@@ -1,8 +1,8 @@
 const Api = require('./api');
 
 class ApiOdds extends Api {
-
-	async fetch({ playerA, playerB, surface = null } = {}) {
+	async fetch(options = null) {
+		let { playerA, playerB, surface = null } = this.resolveOptions(options);
 		playerA = String(playerA || '').trim();
 		playerB = String(playerB || '').trim();
 		surface = surface == null ? null : String(surface).trim();

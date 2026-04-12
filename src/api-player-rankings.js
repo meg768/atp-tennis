@@ -1,7 +1,8 @@
 const Api = require('./api');
 
 class ApiPlayerRankings extends Api {
-	async fetch(options = {}) {
+	async fetch(options = null) {
+		options = this.resolveOptions(options);
 		let top = Number.isFinite(Number(options.top)) ? Math.max(1, Math.trunc(Number(options.top))) : 100;
 		const url = `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=${top}`;
 		return await this.fetchATP(url, options);
