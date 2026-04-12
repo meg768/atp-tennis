@@ -75,10 +75,10 @@ class Module extends Command {
 
 		app.get('/api/ping', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let ApiPing = require('../src/api-ping.js');
-				let apiPing = new ApiPing({ version: packageJSON.version });
-				let raw = await apiPing.fetch();
-				return apiPing.parse(raw);
+				let Api = require('../src/api-ping.js');
+				let api = new Api({ version: packageJSON.version, log: this.log });
+				let raw = await api.fetch();
+				return api.parse(raw);
 			});
 		});
 
@@ -115,19 +115,19 @@ class Module extends Command {
 
 		app.get('/api/meta/endpoints', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let ApiMetaEndpoints = require('../src/api-meta-endpoints.js');
-				let apiMetaEndpoints = new ApiMetaEndpoints({ version: packageJSON.version });
-				let raw = await apiMetaEndpoints.fetch();
-				return apiMetaEndpoints.parse(raw);
+				let Api = require('../src/api-meta-endpoints.js');
+				let api = new Api({ version: packageJSON.version, log: this.log });
+				let raw = await api.fetch();
+				return api.parse(raw);
 			});
 		});
 
 		app.get('/api/matches/live', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let ApiMatchesLive = require('../src/api-matches-live.js');
-				let apiMatchesLive = new ApiMatchesLive();
-				let raw = await apiMatchesLive.fetch();
-				return await apiMatchesLive.parse(raw);
+				let Api = require('../src/api-matches-live.js');
+				let api = new Api({ log: this.log });
+				let raw = await api.fetch();
+				return await api.parse(raw);
 			});
 		});
 
@@ -135,30 +135,30 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
-				let ApiPlayerRankings = require('../src/api-player-rankings.js');
-				let apiPlayerRankings = new ApiPlayerRankings(options);
-				let raw = await apiPlayerRankings.fetch(options);
-				return apiPlayerRankings.parse(raw);
+				let Api = require('../src/api-player-rankings.js');
+				let api = new Api({ ...options, log: this.log });
+				let raw = await api.fetch(options);
+				return api.parse(raw);
 			});
 		});
 
 		app.get('/api/player/search', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
-				let ApiPlayerSearch = require('../src/api-player-search.js');
-				let apiPlayerSearch = new ApiPlayerSearch({ mysql: this.mysql });
-				let raw = await apiPlayerSearch.fetch(options);
-				return apiPlayerSearch.parse(raw);
+				let Api = require('../src/api-player-search.js');
+				let api = new Api({ mysql: this.mysql, log: this.log });
+				let raw = await api.fetch(options);
+				return api.parse(raw);
 			});
 		});
 
 		app.get('/api/player/lookup', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
-				let ApiPlayerLookup = require('../src/api-player-lookup.js');
-				let apiPlayerLookup = new ApiPlayerLookup({ mysql: this.mysql });
-				let raw = await apiPlayerLookup.fetch(options);
-				return apiPlayerLookup.parse(raw);
+				let Api = require('../src/api-player-lookup.js');
+				let api = new Api({ mysql: this.mysql, log: this.log });
+				let raw = await api.fetch(options);
+				return api.parse(raw);
 			});
 		});
 
@@ -166,54 +166,54 @@ class Module extends Command {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query);
 
-				let ApiOddset = require('../src/api-oddset.js');
-				let apiOddset = new ApiOddset({ ...options, mysql: this.mysql, log: this.log });
-				let raw = await apiOddset.fetch(options);
+				let Api = require('../src/api-oddset.js');
+				let api = new Api({ ...options, mysql: this.mysql, log: this.log });
+				let raw = await api.fetch(options);
 
 				if (options.raw != undefined && (options.raw == '' || options.raw != 0)) {
 					return raw;
 				}
 
-				return apiOddset.parse(raw);
+				return api.parse(raw);
 			});
 		});
 
 		app.get('/api/oddset/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let ApiOddsetOdds = require('../src/api-oddset-odds.js');
-				let apiOddsetOdds = new ApiOddsetOdds({ mysql: this.mysql, log: this.log });
-				let raw = await apiOddsetOdds.fetch(options);
-				return apiOddsetOdds.parse(raw);
+				let Api = require('../src/api-oddset-odds.js');
+				let api = new Api({ mysql: this.mysql, log: this.log });
+				let raw = await api.fetch(options);
+				return api.parse(raw);
 			});
 		});
 
 		app.get('/api/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let ApiOdds = require('../src/api-odds.js');
-				let apiOdds = new ApiOdds({ mysql: this.mysql });
-				let raw = await apiOdds.fetch(options);
-				return apiOdds.parse(raw);
+				let Api = require('../src/api-odds.js');
+				let api = new Api({ mysql: this.mysql, log: this.log });
+				let raw = await api.fetch(options);
+				return api.parse(raw);
 			});
 		});
 
 		app.get('/api/tennis-abstract/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
-				let ApiTennisAbstractOdds = require('../src/api-tennis-abstract-odds.js');
-				let apiTennisAbstractOdds = new ApiTennisAbstractOdds({ mysql: this.mysql, log: this.log });
-				let raw = await apiTennisAbstractOdds.fetch(options);
-				return apiTennisAbstractOdds.parse(raw);
+				let Api = require('../src/api-tennis-abstract-odds.js');
+				let api = new Api({ mysql: this.mysql, log: this.log });
+				let raw = await api.fetch(options);
+				return api.parse(raw);
 			});
 		});
 
 		app.get('/api/events/calendar', async (request, response) => {
 			return this.execute(request, response, async () => {
-				let ApiEventsCalendar = require('../src/api-events-calendar.js');
-				let apiEventsCalendar = new ApiEventsCalendar();
-				let raw = await apiEventsCalendar.fetch();
-				return apiEventsCalendar.parse(raw);
+				let Api = require('../src/api-events-calendar.js');
+				let api = new Api({ log: this.log });
+				let raw = await api.fetch();
+				return api.parse(raw);
 			});
 		});
 /*
