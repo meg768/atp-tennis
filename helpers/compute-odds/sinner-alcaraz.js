@@ -12,7 +12,7 @@ function isHelpFlag(value) {
 
 function printUsage() {
 	console.log('Usage: ./helpers/compute-odds/sinner-alcaraz.js [--hard|--clay|--grass] [--port=3004]');
-	console.log('Calls the local /api/players/odds endpoint for Sinner vs Alcaraz.');
+	console.log('Calls the local /api/odds endpoint for Sinner vs Alcaraz.');
 	console.log('The ATP service must already be running.');
 }
 
@@ -91,12 +91,15 @@ async function main() {
 	const port = getPort(args);
 	const params = new URLSearchParams();
 
+	params.set('playerA', PLAYER_A_ID);
+	params.set('playerB', PLAYER_B_ID);
+
 	if (surface) {
 		params.set('surface', surface);
 	}
 
-	const query = params.toString() ? `?${params.toString()}` : '';
-	const url = `http://127.0.0.1:${port}/api/players/odds/${encodeURIComponent(PLAYER_A_ID)}/${encodeURIComponent(PLAYER_B_ID)}${query}`;
+	const query = params.toString();
+	const url = `http://127.0.0.1:${port}/api/odds?${query}`;
 	const result = await getJson(url);
 
 	console.log(`GET ${url}`);

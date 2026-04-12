@@ -133,7 +133,7 @@ The service listens on `127.0.0.1:3004` (localhost).
 - `GET /api/player/search`
 - `GET /api/player/lookup`
 - `GET /api/oddset`
-- `GET /api/players/odds/:playerA/:playerB`
+- `GET /api/odds`
 - `GET /api/events/calendar`
 - `POST /api/query`
 

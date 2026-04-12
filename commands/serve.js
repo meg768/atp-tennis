@@ -236,7 +236,7 @@ class Module extends Command {
 							notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
 						}
 					},
-					'/api/players/odds': {
+					'/api/odds': {
 						method: 'GET',
 						query: {
 							playerA: 'string, required, ATP id or player name',
@@ -367,7 +367,7 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/players/odds', async (request, response) => {
+		app.get('/api/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let options = Object.assign({}, request.body, request.query, request.params);
 				let playerA = String(options.playerA || '').trim();

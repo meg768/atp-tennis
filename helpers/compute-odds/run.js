@@ -217,12 +217,15 @@ async function main() {
 
 		const params = new URLSearchParams();
 
+		params.set('playerA', String(playerA.id));
+		params.set('playerB', String(playerB.id));
+
 		if (surface.surface) {
 			params.set('surface', surface.surface);
 		}
 
-		const query = params.toString() ? `?${params.toString()}` : '';
-		const url = `http://127.0.0.1:${port}/api/players/odds/${encodeURIComponent(playerA.id)}/${encodeURIComponent(playerB.id)}${query}`;
+		const query = params.toString();
+		const url = `http://127.0.0.1:${port}/api/odds?${query}`;
 		const result = await getJson(url);
 
 		if (!Array.isArray(result) || result.length < 2) {
