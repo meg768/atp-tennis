@@ -33,7 +33,7 @@ class Module extends Fetcher {
 
 
 				event.id = `${activity.EventYear}-${tournament.EventId}`;
-				event.url = tournament.TournamentUrl ? `http://atptour.com${tournament.TournamentUrl}` : null;
+				event.url = tournament.TournamentUrl ? `https://www.atptour.com${tournament.TournamentUrl}` : null;
 				event.date = new Date(tournament.EventDate);
 				event.name = tournament.ScDisplayName;
 				event.location = tournament.Location?.EventLocation;
@@ -42,11 +42,16 @@ class Module extends Fetcher {
 
 				switch (event.type) {
                     // Skip some event types that are not relevant
-                    case 'CH':
-                    case 'FU':
-                    case 'Q':
                     case 'ATPC':
                         continue;
+                    case 'FU':
+                        continue;
+                    case 'CH':
+                        event.type = 'Challenger';
+                        break;
+                    case 'Q':
+                        event.type = 'Qualifier';
+                        break;
                     case 'PZ':
                         event.type = 'Prize Money';
                         break
@@ -106,7 +111,7 @@ class Module extends Fetcher {
 					}
 
 					// Skip doubles matches
-					if (match.ParnerId) {
+					if (match.PartnerId) {
 						return;
 					}
 
