@@ -1,7 +1,5 @@
 let Probe = require('../src/probe.js');
 let Command = require('../src/command.js');
-
-const UpdateELO = require('../src/update-elo');
 const UpdatePlayerStats = require('../src/update-player-stats');
 const UpdateRankings = require('../src/update-rankings');
 const UpdateSurfaceFactors = require('../src/update-surface-factors');
@@ -345,8 +343,8 @@ class Import extends Command {
 				let updatePlayerStats = new UpdatePlayerStats({ mysql, log: this.log.bind(this), fetchOptions: this.fetchOptions });
 				await updatePlayerStats.run();
 
-				let updateELO = new UpdateELO({ mysql, log: this.log.bind(this) });
-				await updateELO.run();
+				await this.log('Refreshing database...');
+				await mysql.query('CALL REFRESH()');
 
 				let updateSurfaceFactors = new UpdateSurfaceFactors({ mysql, log: this.log.bind(this) });
 				await updateSurfaceFactors.run();
