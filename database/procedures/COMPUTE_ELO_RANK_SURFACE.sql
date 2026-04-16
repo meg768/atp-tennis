@@ -49,9 +49,17 @@ BEGIN
       loser = 0
     - Player-specific K-factor:
       k = 250 / POW(matches_played + 5, 0.4)
-    - Grand Slam multiplier:
-      - event_type = 'Grand Slam' => multiply K by 1.1
-      - all other events => multiply K by 1.0
+    - Event-level multiplier:
+      - Grand Slam => 1.10
+      - Masters => 1.06
+      - Olympics => 1.08
+      - ATP-500 => 1.03
+      - ATP-250 => 1.00
+      - Challenger => 0.95
+      - Davis Cup => 1.02
+      - United Cup => 1.01
+      - Next Gen Finals => 1.00
+      - all other events => 1.00
 
     Surface normalization
     - Raw surface Elo can be misleading for players with very small samples.
@@ -198,7 +206,18 @@ BEGIN
 
         SET v_k_winner = 250 / POW(v_matches_winner + 5, 0.4);
         SET v_k_loser = 250 / POW(v_matches_loser + 5, 0.4);
-        SET v_event_multiplier = CASE WHEN v_event_type = 'Grand Slam' THEN 1.1 ELSE 1 END;
+        SET v_event_multiplier = CASE v_event_type
+            WHEN 'Grand Slam' THEN 1.10
+            WHEN 'Masters' THEN 1.06
+            WHEN 'Olympics' THEN 1.08
+            WHEN 'ATP-500' THEN 1.03
+            WHEN 'ATP-250' THEN 1.00
+            WHEN 'Challenger' THEN 0.95
+            WHEN 'Davis Cup' THEN 1.02
+            WHEN 'United Cup' THEN 1.01
+            WHEN 'Next Gen Finals' THEN 1.00
+            ELSE 1.00
+        END;
 
         UPDATE tmp_surface_elo_rank
         SET
