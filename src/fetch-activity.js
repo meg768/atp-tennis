@@ -44,17 +44,16 @@ class Module extends Fetcher {
                     // Skip some event types that are not relevant
                     case 'ATPC':
                         continue;
-                    case 'FU':
-                        continue;
-                    case 'CH':
-                        event.type = 'Challenger';
-                        break;
-                    case 'Q':
-                        event.type = 'Qualifier';
-                        break;
-                    case 'PZ':
-                        event.type = 'Prize Money';
-                        break
+	                case 'FU':
+	                    continue;
+	                case 'CH':
+	                    event.type = 'Challenger';
+	                    break;
+	                case 'Q':
+	                    continue;
+	                case 'PZ':
+	                    event.type = 'Prize Money';
+	                    break
                     case 'GC':  
                         event.type = 'Grand Championship';
                         break;
