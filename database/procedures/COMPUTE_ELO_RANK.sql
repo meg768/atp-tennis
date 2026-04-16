@@ -10,8 +10,8 @@ BEGIN
 
     Purpose
     - Rebuild players.elo_rank from the matches and events tables.
-    - This procedure is intended as a database-native replacement for the
-      overall Elo portion of update-elo.js.
+    - This procedure is intended as the database-native implementation of the
+      overall Elo rebuild.
 
     Design goals
     - Keep the Elo calculation close to the data so the model can be iterated
@@ -51,7 +51,7 @@ BEGIN
       2. event id ascending
       3. round order ascending
       4. match id ascending
-    - The round order matches the logic currently used in update-elo.js.
+    - The round order matches the previous Node implementation.
 
     Output
     - First set every player's elo_rank to NULL.

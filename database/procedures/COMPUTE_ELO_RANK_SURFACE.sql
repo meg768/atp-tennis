@@ -14,8 +14,8 @@ BEGIN
       - Hard  => elo_rank_hard
       - Clay  => elo_rank_clay
       - Grass => elo_rank_grass
-    - This procedure is intended as a database-native replacement for the
-      surface Elo portion of update-elo.js.
+    - This procedure is intended as the database-native implementation of the
+      surface Elo rebuild.
 
     Design goals
     - Keep surface Elo experimentation in MariaDB so the model can be tuned
