@@ -22,7 +22,7 @@ BEGIN
       without backend deploys or service restarts.
     - Keep the full surface Elo logic readable from the SQL definition alone.
     - Keep total Elo and surface Elo conceptually separate:
-      - COMPUTE_ELO_RANK_TOTAL() builds players.elo_rank
+      - COMPUTE_ELO_RANK() builds players.elo_rank
       - COMPUTE_ELO_RANK_SURFACE(surface) builds one surface column from
         surface-only matches plus a shrink/blend step
 
