@@ -40,7 +40,7 @@ CREATE TABLE `log` (
 
 -- Create syntax for TABLE 'matches'
 CREATE TABLE `matches` (
-  `id` varchar(50) NOT NULL DEFAULT '',
+  `id` varchar(50) NOT NULL DEFAULT '' COMMENT 'Match ID',
   `event` varchar(50) DEFAULT NULL COMMENT 'ID of event',
   `round` varchar(50) DEFAULT 'NUL' COMMENT 'Typically ''F'', ''SF'', ''QF'', ''R16'', ''R32'', ''R128''',
   `winner` varchar(50) DEFAULT NULL COMMENT 'ID of winner',
@@ -81,10 +81,10 @@ CREATE TABLE `players` (
   `serve_rating` double DEFAULT NULL COMMENT 'ATP Serve rating (52 weeks)',
   `return_rating` double DEFAULT NULL COMMENT 'ATP Return rating (52 weeka)',
   `pressure_rating` double DEFAULT NULL COMMENT 'ATP Under pressure rating (52 weeks)',
-  `elo_rank` int(11) DEFAULT NULL,
-  `elo_rank_clay` int(11) DEFAULT NULL,
-  `elo_rank_grass` int(11) DEFAULT NULL,
-  `elo_rank_hard` int(11) DEFAULT NULL,
+  `elo_rank` int(11) DEFAULT NULL COMMENT 'ELO rank',
+  `elo_rank_hard` int(11) DEFAULT NULL COMMENT 'ELO rank on hardcourt',
+  `elo_rank_clay` int(11) DEFAULT NULL COMMENT 'ELO rank on clay',
+  `elo_rank_grass` int(11) DEFAULT NULL COMMENT 'ELO rank on grass',
   `hard_factor` int(11) DEFAULT NULL COMMENT 'Performance on hardcourt (0-100)',
   `clay_factor` int(11) DEFAULT NULL COMMENT 'Performance on clay (0-100)',
   `grass_factor` int(11) DEFAULT NULL COMMENT 'Performance on grass (0-100)',
@@ -99,6 +99,460 @@ CREATE TABLE `settings` (
   `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`value`)),
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Create syntax for PROCEDURE 'COMPUTE_ELO_RANK'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `COMPUTE_ELO_RANK`()
+BEGIN
+    /*
+    COMPUTE_ELO_RANK()
+
+    Purpose
+    - Rebuild players.elo_rank from the matches and events tables.
+    - This procedure is intended as the database-native implementation of the
+      overall Elo rebuild.
+
+    Design goals
+    - Keep the Elo calculation close to the data so the model can be iterated
+      directly in MariaDB without changing Node code or restarting services.
+    - Make the full Elo rebuild readable from the SQL definition alone.
+    - Keep the procedure deterministic for a fixed database state by ordering
+      matches chronologically and then by round order inside each event.
+
+    Current scope
+    - This procedure computes only the overall Elo rating.
+    - Surface-specific Elo can later be handled by a separate procedure such as
+      COMPUTE_SURFACE_ELO_RANK(surface).
+
+    Included matches
+    - Use matches joined to events where:
+      - events.date IS NOT NULL
+      - matches.winner IS NOT NULL
+      - matches.loser IS NOT NULL
+      - matches.status = 'Completed'
+
+    Elo rules
+    - Initial Elo for a new player: 1500
+    - Expected score:
+      expected = 1 / (1 + 10 ^ ((opponent_elo - player_elo) / 400))
+    - Actual score:
+      winner = 1
+      loser = 0
+    - Player-specific K-factor:
+      k = 250 / POW(matches_played + 5, 0.4)
+    - Event-level multiplier:
+      - Grand Slam => 1.10
+      - Masters => 1.06
+      - Olympics => 1.08
+      - ATP-500 => 1.03
+      - ATP-250 => 1.00
+      - Challenger => 0.95
+      - Davis Cup => 1.02
+      - United Cup => 1.01
+      - Next Gen Finals => 1.00
+      - all other events => 1.00
+
+    Match ordering
+    - Order by:
+      1. event date ascending
+      2. event id ascending
+      3. round order ascending
+      4. match id ascending
+    - The round order matches the previous Node implementation.
+
+    Output
+    - First set every player's elo_rank to NULL.
+    - Then write the rebuilt overall Elo into players.elo_rank for every player
+      that appears in at least one qualifying match.
+
+    Maintenance note
+    - This procedure is intentionally written as a first stored-procedure
+      version of the current Elo model.
+    - If the Node implementation changes, keep this SQL version in sync.
+    - If this procedure becomes the primary Elo engine later, update the schema
+      dump and retire the duplicated Node implementation.
+    */
+
+    DECLARE done INT DEFAULT 0;
+    DECLARE v_match_id VARCHAR(50) DEFAULT NULL;
+    DECLARE v_winner_id VARCHAR(32) DEFAULT NULL;
+    DECLARE v_loser_id VARCHAR(32) DEFAULT NULL;
+    DECLARE v_event_type VARCHAR(50) DEFAULT NULL;
+    DECLARE v_matches_winner INT DEFAULT 0;
+    DECLARE v_matches_loser INT DEFAULT 0;
+    DECLARE v_elo_winner DOUBLE DEFAULT 1500;
+    DECLARE v_elo_loser DOUBLE DEFAULT 1500;
+    DECLARE v_expected_winner DOUBLE DEFAULT 0.5;
+    DECLARE v_expected_loser DOUBLE DEFAULT 0.5;
+    DECLARE v_k_winner DOUBLE DEFAULT 0;
+    DECLARE v_k_loser DOUBLE DEFAULT 0;
+    DECLARE v_event_multiplier DOUBLE DEFAULT 1;
+
+    DECLARE match_cursor CURSOR FOR
+        SELECT
+            m.id,
+            m.winner AS winner_id,
+            m.loser AS loser_id,
+            e.type AS event_type
+        FROM matches m
+        JOIN events e ON e.id = m.event
+        WHERE
+            e.date IS NOT NULL
+            AND m.winner IS NOT NULL
+            AND m.loser IS NOT NULL
+            AND m.status = 'Completed'
+        ORDER BY
+            e.date ASC,
+            m.event ASC,
+            CASE m.round
+                WHEN 'RR' THEN 10
+                WHEN 'R128' THEN 20
+                WHEN 'R64' THEN 30
+                WHEN 'R56' THEN 35
+                WHEN 'R48' THEN 40
+                WHEN 'R32' THEN 50
+                WHEN 'R24' THEN 55
+                WHEN 'R16' THEN 60
+                WHEN 'QF' THEN 70
+                WHEN 'SF' THEN 80
+                WHEN 'BR' THEN 85
+                WHEN 'F' THEN 90
+                ELSE 999
+            END ASC,
+            m.id ASC;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    DROP TEMPORARY TABLE IF EXISTS tmp_elo_rank;
+    CREATE TEMPORARY TABLE tmp_elo_rank (
+        id VARCHAR(32) NOT NULL PRIMARY KEY,
+        elo_rank DOUBLE NOT NULL DEFAULT 1500,
+        matches_played INT NOT NULL DEFAULT 0
+    ) ENGINE=MEMORY;
+
+    OPEN match_cursor;
+
+    read_loop: LOOP
+        FETCH match_cursor INTO v_match_id, v_winner_id, v_loser_id, v_event_type;
+
+        IF done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+
+        INSERT IGNORE INTO tmp_elo_rank (id) VALUES (v_winner_id), (v_loser_id);
+
+        SELECT elo_rank, matches_played
+        INTO v_elo_winner, v_matches_winner
+        FROM tmp_elo_rank
+        WHERE id = v_winner_id
+        LIMIT 1;
+
+        SELECT elo_rank, matches_played
+        INTO v_elo_loser, v_matches_loser
+        FROM tmp_elo_rank
+        WHERE id = v_loser_id
+        LIMIT 1;
+
+        SET v_expected_winner = 1 / (1 + POW(10, (v_elo_loser - v_elo_winner) / 400));
+        SET v_expected_loser = 1 / (1 + POW(10, (v_elo_winner - v_elo_loser) / 400));
+
+        SET v_k_winner = 250 / POW(v_matches_winner + 5, 0.4);
+        SET v_k_loser = 250 / POW(v_matches_loser + 5, 0.4);
+        SET v_event_multiplier = CASE v_event_type
+            WHEN 'Grand Slam' THEN 1.10
+            WHEN 'Masters' THEN 1.06
+            WHEN 'Olympics' THEN 1.08
+            WHEN 'ATP-500' THEN 1.03
+            WHEN 'ATP-250' THEN 1.00
+            WHEN 'Challenger' THEN 0.95
+            WHEN 'Davis Cup' THEN 1.02
+            WHEN 'United Cup' THEN 1.01
+            WHEN 'Next Gen Finals' THEN 1.00
+            ELSE 1.00
+        END;
+
+        UPDATE tmp_elo_rank
+        SET
+            elo_rank = v_elo_winner + v_event_multiplier * v_k_winner * (1 - v_expected_winner),
+            matches_played = v_matches_winner + 1
+        WHERE id = v_winner_id;
+
+        UPDATE tmp_elo_rank
+        SET
+            elo_rank = v_elo_loser + v_event_multiplier * v_k_loser * (0 - v_expected_loser),
+            matches_played = v_matches_loser + 1
+        WHERE id = v_loser_id;
+    END LOOP;
+
+    CLOSE match_cursor;
+
+    UPDATE players
+    SET elo_rank = NULL;
+
+    UPDATE players p
+    JOIN tmp_elo_rank t ON t.id = p.id
+    SET p.elo_rank = t.elo_rank;
+
+    DROP TEMPORARY TABLE IF EXISTS tmp_elo_rank;
+END;;
+DELIMITER ;
+
+-- Create syntax for PROCEDURE 'COMPUTE_ELO_RANK_SURFACE'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `COMPUTE_ELO_RANK_SURFACE`(
+    IN inputSurface VARCHAR(50)
+)
+BEGIN
+    /*
+    COMPUTE_ELO_RANK_SURFACE(inputSurface)
+
+    Purpose
+    - Rebuild one surface-specific Elo column in players:
+      - Hard  => elo_rank_hard
+      - Clay  => elo_rank_clay
+      - Grass => elo_rank_grass
+    - This procedure is intended as the database-native implementation of the
+      surface Elo rebuild.
+
+    Design goals
+    - Keep surface Elo experimentation in MariaDB so the model can be tuned
+      without backend deploys or service restarts.
+    - Keep the full surface Elo logic readable from the SQL definition alone.
+    - Keep total Elo and surface Elo conceptually separate:
+      - COMPUTE_ELO_RANK() builds players.elo_rank
+      - COMPUTE_ELO_RANK_SURFACE(surface) builds one surface column from
+        surface-only matches plus a shrink/blend step
+
+    Supported inputs
+    - Hard
+    - Clay
+    - Grass
+    - Input is case-insensitive
+
+    Included matches
+    - Use only matches joined to events where:
+      - events.date IS NOT NULL
+      - matches.winner IS NOT NULL
+      - matches.loser IS NOT NULL
+      - matches.status = 'Completed'
+      - events.surface = selected surface
+
+    Surface Elo rules
+    - Initial surface Elo for a new player: 1500
+    - Expected score:
+      expected = 1 / (1 + 10 ^ ((opponent_elo - player_elo) / 400))
+    - Actual score:
+      winner = 1
+      loser = 0
+    - Player-specific K-factor:
+      k = 250 / POW(matches_played + 5, 0.4)
+    - Event-level multiplier:
+      - Grand Slam => 1.10
+      - Masters => 1.06
+      - Olympics => 1.08
+      - ATP-500 => 1.03
+      - ATP-250 => 1.00
+      - Challenger => 0.95
+      - Davis Cup => 1.02
+      - United Cup => 1.01
+      - Next Gen Finals => 1.00
+      - all other events => 1.00
+
+    Surface normalization
+    - Raw surface Elo can be misleading for players with very small samples.
+    - To avoid treating "tiny sample" as reliable surface skill, the raw
+      surface Elo is shrunk toward the neutral baseline of 1500.
+    - surface_sample_k = 20
+    - surface_weight = surface_matches / (surface_matches + surface_sample_k)
+    - normalized_surface_elo = 1500 + surface_weight * (raw_surface_elo - 1500)
+
+    Final surface blend
+    - After normalization, blend the surface Elo with total Elo:
+      final_surface_elo = (elo_rank + normalized_surface_elo) / 2
+    - This mirrors the current design intent of using total Elo as an anchor
+      while still allowing the selected surface to matter.
+
+    Important behavior
+    - If a player has zero matches on the selected surface:
+      - raw surface Elo remains 1500
+      - normalized surface Elo remains 1500
+      - final stored surface Elo becomes (elo_rank + 1500) / 2
+    - This avoids the previous behavior where surface Elo could fall back
+      directly to total Elo and overstate surface skill.
+
+    Prerequisite
+    - players.elo_rank should already be populated before running this
+      procedure.
+
+    Output
+    - Reset the selected surface Elo column to NULL for all players.
+    - Then write the rebuilt surface Elo into the selected column for every
+      player that has a non-NULL total elo_rank.
+
+    Maintenance note
+    - This is a first stored-procedure version of the current surface Elo idea.
+    - The shrink constant, baseline, and final blend can all be tuned later in
+      one place here.
+    */
+
+    DECLARE done INT DEFAULT 0;
+    DECLARE v_surface VARCHAR(50) DEFAULT NULL;
+    DECLARE v_target_column VARCHAR(64) DEFAULT NULL;
+    DECLARE v_sql_update_null TEXT DEFAULT NULL;
+    DECLARE v_sql_update_values TEXT DEFAULT NULL;
+    DECLARE v_match_id VARCHAR(50) DEFAULT NULL;
+    DECLARE v_winner_id VARCHAR(32) DEFAULT NULL;
+    DECLARE v_loser_id VARCHAR(32) DEFAULT NULL;
+    DECLARE v_event_type VARCHAR(50) DEFAULT NULL;
+    DECLARE v_matches_winner INT DEFAULT 0;
+    DECLARE v_matches_loser INT DEFAULT 0;
+    DECLARE v_raw_surface_elo_winner DOUBLE DEFAULT 1500;
+    DECLARE v_raw_surface_elo_loser DOUBLE DEFAULT 1500;
+    DECLARE v_expected_winner DOUBLE DEFAULT 0.5;
+    DECLARE v_expected_loser DOUBLE DEFAULT 0.5;
+    DECLARE v_k_winner DOUBLE DEFAULT 0;
+    DECLARE v_k_loser DOUBLE DEFAULT 0;
+    DECLARE v_event_multiplier DOUBLE DEFAULT 1;
+    DECLARE v_surface_sample_k DOUBLE DEFAULT 20;
+
+    DECLARE match_cursor CURSOR FOR
+        SELECT
+            m.id,
+            m.winner AS winner_id,
+            m.loser AS loser_id,
+            e.type AS event_type
+        FROM matches m
+        JOIN events e ON e.id = m.event
+        WHERE
+            e.date IS NOT NULL
+            AND m.winner IS NOT NULL
+            AND m.loser IS NOT NULL
+            AND m.status = 'Completed'
+            AND e.surface = v_surface
+        ORDER BY
+            e.date ASC,
+            m.event ASC,
+            CASE m.round
+                WHEN 'RR' THEN 10
+                WHEN 'R128' THEN 20
+                WHEN 'R64' THEN 30
+                WHEN 'R56' THEN 35
+                WHEN 'R48' THEN 40
+                WHEN 'R32' THEN 50
+                WHEN 'R24' THEN 55
+                WHEN 'R16' THEN 60
+                WHEN 'QF' THEN 70
+                WHEN 'SF' THEN 80
+                WHEN 'BR' THEN 85
+                WHEN 'F' THEN 90
+                ELSE 999
+            END ASC,
+            m.id ASC;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    SET v_surface = CONCAT(
+        UCASE(LEFT(TRIM(inputSurface), 1)),
+        LCASE(SUBSTRING(TRIM(inputSurface), 2))
+    );
+
+    IF v_surface NOT IN ('Hard', 'Clay', 'Grass') THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'COMPUTE_ELO_RANK_SURFACE requires Hard, Clay, or Grass.';
+    END IF;
+
+    SET v_target_column = CASE v_surface
+        WHEN 'Hard' THEN 'elo_rank_hard'
+        WHEN 'Clay' THEN 'elo_rank_clay'
+        WHEN 'Grass' THEN 'elo_rank_grass'
+        ELSE NULL
+    END;
+
+    DROP TEMPORARY TABLE IF EXISTS tmp_surface_elo_rank;
+    CREATE TEMPORARY TABLE tmp_surface_elo_rank (
+        id VARCHAR(32) NOT NULL PRIMARY KEY,
+        raw_surface_elo DOUBLE NOT NULL DEFAULT 1500,
+        surface_matches INT NOT NULL DEFAULT 0
+    ) ENGINE=MEMORY;
+
+    OPEN match_cursor;
+
+    read_loop: LOOP
+        FETCH match_cursor INTO v_match_id, v_winner_id, v_loser_id, v_event_type;
+
+        IF done = 1 THEN
+            LEAVE read_loop;
+        END IF;
+
+        INSERT IGNORE INTO tmp_surface_elo_rank (id) VALUES (v_winner_id), (v_loser_id);
+
+        SELECT raw_surface_elo, surface_matches
+        INTO v_raw_surface_elo_winner, v_matches_winner
+        FROM tmp_surface_elo_rank
+        WHERE id = v_winner_id
+        LIMIT 1;
+
+        SELECT raw_surface_elo, surface_matches
+        INTO v_raw_surface_elo_loser, v_matches_loser
+        FROM tmp_surface_elo_rank
+        WHERE id = v_loser_id
+        LIMIT 1;
+
+        SET v_expected_winner = 1 / (1 + POW(10, (v_raw_surface_elo_loser - v_raw_surface_elo_winner) / 400));
+        SET v_expected_loser = 1 / (1 + POW(10, (v_raw_surface_elo_winner - v_raw_surface_elo_loser) / 400));
+
+        SET v_k_winner = 250 / POW(v_matches_winner + 5, 0.4);
+        SET v_k_loser = 250 / POW(v_matches_loser + 5, 0.4);
+        SET v_event_multiplier = CASE v_event_type
+            WHEN 'Grand Slam' THEN 1.10
+            WHEN 'Masters' THEN 1.06
+            WHEN 'Olympics' THEN 1.08
+            WHEN 'ATP-500' THEN 1.03
+            WHEN 'ATP-250' THEN 1.00
+            WHEN 'Challenger' THEN 0.95
+            WHEN 'Davis Cup' THEN 1.02
+            WHEN 'United Cup' THEN 1.01
+            WHEN 'Next Gen Finals' THEN 1.00
+            ELSE 1.00
+        END;
+
+        UPDATE tmp_surface_elo_rank
+        SET
+            raw_surface_elo = v_raw_surface_elo_winner + v_event_multiplier * v_k_winner * (1 - v_expected_winner),
+            surface_matches = v_matches_winner + 1
+        WHERE id = v_winner_id;
+
+        UPDATE tmp_surface_elo_rank
+        SET
+            raw_surface_elo = v_raw_surface_elo_loser + v_event_multiplier * v_k_loser * (0 - v_expected_loser),
+            surface_matches = v_matches_loser + 1
+        WHERE id = v_loser_id;
+    END LOOP;
+
+    CLOSE match_cursor;
+
+    SET @sql_update_null = CONCAT('UPDATE players SET ', v_target_column, ' = NULL');
+    PREPARE stmt_update_null FROM @sql_update_null;
+    EXECUTE stmt_update_null;
+    DEALLOCATE PREPARE stmt_update_null;
+
+    SET @sql_update_values = CONCAT(
+        'UPDATE players p ',
+        'LEFT JOIN tmp_surface_elo_rank t ON t.id = p.id ',
+        'SET p.', v_target_column, ' = CASE ',
+        'WHEN p.elo_rank IS NULL THEN NULL ',
+        'WHEN t.id IS NULL THEN (p.elo_rank + 1500) / 2 ',
+        'ELSE (p.elo_rank + (1500 + (t.surface_matches / (t.surface_matches + ', v_surface_sample_k, ')) * (t.raw_surface_elo - 1500))) / 2 ',
+        'END'
+    );
+
+    PREPARE stmt_update_values FROM @sql_update_values;
+    EXECUTE stmt_update_values;
+    DEALLOCATE PREPARE stmt_update_values;
+
+    DROP TEMPORARY TABLE IF EXISTS tmp_surface_elo_rank;
+END;;
+DELIMITER ;
 
 -- Create syntax for FUNCTION 'NUMBER_OF_GAMES'
 CREATE DEFINER=`root`@`%` FUNCTION `NUMBER_OF_GAMES`(score TEXT) RETURNS int(11)
@@ -728,6 +1182,32 @@ BEGIN
     - Grass => use elo_rank_grass, falling back to elo_rank
     - NULL, empty, or any other surface => use elo_rank
 
+    Surface normalization
+    - Surface-specific Elo can be misleading when a player has very few
+      completed matches on the selected surface.
+    - To avoid treating "no surface evidence" as "same as overall Elo", the
+      selected surface Elo is shrunk toward the neutral Elo baseline of 1500.
+    - This normalization is applied only when surface is Hard, Clay, or Grass.
+    - Overall Elo is not normalized.
+
+    Surface normalization formula
+    - surface_match_count = completed matches for the player on the selected surface
+    - surface_sample_k = 20
+    - surface_weight = surface_match_count / (surface_match_count + surface_sample_k)
+    - normalized_surface_elo = 1500 + surface_weight * (surface_elo - 1500)
+
+    Surface normalization examples
+    - 0 surface matches => normalized surface Elo = 1500
+    - 5 surface matches => 20% of the distance from 1500 to surface Elo
+    - 20 surface matches => 50% of the distance from 1500 to surface Elo
+    - Many surface matches => normalized surface Elo approaches stored surface Elo
+
+    Surface normalization interpretation
+    - A player with no grass matches should not inherit full grass strength
+      from overall Elo.
+    - A player with deep surface history should keep most of the stored
+      surface-specific Elo.
+
     Interpretation
     - The Elo gap is the primary driver of the probability.
     - Positive gap favors playerID.
@@ -920,6 +1400,12 @@ BEGIN
     DECLARE v_surface VARCHAR(50) DEFAULT NULL;
     DECLARE v_elo_player DOUBLE DEFAULT NULL;
     DECLARE v_elo_opponent DOUBLE DEFAULT NULL;
+    DECLARE v_surface_match_count_player INT DEFAULT 0;
+    DECLARE v_surface_match_count_opponent INT DEFAULT 0;
+    DECLARE v_surface_sample_k DOUBLE DEFAULT 20;
+    DECLARE v_surface_weight_player DOUBLE DEFAULT 0;
+    DECLARE v_surface_weight_opponent DOUBLE DEFAULT 0;
+    DECLARE v_surface_name VARCHAR(50) DEFAULT NULL;
     DECLARE v_elo_factor_weight DOUBLE DEFAULT 50;
     DECLARE v_rank_factor_weight DOUBLE DEFAULT 15;
     DECLARE v_rank_factor_raw_elo DOUBLE DEFAULT 100;
@@ -988,6 +1474,7 @@ BEGIN
 
     SET v_surface = UPPER(NULLIF(TRIM(surface), ''));
     SET v_form_window_days = v_form_weeks * 7;
+    SET v_surface_name = CONCAT(UCASE(LEFT(v_surface, 1)), LCASE(SUBSTRING(v_surface, 2)));
 
     SELECT
         CASE
@@ -1015,6 +1502,34 @@ BEGIN
 
     IF v_elo_player IS NULL OR v_elo_opponent IS NULL THEN
         RETURN NULL;
+    END IF;
+
+    IF v_surface IN ('HARD', 'CLAY', 'GRASS') THEN
+        SELECT COUNT(*)
+        INTO v_surface_match_count_player
+        FROM matches m
+        JOIN events e ON e.id = m.event
+        WHERE
+            m.status = 'Completed'
+            AND e.date IS NOT NULL
+            AND e.surface = v_surface_name
+            AND (m.winner = playerID OR m.loser = playerID);
+
+        SELECT COUNT(*)
+        INTO v_surface_match_count_opponent
+        FROM matches m
+        JOIN events e ON e.id = m.event
+        WHERE
+            m.status = 'Completed'
+            AND e.date IS NOT NULL
+            AND e.surface = v_surface_name
+            AND (m.winner = opponentID OR m.loser = opponentID);
+
+        SET v_surface_weight_player = v_surface_match_count_player / (v_surface_match_count_player + v_surface_sample_k);
+        SET v_surface_weight_opponent = v_surface_match_count_opponent / (v_surface_match_count_opponent + v_surface_sample_k);
+
+        SET v_elo_player = 1500 + v_surface_weight_player * (v_elo_player - 1500);
+        SET v_elo_opponent = 1500 + v_surface_weight_opponent * (v_elo_opponent - 1500);
     END IF;
 
     SELECT rank INTO v_rank_player
@@ -1318,3 +1833,32 @@ BEGIN
 
     RETURN ROUND(v_probability, 4);
 END;
+
+-- Create syntax for PROCEDURE 'REFRESH'
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `REFRESH`()
+BEGIN
+    /*
+    REFRESH()
+
+    Purpose
+    - Provide one generic database entry point for refresh jobs.
+    - Start simple and let this procedure grow as more rebuild steps are moved
+      from Node into MariaDB.
+
+    Current behavior
+    - Rebuild total Elo.
+    - Rebuild Hard Elo.
+    - Rebuild Clay Elo.
+    - Rebuild Grass Elo.
+
+    Usage
+    - CALL REFRESH();
+    */
+
+    CALL COMPUTE_ELO_RANK();
+    CALL COMPUTE_ELO_RANK_SURFACE('Hard');
+    CALL COMPUTE_ELO_RANK_SURFACE('Clay');
+    CALL COMPUTE_ELO_RANK_SURFACE('Grass');
+END;;
+DELIMITER ;
