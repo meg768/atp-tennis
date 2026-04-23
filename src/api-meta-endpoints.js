@@ -115,7 +115,7 @@ class ApiMetaEndpoints extends Api {
 						playerB: 'string, required, ATP id or player name',
 						surface: 'string, optional'
 					},
-					description: 'Returns both Vitel model odds and Tennis Abstract odds for a specific matchup.',
+					description: 'Returns both computed odds and Tennis Abstract odds for a specific matchup.',
 					response: {
 						shape: 'object',
 						fields: {
