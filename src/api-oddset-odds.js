@@ -58,16 +58,16 @@ class ApiOddsetOdds extends Api {
 		}
 
 		const apiOddset = new ApiOddset({ mysql: this.mysql, log: this.log });
-		const rows = await apiOddset.fetchRows(options);
+		const rows = await apiOddset.parse(await apiOddset.fetch(options));
 		const requestedKey = createPlayersKey(resolvedA.name, resolvedB.name);
 
-		const row = rows.find(candidate => createPlayersKey(candidate.playerA, candidate.playerB) === requestedKey);
+		const row = rows.find(candidate => createPlayersKey(candidate.playerA?.name, candidate.playerB?.name) === requestedKey);
 
 		if (!row) {
 			throw new Error(`Could not find Oddset odds for ${resolvedA.name} vs ${resolvedB.name}.`);
 		}
 
-		const rowPlayerA = normalizeName(row.playerA);
+		const rowPlayerA = normalizeName(row.playerA?.name);
 		const resolvedPlayerA = normalizeName(resolvedA.name);
 		const isSameOrder = rowPlayerA === resolvedPlayerA;
 
@@ -75,7 +75,7 @@ class ApiOddsetOdds extends Api {
 			playerA: resolvedA,
 			playerB: resolvedB,
 			match: row,
-			odds: isSameOrder ? [row.oddsA, row.oddsB] : [row.oddsB, row.oddsA]
+			odds: isSameOrder ? [row.playerA?.odds, row.playerB?.odds] : [row.playerB?.odds, row.playerA?.odds]
 		};
 	}
 
