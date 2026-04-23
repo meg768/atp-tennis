@@ -2,6 +2,61 @@ let cache = null;
 let cacheAt = 0;
 const cacheTime = 30 * 1000;
 
+function isNonNegativeNumber(value) {
+	return typeof value === 'number' && Number.isFinite(value) && value >= 0;
+}
+
+function buildSetScores(item) {
+	const homeSets = item.liveData?.statistics?.sets?.home ?? [];
+	const awaySets = item.liveData?.statistics?.sets?.away ?? [];
+	const setCount = Math.max(homeSets.length, awaySets.length);
+	const scores = [];
+
+	for (let index = 0; index < setCount; index++) {
+		const home = homeSets[index];
+		const away = awaySets[index];
+
+		if (!isNonNegativeNumber(home) || !isNonNegativeNumber(away)) {
+			continue;
+		}
+
+		if (home === 0 && away === 0) {
+			continue;
+		}
+
+		scores.push(`${home}-${away}`);
+	}
+
+	return scores;
+}
+
+function buildGameScore(item) {
+	const home = item.liveData?.score?.home ?? null;
+	const away = item.liveData?.score?.away ?? null;
+
+	if (home == null || away == null) {
+		return null;
+	}
+
+	return `${home}-${away}`;
+}
+
+function buildScore(item) {
+	if (!item.liveData) {
+		return null;
+	}
+
+	const setScores = buildSetScores(item);
+	const gameScore = buildGameScore(item);
+	const score = setScores.join(' ');
+
+	if (gameScore) {
+		return score ? `${score} [${gameScore}]` : `[${gameScore}]`;
+	}
+
+	return score || null;
+}
+
 class Oddset {
 	constructor(options = {}) {
 		this.url = options.url ?? 'https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json';
@@ -41,11 +96,7 @@ class Oddset {
 		let filter = json => {
 			return json.events.map(item => {
 				let matchOdds = item.betOffers.find(offer => offer.criterion.label === 'Matchodds');
-				let homeSets = item.liveData?.statistics?.sets?.home ?? [];
-				let awaySets = item.liveData?.statistics?.sets?.away ?? [];
-				let sets = homeSets.map((home, index) => `${home}-${awaySets[index]}`);
-				let game = `${item.liveData?.score?.home}-${item.liveData?.score?.away}`;
-				let score = `${sets.join(' ')} [${game}]`;
+				let score = buildScore(item);
 
 				let match = {
 					start: item.event.start,
@@ -53,7 +104,7 @@ class Oddset {
 					playerA: { name: item.event.homeName, odds: matchOdds?.outcomes?.[0]?.odds / 1000 },
 					playerB: { name: item.event.awayName, odds: matchOdds?.outcomes?.[1]?.odds / 1000 },
 					state: item.event.state == 'STARTED' ? 'live' : 'upcoming',
-					score: item.liveData ? score : null,
+					score: score,
 					serve: item.liveData ? (item.liveData?.statistics?.sets?.homeServe ? 'player' : 'opponent') : null
 				};
 

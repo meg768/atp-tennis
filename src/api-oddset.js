@@ -86,6 +86,7 @@ class ApiOddset extends Api {
 			tournament: row.tournament,
 			state: row.state,
 			score: row.score,
+			serve: row.serve,
 			playerA: row.playerA,
 			playerB: row.playerB
 		}));

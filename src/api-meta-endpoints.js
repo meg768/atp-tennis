@@ -90,11 +90,11 @@ class ApiMetaEndpoints extends Api {
 					response: {
 						shape: 'array',
 						fields: {
-							id: 'number',
 							start: 'string (ISO datetime)',
 							tournament: 'string',
-							state: 'string',
+							state: '"live"|"upcoming"',
 							score: 'string|null',
+							serve: '"player"|"opponent"|null',
 							playerA: {
 								id: 'string|null',
 								name: 'string',
@@ -108,24 +108,6 @@ class ApiMetaEndpoints extends Api {
 						}
 					}
 				},
-				'/api/oddset/odds': {
-					method: 'GET',
-					query: {
-						playerA: 'string, required, ATP id or player name',
-						playerB: 'string, required, ATP id or player name',
-						requestTimeoutMs: 'number, optional',
-						url: 'string, optional upstream override',
-						matchesUrl: 'string, optional primary ATP matches override',
-						openUrl: 'string, optional live-open fallback override',
-						upcomingUrl: 'string, optional tennis-all upcoming override'
-					},
-					description: 'Returns Svenska Spel Oddset decimal odds for a specific matchup.',
-					response: {
-						shape: 'array',
-						example: [1.6, 2.33],
-						notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
-					}
-				},
 				'/api/odds': {
 					method: 'GET',
 					query: {
@@ -133,26 +115,13 @@ class ApiMetaEndpoints extends Api {
 						playerB: 'string, required, ATP id or player name',
 						surface: 'string, optional'
 					},
-					description: 'Returns model prices for a specific matchup.',
+					description: 'Returns both Vitel model odds and Tennis Abstract odds for a specific matchup.',
 					response: {
-						shape: 'array',
-						example: [1.63, 2.29],
-						notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
-					}
-				},
-				'/api/tennis-abstract/odds': {
-					method: 'GET',
-					query: {
-						playerA: 'string, required, ATP id or player name',
-						playerB: 'string, required, ATP id or player name',
-						surface: 'string, optional, Hard/Clay/Grass',
-						bestOf: 'number, optional, defaults to 3'
-					},
-					description: 'Returns Tennis Abstract-inspired matchup odds with a 5% margin added to the model probabilities.',
-					response: {
-						shape: 'array',
-						example: [1.68, 2.24],
-						notes: ['Index 0 is playerA odds.', 'Index 1 is playerB odds.']
+						shape: 'object',
+						fields: {
+							computedOdds: 'array[number, number]',
+							tennisAbstractOdds: 'array[number, number]'
+						}
 					}
 				},
 				'/api/events/calendar': {

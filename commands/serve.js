@@ -160,25 +160,9 @@ class Module extends Command {
 			});
 		});
 
-		app.get('/api/oddset/odds', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let Api = require('../src/api-oddset-odds.js');
-				let api = new Api({ request, response, mysql: this.mysql, log: this.log });
-				return await api.run();
-			});
-		});
-
 		app.get('/api/odds', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Api = require('../src/api-odds.js');
-				let api = new Api({ request, response, mysql: this.mysql, log: this.log });
-				return await api.run();
-			});
-		});
-
-		app.get('/api/tennis-abstract/odds', async (request, response) => {
-			return this.execute(request, response, async () => {
-				let Api = require('../src/api-tennis-abstract-odds.js');
 				let api = new Api({ request, response, mysql: this.mysql, log: this.log });
 				return await api.run();
 			});
