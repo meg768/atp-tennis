@@ -3,6 +3,25 @@ const Fetcher = require('./fetcher');
 let now = new Date();
 let year = now.getFullYear();
 
+function buildMatchId({ event, matchId, round, playerA, playerB, eventType }) {
+	let id = `${event}-${matchId}`;
+
+	if (String(eventType || '').trim().toUpperCase() !== 'DAVIS CUP') {
+		return id;
+	}
+
+	let players = [playerA, playerB]
+		.map(player => String(player || '').trim().toUpperCase())
+		.filter(Boolean)
+		.sort();
+
+	if (players.length < 2) {
+		return `${id}-${String(round || 'UNK').trim().toUpperCase()}`;
+	}
+
+	return `${id}-${String(round || 'UNK').trim().toUpperCase()}-${players[0]}-${players[1]}`;
+}
+
 class Module extends Fetcher {
 	constructor(options) {
 		super(options);
@@ -127,7 +146,14 @@ class Module extends Fetcher {
 					opponent.rank = match.OpponentRank;
 
 					let entry = {};
-					entry.id = `${activity.EventYear}-${tournament.EventId}-${match.MatchId}`;
+					entry.id = buildMatchId({
+						event: event.id,
+						matchId: match.MatchId,
+						round: match.Round?.ShortName,
+						playerA: me.player,
+						playerB: opponent.player,
+						eventType: event.type
+					});
 					entry.round = match.Round?.ShortName;
 					entry.opponent = opponent.player;
 					entry.winner = {};

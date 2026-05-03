@@ -1,5 +1,24 @@
 const Fetcher = require('./fetcher');
 
+function buildMatchId({ event, matchId, round, playerA, playerB, eventType }) {
+	let id = `${event}-${matchId}`;
+
+	if (String(eventType || '').trim().toUpperCase() !== 'DC') {
+		return id;
+	}
+
+	let players = [playerA, playerB]
+		.map(player => String(player || '').trim().toUpperCase())
+		.filter(Boolean)
+		.sort();
+
+	if (players.length < 2) {
+		return `${id}-${String(round || 'UNK').trim().toUpperCase()}`;
+	}
+
+	return `${id}-${String(round || 'UNK').trim().toUpperCase()}-${players[0]}-${players[1]}`;
+}
+
 class Module extends Fetcher {
 	constructor(options) {
 		super(options);
@@ -140,7 +159,14 @@ class Module extends Fetcher {
 			}
 
 			let item = {};
-			item.id = `${event}-${match.MatchId}`;
+			item.id = buildMatchId({
+				event,
+				matchId: match.MatchId,
+				round: match.Round?.ShortName,
+				playerA: match.PlayerTeam1.PlayerId,
+				playerB: match.PlayerTeam2.PlayerId,
+				eventType: eventData.EventType
+			});
 			item.round = match.Round?.ShortName;
 			item.score = formatScore(match.ResultString);
 			item.duration = formatDuration(match.MatchTime == '00:00:00' ? null : match.MatchTime);
