@@ -5,11 +5,6 @@ let year = now.getFullYear();
 
 function buildMatchId({ event, matchId, round, playerA, playerB, eventType }) {
 	let id = `${event}-${matchId}`;
-
-	if (String(eventType || '').trim().toUpperCase() !== 'DAVIS CUP') {
-		return id;
-	}
-
 	let players = [playerA, playerB]
 		.map(player => String(player || '').trim().toUpperCase())
 		.filter(Boolean)
