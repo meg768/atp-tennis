@@ -23,66 +23,61 @@ class Module extends Fetcher {
 	parse(raw) {
 		const event = this.event;
 
-		function formatScore(rawScore) {
-			if (!rawScore || typeof rawScore !== 'string') {
-				return rawScore;
+		function getWinnerTeam(match) {
+			if (match.WinningPlayerId == match.PlayerTeam1.PlayerId) {
+				return match.PlayerTeam1;
 			}
 
-			let text = rawScore.trim();
+			if (match.WinningPlayerId == match.PlayerTeam2.PlayerId) {
+				return match.PlayerTeam2;
+			}
+		}
 
-			text = text.replace(/\b(RET(?:['']?D)?|W\/O|WO|WALKOVER)\b\.?$/i, '').trim();
+		function getLoserTeam(match) {
+			if (match.WinningPlayerId == match.PlayerTeam1.PlayerId) {
+				return match.PlayerTeam2;
+			}
 
-			if (!text) {
+			if (match.WinningPlayerId == match.PlayerTeam2.PlayerId) {
+				return match.PlayerTeam1;
+			}
+		}
+
+		function formatStructuredScore(match) {
+			let winner = getWinnerTeam(match);
+			let loser = getLoserTeam(match);
+
+			if (!winner || !loser) {
 				return null;
 			}
 
-			const tokens = text.split(/\s+/);
-			return tokens.map(formatSetToken).join(' ');
-		}
+			let winnerSets = Array.isArray(winner.Sets) ? winner.Sets.filter(set => set.SetNumber > 0) : [];
+			let loserSets = Array.isArray(loser.Sets) ? loser.Sets.filter(set => set.SetNumber > 0) : [];
+			let tokens = [];
 
-		function formatSetToken(token) {
-			if (token.includes('-')) {
-				return token;
-			}
+			for (let i = 0; i < Math.max(winnerSets.length, loserSets.length); i++) {
+				let winnerSet = winnerSets[i];
+				let loserSet = loserSets[i];
 
-			const tieBreakMatch = token.match(/^(\d+)\((\d+)\)$/);
-			if (tieBreakMatch) {
-				const games = parseCompactGames(tieBreakMatch[1]);
-
-				if (!games) {
-					return token;
+				if (!Number.isInteger(winnerSet?.SetScore) || !Number.isInteger(loserSet?.SetScore)) {
+					continue;
 				}
 
-				return `${games[0]}-${games[1]}(${tieBreakMatch[2]})`;
+				let token = `${winnerSet.SetScore}-${loserSet.SetScore}`;
+				let tieBreakScore = Number.isInteger(winnerSet?.TieBreakScore)
+					? winnerSet.TieBreakScore
+					: Number.isInteger(loserSet?.TieBreakScore)
+						? loserSet.TieBreakScore
+						: null;
+
+				if (tieBreakScore !== null) {
+					token += `(${tieBreakScore})`;
+				}
+
+				tokens.push(token);
 			}
 
-			const games = parseCompactGames(token);
-
-			if (!games) {
-				return token;
-			}
-
-			return `${games[0]}-${games[1]}`;
-		}
-
-		function parseCompactGames(token) {
-			if (!/^\d+$/.test(token)) {
-				return null;
-			}
-
-			if (token.length === 2) {
-				return [token[0], token[1]];
-			}
-
-			if (token.length === 3) {
-				return [token[0], token.slice(1)];
-			}
-
-			if (token.length === 4) {
-				return [token.slice(0, 2), token.slice(2)];
-			}
-
-			return null;
+			return tokens.length > 0 ? tokens.join(' ') : null;
 		}
 
 		function formatDuration(duration) {
@@ -163,7 +158,7 @@ class Module extends Fetcher {
 				eventType: eventData.EventType
 			});
 			item.round = match.Round?.ShortName;
-			item.score = formatScore(match.ResultString);
+			item.score = formatStructuredScore(match);
 			item.duration = formatDuration(match.MatchTime == '00:00:00' ? null : match.MatchTime);
 			item.court = match.CourtName ? match.CourtName : null;
 			item.umpire = match.UmpireFirstName && match.UmpireLastName ? `${match.UmpireFirstName} ${match.UmpireLastName}` : null;
@@ -174,13 +169,8 @@ class Module extends Fetcher {
 			let winner = undefined;
 			let loser = undefined;
 
-			if (match.WinningPlayerId == match.PlayerTeam1.PlayerId) {
-				winner = match.PlayerTeam1;
-				loser = match.PlayerTeam2;
-			} else {
-				winner = match.PlayerTeam2;
-				loser = match.PlayerTeam1;
-			}
+			winner = getWinnerTeam(match);
+			loser = getLoserTeam(match);
 
 			item.round = match.Round?.ShortName;
 
