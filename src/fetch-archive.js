@@ -1,4 +1,5 @@
 const Fetcher = require('./fetcher');
+const ScoreParser = require('./score-parser');
 
 function buildMatchId({ event, matchId, round, playerA, playerB, eventType }) {
 	let id = `${event}-${matchId}`;
@@ -22,68 +23,7 @@ class Module extends Fetcher {
 
 	parse(raw) {
 		const event = this.event;
-
-		function formatScore(rawScore) {
-			if (!rawScore || typeof rawScore !== 'string') {
-				return rawScore;
-			}
-
-			let text = rawScore.trim();
-
-			text = text.replace(/\b(RET(?:['']?D)?|W\/O|WO|WALKOVER)\b\.?$/i, '').trim();
-
-			if (!text) {
-				return null;
-			}
-
-			const tokens = text.split(/\s+/);
-			return tokens.map(formatSetToken).join(' ');
-		}
-
-		function formatSetToken(token) {
-			if (token.includes('-')) {
-				return token;
-			}
-
-			const tieBreakMatch = token.match(/^(\d+)\((\d+)\)$/);
-			if (tieBreakMatch) {
-				const games = parseCompactGames(tieBreakMatch[1]);
-
-				if (!games) {
-					return token;
-				}
-
-				return `${games[0]}-${games[1]}(${tieBreakMatch[2]})`;
-			}
-
-			const games = parseCompactGames(token);
-
-			if (!games) {
-				return token;
-			}
-
-			return `${games[0]}-${games[1]}`;
-		}
-
-		function parseCompactGames(token) {
-			if (!/^\d+$/.test(token)) {
-				return null;
-			}
-
-			if (token.length === 2) {
-				return [token[0], token[1]];
-			}
-
-			if (token.length === 3) {
-				return [token[0], token.slice(1)];
-			}
-
-			if (token.length === 4) {
-				return [token.slice(0, 2), token.slice(2)];
-			}
-
-			return null;
-		}
+		const scoreParser = new ScoreParser();
 
 		function formatDuration(duration) {
 			if (!duration) {
@@ -163,7 +103,7 @@ class Module extends Fetcher {
 				eventType: eventData.EventType
 			});
 			item.round = match.Round?.ShortName;
-			item.score = formatScore(match.ResultString);
+			item.score = scoreParser.parse(match.ResultString);
 			item.duration = formatDuration(match.MatchTime == '00:00:00' ? null : match.MatchTime);
 			item.court = match.CourtName ? match.CourtName : null;
 			item.umpire = match.UmpireFirstName && match.UmpireLastName ? `${match.UmpireFirstName} ${match.UmpireLastName}` : null;
