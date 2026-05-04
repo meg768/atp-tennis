@@ -14,7 +14,7 @@ async function main() {
 	console.log = () => {};
 
 	try {
-		const raw = await fetcher.fetch({ event: '2026-404' });
+		const raw = await fetcher.fetch({ event: '1968-2030' });
 		const parsed = fetcher.parse(raw);
 
 		fs.mkdirSync(outputDir, { recursive: true });
