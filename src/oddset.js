@@ -79,12 +79,22 @@ function isMensGrandSlam(item) {
 	return terms.includes('grand_slam') && !terms.some(term =>
 		term.includes('women') ||
 		term.includes('dam') ||
-		term.includes('wta')
+		term.includes('wta') ||
+		term.includes('double') ||
+		term.includes('dubbel')
 	);
 }
 
 function isAtpFamilyEvent(item) {
 	const terms = eventTerms(item);
+	const isDoubles = terms.some(term =>
+		term.includes('double') ||
+		term.includes('dubbel')
+	);
+
+	if (isDoubles) {
+		return false;
+	}
 
 	return terms.some(term =>
 		term === 'atp' ||

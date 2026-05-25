@@ -36,6 +36,11 @@ function isATPFamilyEvent(item) {
 	const terms = eventPath.flatMap(term => [term?.termKey, term?.name, term?.englishName]).map(normalizeCategoryToken);
 	const isGrandSlam = terms.includes('grand_slam');
 	const isWomen = terms.some(term => term.includes('women') || term.includes('dam') || term.includes('wta'));
+	const isDoubles = terms.some(term => term.includes('double') || term.includes('dubbel'));
+
+	if (isDoubles) {
+		return false;
+	}
 
 	return eventPath.some(term =>
 		isATPFamilyToken(term?.termKey) ||
@@ -59,6 +64,7 @@ async function main() {
 		const sourceItem = upcomingSourceById.get(String(row.id));
 		return sourceItem ? !isATPFamilyEvent(sourceItem) : false;
 	});
+	const doublesRows = rows.filter(row => /double|dubbel/i.test(row.tournament));
 	const qualifierRow = upcomingRows.find(row => {
 		const sourceItem = upcomingSourceById.get(String(row.id));
 		return sourceItem?.event?.path?.some(term => normalizeCategoryToken(term?.termKey).startsWith('atp_qual'));
@@ -70,12 +76,14 @@ async function main() {
 	assert(upcomingRows.every(row => row.score === null), 'Expected upcoming rows to have score=null');
 	assert(liveRows.every(row => row.score !== undefined), 'Expected live rows to include score field');
 	assert(nonATPUpcomingRows.length === 0, 'Expected NOT_STARTED rows to stay within ATP family');
+	assert(doublesRows.length === 0, 'Expected doubles rows to be excluded');
 
 	const report = {
 		counts: {
 			total: rows.length,
 			live: liveRows.length,
-			upcoming: upcomingRows.length
+			upcoming: upcomingRows.length,
+			doubles: doublesRows.length
 		},
 		meta: raw.meta,
 		errors: raw.errors,
