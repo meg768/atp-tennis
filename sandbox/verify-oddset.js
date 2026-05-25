@@ -28,10 +28,7 @@ function isATPFamilyToken(value = '') {
 		token.startsWith('atp_') ||
 		token === 'atp qual.' ||
 		token === 'atp qual' ||
-		token === 'atp qualifiers' ||
-		token === 'challenger' ||
-		token === 'challenger_qual_' ||
-		token.startsWith('challenger ');
+		token === 'atp qualifiers';
 }
 
 function isATPFamilyEvent(item) {

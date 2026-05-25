@@ -91,10 +91,7 @@ function isAtpFamilyEvent(item) {
 		term.startsWith('atp_') ||
 		term === 'atp qual.' ||
 		term === 'atp qual' ||
-		term === 'atp qualifiers' ||
-		term === 'challenger' ||
-		term === 'challenger_qual_' ||
-		term.startsWith('challenger ')
+		term === 'atp qualifiers'
 	) || isMensGrandSlam(item);
 }
 
