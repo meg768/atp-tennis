@@ -218,6 +218,37 @@ For fresh dev/prod environments:
 ## Operational Context
 - `atp.js` is used for daily imports from ATP endpoints
 - Primary production concern is keeping the import pipeline stable
+
+## Session Memory
+
+### 2026-05-25 Oddset Filtering
+- User reported that Oddset had stopped showing matches. The issue was traced to Kambi/Svenska Spel category filtering.
+- Commit `d3cec28 Exclude Challenger from Oddset feed` removed `Challenger` and `Challenger kval` from `/api/oddset`.
+- Later the user clarified that `Franska Öppna Dubbel` should not show any doubles matches.
+- Commit `4b0dd16 Exclude doubles from Oddset feed` excludes event terms containing `double` or `dubbel`, including Grand Slam doubles such as `french_open_doubles`.
+- After deploy to `pi-kato` and `pm2 restart atp-service`, verification showed:
+  - `/api/oddset` count: `36`
+  - doubles: `0`
+  - tournaments: `["Franska Öppna"]`
+- The main filter is in `src/oddset.js`.
+- `sandbox/verify-oddset.js` asserts that doubles rows are excluded.
+
+### 2026-05-25 Oddset Player Lookup Edge Case
+- Kambi/Oddset names can be longer than ATP names and therefore fail local player resolution.
+- Example:
+  - Oddset: `Daniel Merida Aguilar`
+  - MariaDB: `M0N7`, `Daniel Merida`, `ESP`
+- Symptom: `/api/oddset` can return `playerA.id: null` or `playerB.id: null` even when the player exists locally.
+
+### 2026-05-25 Court/Bana Data Note
+- ATP live and archive data can include court metadata:
+  - `CourtName`
+  - `CourtId`
+  - `HasCourtTracking`
+- `src/fetch-archive.js` already parses `match.CourtName` into `item.court`.
+- Current production `matches` table does not have a `court` column, so court is not persisted historically.
+- Kambi/Oddset `/api/oddset` source data appears not to include court.
+- This was only explored as a future idea; no implementation was requested.
 - CLI has been minimized to `import` and `serve`
 - endpoint/fetch testing is expected to happen under `sandbox/`
 
