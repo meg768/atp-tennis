@@ -64,7 +64,9 @@ class ApiOddset extends Api {
 		options = this.resolveOptions(options);
 
 		const oddset = new Oddset({
-			url: options.url ?? this.url ?? undefined
+			url: options.url ?? options.matchesUrl ?? this.url ?? undefined,
+			openUrl: options.openUrl ?? undefined,
+			upcomingUrl: options.upcomingUrl ?? undefined
 		});
 
 		if (this.usesRawResponse(options)) {
@@ -82,6 +84,7 @@ class ApiOddset extends Api {
 		const rows = await this.attachPlayerIds(raw);
 
 		return rows.map(row => ({
+			id: row.id,
 			start: row.start,
 			tournament: row.tournament,
 			state: row.state,

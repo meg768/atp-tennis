@@ -2,20 +2,20 @@
 
 const fs = require('fs');
 const path = require('path');
-const FetchOddset = require('../src/fetch-oddset');
+const Oddset = require('../src/oddset');
 
 async function main() {
 	const outputDir = path.resolve(__dirname, 'output');
 	const scriptName = path.basename(__filename, '.js');
 	const parsedPath = path.join(outputDir, `${scriptName}.parsed.json`);
 	const rawPath = path.join(outputDir, `${scriptName}.raw.json`);
-	const fetcher = new FetchOddset({ log: () => {} });
+	const oddset = new Oddset();
 	const originalLog = console.log;
 	console.log = () => {};
 
 	try {
-		const raw = await fetcher.fetch();
-		const parsed = await fetcher.parse(raw);
+		const raw = await oddset.fetch();
+		const parsed = await oddset.getMatches();
 
 		fs.mkdirSync(outputDir, { recursive: true });
 		fs.writeFileSync(parsedPath, `${JSON.stringify(parsed, null, 2)}\n`);
