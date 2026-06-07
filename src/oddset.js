@@ -172,16 +172,11 @@ class Oddset {
 				return null;
 			}
 		};
-		const [matches, open] = await Promise.all([
+		const [matches, open, upcoming] = await Promise.all([
 			fetchOptional('matches', this.url),
-			fetchOptional('open', this.openUrl)
+			fetchOptional('open', this.openUrl),
+			fetchOptional('upcoming', this.upcomingUrl)
 		]);
-		const hasPrimaryUpcoming = Array.isArray(matches?.events) && matches.events.some(item =>
-			item.event?.sport === 'TENNIS' &&
-			item.event?.state === 'NOT_STARTED' &&
-			isAtpFamilyEvent(item)
-		);
-		const upcoming = hasPrimaryUpcoming ? null : await fetchOptional('upcoming', this.upcomingUrl);
 
 		if (!matches && !open && !upcoming) {
 			throw new Error(Object.values(errors).join(' | ') || 'No Oddset response received');

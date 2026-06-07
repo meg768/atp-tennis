@@ -149,10 +149,10 @@ Notes:
 - it always returns the current ATP-family Oddset rows for both live and upcoming matches
 - clients can filter on the returned `state` field when they only want live or only upcoming rows
 
-### `/api/oddset` Upstream Fallback Order
+### `/api/oddset` Upstream Sources
 - Primary: Oddset ATP `matches.json` for ATP live/upcoming odds.
-- Live fallback: Oddset `event/live/open.json` for ATP live rows when ATP `matches.json` is empty/incomplete.
-- Upcoming fallback: Oddset tennis-all `listView/tennis/all/all/all/matches.json` when ATP `matches.json` has no upcoming rows.
+- Live supplement: Oddset `event/live/open.json` for ATP live rows when ATP `matches.json` is empty/incomplete.
+- Upcoming supplement: Oddset tennis-all `listView/tennis/all/all/all/matches.json`, because Grand Slam rows can be missing from the ATP-specific endpoint even when other ATP upcoming rows exist.
 - All rows are filtered to the ATP family in code, not just by upstream URL naming:
   - `termKey === 'atp'`
   - `termKey.startsWith('atp_')`
