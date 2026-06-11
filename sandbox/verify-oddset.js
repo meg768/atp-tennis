@@ -49,6 +49,24 @@ function isATPFamilyEvent(item) {
 	) || (isGrandSlam && !isWomen);
 }
 
+function getMatchOdds(item) {
+	return item.betOffers?.find(offer =>
+		offer.criterion?.label === 'Matchodds' ||
+		offer.criterion?.englishLabel === 'Match Odds'
+	) ?? item.mainBetOffer ?? null;
+}
+
+function formatOdds(value) {
+	return typeof value === 'number' && Number.isFinite(value) ? value / 1000 : null;
+}
+
+function expectedOdds(item, type) {
+	const outcomes = getMatchOdds(item)?.outcomes || [];
+	const outcome = outcomes.find(row => row?.type === type);
+
+	return formatOdds(outcome?.odds);
+}
+
 async function main() {
 	const outputDir = path.resolve(__dirname, 'output');
 	const reportPath = path.join(outputDir, 'verify-oddset.report.json');
@@ -65,6 +83,20 @@ async function main() {
 		return sourceItem ? !isATPFamilyEvent(sourceItem) : false;
 	});
 	const doublesRows = rows.filter(row => /double|dubbel/i.test(row.tournament));
+	const sourceById = new Map(
+		[...(raw.matches?.events || []), ...(raw.open?.liveEvents || []), ...(raw.upcoming?.events || [])]
+			.map(item => [String(item.event?.id), item])
+	);
+	const misalignedOddsRows = rows.filter(row => {
+		const sourceItem = sourceById.get(String(row.id));
+
+		if (!sourceItem) {
+			return false;
+		}
+
+		return row.playerA.odds !== expectedOdds(sourceItem, 'OT_ONE') ||
+			row.playerB.odds !== expectedOdds(sourceItem, 'OT_TWO');
+	});
 	const qualifierRow = upcomingRows.find(row => {
 		const sourceItem = upcomingSourceById.get(String(row.id));
 		return sourceItem?.event?.path?.some(term => normalizeCategoryToken(term?.termKey).startsWith('atp_qual'));
@@ -77,13 +109,15 @@ async function main() {
 	assert(liveRows.every(row => row.score !== undefined), 'Expected live rows to include score field');
 	assert(nonATPUpcomingRows.length === 0, 'Expected NOT_STARTED rows to stay within ATP family');
 	assert(doublesRows.length === 0, 'Expected doubles rows to be excluded');
+	assert(misalignedOddsRows.length === 0, 'Expected odds to align with Kambi OT_ONE/OT_TWO outcome types');
 
 	const report = {
 		counts: {
 			total: rows.length,
 			live: liveRows.length,
 			upcoming: upcomingRows.length,
-			doubles: doublesRows.length
+			doubles: doublesRows.length,
+			misalignedOdds: misalignedOddsRows.length
 		},
 		meta: raw.meta,
 		errors: raw.errors,

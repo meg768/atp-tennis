@@ -120,6 +120,34 @@ function normalizeState(state) {
 	return state === 'STARTED' ? 'live' : 'upcoming';
 }
 
+function normalizeName(value = '') {
+	return String(value)
+		.trim()
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/\s+/g, ' ');
+}
+
+function outcomeMatchesName(outcome, name) {
+	const expected = normalizeName(name);
+
+	if (!expected) {
+		return false;
+	}
+
+	return [outcome?.participant, outcome?.label, outcome?.englishLabel]
+		.map(normalizeName)
+		.some(value => value === expected);
+}
+
+function findOutcomeForPlayer(outcomes = [], name, type, fallbackIndex) {
+	return outcomes.find(outcome => outcome?.type === type) ??
+		outcomes.find(outcome => outcomeMatchesName(outcome, name)) ??
+		outcomes[fallbackIndex] ??
+		null;
+}
+
 class Oddset {
 	constructor(options = {}) {
 		this.url = options.url ?? DEFAULT_ATP_MATCHES_URL;
@@ -207,13 +235,16 @@ class Oddset {
 				.map(item => {
 					let matchOdds = getMatchOdds(item);
 					let score = buildScore(item);
+					let outcomes = Array.isArray(matchOdds?.outcomes) ? matchOdds.outcomes : [];
+					let playerAOutcome = findOutcomeForPlayer(outcomes, item.event.homeName, 'OT_ONE', 0);
+					let playerBOutcome = findOutcomeForPlayer(outcomes, item.event.awayName, 'OT_TWO', 1);
 
 					let match = {
 						id: item.event.id,
 						start: item.event.start,
 						tournament: item.event.group,
-						playerA: { name: item.event.homeName, odds: formatOdds(matchOdds?.outcomes?.[0]?.odds) },
-						playerB: { name: item.event.awayName, odds: formatOdds(matchOdds?.outcomes?.[1]?.odds) },
+						playerA: { name: item.event.homeName, odds: formatOdds(playerAOutcome?.odds) },
+						playerB: { name: item.event.awayName, odds: formatOdds(playerBOutcome?.odds) },
 						state: normalizeState(item.event.state),
 						score: item.event.state === 'STARTED' ? (score || 'Live') : null,
 						serve: item.liveData ? (item.liveData?.statistics?.sets?.homeServe ? 'player' : 'opponent') : null
