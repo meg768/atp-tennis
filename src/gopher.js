@@ -1,7 +1,10 @@
 const { execFile } = require('child_process');
+const path = require('path');
+const os = require('os');
 const { promisify } = require('util');
 
 const execFileAsync = promisify(execFile);
+const ATP_COOKIE_JAR = path.join(os.tmpdir(), 'atp-tennis-cookies.txt');
 
 class Gopher {
 	constructor() {}
@@ -28,8 +31,8 @@ class Gopher {
 
 		let stdout = null;
 		let attempts = [
-			['--http1.1', '-fsS', '-D', '-', '-o', '-', url, ...headerArgs],
-			['--http1.1', '--no-alpn', '-fsS', '-D', '-', '-o', '-', url, ...headerArgs]
+			['--http1.1', '--no-alpn', '-fsS', '-b', ATP_COOKIE_JAR, '-c', ATP_COOKIE_JAR, '-D', '-', '-o', '-', url, ...headerArgs],
+			['--http1.1', '-fsS', '-b', ATP_COOKIE_JAR, '-c', ATP_COOKIE_JAR, '-D', '-', '-o', '-', url, ...headerArgs]
 		];
 		let lastError = null;
 
@@ -117,7 +120,9 @@ class Gopher {
 			try {
 				return await fetchOnce.call(this);
 			} catch (error) {
-				console.log(error.message);
+				if (attempt === retryCount) {
+					console.log(error.message);
+				}
 				await pause(retryDelay);
 			}
 		}
