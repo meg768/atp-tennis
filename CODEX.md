@@ -232,6 +232,7 @@ For fresh dev/prod environments:
   - tournaments: `["Franska Öppna"]`
 - The main filter is in `src/oddset.js`.
 - `sandbox/verify-oddset.js` asserts that doubles rows are excluded.
+- 2026-06-14: ATP qualifier rows such as Kambi `atp_qual_` are also excluded from `/api/oddset`; only main ATP-family and men's Grand Slam rows should remain.
 
 ### 2026-05-25 Oddset Player Lookup Edge Case
 - Kambi/Oddset names can be longer than ATP names and therefore fail local player resolution.

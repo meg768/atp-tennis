@@ -155,8 +155,8 @@ Notes:
 - Upcoming supplement: Oddset tennis-all `listView/tennis/all/all/all/matches.json`, because Grand Slam rows can be missing from the ATP-specific endpoint even when other ATP upcoming rows exist.
 - All rows are filtered to the ATP family in code, not just by upstream URL naming:
   - `termKey === 'atp'`
-  - `termKey.startsWith('atp_')`
-- fallback name matching for ATP qualifier labels such as `ATP Qual.`
+  - men's Grand Slam rows
+- ATP qualifiers (`qual`/`kval`) are excluded.
 - Parsed response shape stays the same: an array of rows with `id`, `start`, `tournament`, `state`, `score`, `playerA`, `playerB`.
 - Each nested player object now also includes resolved ATP `id` when available.
 

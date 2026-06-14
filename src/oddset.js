@@ -91,17 +91,17 @@ function isAtpFamilyEvent(item) {
 		term.includes('double') ||
 		term.includes('dubbel')
 	);
+	const isQualifier = terms.some(term =>
+		term.includes('qual') ||
+		term.includes('kval')
+	);
 
-	if (isDoubles) {
+	if (isDoubles || isQualifier) {
 		return false;
 	}
 
 	return terms.some(term =>
-		term === 'atp' ||
-		term.startsWith('atp_') ||
-		term === 'atp qual.' ||
-		term === 'atp qual' ||
-		term === 'atp qualifiers'
+		term === 'atp'
 	) || isMensGrandSlam(item);
 }
 
