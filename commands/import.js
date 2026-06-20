@@ -20,7 +20,7 @@ class Import extends Command {
 			alias: 'l',
 			describe: 'Run again after specified number of hours',
 			type: 'number',
-			default: 12
+			default: 0
 		});
 
 		args.option('since', {
