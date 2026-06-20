@@ -16,13 +16,6 @@ class Import extends Command {
 	arguments(args) {
 		let year = new Date().getFullYear();
 
-		args.option('loop', {
-			alias: 'l',
-			describe: 'Run again after specified number of hours',
-			type: 'number',
-			default: 0
-		});
-
 		args.option('since', {
 			alias: 's',
 			describe: 'Import matches since this year',
@@ -59,10 +52,6 @@ class Import extends Command {
 		} finally {
 			console.log(message);
 		}
-	}
-
-	async delay(hours) {
-		return await new Promise(resolve => setTimeout(resolve, hours * 60 * 60 * 1000));
 	}
 
 	async process({ items = [], message, fn }) {
@@ -357,11 +346,6 @@ class Import extends Command {
 				await mysql.disconnect();
 			}
 
-			if (argv.loop) {
-				await this.log(`Waiting for next run in ${argv.loop} hours.`);
-				await this.delay(argv.loop);
-				await work();
-			}
 		};
 
 		await work();
