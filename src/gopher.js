@@ -6,6 +6,13 @@ const { promisify } = require('util');
 const execFileAsync = promisify(execFile);
 const ATP_COOKIE_JAR = path.join(os.tmpdir(), 'atp-tennis-cookies.txt');
 
+class NonRetryableFetchError extends Error {
+	constructor(message) {
+		super(message);
+		this.nonRetryable = true;
+	}
+}
+
 class Gopher {
 	constructor() {}
 
@@ -41,6 +48,9 @@ class Gopher {
 				({ stdout } = await execFileAsync('curl', args, { maxBuffer: 50 * 1024 * 1024 }));
 				break;
 			} catch (error) {
+				if (this.isCloudflareChallenge(error.stdout)) {
+					throw new NonRetryableFetchError(`Failed to fetch ${url}: Cloudflare challenge`);
+				}
 				lastError = error;
 			}
 		}
@@ -59,6 +69,10 @@ class Gopher {
 		let bodyText = stdout.slice(index + separator.length);
 		let status = Number((headerText.match(/^HTTP\/\S+\s+(\d+)/) || [])[1]);
 		let contentType = (headerText.match(/^content-type:\s*(.+)$/im) || [])[1] || '';
+
+		if (this.isCloudflareChallenge(stdout)) {
+			throw new NonRetryableFetchError(`Failed to fetch ${url}: Cloudflare challenge`);
+		}
 
 		if (!status || status < 200 || status >= 300) {
 			throw new Error(`Failed to fetch ${url} (${status || 'unknown'})`);
@@ -120,6 +134,10 @@ class Gopher {
 			try {
 				return await fetchOnce.call(this);
 			} catch (error) {
+				if (error.nonRetryable) {
+					throw error;
+				}
+
 				if (attempt === retryCount) {
 					console.log(error.message);
 				}
@@ -128,6 +146,10 @@ class Gopher {
 		}
 
 		throw new Error(`Failed to fetch ${url} after ${retryCount} attempts`);
+	}
+
+	isCloudflareChallenge(text) {
+		return typeof text === 'string' && /(^|\n)cf-mitigated:\s*challenge/im.test(text);
 	}
 }
 

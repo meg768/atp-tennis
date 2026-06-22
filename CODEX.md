@@ -221,6 +221,21 @@ For fresh dev/prod environments:
 
 ## Session Memory
 
+### 2026-06-22 ATP Import Cloudflare And Activity Fix
+- Morning import failed at `2026-06-22 06:01:32` with:
+  - `FATAL ERROR: Failed to fetch https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100 after 3 attempts`
+- Direct checks showed ATP sometimes returns Cloudflare challenge responses (`Cf-Mitigated: challenge`) for both `app.atptour.com` and `www.atptour.com`.
+- `src/gopher.js` now detects Cloudflare challenge responses as non-retryable, so imports fail/skip quickly instead of waiting through long retry cycles.
+- `commands/import.js` can fall back to existing ranked players from the local `players` table if the top ranking endpoint fails; this keeps the import from aborting before discovery.
+- Important endpoint behavior found during debugging:
+  - `https://www.atptour.com/en/-/www/activity/last/S0AG` returns `null`
+  - `https://www.atptour.com/en/-/www/activity/last/s0ag` returns the player activity JSON
+- `src/fetch-activity.js` therefore keeps internal player ids uppercase but uses lowercase player ids in the activity URL.
+- Verification on 2026-06-22:
+  - ranking endpoint returned Sinner/Alcaraz/Zverev for `RankDate` `2026-06-22T00:00:00`
+  - activity for `s0ag` returned 8 events for 2026
+  - archive fetch for `2026-520` returned 237 Roland Garros matches
+
 ### 2026-05-25 Oddset Filtering
 - User reported that Oddset had stopped showing matches. The issue was traced to Kambi/Svenska Spel category filtering.
 - Commit `d3cec28 Exclude Challenger from Oddset feed` removed `Challenger` and `Challenger kval` from `/api/oddset`.

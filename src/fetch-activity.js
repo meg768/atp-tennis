@@ -191,7 +191,7 @@ class Module extends Fetcher {
 		const parsedSince = Number(since);
 		this.since = since != undefined && Number.isFinite(parsedSince) ? parsedSince : year;
 
-		let url = `https://www.atptour.com/en/-/www/activity/last/${this.player}`;
+		let url = `https://www.atptour.com/en/-/www/activity/last/${this.player.toLowerCase()}`;
 		return await this.fetchATP(url);
 	}
 }

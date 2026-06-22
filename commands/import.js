@@ -204,8 +204,47 @@ class Import extends Command {
 	async getPlayers({ top }) {
 		let Fetcher = require('../src/fetch-top-players');
 		let fetcher = new Fetcher(this.fetchOptions);
-		let raw = await fetcher.fetch({ top: top });
-		return fetcher.parse(raw);
+
+		try {
+			let raw = await fetcher.fetch({ top: top });
+			return fetcher.parse(raw);
+		} catch (error) {
+			await this.log(`ERROR fetching ATP rankings: ${error.message}`);
+			await this.log(`Falling back to existing top ${top} players from the database.`);
+			return await this.getPlayersFromDatabase({ top });
+		}
+	}
+
+	async getPlayersFromDatabase({ top }) {
+		let rows = await this.mysql.query({
+			sql: `
+				SELECT
+					id AS player,
+					name,
+					age,
+					country,
+					rank,
+					points
+				FROM players
+				WHERE rank IS NOT NULL
+				ORDER BY rank ASC
+				LIMIT ?
+			`,
+			format: [top]
+		});
+
+		return {
+			source: 'database',
+			players: rows.map(row => ({
+				date: null,
+				player: row.player,
+				name: row.name,
+				age: row.age,
+				country: row.country,
+				rank: row.rank,
+				points: row.points
+			}))
+		};
 	}
 
 	async fetchArchive({ events, activities }) {
