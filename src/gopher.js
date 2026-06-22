@@ -29,10 +29,6 @@ class Gopher {
 		let headerArgs = [];
 
 		for (let [key, value] of Object.entries(options.headers || {})) {
-			if (['origin', 'referer'].includes(key.toLowerCase())) {
-				continue;
-			}
-
 			headerArgs.push('-H', `${key}: ${value}`);
 		}
 

@@ -226,7 +226,8 @@ For fresh dev/prod environments:
   - `FATAL ERROR: Failed to fetch https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank=100 after 3 attempts`
 - Direct checks showed ATP sometimes returns Cloudflare challenge responses (`Cf-Mitigated: challenge`) for both `app.atptour.com` and `www.atptour.com`.
 - `src/gopher.js` now detects Cloudflare challenge responses as non-retryable, so imports fail/skip quickly instead of waiting through long retry cycles.
-- `commands/import.js` can fall back to existing ranked players from the local `players` table if the top ranking endpoint fails; this keeps the import from aborting before discovery.
+- Ranking fetches must not fall back to existing ranked players from the local database; if the ranking endpoint fails, the import should fail before database writes.
+- The ranking endpoint works from `pi-kato` when the curl request keeps the ATP `Origin` and `Referer` headers. Do not strip those headers from ATP curl requests.
 - Important endpoint behavior found during debugging:
   - `https://www.atptour.com/en/-/www/activity/last/S0AG` returns `null`
   - `https://www.atptour.com/en/-/www/activity/last/s0ag` returns the player activity JSON
