@@ -74,6 +74,10 @@ class Gopher {
 			throw new Error(`Failed to fetch ${url} (${status || 'unknown'})`);
 		}
 
+		if (options.responseType === 'text') {
+			return bodyText;
+		}
+
 		if (contentType.includes('application/json')) {
 			return JSON.parse(bodyText);
 		}
@@ -115,8 +119,13 @@ class Gopher {
 				throw new Error(`Failed to fetch ${url} (${response.status})`);
 			}
 
-			const contentType = response.headers.get('content-type') || '';
 			const bodyText = await response.text();
+
+			if (options.responseType === 'text') {
+				return bodyText;
+			}
+
+			const contentType = response.headers.get('content-type') || '';
 
 			// Försök bara JSON om det verkar vara JSON
 			if (contentType.includes('application/json')) {
