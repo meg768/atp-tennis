@@ -236,6 +236,9 @@ For fresh dev/prod environments:
   - ranking endpoint returned Sinner/Alcaraz/Zverev for `RankDate` `2026-06-22T00:00:00`
   - activity for `s0ag` returned 8 events for 2026
   - archive fetch for `2026-520` returned 237 Roland Garros matches
+- Production PM2 schedule was changed on 2026-06-22 so `atp-import` runs once per day at 06:00 only:
+  - `cron_restart`: `0 6 * * *`
+  - Previous schedule was `0 6,18 * * *`; the 18:00 run was removed because a full import takes about an hour and twice daily is unnecessary.
 
 ### 2026-05-25 Oddset Filtering
 - User reported that Oddset had stopped showing matches. The issue was traced to Kambi/Svenska Spel category filtering.
