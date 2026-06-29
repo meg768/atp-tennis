@@ -218,8 +218,40 @@ For fresh dev/prod environments:
 ## Operational Context
 - `atp.js` is used for daily imports from ATP endpoints
 - Primary production concern is keeping the import pipeline stable
+- Production API runs on `pi-kato` under root PM2 as `atp-service` from `/home/pi/atp-tennis` with args `serve`.
+- Production import is scheduled under root PM2 as `atp-import` with cron `0 6 * * *` and args `import`; it is normally stopped between scheduled runs.
+- `tennis.egelberg.se` serves the `vitel` frontend and reverse-proxies `/api` to `http://localhost:3004/api`, so backend API compatibility directly affects the public tennis site.
+- Database is MariaDB database `atp` on `pi-sql`.
+
+## Deployment
+- Production checkout: `/home/pi/atp-tennis` on `pi-kato`, owned by `root`.
+- Pull/deploy pattern:
+  - `ssh pi@pi-kato 'cd /home/pi/atp-tennis && sudo -n git pull --ff-only origin main'`
+  - `ssh pi@pi-kato 'sudo -n pm2 restart atp-service'`
+- Quick verification targets:
+  - `ssh pi@pi-kato 'curl -s http://127.0.0.1:3004/api/ping'`
+  - `ssh pi@pi-kato 'curl -s http://127.0.0.1:3004/api/oddset'`
+- 2026-06-30 status check:
+  - root PM2 `atp-service`: online
+  - root PM2 `atp-import`: stopped, cron `0 6 * * *`
+  - root PM2 `atp-import-rebuild`: stopped
+  - server checkout was at `4b8cb71 Add ATP rankings page fallback`
+  - local checkout was ahead at `3a7fb22 Save local updates`; verify before deploying
+
+## Backup And Restore
+- Full logical backup created on 2026-05-26:
+  - source: `pi-sql` MariaDB database `atp`
+  - destination: `pi-storage:/mnt/samsung/NAS/atp/atp-full-20260526-213651.sql.gz`
+  - command pattern: stream `sudo mysqldump --single-transaction --quick --routines --triggers --events --databases atp | gzip -c` from `pi-sql` into the NAS path on `pi-storage`
+- Restore test on 2026-05-26 restored that dump into `atp-tennis-restored` on `pi-sql`, adjusted SQL identifiers while streaming, verified row counts for `events`, `matches`, `players`, `log`, and `settings`, then dropped the test database.
 
 ## Session Memory
+
+### 2026-06-30 Project Context Refresh
+- README is already in English and remains the human-facing setup/API reference.
+- This `CODEX.md` remains the project-specific Codex memory for deployment, operations, cross-repo relationships, and learned gotchas.
+- Global cross-project notes also exist in `/Users/magnus/Documents/GitHub/codex-chat/CONTEXT.md`; keep detailed `atp-tennis` operational notes here and only concise cross-project pointers there.
+- Root PM2 on `pi-kato` also showed `atp-mqtt` online from sibling repo `/home/pi/atp-mqtt`; do not confuse that with this backend's `atp-service`/`atp-import` processes.
 
 ### 2026-06-22 ATP Import Cloudflare And Activity Fix
 - Morning import failed at `2026-06-22 06:01:32` with:
