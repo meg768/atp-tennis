@@ -58,12 +58,12 @@ uses the same matching rules as `PLAYER_LOOKUP.sql`, and always returns at most
 `5` rows. Exact last-name matches are ranked ahead of generic prefix/contains
 matches.
 
-`PLAYER_WIN_FACTOR.sql` is the self-contained source of truth for CODEX matchup
+`PLAYER_WIN_FACTOR.sql` is the self-contained source of truth for GPT matchup
 probability. With a surface it uses total and surface TA ELO, ATP ranking,
 surface record, latest-12 form, and 365-day form with the same calibrated
 coefficients as Match Point. Without a surface it uses pure total TA ELO.
 
-`PLAYER_ODDS.sql` returns two rows of CODEX decimal odds for a matchup, one row per
+`PLAYER_ODDS.sql` returns two rows of GPT decimal odds for a matchup, one row per
 player, resolves free-text player inputs through `PLAYER_LOOKUP.sql`, and now
 delegates the fair win probability to `PLAYER_WIN_FACTOR.sql` before applying a
 fixed margin.

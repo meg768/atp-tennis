@@ -10,12 +10,12 @@ CREATE FUNCTION `PLAYER_WIN_FACTOR`(
     DETERMINISTIC
 BEGIN
     /*
-    Canonical TA-calibrated CODEX probability model.
+    Canonical TA-calibrated GPT probability model.
 
     For a real match it uses total TA ELO, surface TA ELO, ATP ranking,
     career surface record, latest-12 main-tour form, and 365-day form.
     With no surface it uses pure total TA ELO, matching hypothetical H2H in
-    Match Point. Coefficients are from the chronological Codex backtest.
+    Match Point. Coefficients are from the chronological GPT backtest.
     */
     DECLARE v_player_id VARCHAR(32) DEFAULT NULL;
     DECLARE v_opponent_id VARCHAR(32) DEFAULT NULL;

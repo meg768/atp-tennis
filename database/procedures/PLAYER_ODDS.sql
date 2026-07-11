@@ -14,7 +14,7 @@ BEGIN
     Purpose
     - Return two rows of decimal odds for a matchup.
     - One row is returned per player.
-    - The underlying win probability comes from the TA-calibrated CODEX model
+    - The underlying win probability comes from the TA-calibrated GPT model
       in PLAYER_WIN_FACTOR(...), the single source of truth for server odds.
     - A fixed 5% margin is then applied when converting fair probability to
       decimal odds.
