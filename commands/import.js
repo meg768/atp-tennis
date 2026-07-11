@@ -3,6 +3,7 @@ let Command = require('../src/command.js');
 const UpdatePlayerStats = require('../src/update-player-stats');
 const UpdateRankings = require('../src/update-rankings');
 const UpdateSurfaceFactors = require('../src/update-surface-factors');
+const UpdateTennisAbstractElo = require('../src/update-tennis-abstract-elo');
 
 require('../src/logger')(); // 1 MB
 
@@ -39,6 +40,12 @@ class Import extends Command {
 
 		args.option('light', {
 			describe: 'Run a minimal import using the current year and top 1 player',
+			type: 'boolean',
+			default: false
+		});
+
+		args.option('elo-only', {
+			describe: 'Only replace all Elo values with current Tennis Abstract ratings',
 			type: 'boolean',
 			default: false
 		});
@@ -274,6 +281,10 @@ class Import extends Command {
 
 		let work = async () => {
 			try {
+				if (argv.eloOnly && (argv.clean || argv.light)) {
+					throw new Error('--elo-only cannot be combined with --clean or --light.');
+				}
+
 				if (argv.light) {
 					let year = new Date().getFullYear();
 					argv.since = year;
@@ -283,6 +294,13 @@ class Import extends Command {
 
 				await mysql.connect();
 				let probe = new Probe();
+				let updateElo = new UpdateTennisAbstractElo({ mysql, log: this.log.bind(this) });
+
+				if (argv.eloOnly) {
+					await updateElo.run();
+					await this.log(`Elo-only import finished in ${probe.toString()}.`);
+					return;
+				}
 
 				if (argv.clean) {
 					await this.log(`Cleaning previous import...`);
@@ -332,8 +350,7 @@ class Import extends Command {
 				let updatePlayerStats = new UpdatePlayerStats({ mysql, log: this.log.bind(this), fetchOptions: this.fetchOptions });
 				await updatePlayerStats.run();
 
-				await this.log('Refreshing database...');
-				await mysql.query('CALL REFRESH()');
+				await updateElo.run();
 
 				let updateSurfaceFactors = new UpdateSurfaceFactors({ mysql, log: this.log.bind(this) });
 				await updateSurfaceFactors.run();

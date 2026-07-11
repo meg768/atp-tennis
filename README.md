@@ -50,18 +50,25 @@ node atp.js --help
 ```
 
 Available commands (from `atp.js`):
-- `import [options]` - Full import pipeline (rankings -> activity -> scores -> players -> stats -> ELO -> surface factors).
+- `import [options]` - Full import pipeline (rankings -> activity -> scores -> players -> stats -> Tennis Abstract ELO -> surface factors).
 - `serve [options]` - Start local API server.
 
 ### Common Command Examples
 
 ```bash
 node atp.js import --top 100 --since 2025
+node atp.js import --elo-only
 node atp.js serve
 ```
 
 ### Important Options
-- `import`: `--top`, `--since`, `--clean`, `--loop` (hours; default `12`), `--light`.
+- `import`: `--top`, `--since`, `--clean`, `--loop` (hours; default `12`), `--light`, `--elo-only`.
+
+`--elo-only` skips the ATP match import and replaces the four player ELO fields
+with current overall, Hard, Clay, and Grass ratings from Tennis Abstract. The
+report is downloaded and parsed before the database is changed. The database
+update is transactional: all existing ELO values are first set to `NULL`, then
+matched players are populated. Players absent from the report remain `NULL`.
 
 ## Helper Scripts
 
