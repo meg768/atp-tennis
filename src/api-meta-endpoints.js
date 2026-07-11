@@ -115,11 +115,11 @@ class ApiMetaEndpoints extends Api {
 						playerB: 'string, required, ATP id or player name',
 						surface: 'string, optional'
 					},
-					description: 'Returns both computed odds and Tennis Abstract odds for a specific matchup.',
+					description: 'Returns both CODEX odds and Tennis Abstract odds for a specific matchup.',
 					response: {
 						shape: 'object',
 						fields: {
-							computedOdds: 'array[number, number]',
+							codexOdds: 'array[number, number]',
 							tennisAbstractOdds: 'array[number, number]'
 						}
 					}

@@ -1,4 +1,17 @@
--- Create syntax for TABLE 'events'
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS `events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `events` (
   `id` varchar(20) NOT NULL DEFAULT '' COMMENT 'Unique ID',
   `date` date DEFAULT NULL COMMENT 'Start of event',
@@ -9,36 +22,41 @@ CREATE TABLE `events` (
   `url` varchar(100) DEFAULT NULL COMMENT 'URL to atptour.com',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Create syntax for VIEW 'flatly'
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `flatly`
-AS SELECT
-   `matches`.`id` AS `id`,
-   `C`.`date` AS `event_date`,
-   `C`.`id` AS `event_id`,
-   `C`.`name` AS `event_name`,
-   `C`.`location` AS `event_location`,
-   `C`.`type` AS `event_type`,
-   `C`.`surface` AS `event_surface`,
-   `matches`.`round` AS `round`,
-   `A`.`name` AS `winner`,
-   `B`.`name` AS `loser`,
-   `A`.`id` AS `winner_id`,
-   `matches`.`winner_rank` AS `winner_rank`,
-   `B`.`id` AS `loser_id`,
-   `matches`.`loser_rank` AS `loser_rank`,
-   `matches`.`score` AS `score`,
-   `matches`.`status` AS `status`,
-   `matches`.`duration` AS `duration`
-FROM (((`matches` left join `players` `A` on(`matches`.`winner` = `A`.`id`)) left join `players` `B` on(`matches`.`loser` = `B`.`id`)) left join `events` `C` on(`matches`.`event` = `C`.`id`)) order by `C`.`date`;
-
--- Create syntax for TABLE 'log'
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `flatly`;
+/*!50001 DROP VIEW IF EXISTS `flatly`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `flatly` AS SELECT
+ 1 AS `id`,
+  1 AS `event_date`,
+  1 AS `event_id`,
+  1 AS `event_name`,
+  1 AS `event_location`,
+  1 AS `event_type`,
+  1 AS `event_surface`,
+  1 AS `round`,
+  1 AS `winner`,
+  1 AS `loser`,
+  1 AS `winner_id`,
+  1 AS `winner_rank`,
+  1 AS `loser_id`,
+  1 AS `loser_rank`,
+  1 AS `score`,
+  1 AS `status`,
+  1 AS `duration` */;
+SET character_set_client = @saved_cs_client;
+DROP TABLE IF EXISTS `log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `log` (
   `timestamp` datetime DEFAULT current_timestamp(),
   `message` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Create syntax for TABLE 'matches'
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `matches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `matches` (
   `id` varchar(50) NOT NULL DEFAULT '' COMMENT 'Match ID',
   `event` varchar(50) DEFAULT NULL COMMENT 'ID of event',
@@ -53,8 +71,10 @@ CREATE TABLE `matches` (
   PRIMARY KEY (`id`),
   KEY `events` (`event`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Create syntax for TABLE 'players'
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `players`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `players` (
   `id` varchar(32) NOT NULL DEFAULT '' COMMENT 'Unique ID',
   `name` varchar(64) DEFAULT NULL COMMENT 'Full name',
@@ -92,15 +112,26 @@ CREATE TABLE `players` (
   `wikipedia` varchar(100) DEFAULT NULL COMMENT 'URL to Wikipedia',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Create syntax for TABLE 'settings'
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `settings` (
   `key` varchar(100) NOT NULL DEFAULT '',
   `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`value`)),
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Create syntax for FUNCTION 'NUMBER_OF_GAMES'
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 DROP FUNCTION IF EXISTS `NUMBER_OF_GAMES` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+DELIMITER ;;
 CREATE DEFINER=`root`@`%` FUNCTION `NUMBER_OF_GAMES`(score TEXT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -187,8 +218,22 @@ Why this is strict
     END IF;
 
     RETURN total_games;
-END;
--- Create syntax for FUNCTION 'NUMBER_OF_SETS'
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 DROP FUNCTION IF EXISTS `NUMBER_OF_SETS` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+DELIMITER ;;
 CREATE DEFINER=`root`@`%` FUNCTION `NUMBER_OF_SETS`(score TEXT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -265,9 +310,22 @@ BEGIN
     END IF;
 
     RETURN total_sets;
-END;
-
--- Create syntax for FUNCTION 'NUMBER_OF_TIE_BREAKS'
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 DROP FUNCTION IF EXISTS `NUMBER_OF_TIE_BREAKS` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+DELIMITER ;;
 CREATE DEFINER=`root`@`%` FUNCTION `NUMBER_OF_TIE_BREAKS`(score TEXT) RETURNS int(11)
     DETERMINISTIC
 BEGIN
@@ -350,9 +408,22 @@ BEGIN
     END IF;
 
     RETURN total_tie_breaks;
-END;
-
--- Create syntax for FUNCTION 'PLAYER_LOOKUP'
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 DROP FUNCTION IF EXISTS `PLAYER_LOOKUP` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+DELIMITER ;;
 CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_LOOKUP`(searchTerm VARCHAR(255)
 ) RETURNS varchar(32) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
     DETERMINISTIC
@@ -441,57 +512,220 @@ BEGIN
     ) ranked_candidates;
 
     RETURN resultPlayerID;
-END;
-
--- Create syntax for PROCEDURE 'PLAYER_ODDS'
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 DROP FUNCTION IF EXISTS `PLAYER_WIN_FACTOR` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `PLAYER_ODDS`(
+CREATE DEFINER=`root`@`localhost` FUNCTION `PLAYER_WIN_FACTOR`(playerID VARCHAR(32),
+    opponentID VARCHAR(32),
+    surface VARCHAR(50)
+) RETURNS double
+    DETERMINISTIC
+BEGIN
+
+    DECLARE v_player_id VARCHAR(32) DEFAULT NULL;
+    DECLARE v_opponent_id VARCHAR(32) DEFAULT NULL;
+    DECLARE v_surface VARCHAR(50) DEFAULT NULL;
+    DECLARE v_surface_name VARCHAR(50) DEFAULT NULL;
+
+    DECLARE v_overall_a DOUBLE DEFAULT 1500;
+    DECLARE v_overall_b DOUBLE DEFAULT 1500;
+    DECLARE v_surface_a DOUBLE DEFAULT 1500;
+    DECLARE v_surface_b DOUBLE DEFAULT 1500;
+    DECLARE v_rank_a INT DEFAULT NULL;
+    DECLARE v_rank_b INT DEFAULT NULL;
+
+    DECLARE v_surface_matches_a INT DEFAULT 0;
+    DECLARE v_surface_wins_a INT DEFAULT 0;
+    DECLARE v_surface_matches_b INT DEFAULT 0;
+    DECLARE v_surface_wins_b INT DEFAULT 0;
+    DECLARE v_form_matches_a INT DEFAULT 0;
+    DECLARE v_form_wins_a INT DEFAULT 0;
+    DECLARE v_form_matches_b INT DEFAULT 0;
+    DECLARE v_form_wins_b INT DEFAULT 0;
+    DECLARE v_recent_matches_a INT DEFAULT 0;
+    DECLARE v_recent_wins_a INT DEFAULT 0;
+    DECLARE v_recent_matches_b INT DEFAULT 0;
+    DECLARE v_recent_wins_b INT DEFAULT 0;
+
+    DECLARE v_feature_overall DOUBLE DEFAULT 0;
+    DECLARE v_feature_surface DOUBLE DEFAULT 0;
+    DECLARE v_feature_ranking DOUBLE DEFAULT 0;
+    DECLARE v_feature_surface_form DOUBLE DEFAULT 0;
+    DECLARE v_feature_form12 DOUBLE DEFAULT 0;
+    DECLARE v_feature_form365 DOUBLE DEFAULT 0;
+    DECLARE v_score DOUBLE DEFAULT 0.0000253868667645;
+    DECLARE v_probability DOUBLE DEFAULT NULL;
+
+    IF playerID IS NULL OR TRIM(playerID) = '' OR opponentID IS NULL OR TRIM(opponentID) = '' THEN
+        RETURN NULL;
+    END IF;
+
+    SET v_player_id = PLAYER_LOOKUP(playerID);
+    SET v_opponent_id = PLAYER_LOOKUP(opponentID);
+    IF v_player_id IS NULL OR v_opponent_id IS NULL OR UPPER(v_player_id) = UPPER(v_opponent_id) THEN
+        RETURN NULL;
+    END IF;
+
+    SET v_surface = UPPER(NULLIF(TRIM(surface), ''));
+    SET v_surface_name = CASE v_surface
+        WHEN 'HARD' THEN 'Hard'
+        WHEN 'CLAY' THEN 'Clay'
+        WHEN 'GRASS' THEN 'Grass'
+        ELSE NULL
+    END;
+
+    SELECT
+        COALESCE(elo_rank, 1500),
+        COALESCE(CASE v_surface
+            WHEN 'HARD' THEN elo_rank_hard
+            WHEN 'CLAY' THEN elo_rank_clay
+            WHEN 'GRASS' THEN elo_rank_grass
+            ELSE elo_rank
+        END, elo_rank, 1500),
+        rank
+    INTO v_overall_a, v_surface_a, v_rank_a
+    FROM players WHERE id = v_player_id LIMIT 1;
+
+    SELECT
+        COALESCE(elo_rank, 1500),
+        COALESCE(CASE v_surface
+            WHEN 'HARD' THEN elo_rank_hard
+            WHEN 'CLAY' THEN elo_rank_clay
+            WHEN 'GRASS' THEN elo_rank_grass
+            ELSE elo_rank
+        END, elo_rank, 1500),
+        rank
+    INTO v_overall_b, v_surface_b, v_rank_b
+    FROM players WHERE id = v_opponent_id LIMIT 1;
+
+    IF v_surface_name IS NULL THEN
+        SET v_probability = 1 / (1 + POW(10, (v_overall_b - v_overall_a) / 400));
+        RETURN LEAST(0.995, GREATEST(0.005, v_probability));
+    END IF;
+
+    SELECT COUNT(*), COALESCE(SUM(m.winner = v_player_id), 0)
+    INTO v_surface_matches_a, v_surface_wins_a
+    FROM matches m JOIN events e ON e.id = m.event
+    WHERE m.winner IS NOT NULL AND m.loser IS NOT NULL
+      AND e.surface = v_surface_name
+      AND (m.winner = v_player_id OR m.loser = v_player_id);
+
+    SELECT COUNT(*), COALESCE(SUM(m.winner = v_opponent_id), 0)
+    INTO v_surface_matches_b, v_surface_wins_b
+    FROM matches m JOIN events e ON e.id = m.event
+    WHERE m.winner IS NOT NULL AND m.loser IS NOT NULL
+      AND e.surface = v_surface_name
+      AND (m.winner = v_opponent_id OR m.loser = v_opponent_id);
+
+    SELECT COUNT(*), COALESCE(SUM(recent.winner = v_player_id), 0)
+    INTO v_form_matches_a, v_form_wins_a
+    FROM (
+        SELECT m.winner
+        FROM matches m JOIN events e ON e.id = m.event
+        WHERE e.date IS NOT NULL
+          AND e.type IN ('Grand Slam', 'Masters', 'ATP-500', 'ATP-250')
+          AND m.winner IS NOT NULL AND m.loser IS NOT NULL
+          AND (m.winner = v_player_id OR m.loser = v_player_id)
+        ORDER BY e.date DESC, e.id DESC, m.id DESC
+        LIMIT 12
+    ) recent;
+
+    SELECT COUNT(*), COALESCE(SUM(recent.winner = v_opponent_id), 0)
+    INTO v_form_matches_b, v_form_wins_b
+    FROM (
+        SELECT m.winner
+        FROM matches m JOIN events e ON e.id = m.event
+        WHERE e.date IS NOT NULL
+          AND e.type IN ('Grand Slam', 'Masters', 'ATP-500', 'ATP-250')
+          AND m.winner IS NOT NULL AND m.loser IS NOT NULL
+          AND (m.winner = v_opponent_id OR m.loser = v_opponent_id)
+        ORDER BY e.date DESC, e.id DESC, m.id DESC
+        LIMIT 12
+    ) recent;
+
+    SELECT COUNT(*), COALESCE(SUM(m.winner = v_player_id), 0)
+    INTO v_recent_matches_a, v_recent_wins_a
+    FROM matches m JOIN events e ON e.id = m.event
+    WHERE e.date IS NOT NULL AND e.date >= CURDATE() - INTERVAL 365 DAY
+      AND m.winner IS NOT NULL AND m.loser IS NOT NULL
+      AND (m.winner = v_player_id OR m.loser = v_player_id);
+
+    SELECT COUNT(*), COALESCE(SUM(m.winner = v_opponent_id), 0)
+    INTO v_recent_matches_b, v_recent_wins_b
+    FROM matches m JOIN events e ON e.id = m.event
+    WHERE e.date IS NOT NULL AND e.date >= CURDATE() - INTERVAL 365 DAY
+      AND m.winner IS NOT NULL AND m.loser IS NOT NULL
+      AND (m.winner = v_opponent_id OR m.loser = v_opponent_id);
+
+    SET v_feature_overall = (v_overall_a - v_overall_b) / 400;
+    SET v_feature_surface = (v_surface_a - v_surface_b) / 400;
+    IF v_rank_a IS NOT NULL AND v_rank_a > 0 AND v_rank_b IS NOT NULL AND v_rank_b > 0 THEN
+        SET v_feature_ranking = LN(v_rank_b / v_rank_a);
+    END IF;
+    SET v_feature_surface_form =
+        (CASE WHEN v_surface_matches_a > 0 THEN v_surface_wins_a / v_surface_matches_a ELSE 0.5 END)
+        - (CASE WHEN v_surface_matches_b > 0 THEN v_surface_wins_b / v_surface_matches_b ELSE 0.5 END);
+    SET v_feature_form12 =
+        (CASE WHEN v_form_matches_a > 0 THEN v_form_wins_a / v_form_matches_a ELSE 0.5 END)
+        - (CASE WHEN v_form_matches_b > 0 THEN v_form_wins_b / v_form_matches_b ELSE 0.5 END);
+    SET v_feature_form365 =
+        (CASE WHEN v_recent_matches_a > 0 THEN v_recent_wins_a / v_recent_matches_a ELSE 0.5 END)
+        - (CASE WHEN v_recent_matches_b > 0 THEN v_recent_wins_b / v_recent_matches_b ELSE 0.5 END);
+
+    SET v_score = v_score
+        + 0.308259581872 * (v_feature_overall / 0.480841409542)
+        + 0.271303033199 * (v_feature_surface / 0.453431590526)
+        + 0.226042701631 * (v_feature_ranking / 1.032929982385)
+        + 0.067860094189 * (v_feature_surface_form / 0.218879304230)
+        + 0.066165906183 * (v_feature_form12 / 0.253832178694)
+        + 0.031416125989 * (v_feature_form365 / 0.211008586769);
+
+    SET v_probability = 1 / (1 + EXP(-v_score));
+    RETURN LEAST(0.995, GREATEST(0.005, v_probability));
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `PLAYER_ODDS` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PLAYER_ODDS`(
     IN playerA VARCHAR(255),
     IN playerB VARCHAR(255),
     IN surface VARCHAR(50)
 )
 BEGIN
-    /*
-    PLAYER_ODDS(playerA, playerB, surface)
 
-    Purpose
-    - Return two rows of decimal odds for a matchup.
-    - One row is returned per player.
-    - The underlying win probability now comes from PLAYER_WIN_FACTOR(...),
-      which is the single source of truth for the model.
-    - A fixed 5% margin is then applied when converting fair probability to
-      decimal odds.
-
-    Inputs
-    - playerA:
-      ATP id or free-text player name for the first player
-    - playerB:
-      ATP id or free-text player name for the second player
-    - surface:
-      Optional surface selector such as 'Hard', 'Clay', or 'Grass'
-
-    Output columns
-    - player
-    - name
-    - odds
-
-    Notes
-    - Player inputs are resolved through PLAYER_LOOKUP(...)
-    - The procedure returns an empty result set when either player cannot be
-      resolved or when both resolve to the same player
-
-    Example usage
-    - CALL PLAYER_ODDS('Tien', 'Burruchaga', 'Clay');
-    - CALL PLAYER_ODDS('T0HA', 'B0FV', 'Clay');
-    */
 
     DECLARE resolvedPlayerA VARCHAR(32) DEFAULT NULL;
     DECLARE resolvedPlayerB VARCHAR(32) DEFAULT NULL;
     DECLARE normalizedSurface VARCHAR(50) DEFAULT NULL;
-    DECLARE factorA DECIMAL(10,4) DEFAULT NULL;
-    DECLARE factorB DECIMAL(10,4) DEFAULT NULL;
-    DECLARE pricedFactorA DECIMAL(10,4) DEFAULT NULL;
-    DECLARE pricedFactorB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE factorA DOUBLE DEFAULT NULL;
+    DECLARE factorB DOUBLE DEFAULT NULL;
+    DECLARE pricedFactorA DOUBLE DEFAULT NULL;
+    DECLARE pricedFactorB DOUBLE DEFAULT NULL;
 
     SET resolvedPlayerA = PLAYER_LOOKUP(playerA);
     SET resolvedPlayerB = PLAYER_LOOKUP(playerB);
@@ -548,10 +782,21 @@ BEGIN
             END IF;
         END IF;
     END IF;
-END;;
+END ;;
 DELIMITER ;
-
--- Create syntax for PROCEDURE 'PLAYER_SEARCH'
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `PLAYER_SEARCH` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`%` PROCEDURE `PLAYER_SEARCH`(
     IN searchTerm VARCHAR(255)
@@ -653,728 +898,31 @@ BEGIN
             name ASC
         LIMIT 5;
     END IF;
-END;;
+END ;;
 DELIMITER ;
-
--- Create syntax for FUNCTION 'PLAYER_WIN_FACTOR'
-CREATE DEFINER=`root`@`%` FUNCTION `PLAYER_WIN_FACTOR`(playerID VARCHAR(32),
-    opponentID VARCHAR(32),
-    surface VARCHAR(50)
-) RETURNS decimal(10,4)
-    DETERMINISTIC
-BEGIN
-    /*
-    PLAYER_WIN_FACTOR(playerID, opponentID, surface)
-
-    Purpose
-    - Return the win probability for playerID against opponentID.
-    - This version is organized into named model factors.
-    - Higher return value means playerID is more likely to win.
-    - 0.5 is neutral.
-
-    Design goals
-    - Keep this function self-contained so the full win-factor model can be
-      understood from the SQL definition alone.
-    - Keep this function separate from older PLAYER_*_FACTOR helpers.
-    - Build the model gradually by starting from Elo and adding small,
-      explicitly weighted adjustments.
-    - Document each factor with its own name, criteria, and weight.
-    - Express each extra factor as an Elo-point adjustment instead of mixing
-      together several independent probabilities.
-
-    Current model
-    1. Start from the Elo factor.
-    2. Add any enabled adjustment factors.
-    3. Convert the adjusted Elo gap into win probability.
-
-    Factor overview
-    - Factor: Elo
-      Weight: 50%
-      Role: core model factor
-    - Factor: Ranking
-      Weight: 15%
-      Role: stable quality adjustment factor
-    - Factor: Head To Head
-      Weight: 15%
-      Role: small adjustment factor
-    - Factor: Form
-      Weight: 20%
-      Role: recent performance adjustment factor
-
-    Factor rules
-    - Every factor must have:
-      1. a name
-      2. a purpose
-      3. clear sample criteria
-      4. a documented weight
-      5. a documented inclusion or exclusion rule
-    - The configured factor weights must sum to 100%.
-    - The Elo factor is the base factor.
-    - Additional factors should adjust or blend with the Elo gap, not replace it.
-    - If a factor is excluded, the active factors are renormalized so the
-      active model still sums to 100%.
-
-    Factor: Elo
-    Purpose
-    - Use the players' rating difference as the main signal.
-
-    Weight
-    - 50%
-
-    Criteria
-    - Hard => use elo_rank_hard, falling back to elo_rank
-    - Clay => use elo_rank_clay, falling back to elo_rank
-    - Grass => use elo_rank_grass, falling back to elo_rank
-    - NULL, empty, or any other surface => use elo_rank
-
-    Surface normalization
-    - Surface-specific Elo can be misleading when a player has very few
-      completed matches on the selected surface.
-    - To avoid treating "no surface evidence" as "same as overall Elo", the
-      selected surface Elo is shrunk toward the neutral Elo baseline of 1500.
-    - This normalization is applied only when surface is Hard, Clay, or Grass.
-    - Overall Elo is not normalized.
-
-    Surface normalization formula
-    - surface_match_count = completed matches for the player on the selected surface
-    - surface_sample_k = 20
-    - surface_weight = surface_match_count / (surface_match_count + surface_sample_k)
-    - normalized_surface_elo = 1500 + surface_weight * (surface_elo - 1500)
-
-    Surface normalization examples
-    - 0 surface matches => normalized surface Elo = 1500
-    - 5 surface matches => 20% of the distance from 1500 to surface Elo
-    - 20 surface matches => 50% of the distance from 1500 to surface Elo
-    - Many surface matches => normalized surface Elo approaches stored surface Elo
-
-    Surface normalization interpretation
-    - A player with no grass matches should not inherit full grass strength
-      from overall Elo.
-    - A player with deep surface history should keep most of the stored
-      surface-specific Elo.
-
-    Interpretation
-    - The Elo gap is the primary driver of the probability.
-    - Positive gap favors playerID.
-    - Negative gap favors opponentID.
-    - Other factors should only nudge this gap.
-
-    Factor: Ranking
-    Purpose
-    - Add a stable quality adjustment based on current ATP ranking.
-
-    Weight
-    - 15%
-
-    Raw factor scale
-    - 100 Elo points
-    - At 15% weight, the maximum effect is +/-15 Elo points
-
-    Criteria
-    - Use the current ATP rank from the players table.
-    - Lower ranking number is better.
-    - Use all surfaces.
-
-    Formula
-    - rank_score = LN(rank_opponent) - LN(rank_player)
-    - rank_factor = 1 / (1 + EXP(-rank_score))
-    - rank_edge = (rank_factor - 0.5) * 2
-    - rank_raw_gap = rank_edge * 100
-
-    Interpretation
-    - This gives a modest edge to the better-ranked player.
-    - The log transform makes top-of-the-ranking gaps matter more than the
-      same absolute gap lower down the list.
-
-    Inclusion rule
-    - If either player has a missing or non-positive ATP rank, the Ranking
-      factor is excluded entirely.
-
-    Factor: Head To Head
-    Purpose
-    - Add a small adjustment when the two players have already faced each
-      other recently.
-
-    Weight
-    - 15%
-
-    Raw factor scale
-    - 100 Elo points
-    - At 15% weight, the maximum effect is +/-15 Elo points
-
-    Criteria
-    - Look only at completed matches between the two players.
-    - Ignore matches without a known event date.
-    - Restrict the sample to the last 2 years.
-    - If surface is provided, only use matches on that surface.
-    - If surface is NULL or empty, use all surfaces.
-
-    Smoothing
-    - h2h_factor = (wins_player + 1) / (matches + 2)
-    - No matches => 0.5
-    - 1-0 => 0.6667
-    - 0-1 => 0.3333
-
-    Inclusion rule
-    - If the players have no qualifying head-to-head matches in the sample,
-      the head-to-head factor is excluded entirely.
-    - In that case the model uses the pure Elo gap with no head-to-head
-      adjustment.
-
-    Factor: Form
-    Purpose
-    - Add a small adjustment based on recent match results.
-
-    Weight
-    - 20%
-
-    Raw factor scale
-    - 100 Elo points
-    - At 20% weight, the maximum effect is +/-20 Elo points
-
-    Criteria
-    - Look only at completed matches for each player separately.
-    - Ignore matches without a known event date.
-    - Restrict the sample to the last 8 weeks.
-    - Use all surfaces.
-    - Weight newer matches higher than older matches.
-
-    Recency weighting
-    - match_weight = POW(0.5, days_ago / window_days)
-    - window_days = 8 * 7
-    - A match today has weight 1.0
-    - A match at the edge of the window has weight about 0.5
-
-    Smoothing
-    - base_form_factor = (weighted_wins + 4) / (weighted_matches + 8)
-    - No matches => 0.5
-    - Small samples remain close to neutral
-
-    Quality-of-results adjustment
-    - The Form factor also rewards recent wins against better-ranked opponents.
-    - It also penalizes recent losses against worse-ranked opponents.
-    - "Better-ranked" means a lower ranking number.
-    - Match-time ranks are taken from winner_rank and loser_rank in the matches
-      table.
-    - Only matches with positive known ranks contribute to the quality signal.
-    - Upset wins and bad losses are scaled with a log transform and capped so
-      one match cannot dominate the factor.
-
-    Quality formula
-    - per_match_quality_score:
-      - positive for a win against a better-ranked opponent
-      - negative for a loss against a worse-ranked opponent
-      - zero otherwise
-    - quality_factor = 0.5 + 0.5 * (weighted_quality_score / (weighted_matches + 2))
-    - quality_factor is clamped to the range 0.0..1.0
-
-    Set-dominance adjustment
-    - The Form factor also rewards more decisive recent match results.
-    - Straight-set wins are worth more than narrow wins.
-    - Straight-set losses are worse than narrow losses.
-    - The score string is parsed through NUMBER_OF_SETS(score).
-    - The dominance signal uses completed match scores with 2 to 5 sets.
-
-    Set-dominance formula
-    - For best-of-3 style results:
-      - 2-0 win => +1.0000
-      - 2-1 win => +0.5000
-      - 1-2 loss => -0.5000
-      - 0-2 loss => -1.0000
-    - For best-of-5 style results:
-      - 3-0 win => +1.0000
-      - 3-1 win => +0.6667
-      - 3-2 win => +0.3333
-      - 2-3 loss => -0.3333
-      - 1-3 loss => -0.6667
-      - 0-3 loss => -1.0000
-    - dominance_factor = 0.5 + 0.5 * (weighted_dominance_score / (weighted_matches + 2))
-    - dominance_factor is clamped to the range 0.0..1.0
-
-    Form blend
-    - final_form_factor =
-      (base_form_factor * 60%)
-      + (quality_factor * 25%)
-      + (dominance_factor * 15%)
-
-    Inclusion rule
-    - If neither player has any qualifying recent matches in the sample,
-      the Form factor is excluded entirely.
-    - If the resulting form edge is neutral, the Form factor is also excluded.
-    - Otherwise the Form factor is included.
-
-    Exact formula
-    - elo_raw_gap = elo_player - elo_opponent
-    - rank_score = LN(rank_opponent) - LN(rank_player)
-    - rank_factor = 1 / (1 + EXP(-rank_score))
-    - rank_edge = (rank_factor - 0.5) * 2
-    - rank_raw_gap = rank_edge * 100
-    - h2h_edge = (h2h_factor - 0.5) * 2
-    - h2h_raw_gap = h2h_edge * 100
-    - form_edge = final_form_factor_player - final_form_factor_opponent
-    - form_raw_gap = form_edge * 100
-    - weighted_gap_sum =
-      (elo_raw_gap * 50)
-      + (rank_raw_gap * 15 if included)
-      + (h2h_raw_gap * 15 if included)
-      + (form_raw_gap * 20 if included)
-    - active_weight_sum = sum of active factor weights
-    - adjusted_gap = weighted_gap_sum / active_weight_sum
-    - probability = 1 / (1 + POW(10, -adjusted_gap / 400))
-
-    Inputs and edge cases
-    - Invalid playerID => NULL
-    - Invalid opponentID => NULL
-    - Same player and opponent => NULL
-    - Missing usable Elo on either side => NULL
-
-    Maintenance note
-    - When adding a new factor later, document all of the following inside this
-      function:
-      1. Factor name
-      2. Why the factor exists
-      3. Factor weight
-      4. What sample or data it uses
-      5. How it is smoothed or capped
-      6. How it modifies the Elo gap
-      7. When it is excluded from the model
-    - Keep this documentation inside the function so the model remains
-      understandable from a SQL dump alone.
-    */
-
-    DECLARE v_surface VARCHAR(50) DEFAULT NULL;
-    DECLARE v_elo_player DOUBLE DEFAULT NULL;
-    DECLARE v_elo_opponent DOUBLE DEFAULT NULL;
-    DECLARE v_surface_match_count_player INT DEFAULT 0;
-    DECLARE v_surface_match_count_opponent INT DEFAULT 0;
-    DECLARE v_surface_sample_k DOUBLE DEFAULT 20;
-    DECLARE v_surface_weight_player DOUBLE DEFAULT 0;
-    DECLARE v_surface_weight_opponent DOUBLE DEFAULT 0;
-    DECLARE v_surface_name VARCHAR(50) DEFAULT NULL;
-    DECLARE v_elo_factor_weight DOUBLE DEFAULT 50;
-    DECLARE v_rank_factor_weight DOUBLE DEFAULT 15;
-    DECLARE v_rank_factor_raw_elo DOUBLE DEFAULT 100;
-    DECLARE v_h2h_factor_weight DOUBLE DEFAULT 15;
-    DECLARE v_h2h_factor_raw_elo DOUBLE DEFAULT 100;
-    DECLARE v_form_factor_weight DOUBLE DEFAULT 20;
-    DECLARE v_form_factor_raw_elo DOUBLE DEFAULT 100;
-    DECLARE v_rank_player INT DEFAULT NULL;
-    DECLARE v_rank_opponent INT DEFAULT NULL;
-    DECLARE v_rank_score DOUBLE DEFAULT 0;
-    DECLARE v_rank_factor_value DOUBLE DEFAULT 0.5;
-    DECLARE v_rank_edge DOUBLE DEFAULT 0;
-    DECLARE v_rank_raw_gap DOUBLE DEFAULT 0;
-    DECLARE v_include_rank TINYINT(1) DEFAULT 0;
-    DECLARE v_h2h_matches INT DEFAULT 0;
-    DECLARE v_h2h_wins_player INT DEFAULT 0;
-    DECLARE v_h2h_factor DOUBLE DEFAULT 0.5;
-    DECLARE v_h2h_edge DOUBLE DEFAULT 0;
-    DECLARE v_h2h_raw_gap DOUBLE DEFAULT 0;
-    DECLARE v_include_h2h TINYINT(1) DEFAULT 0;
-    DECLARE v_form_weeks INT DEFAULT 8;
-    DECLARE v_form_window_days DOUBLE DEFAULT 0;
-    DECLARE v_form_matches_player DOUBLE DEFAULT 0;
-    DECLARE v_form_wins_player DOUBLE DEFAULT 0;
-    DECLARE v_form_matches_opponent DOUBLE DEFAULT 0;
-    DECLARE v_form_wins_opponent DOUBLE DEFAULT 0;
-    DECLARE v_form_quality_score_player DOUBLE DEFAULT 0;
-    DECLARE v_form_quality_score_opponent DOUBLE DEFAULT 0;
-    DECLARE v_form_dominance_score_player DOUBLE DEFAULT 0;
-    DECLARE v_form_dominance_score_opponent DOUBLE DEFAULT 0;
-    DECLARE v_form_base_weight DOUBLE DEFAULT 0.60;
-    DECLARE v_form_quality_weight DOUBLE DEFAULT 0.25;
-    DECLARE v_form_dominance_weight DOUBLE DEFAULT 0.15;
-    DECLARE v_form_factor_player DOUBLE DEFAULT 0.5;
-    DECLARE v_form_factor_opponent DOUBLE DEFAULT 0.5;
-    DECLARE v_form_base_factor_player DOUBLE DEFAULT 0.5;
-    DECLARE v_form_base_factor_opponent DOUBLE DEFAULT 0.5;
-    DECLARE v_form_quality_factor_player DOUBLE DEFAULT 0.5;
-    DECLARE v_form_quality_factor_opponent DOUBLE DEFAULT 0.5;
-    DECLARE v_form_dominance_factor_player DOUBLE DEFAULT 0.5;
-    DECLARE v_form_dominance_factor_opponent DOUBLE DEFAULT 0.5;
-    DECLARE v_form_edge DOUBLE DEFAULT 0;
-    DECLARE v_form_raw_gap DOUBLE DEFAULT 0;
-    DECLARE v_include_form TINYINT(1) DEFAULT 0;
-    DECLARE v_elo_gap DOUBLE DEFAULT NULL;
-    DECLARE v_weighted_gap_sum DOUBLE DEFAULT NULL;
-    DECLARE v_active_weight_sum DOUBLE DEFAULT NULL;
-    DECLARE v_adjusted_gap DOUBLE DEFAULT NULL;
-    DECLARE v_probability DOUBLE DEFAULT NULL;
-
-    IF playerID IS NULL OR TRIM(playerID) = '' OR opponentID IS NULL OR TRIM(opponentID) = '' THEN
-        RETURN NULL;
-    END IF;
-
-    IF UPPER(playerID) = UPPER(opponentID) THEN
-        RETURN NULL;
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM players WHERE id = playerID) THEN
-        RETURN NULL;
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM players WHERE id = opponentID) THEN
-        RETURN NULL;
-    END IF;
-
-    SET v_surface = UPPER(NULLIF(TRIM(surface), ''));
-    SET v_form_window_days = v_form_weeks * 7;
-    SET v_surface_name = CONCAT(UCASE(LEFT(v_surface, 1)), LCASE(SUBSTRING(v_surface, 2)));
-
-    SELECT
-        CASE
-            WHEN v_surface = 'HARD' THEN COALESCE(elo_rank_hard, elo_rank)
-            WHEN v_surface = 'CLAY' THEN COALESCE(elo_rank_clay, elo_rank)
-            WHEN v_surface = 'GRASS' THEN COALESCE(elo_rank_grass, elo_rank)
-            ELSE elo_rank
-        END
-    INTO v_elo_player
-    FROM players
-    WHERE id = playerID
-    LIMIT 1;
-
-    SELECT
-        CASE
-            WHEN v_surface = 'HARD' THEN COALESCE(elo_rank_hard, elo_rank)
-            WHEN v_surface = 'CLAY' THEN COALESCE(elo_rank_clay, elo_rank)
-            WHEN v_surface = 'GRASS' THEN COALESCE(elo_rank_grass, elo_rank)
-            ELSE elo_rank
-        END
-    INTO v_elo_opponent
-    FROM players
-    WHERE id = opponentID
-    LIMIT 1;
-
-    IF v_elo_player IS NULL OR v_elo_opponent IS NULL THEN
-        RETURN NULL;
-    END IF;
-
-    IF v_surface IN ('HARD', 'CLAY', 'GRASS') THEN
-        SELECT COUNT(*)
-        INTO v_surface_match_count_player
-        FROM matches m
-        JOIN events e ON e.id = m.event
-        WHERE
-            m.status = 'Completed'
-            AND e.date IS NOT NULL
-            AND e.surface = v_surface_name
-            AND (m.winner = playerID OR m.loser = playerID);
-
-        SELECT COUNT(*)
-        INTO v_surface_match_count_opponent
-        FROM matches m
-        JOIN events e ON e.id = m.event
-        WHERE
-            m.status = 'Completed'
-            AND e.date IS NOT NULL
-            AND e.surface = v_surface_name
-            AND (m.winner = opponentID OR m.loser = opponentID);
-
-        SET v_surface_weight_player = v_surface_match_count_player / (v_surface_match_count_player + v_surface_sample_k);
-        SET v_surface_weight_opponent = v_surface_match_count_opponent / (v_surface_match_count_opponent + v_surface_sample_k);
-
-        SET v_elo_player = 1500 + v_surface_weight_player * (v_elo_player - 1500);
-        SET v_elo_opponent = 1500 + v_surface_weight_opponent * (v_elo_opponent - 1500);
-    END IF;
-
-    SELECT rank INTO v_rank_player
-    FROM players
-    WHERE id = playerID
-    LIMIT 1;
-
-    SELECT rank INTO v_rank_opponent
-    FROM players
-    WHERE id = opponentID
-    LIMIT 1;
-
-    IF v_rank_player IS NOT NULL
-        AND v_rank_player > 0
-        AND v_rank_opponent IS NOT NULL
-        AND v_rank_opponent > 0
-    THEN
-        SET v_include_rank = 1;
-        SET v_rank_score = LN(v_rank_opponent) - LN(v_rank_player);
-        SET v_rank_factor_value = 1 / (1 + EXP(-v_rank_score));
-        SET v_rank_edge = (v_rank_factor_value - 0.5) * 2;
-        SET v_rank_raw_gap = v_rank_edge * v_rank_factor_raw_elo;
-    ELSE
-        SET v_include_rank = 0;
-        SET v_rank_score = 0;
-        SET v_rank_factor_value = NULL;
-        SET v_rank_edge = 0;
-        SET v_rank_raw_gap = 0;
-    END IF;
-
-    SELECT
-        COUNT(*) AS matches_played,
-        COALESCE(SUM(CASE WHEN m.winner = playerID THEN 1 ELSE 0 END), 0) AS wins_player
-    INTO
-        v_h2h_matches,
-        v_h2h_wins_player
-    FROM matches m
-    JOIN events e ON e.id = m.event
-    WHERE
-        m.status = 'Completed'
-        AND e.date IS NOT NULL
-        AND e.date >= DATE_SUB(CURDATE(), INTERVAL 2 YEAR)
-        AND (
-            (m.winner = playerID AND m.loser = opponentID)
-            OR
-            (m.winner = opponentID AND m.loser = playerID)
-        )
-        AND (
-            v_surface IS NULL
-            OR e.surface = CONCAT(UCASE(LEFT(v_surface, 1)), LCASE(SUBSTRING(v_surface, 2)))
-        );
-
-    IF v_h2h_matches > 0 THEN
-        SET v_include_h2h = 1;
-        SET v_h2h_factor = (v_h2h_wins_player + 1) / (v_h2h_matches + 2);
-        SET v_h2h_edge = (v_h2h_factor - 0.5) * 2;
-        SET v_h2h_raw_gap = v_h2h_edge * v_h2h_factor_raw_elo;
-    ELSE
-        SET v_include_h2h = 0;
-        SET v_h2h_factor = NULL;
-        SET v_h2h_edge = 0;
-        SET v_h2h_raw_gap = 0;
-    END IF;
-
-    SELECT
-        COALESCE(SUM(match_weight), 0) AS weighted_matches,
-        COALESCE(SUM(CASE WHEN is_win = 1 THEN match_weight ELSE 0 END), 0) AS weighted_wins,
-        COALESCE(SUM(match_weight * quality_score), 0) AS weighted_quality_score,
-        COALESCE(SUM(match_weight * dominance_score), 0) AS weighted_dominance_score
-    INTO
-        v_form_matches_player,
-        v_form_wins_player,
-        v_form_quality_score_player,
-        v_form_dominance_score_player
-    FROM (
-        SELECT
-            CASE WHEN m.winner = playerID THEN 1 ELSE 0 END AS is_win,
-            POW(0.5, GREATEST(DATEDIFF(CURDATE(), e.date), 0) / v_form_window_days) AS match_weight,
-            CASE
-                WHEN m.winner = playerID
-                    AND m.winner_rank IS NOT NULL
-                    AND m.loser_rank IS NOT NULL
-                    AND m.winner_rank > 0
-                    AND m.loser_rank > 0
-                    AND m.winner_rank > m.loser_rank
-                THEN LEAST(1, (LN(m.winner_rank) - LN(m.loser_rank)) / LN(4))
-                WHEN m.loser = playerID
-                    AND m.winner_rank IS NOT NULL
-                    AND m.loser_rank IS NOT NULL
-                    AND m.winner_rank > 0
-                    AND m.loser_rank > 0
-                    AND m.loser_rank < m.winner_rank
-                THEN -LEAST(1, (LN(m.winner_rank) - LN(m.loser_rank)) / LN(4))
-                ELSE 0
-            END AS quality_score,
-            CASE
-                WHEN NUMBER_OF_SETS(m.score) BETWEEN 2 AND 5 THEN
-                    CASE
-                        WHEN m.winner = playerID THEN
-                            (
-                                (
-                                    CASE
-                                        WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                        ELSE 3
-                                    END
-                                ) - (
-                                    NUMBER_OF_SETS(m.score) - (
-                                        CASE
-                                            WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                            ELSE 3
-                                        END
-                                    )
-                                )
-                            ) / (
-                                CASE
-                                    WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                    ELSE 3
-                                END
-                            )
-                        WHEN m.loser = playerID THEN
-                            -(
-                                (
-                                    (
-                                        CASE
-                                            WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                            ELSE 3
-                                        END
-                                    ) - (
-                                        NUMBER_OF_SETS(m.score) - (
-                                            CASE
-                                                WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                                ELSE 3
-                                            END
-                                        )
-                                    )
-                                ) / (
-                                    CASE
-                                        WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                        ELSE 3
-                                    END
-                                )
-                            )
-                        ELSE 0
-                    END
-                ELSE 0
-            END AS dominance_score
-        FROM matches m
-        JOIN events e ON e.id = m.event
-        WHERE
-            m.status = 'Completed'
-            AND e.date IS NOT NULL
-            AND e.date >= DATE_SUB(CURDATE(), INTERVAL v_form_weeks WEEK)
-            AND (m.winner = playerID OR m.loser = playerID)
-    ) recent_player_matches;
-
-    SELECT
-        COALESCE(SUM(match_weight), 0) AS weighted_matches,
-        COALESCE(SUM(CASE WHEN is_win = 1 THEN match_weight ELSE 0 END), 0) AS weighted_wins,
-        COALESCE(SUM(match_weight * quality_score), 0) AS weighted_quality_score,
-        COALESCE(SUM(match_weight * dominance_score), 0) AS weighted_dominance_score
-    INTO
-        v_form_matches_opponent,
-        v_form_wins_opponent,
-        v_form_quality_score_opponent,
-        v_form_dominance_score_opponent
-    FROM (
-        SELECT
-            CASE WHEN m.winner = opponentID THEN 1 ELSE 0 END AS is_win,
-            POW(0.5, GREATEST(DATEDIFF(CURDATE(), e.date), 0) / v_form_window_days) AS match_weight,
-            CASE
-                WHEN m.winner = opponentID
-                    AND m.winner_rank IS NOT NULL
-                    AND m.loser_rank IS NOT NULL
-                    AND m.winner_rank > 0
-                    AND m.loser_rank > 0
-                    AND m.winner_rank > m.loser_rank
-                THEN LEAST(1, (LN(m.winner_rank) - LN(m.loser_rank)) / LN(4))
-                WHEN m.loser = opponentID
-                    AND m.winner_rank IS NOT NULL
-                    AND m.loser_rank IS NOT NULL
-                    AND m.winner_rank > 0
-                    AND m.loser_rank > 0
-                    AND m.loser_rank < m.winner_rank
-                THEN -LEAST(1, (LN(m.winner_rank) - LN(m.loser_rank)) / LN(4))
-                ELSE 0
-            END AS quality_score,
-            CASE
-                WHEN NUMBER_OF_SETS(m.score) BETWEEN 2 AND 5 THEN
-                    CASE
-                        WHEN m.winner = opponentID THEN
-                            (
-                                (
-                                    CASE
-                                        WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                        ELSE 3
-                                    END
-                                ) - (
-                                    NUMBER_OF_SETS(m.score) - (
-                                        CASE
-                                            WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                            ELSE 3
-                                        END
-                                    )
-                                )
-                            ) / (
-                                CASE
-                                    WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                    ELSE 3
-                                END
-                            )
-                        WHEN m.loser = opponentID THEN
-                            -(
-                                (
-                                    (
-                                        CASE
-                                            WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                            ELSE 3
-                                        END
-                                    ) - (
-                                        NUMBER_OF_SETS(m.score) - (
-                                            CASE
-                                                WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                                ELSE 3
-                                            END
-                                        )
-                                    )
-                                ) / (
-                                    CASE
-                                        WHEN NUMBER_OF_SETS(m.score) <= 3 THEN 2
-                                        ELSE 3
-                                    END
-                                )
-                            )
-                        ELSE 0
-                    END
-                ELSE 0
-            END AS dominance_score
-        FROM matches m
-        JOIN events e ON e.id = m.event
-        WHERE
-            m.status = 'Completed'
-            AND e.date IS NOT NULL
-            AND e.date >= DATE_SUB(CURDATE(), INTERVAL v_form_weeks WEEK)
-            AND (m.winner = opponentID OR m.loser = opponentID)
-    ) recent_opponent_matches;
-
-    IF v_form_matches_player > 0 OR v_form_matches_opponent > 0 THEN
-        SET v_form_base_factor_player = (v_form_wins_player + 4) / (v_form_matches_player + 8);
-        SET v_form_base_factor_opponent = (v_form_wins_opponent + 4) / (v_form_matches_opponent + 8);
-        SET v_form_quality_factor_player = 0.5 + 0.5 * (v_form_quality_score_player / (v_form_matches_player + 2));
-        SET v_form_quality_factor_opponent = 0.5 + 0.5 * (v_form_quality_score_opponent / (v_form_matches_opponent + 2));
-        SET v_form_dominance_factor_player = 0.5 + 0.5 * (v_form_dominance_score_player / (v_form_matches_player + 2));
-        SET v_form_dominance_factor_opponent = 0.5 + 0.5 * (v_form_dominance_score_opponent / (v_form_matches_opponent + 2));
-        SET v_form_quality_factor_player = GREATEST(0, LEAST(1, v_form_quality_factor_player));
-        SET v_form_quality_factor_opponent = GREATEST(0, LEAST(1, v_form_quality_factor_opponent));
-        SET v_form_dominance_factor_player = GREATEST(0, LEAST(1, v_form_dominance_factor_player));
-        SET v_form_dominance_factor_opponent = GREATEST(0, LEAST(1, v_form_dominance_factor_opponent));
-        SET v_form_factor_player = (v_form_base_factor_player * v_form_base_weight)
-            + (v_form_quality_factor_player * v_form_quality_weight)
-            + (v_form_dominance_factor_player * v_form_dominance_weight);
-        SET v_form_factor_opponent = (v_form_base_factor_opponent * v_form_base_weight)
-            + (v_form_quality_factor_opponent * v_form_quality_weight)
-            + (v_form_dominance_factor_opponent * v_form_dominance_weight);
-        SET v_form_edge = v_form_factor_player - v_form_factor_opponent;
-        SET v_form_raw_gap = v_form_edge * v_form_factor_raw_elo;
-
-        IF ABS(v_form_edge) < 0.0001 THEN
-            SET v_include_form = 0;
-            SET v_form_edge = 0;
-            SET v_form_raw_gap = 0;
-        ELSE
-            SET v_include_form = 1;
-        END IF;
-    ELSE
-        SET v_include_form = 0;
-        SET v_form_factor_player = NULL;
-        SET v_form_factor_opponent = NULL;
-        SET v_form_base_factor_player = NULL;
-        SET v_form_base_factor_opponent = NULL;
-        SET v_form_quality_factor_player = NULL;
-        SET v_form_quality_factor_opponent = NULL;
-        SET v_form_dominance_factor_player = NULL;
-        SET v_form_dominance_factor_opponent = NULL;
-        SET v_form_edge = 0;
-        SET v_form_raw_gap = 0;
-    END IF;
-
-    SET v_elo_gap = v_elo_player - v_elo_opponent;
-    SET v_weighted_gap_sum = (v_elo_gap * v_elo_factor_weight)
-        + (v_rank_raw_gap * v_rank_factor_weight * v_include_rank)
-        + (v_h2h_raw_gap * v_h2h_factor_weight * v_include_h2h);
-    SET v_weighted_gap_sum = v_weighted_gap_sum
-        + (v_form_raw_gap * v_form_factor_weight * v_include_form);
-    SET v_active_weight_sum = v_elo_factor_weight
-        + (v_rank_factor_weight * v_include_rank)
-        + (v_h2h_factor_weight * v_include_h2h);
-    SET v_active_weight_sum = v_active_weight_sum
-        + (v_form_factor_weight * v_include_form);
-    SET v_adjusted_gap = v_weighted_gap_sum / v_active_weight_sum;
-    SET v_probability = 1 / (1 + POW(10, -v_adjusted_gap / 400));
-
-    RETURN ROUND(v_probability, 4);
-END;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50001 DROP VIEW IF EXISTS `flatly`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `flatly` AS select `matches`.`id` AS `id`,`C`.`date` AS `event_date`,`C`.`id` AS `event_id`,`C`.`name` AS `event_name`,`C`.`location` AS `event_location`,`C`.`type` AS `event_type`,`C`.`surface` AS `event_surface`,`matches`.`round` AS `round`,`A`.`name` AS `winner`,`B`.`name` AS `loser`,`A`.`id` AS `winner_id`,`matches`.`winner_rank` AS `winner_rank`,`B`.`id` AS `loser_id`,`matches`.`loser_rank` AS `loser_rank`,`matches`.`score` AS `score`,`matches`.`status` AS `status`,`matches`.`duration` AS `duration` from (((`matches` left join `players` `A` on(`matches`.`winner` = `A`.`id`)) left join `players` `B` on(`matches`.`loser` = `B`.`id`)) left join `events` `C` on(`matches`.`event` = `C`.`id`)) order by `C`.`date` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

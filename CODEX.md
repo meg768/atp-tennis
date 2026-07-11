@@ -184,7 +184,8 @@ This is a deduplicated list from the current codebase.
   - tables: `events`, `log`, `matches`, `players`, `settings`
   - view: `flatly`
   - helper SQL functions: `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`, `PLAYER_LOOKUP`
-  - stored procedure: `PLAYER_SEARCH`
+  - stored procedures: `PLAYER_ODDS`, `PLAYER_SEARCH`
+  - `PLAYER_WIN_FACTOR` is the canonical TA-calibrated CODEX model; the older factor-specific ELO/form/rating/ranking/HTH functions and `PLAYER_STATS` procedure were removed
   - no legacy `sp_update*` stored procedures
 
 ## MariaDB Prerequisites

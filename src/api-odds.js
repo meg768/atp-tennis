@@ -2,7 +2,7 @@ const Api = require('./api');
 const ApiTennisAbstractOdds = require('./api-tennis-abstract-odds.js');
 
 class ApiOdds extends Api {
-	async fetchMyOdds(playerA, playerB, surface) {
+	async fetchCodexOdds(playerA, playerB, surface) {
 		let rows = await this.mysql.query({
 			sql: 'CALL PLAYER_ODDS(?, ?, ?)',
 			format: [playerA, playerB, surface || null]
@@ -35,13 +35,13 @@ class ApiOdds extends Api {
 			mysql: this.mysql,
 			log: this.log
 		});
-		const [computedOdds, tennisAbstract] = await Promise.all([
-			this.fetchMyOdds(playerA, playerB, surface),
+		const [codexOdds, tennisAbstract] = await Promise.all([
+			this.fetchCodexOdds(playerA, playerB, surface),
 			tennisAbstractApi.fetch({ playerA, playerB, surface })
 		]);
 
 		return {
-			computedOdds,
+			codexOdds,
 			tennisAbstractOdds: tennisAbstract.odds
 		};
 	}

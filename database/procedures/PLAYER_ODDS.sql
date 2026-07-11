@@ -14,8 +14,8 @@ BEGIN
     Purpose
     - Return two rows of decimal odds for a matchup.
     - One row is returned per player.
-    - The underlying win probability now comes from PLAYER_WIN_FACTOR(...),
-      which is the single source of truth for the model.
+    - The underlying win probability comes from the TA-calibrated CODEX model
+      in PLAYER_WIN_FACTOR(...), the single source of truth for server odds.
     - A fixed 5% margin is then applied when converting fair probability to
       decimal odds.
 
@@ -45,10 +45,10 @@ BEGIN
     DECLARE resolvedPlayerA VARCHAR(32) DEFAULT NULL;
     DECLARE resolvedPlayerB VARCHAR(32) DEFAULT NULL;
     DECLARE normalizedSurface VARCHAR(50) DEFAULT NULL;
-    DECLARE factorA DECIMAL(10,4) DEFAULT NULL;
-    DECLARE factorB DECIMAL(10,4) DEFAULT NULL;
-    DECLARE pricedFactorA DECIMAL(10,4) DEFAULT NULL;
-    DECLARE pricedFactorB DECIMAL(10,4) DEFAULT NULL;
+    DECLARE factorA DOUBLE DEFAULT NULL;
+    DECLARE factorB DOUBLE DEFAULT NULL;
+    DECLARE pricedFactorA DOUBLE DEFAULT NULL;
+    DECLARE pricedFactorB DOUBLE DEFAULT NULL;
 
     SET resolvedPlayerA = PLAYER_LOOKUP(playerA);
     SET resolvedPlayerB = PLAYER_LOOKUP(playerB);
