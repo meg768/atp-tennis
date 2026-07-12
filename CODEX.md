@@ -433,6 +433,7 @@ For fresh dev/prod environments:
   - most import-specific helper functions now live locally inside `commands/import.js` `run()` for readability, instead of as class methods
   - surface factor calculation was moved out of `commands/import.js` into `src/update-surface-factors.js`, keeping the command file thinner
   - ELO values are imported from Tennis Abstract by `src/update-tennis-abstract-elo.js`; the normal import no longer calls `REFRESH()` to calculate ELO locally
+  - odds API requests calculate pure TA odds from those stored values and never fetch Tennis Abstract directly; only the import owns that external dependency
   - `import --elo-only` fetches and validates the Tennis Abstract report, then transactionally clears all four ELO columns and populates matched players without running the rest of the import
   - the obsolete `COMPUTE_ELO_RANK`, `COMPUTE_ELO_RANK_SURFACE`, and `REFRESH` procedures were removed after Tennis Abstract became the ELO source of truth
   - ATP player stats sync is now also moved to `src/update-player-stats.js`, continuing the same thin-command pattern

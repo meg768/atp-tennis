@@ -179,7 +179,8 @@ Notes:
 
 Notes:
 - `playerA` and `playerB` can be ATP player ids or free-text player names.
-- The endpoint delegates to `CALL PLAYER_ODDS(?, ?, ?)` in MariaDB and returns a two-item array with decimal odds after a fixed 5% margin.
+- The endpoint returns GPT odds from `CALL PLAYER_ODDS(?, ?, ?)` and pure Tennis Abstract Elo odds calculated from the latest ratings stored in MariaDB.
+- The service does not contact Tennis Abstract at request time; the daily import is solely responsible for refreshing stored Elo ratings.
 - `PLAYER_ODDS` now delegates win probability to `PLAYER_WIN_FACTOR(...)`, which is the single source of truth for the model.
 
 ## Data Sources Used in Code
