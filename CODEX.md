@@ -4,6 +4,16 @@ This file is the single source of truth for Codex instructions, project context,
 
 When updating project memory, architecture notes, operational details, priorities, or collaboration conventions, update this file directly.
 
+## Current Handoff — 2026-07-12
+
+- Tennis Abstract (Jeff Sackmann) is the sole Elo source of truth. The project no longer calculates its own Elo.
+- The normal PM2 job `atp-import` runs daily at `0 6 * * *`; it performs the ordinary ATP import and refreshes overall, Hard, Clay, and Grass Elo from Tennis Abstract. `import --elo-only` refreshes only Elo.
+- Only the import may contact/scrape Tennis Abstract. `atp-service` must not fetch TA at request time.
+- `GET /api/odds` reads the latest stored TA Elo from MariaDB. `tennisAbstractOdds` is pure Elo (surface Elo when supplied, overall otherwise) with the existing 5% pricing margin. `gptOdds` comes from `PLAYER_ODDS` / `PLAYER_WIN_FACTOR`, using the same stored TA Elo plus the GPT model's additional weighting.
+- `PLAYER_WIN_FACTOR` is the single source of truth for GPT matchup probability. The old client label `Vitel`/`Codex` has been replaced by `GPT`.
+- Production `pi-kato` runs commit `9523622`; `atp-service` was restarted and verified online. Sinner–Zverev verification: overall TA/GPT `1.22–4.33`; Grass TA `1.30–3.55`, GPT `1.34–3.29`.
+- Preserve the `/api/odds` response contract: `gptOdds` and `tennisAbstractOdds`.
+
 ## ATP Tennis
 
 Node.js project for fetching ATP data from `atptour.com`, storing it in MariaDB, and exposing data through CLI commands and a local API service.
