@@ -124,6 +124,22 @@ class ApiMetaEndpoints extends Api {
 						}
 					}
 				},
+				'/api/odds/matches': {
+					method: 'POST',
+					body: {
+						matches: 'array, required, up to 100 entries with key, playerA, playerB, and optional surface'
+					},
+					description: 'Returns GPT and Tennis Abstract odds for multiple matchups in one request. Individual matchup errors do not fail the complete batch.',
+					response: {
+						shape: 'array',
+						fields: {
+							key: 'string',
+							gptOdds: 'array[number, number]|null',
+							tennisAbstractOdds: 'array[number, number]|null',
+							error: 'string|null'
+						}
+					}
+				},
 				'/api/events/calendar': {
 					method: 'GET',
 					description: 'Normalized ATP calendar.',

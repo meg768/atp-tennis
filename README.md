@@ -97,6 +97,7 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/player/lookup`
 - `GET /api/oddset`
 - `GET /api/odds`
+- `POST /api/odds/matches`
 - `GET /api/events/calendar`
 - `POST /api/query`
 
@@ -182,6 +183,10 @@ Notes:
 - The endpoint returns GPT odds from `CALL PLAYER_ODDS(?, ?, ?)` and pure Tennis Abstract Elo odds calculated from the latest ratings stored in MariaDB.
 - The service does not contact Tennis Abstract at request time; the daily import is solely responsible for refreshing stored Elo ratings.
 - `PLAYER_ODDS` now delegates win probability to `PLAYER_WIN_FACTOR(...)`, which is the single source of truth for the model.
+
+### `/api/odds/matches`
+
+Accepts a JSON body with a `matches` array of up to 100 matchups. Each entry contains a client-provided `key`, `playerA`, `playerB`, and optional `surface`. The response contains one row per matchup with the same key, `gptOdds`, `tennisAbstractOdds`, and an individual `error` value. One invalid matchup does not fail the complete batch.
 
 ## Data Sources Used in Code
 - `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank={top}`

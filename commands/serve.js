@@ -168,6 +168,14 @@ class Module extends Command {
 			});
 		});
 
+		app.post('/api/odds/matches', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let Api = require('../src/api-odds-matches.js');
+				let api = new Api({ request, response, mysql: this.mysql, log: this.log });
+				return await api.run();
+			});
+		});
+
 		app.get('/api/events/calendar', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Api = require('../src/api-events-calendar.js');

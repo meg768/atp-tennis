@@ -6,6 +6,8 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-13: `POST /api/odds/matches` was added for Vitel's `/matches` page so all displayed matchups can request GPT and Tennis Abstract odds in one HTTP request. The response is keyed per matchup and isolates individual errors.
+
 - Tennis Abstract (Jeff Sackmann) is the sole Elo source of truth. The project no longer calculates its own Elo.
 - The normal PM2 job `atp-import` runs daily at `0 6 * * *`; it performs the ordinary ATP import and refreshes overall, Hard, Clay, and Grass Elo from Tennis Abstract. `import --elo-only` refreshes only Elo.
 - Only the import may contact/scrape Tennis Abstract. `atp-service` must not fetch TA at request time.
