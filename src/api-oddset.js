@@ -1,6 +1,6 @@
 const Api = require('./api');
 const Oddset = require('./oddset.js');
-const searchPlayers = require('./search-players.js');
+const searchPlayersBulk = require('./search-players-bulk.js');
 
 class ApiOddset extends Api {
 	constructor(options = {}) {
@@ -11,15 +11,6 @@ class ApiOddset extends Api {
 	usesRawResponse(options = null) {
 		options = this.resolveOptions(options);
 		return options.raw != undefined && (options.raw === '' || options.raw != 0);
-	}
-
-	async resolvePlayerId(name) {
-		if (!this.mysql) {
-			return null;
-		}
-
-		const rows = await searchPlayers(this.mysql, name, 5);
-		return rows[0]?.id ?? null;
 	}
 
 	async attachPlayerIds(rows = []) {
@@ -42,20 +33,17 @@ class ApiOddset extends Api {
 				.flatMap(row => [row?.playerA?.name, row?.playerB?.name].map(name => String(name || '').trim()))
 				.filter(Boolean)
 		)];
-		const idEntries = await Promise.all(
-			uniqueNames.map(async name => [name, await this.resolvePlayerId(name)])
-		);
-		const playerIdByName = Object.fromEntries(idEntries);
+		const playersByName = await searchPlayersBulk(this.mysql, uniqueNames);
 
 		return rows.map(row => ({
 			...row,
 			playerA: {
 				...(row.playerA || {}),
-				id: playerIdByName[String(row?.playerA?.name || '').trim()] ?? null
+				id: playersByName[String(row?.playerA?.name || '').trim()]?.id ?? null
 			},
 			playerB: {
 				...(row.playerB || {}),
-				id: playerIdByName[String(row?.playerB?.name || '').trim()] ?? null
+				id: playersByName[String(row?.playerB?.name || '').trim()]?.id ?? null
 			}
 		}));
 	}

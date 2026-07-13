@@ -156,6 +156,8 @@ Notes:
 `/api/oddset` is the canonical Oddset endpoint for this project:
 - it always returns the current ATP-family Oddset rows for both live and upcoming matches
 - clients can filter on the returned `state` field when they only want live or only upcoming rows
+- it returns Kambi/Oddset data and resolved ATP player ids only; GPT and Tennis Abstract odds remain owned by `/api/odds` and `/api/odds/matches`
+- player ids for all unique names in a feed are resolved through one bulk MariaDB query
 
 ### `/api/oddset` Upstream Sources
 - Primary: Oddset ATP `matches.json` for ATP live/upcoming odds.

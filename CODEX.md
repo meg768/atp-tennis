@@ -6,6 +6,8 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-13: `GET /api/oddset` still returns only the normalized Kambi/Oddset feed and resolved ATP player ids; it does not calculate GPT or Tennis Abstract odds. Player ids are now resolved with one bulk MariaDB query for all unique feed names instead of one query per name.
+
 - 2026-07-13: `POST /api/odds/matches` was added for Vitel's `/matches` page so all displayed matchups can request GPT and Tennis Abstract odds in one HTTP request. The response is keyed per matchup and isolates individual errors.
 - The batch odds endpoint uses a dedicated MariaDB pool with at most eight connections so matchup calculations can run concurrently. The ordinary singleton connection remains unchanged for imports and transaction-sensitive work.
 
