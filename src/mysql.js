@@ -7,6 +7,8 @@ class MySQL {
 	constructor(options) {
 
 		this.connection = undefined;
+		this.parallelPool = undefined;
+		this.connectionOptions = undefined;
         this.debug = options?.debug || false;
 		this.log = console.log;
 		this.error = console.error;
@@ -23,6 +25,7 @@ class MySQL {
 			port: process.env.MYSQL_PORT,
 			multipleStatements: true
 		};
+		this.connectionOptions = options;
 
 		if (!isString(options.host) || !isString(options.user) || !isString(options.password) || !isString(options.database)) {
 			throw new Error('MySQL credentials/database not specified.');
@@ -66,6 +69,12 @@ class MySQL {
 	}
 
 	async disconnect() {
+		if (this.parallelPool !== undefined) {
+			const endPoolAsync = util.promisify(this.parallelPool.end).bind(this.parallelPool);
+			await endPoolAsync();
+			this.parallelPool = undefined;
+		}
+
 		if (this.connection !== undefined) {
 			this.log(`Disconnecting from '${process.env.MYSQL_DATABASE}' at ${process.env.MYSQL_HOST}...`);
 
@@ -99,6 +108,25 @@ class MySQL {
 	}
 
 	async query(params) {
+		return await this.queryConnection(this.connection, params);
+	}
+
+	async parallelQuery(params) {
+		if (!this.parallelPool) {
+			if (!this.connectionOptions) {
+				throw new Error('MySQL must be connected before parallelQuery is used.');
+			}
+
+			this.parallelPool = mysql.createPool({
+				...this.connectionOptions,
+				connectionLimit: 8
+			});
+		}
+
+		return await this.queryConnection(this.parallelPool, params);
+	}
+
+	async queryConnection(connection, params) {
 		if (typeof params === 'string') {
 			params = { sql: params };
 		}
@@ -111,7 +139,7 @@ class MySQL {
 
 		let query = () => {
 			return new Promise((resolve, reject) => {
-				this.connection.query({ sql, ...options }, (error, results) => {
+				connection.query({ sql, ...options }, (error, results) => {
 					if (error) {
 						this.error('MySQL query error:', error.message);
 						reject(error);

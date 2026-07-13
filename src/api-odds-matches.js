@@ -15,7 +15,10 @@ class ApiOddsMatches extends Api {
 			throw new Error(`matches may contain at most ${MAX_MATCHES} entries.`);
 		}
 
-		const oddsApi = new ApiOdds({ mysql: this.mysql, log: this.log });
+		const parallelMysql = {
+			query: params => this.mysql.parallelQuery(params)
+		};
+		const oddsApi = new ApiOdds({ mysql: parallelMysql, log: this.log });
 		return await Promise.all(matches.map(async (match, index) => {
 			const key = String(match?.key ?? index);
 
