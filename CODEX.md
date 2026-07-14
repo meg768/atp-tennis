@@ -6,6 +6,10 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-14: The duplicate `database/functions/` and `database/procedures/` trees were removed after the live schema dump was restore-tested. `database/schema.sql` is now the only repo-managed source of truth for all MariaDB structure, including routines.
+
+- 2026-07-14: `database/schema.sql` was regenerated directly from the live `atp` database on `pi-sql` with `mysqldump --no-data --routines --triggers --events --databases atp`. The standalone dump contains 5 tables, 1 view, 5 functions, and 2 procedures and no application data. It was successfully restored into and verified against a temporary `atp_schema_verify` database, which was then dropped. README files now document that `schema.sql` alone is sufficient for structure bootstrap.
+
 - 2026-07-13: `GET /api/oddset` still returns only the normalized Kambi/Oddset feed and resolved ATP player ids; it does not calculate GPT or Tennis Abstract odds. Player ids are now resolved with one bulk MariaDB query for all unique feed names instead of one query per name.
 
 - 2026-07-13: `POST /api/odds/matches` was added for Vitel's `/matches` page so all displayed matchups can request GPT and Tennis Abstract odds in one HTTP request. The response is keyed per matchup and isolates individual errors.
@@ -189,10 +193,7 @@ This is a deduplicated list from the current codebase.
 - `https://www.atptour.com/en/~/media/images/flags/{COUNTRY}.svg` (flags, `helpers/fetch-flags.js`)
 
 ## Database
-- Repo-managed DB artifacts:
-  - `database/schema.sql`
-  - `database/functions/*.sql`
-  - `database/procedures/*.sql`
+- The sole repo-managed DB structure artifact is `database/schema.sql`.
 - Legacy `import` no longer calls `sp_update()`; surface factors are now updated in app code via `src/update-surface-factors.js`
 - Legacy `import` ELO now reads directly from `matches` + `events` and does not depend on the `flatly` view
 - `database/schema.sql` is now a dump of the current MariaDB schema and currently includes:
@@ -206,9 +207,7 @@ This is a deduplicated list from the current codebase.
 ## MariaDB Prerequisites
 
 Before running a full import, MariaDB must already contain:
-- Tables/views from `database/schema.sql`
-- Repo-managed functions from `database/functions/`
-- Repo-managed procedures from `database/procedures/` when used
+- The complete structure from `database/schema.sql`, including tables, view, functions, and procedures
 
 Failure behavior:
 - `node atp.js import ...` fails with a MariaDB error if required schema tables are missing
@@ -216,9 +215,7 @@ Failure behavior:
 ## Environment Bootstrap Note
 
 For fresh dev/prod environments:
-1. Create tables/views from `database/schema.sql`
-2. Apply SQL files from `database/functions/`
-3. Apply SQL files from `database/procedures/` when needed
+1. Apply `database/schema.sql`
 
 ## Project Structure
 - `atp.js` - CLI entrypoint

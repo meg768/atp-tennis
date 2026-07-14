@@ -10,9 +10,7 @@ Node.js (CommonJS) app that imports ATP data into MariaDB, updates player metric
 
 ## Requirements
 - Node.js 20+ (built-in `fetch` is used in multiple modules).
-- MariaDB with tables/views from `database/schema.sql`.
-- SQL helper functions from `database/functions/*.sql`.
-- SQL procedures from `database/procedures/*.sql` when required.
+- MariaDB with the complete structure from `database/schema.sql`.
 - MariaDB user permissions that allow creating the tables, view, helper functions, and procedures defined in the repo-managed database files.
 
 ## Environment (`.env`)
@@ -33,11 +31,8 @@ npm install
 
 ## Database Bootstrap
 
-Apply the repo-managed database objects in this order:
-
-1. `database/schema.sql`
-2. Each SQL file in `database/functions/`
-3. Each SQL file in `database/procedures/`
+Apply `database/schema.sql`. It is a structure-only dump that creates the
+database, tables, view, functions, and procedures without application data.
 
 The app expects those objects to already exist before you run `import` or `serve`.
 
@@ -207,8 +202,7 @@ Reference docs:
 
 ## Database Notes
 - Schema in repo: `database/schema.sql`.
-- Repo-managed SQL functions live in `database/functions/`.
-- Repo-managed SQL procedures live in `database/procedures/`.
+- `database/schema.sql` is the single repo-managed source for tables, views, functions, and procedures.
 - The database layer currently relies on score helper functions (`NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`) plus `PLAYER_WIN_FACTOR(...)` as the self-contained source of truth for TA-calibrated GPT matchup probability.
 - Lookup helpers now also exist in MariaDB:
   - `PLAYER_LOOKUP(searchTerm)` returns the single best matching `players.id`
