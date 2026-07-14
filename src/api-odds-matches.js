@@ -33,8 +33,10 @@ class ApiOddsMatches extends Api {
 			} catch (error) {
 				return {
 					key,
-					gptOdds: null,
-					tennisAbstractOdds: null,
+					odds: {
+						TA: null,
+						GPT: null
+					},
 					error: error instanceof Error ? error.message : String(error)
 				};
 			}

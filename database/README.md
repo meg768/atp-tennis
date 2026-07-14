@@ -20,8 +20,8 @@ application data and can be executed on its own to recreate the complete
 database structure.
 
 The dump includes the score helpers, player lookup/search routines,
-`PLAYER_ODDS`, and the canonical TA-calibrated GPT model in
-`PLAYER_WIN_FACTOR`.
+`PLAYER_ODDS`, the pure Elo model in `WIN_PROBABILITY_TA`, and the weighted
+model in `WIN_PROBABILITY_GPT`.
 
 ## How It Is Used
 

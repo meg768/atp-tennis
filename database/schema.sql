@@ -524,7 +524,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-/*!50003 DROP FUNCTION IF EXISTS `PLAYER_WIN_FACTOR` */;
+/*!50003 DROP FUNCTION IF EXISTS `WIN_PROBABILITY_GPT` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -532,14 +532,14 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8mb3 */ ;
 /*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `PLAYER_WIN_FACTOR`(playerID VARCHAR(32),
+CREATE DEFINER=`root`@`localhost` FUNCTION `WIN_PROBABILITY_GPT`(playerID VARCHAR(32),
     opponentID VARCHAR(32),
     surface VARCHAR(50)
 ) RETURNS double
     DETERMINISTIC
 BEGIN
     /*
-    PLAYER_WIN_FACTOR(playerID, opponentID, surface)
+    WIN_PROBABILITY_GPT(playerID, opponentID, surface)
 
     Purpose
     - Return the modelled fair win probability for playerID against opponentID.
@@ -663,8 +663,7 @@ BEGIN
     FROM players WHERE id = v_opponent_id LIMIT 1;
 
     IF v_surface_name IS NULL THEN
-        SET v_probability = 1 / (1 + POW(10, (v_overall_b - v_overall_a) / 400));
-        RETURN LEAST(0.995, GREATEST(0.005, v_probability));
+        RETURN WIN_PROBABILITY_TA(v_player_id, v_opponent_id, NULL);
     END IF;
 
     SELECT COUNT(*), COALESCE(SUM(m.winner = v_player_id), 0)
@@ -754,6 +753,96 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 DROP FUNCTION IF EXISTS `WIN_PROBABILITY_TA` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `WIN_PROBABILITY_TA`(playerID VARCHAR(32),
+    opponentID VARCHAR(32),
+    surface VARCHAR(50)
+) RETURNS double
+    DETERMINISTIC
+BEGIN
+    /*
+    WIN_PROBABILITY_TA(playerID, opponentID, surface)
+
+    Purpose
+    - Return the fair Tennis Abstract Elo win probability for playerID against
+      opponentID.
+    - This is the canonical TA model. It performs no pricing and applies no
+      margin; PLAYER_ODDS converts the probability to decimal odds.
+
+    Input
+    - playerID, opponentID:
+      ATP player id or free-text player name resolved through PLAYER_LOOKUP.
+    - surface:
+      Hard, Clay, or Grass (case-insensitive). NULL, empty, or another value
+      selects overall Tennis Abstract Elo.
+
+    Output
+    - Fair probability for playerID between 0 and 1.
+    - NULL when either player cannot be resolved, both inputs resolve to the
+      same player, or the selected stored Elo is missing or non-positive.
+
+    Model
+    - Select overall or surface-specific Tennis Abstract Elo from players.
+    - Apply the standard Elo expectation formula:
+      1 / (1 + 10 ^ ((opponentElo - playerElo) / 400)).
+    */
+
+    DECLARE v_player_id VARCHAR(32) DEFAULT NULL;
+    DECLARE v_opponent_id VARCHAR(32) DEFAULT NULL;
+    DECLARE v_surface VARCHAR(50) DEFAULT NULL;
+    DECLARE v_elo_player DOUBLE DEFAULT NULL;
+    DECLARE v_elo_opponent DOUBLE DEFAULT NULL;
+
+    IF playerID IS NULL OR TRIM(playerID) = '' OR opponentID IS NULL OR TRIM(opponentID) = '' THEN
+        RETURN NULL;
+    END IF;
+
+    SET v_player_id = PLAYER_LOOKUP(playerID);
+    SET v_opponent_id = PLAYER_LOOKUP(opponentID);
+    IF v_player_id IS NULL OR v_opponent_id IS NULL OR UPPER(v_player_id) = UPPER(v_opponent_id) THEN
+        RETURN NULL;
+    END IF;
+
+    SET v_surface = UPPER(NULLIF(TRIM(surface), ''));
+
+    SELECT CASE v_surface
+        WHEN 'HARD' THEN elo_rank_hard
+        WHEN 'CLAY' THEN elo_rank_clay
+        WHEN 'GRASS' THEN elo_rank_grass
+        ELSE elo_rank
+    END
+    INTO v_elo_player
+    FROM players WHERE id = v_player_id LIMIT 1;
+
+    SELECT CASE v_surface
+        WHEN 'HARD' THEN elo_rank_hard
+        WHEN 'CLAY' THEN elo_rank_clay
+        WHEN 'GRASS' THEN elo_rank_grass
+        ELSE elo_rank
+    END
+    INTO v_elo_opponent
+    FROM players WHERE id = v_opponent_id LIMIT 1;
+
+    IF v_elo_player IS NULL OR v_elo_opponent IS NULL OR v_elo_player <= 0 OR v_elo_opponent <= 0 THEN
+        RETURN NULL;
+    END IF;
+
+    RETURN 1 / (1 + POW(10, (v_elo_opponent - v_elo_player) / 400));
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `PLAYER_ODDS` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -773,31 +862,33 @@ BEGIN
 
     Purpose
     - Return priced decimal odds for two players in the requested matchup.
-    - Resolve both inputs through PLAYER_LOOKUP and delegate the fair win
-      probability to PLAYER_WIN_FACTOR, the canonical probability model.
+    - Resolve both inputs through PLAYER_LOOKUP and return both the TA and GPT
+      models in one result set.
 
     Input
     - playerA, playerB:
       ATP player id or free-text player name.
     - surface:
       Hard, Clay, or Grass (case-insensitive). NULL, empty, or another value
-      uses PLAYER_WIN_FACTOR's surface-neutral fallback.
+      selects each model's surface-neutral behavior.
 
     Output columns
     - player: resolved players.id.
     - name: resolved player name.
-    - odds: decimal odds rounded to two decimals.
+    - TA: Tennis Abstract Elo decimal odds rounded to two decimals.
+    - GPT: weighted GPT-model decimal odds rounded to two decimals.
     - Two rows in input order: playerA first, playerB second.
 
     Pricing
-    - factorA is the fair probability returned by PLAYER_WIN_FACTOR.
-    - factorB is 1 - factorA.
-    - Both probabilities are multiplied by 1.05 before conversion with 1 / p,
-      producing a combined implied probability of 1.05 (5 percent margin).
+    - Fair probabilities come from WIN_PROBABILITY_TA and WIN_PROBABILITY_GPT.
+    - The opponent probability is 1 minus the player probability.
+    - Every probability is multiplied by 1.05 and clamped to 0.001..0.999
+      before conversion with 1 / p. Each model therefore has a 5 percent
+      pricing margin and never returns decimal odds below 1.00.
 
     Validation and empty results
     - Returns an empty result set when either player cannot be resolved, both
-      inputs resolve to the same player, or the model returns an invalid
+      inputs resolve to the same player, or either model returns an invalid
       probability.
 
     Example usage
@@ -809,10 +900,10 @@ BEGIN
     DECLARE resolvedPlayerA VARCHAR(32) DEFAULT NULL;
     DECLARE resolvedPlayerB VARCHAR(32) DEFAULT NULL;
     DECLARE normalizedSurface VARCHAR(50) DEFAULT NULL;
-    DECLARE factorA DOUBLE DEFAULT NULL;
-    DECLARE factorB DOUBLE DEFAULT NULL;
-    DECLARE pricedFactorA DOUBLE DEFAULT NULL;
-    DECLARE pricedFactorB DOUBLE DEFAULT NULL;
+    DECLARE taProbabilityA DOUBLE DEFAULT NULL;
+    DECLARE taProbabilityB DOUBLE DEFAULT NULL;
+    DECLARE gptProbabilityA DOUBLE DEFAULT NULL;
+    DECLARE gptProbabilityB DOUBLE DEFAULT NULL;
 
     SET resolvedPlayerA = PLAYER_LOOKUP(playerA);
     SET resolvedPlayerB = PLAYER_LOOKUP(playerB);
@@ -825,48 +916,45 @@ BEGIN
         SELECT
             id AS player,
             name AS name,
-            CAST(NULL AS DECIMAL(10,2)) AS odds
+            CAST(NULL AS DECIMAL(10,2)) AS TA,
+            CAST(NULL AS DECIMAL(10,2)) AS GPT
         FROM players
         WHERE 1 = 0;
     ELSE
-        SET factorA = PLAYER_WIN_FACTOR(resolvedPlayerA, resolvedPlayerB, normalizedSurface);
+        SET taProbabilityA = WIN_PROBABILITY_TA(resolvedPlayerA, resolvedPlayerB, normalizedSurface);
+        SET gptProbabilityA = WIN_PROBABILITY_GPT(resolvedPlayerA, resolvedPlayerB, normalizedSurface);
 
-        IF factorA IS NULL OR factorA <= 0 OR factorA >= 1 THEN
+        IF taProbabilityA IS NULL OR taProbabilityA <= 0 OR taProbabilityA >= 1
+            OR gptProbabilityA IS NULL OR gptProbabilityA <= 0 OR gptProbabilityA >= 1
+        THEN
             SELECT
                 id AS player,
                 name AS name,
-                CAST(NULL AS DECIMAL(10,2)) AS odds
+                CAST(NULL AS DECIMAL(10,2)) AS TA,
+                CAST(NULL AS DECIMAL(10,2)) AS GPT
             FROM players
             WHERE 1 = 0;
         ELSE
-            SET factorB = 1 - factorA;
-            SET pricedFactorA = factorA * 1.05;
-            SET pricedFactorB = factorB * 1.05;
+            SET taProbabilityB = 1 - taProbabilityA;
+            SET gptProbabilityB = 1 - gptProbabilityA;
 
-            IF factorB <= 0 OR factorB >= 1 THEN
-                SELECT
-                    id AS player,
-                    name AS name,
-                    CAST(NULL AS DECIMAL(10,2)) AS odds
-                FROM players
-                WHERE 1 = 0;
-            ELSE
-                SELECT
-                    p.id AS player,
-                    p.name AS name,
-                    ROUND(1 / pricedFactorA, 2) AS odds
-                FROM players p
-                WHERE p.id = resolvedPlayerA
+            SELECT
+                p.id AS player,
+                p.name AS name,
+                ROUND(1 / LEAST(0.999, GREATEST(0.001, taProbabilityA * 1.05)), 2) AS TA,
+                ROUND(1 / LEAST(0.999, GREATEST(0.001, gptProbabilityA * 1.05)), 2) AS GPT
+            FROM players p
+            WHERE p.id = resolvedPlayerA
 
-                UNION ALL
+            UNION ALL
 
-                SELECT
-                    p.id AS player,
-                    p.name AS name,
-                    ROUND(1 / pricedFactorB, 2) AS odds
-                FROM players p
-                WHERE p.id = resolvedPlayerB;
-            END IF;
+            SELECT
+                p.id AS player,
+                p.name AS name,
+                ROUND(1 / LEAST(0.999, GREATEST(0.001, taProbabilityB * 1.05)), 2) AS TA,
+                ROUND(1 / LEAST(0.999, GREATEST(0.001, gptProbabilityB * 1.05)), 2) AS GPT
+            FROM players p
+            WHERE p.id = resolvedPlayerB;
         END IF;
     END IF;
 END ;;

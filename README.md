@@ -177,13 +177,15 @@ Notes:
 
 Notes:
 - `playerA` and `playerB` can be ATP player ids or free-text player names.
-- The endpoint returns GPT odds from `CALL PLAYER_ODDS(?, ?, ?)` and pure Tennis Abstract Elo odds calculated from the latest ratings stored in MariaDB.
+- The endpoint returns `{ "odds": { "TA": [...], "GPT": [...] } }` from one `CALL PLAYER_ODDS(?, ?, ?)`.
+- MariaDB owns both models, probability-to-odds conversion, and the 5% pricing margin. `atp-service` only validates transport input and shapes JSON.
 - The service does not contact Tennis Abstract at request time; the daily import is solely responsible for refreshing stored Elo ratings.
-- `PLAYER_ODDS` now delegates win probability to `PLAYER_WIN_FACTOR(...)`, which is the single source of truth for the model.
+- `WIN_PROBABILITY_TA(...)` is the pure overall/surface Elo model.
+- `WIN_PROBABILITY_GPT(...)` is the weighted model using stored TA Elo, ranking, and form.
 
 ### `/api/odds/matches`
 
-Accepts a JSON body with a `matches` array of up to 100 matchups. Each entry contains a client-provided `key`, `playerA`, `playerB`, and optional `surface`. The response contains one row per matchup with the same key, `gptOdds`, `tennisAbstractOdds`, and an individual `error` value. One invalid matchup does not fail the complete batch.
+Accepts a JSON body with a `matches` array of up to 100 matchups. Each entry contains a client-provided `key`, `playerA`, `playerB`, and optional `surface`. The response contains one row per matchup with the same key, `odds.TA`, `odds.GPT`, and an individual `error` value. One invalid matchup does not fail the complete batch.
 
 ## Data Sources Used in Code
 - `https://app.atptour.com/api/gateway/rankings.ranksglrollrange?fromRank=1&toRank={top}`
@@ -203,7 +205,7 @@ Reference docs:
 ## Database Notes
 - Schema in repo: `database/schema.sql`.
 - `database/schema.sql` is the single repo-managed source for tables, views, functions, and procedures.
-- The database layer currently relies on score helper functions (`NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`) plus `PLAYER_WIN_FACTOR(...)` as the self-contained source of truth for TA-calibrated GPT matchup probability.
+- The database layer owns both odds models through `WIN_PROBABILITY_TA(...)`, `WIN_PROBABILITY_GPT(...)`, and `PLAYER_ODDS(...)`.
 - Lookup helpers now also exist in MariaDB:
   - `PLAYER_LOOKUP(searchTerm)` returns the single best matching `players.id`
   - `CALL PLAYER_SEARCH(searchTerm)` returns up to 5 ranked candidate rows

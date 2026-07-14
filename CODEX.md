@@ -6,13 +6,15 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
-- 2026-07-14: All five MariaDB functions and both procedures embedded in `database/schema.sql` now have persisted body documentation where appropriate. Existing detailed blocks were retained; `PLAYER_WIN_FACTOR` and the previously undocumented `PLAYER_ODDS` received comprehensive documentation. Routine definitions are applied with the MariaDB client's `--comments` option so the blocks survive in live `SHOW CREATE` output and subsequent dumps.
+- 2026-07-14: Odds ownership moved completely into MariaDB. `WIN_PROBABILITY_TA` implements pure overall/surface Tennis Abstract Elo, `WIN_PROBABILITY_GPT` implements the weighted model, and `PLAYER_ODDS` applies the shared 5% margin and returns columns `TA` and `GPT`. The old `PLAYER_WIN_FACTOR` and JavaScript TA calculator were removed. API responses now use `{ odds: { TA, GPT } }`, allowing future models such as `MEG` without more top-level response fields.
 
-- 2026-07-14: Live MariaDB routine `PLAYER_WIN_FACTOR` now contains a detailed documentation block inside its body, covering purpose, inputs, output, surface-neutral fallback, all six surface-model factors with coefficients/scales, missing-data behavior, intercept, and logistic conversion. The MariaDB client must be invoked with `--comments` when recreating documented routines; otherwise it strips body comments before sending the definition. `database/schema.sql` was regenerated from live and restore-tested with the comment intact.
+- 2026-07-14: All six MariaDB functions and both procedures embedded in `database/schema.sql` have persisted body documentation where appropriate. Existing detailed blocks were retained; `WIN_PROBABILITY_TA`, `WIN_PROBABILITY_GPT`, and `PLAYER_ODDS` document model and pricing behavior. Routine definitions are applied with the MariaDB client's `--comments` option so the blocks survive in live `SHOW CREATE` output and subsequent dumps.
+
+- 2026-07-14: Live MariaDB routine now named `WIN_PROBABILITY_GPT` contains a detailed documentation block covering purpose, inputs, output, surface-neutral fallback, all six surface-model factors with coefficients/scales, missing-data behavior, intercept, and logistic conversion. The MariaDB client must be invoked with `--comments` when recreating documented routines; otherwise it strips body comments before sending the definition.
 
 - 2026-07-14: The duplicate `database/functions/` and `database/procedures/` trees were removed after the live schema dump was restore-tested. `database/schema.sql` is now the only repo-managed source of truth for all MariaDB structure, including routines.
 
-- 2026-07-14: `database/schema.sql` was regenerated directly from the live `atp` database on `pi-sql` with `mysqldump --no-data --routines --triggers --events --databases atp`. The standalone dump contains 5 tables, 1 view, 5 functions, and 2 procedures and no application data. It was successfully restored into and verified against a temporary `atp_schema_verify` database, which was then dropped. README files now document that `schema.sql` alone is sufficient for structure bootstrap.
+- 2026-07-14: `database/schema.sql` is regenerated directly from the live `atp` database on `pi-sql` with `mysqldump --no-data --routines --triggers --events --databases atp`. The standalone dump contains 5 tables, 1 view, 6 functions, and 2 procedures and no application data. It is restore-tested against a temporary `atp_schema_verify` database.
 
 - 2026-07-13: `GET /api/oddset` still returns only the normalized Kambi/Oddset feed and resolved ATP player ids; it does not calculate GPT or Tennis Abstract odds. Player ids are now resolved with one bulk MariaDB query for all unique feed names instead of one query per name.
 
@@ -22,10 +24,10 @@ When updating project memory, architecture notes, operational details, prioritie
 - Tennis Abstract (Jeff Sackmann) is the sole Elo source of truth. The project no longer calculates its own Elo.
 - The normal PM2 job `atp-import` runs daily at `0 6 * * *`; it performs the ordinary ATP import and refreshes overall, Hard, Clay, and Grass Elo from Tennis Abstract. `import --elo-only` refreshes only Elo.
 - Only the import may contact/scrape Tennis Abstract. `atp-service` must not fetch TA at request time.
-- `GET /api/odds` reads the latest stored TA Elo from MariaDB. `tennisAbstractOdds` is pure Elo (surface Elo when supplied, overall otherwise) with the existing 5% pricing margin. `gptOdds` comes from `PLAYER_ODDS` / `PLAYER_WIN_FACTOR`, using the same stored TA Elo plus the GPT model's additional weighting.
-- `PLAYER_WIN_FACTOR` is the single source of truth for GPT matchup probability. The old client label `Vitel`/`Codex` has been replaced by `GPT`.
+- `GET /api/odds` returns `odds.TA` and `odds.GPT`; all calculation comes from MariaDB through `PLAYER_ODDS`.
+- `WIN_PROBABILITY_TA` and `WIN_PROBABILITY_GPT` are the separate sources of truth for model probability. `atp-service` contains no odds formula or margin logic.
 - Production `pi-kato` runs commit `9523622`; `atp-service` was restarted and verified online. Sinner–Zverev verification: overall TA/GPT `1.22–4.33`; Grass TA `1.30–3.55`, GPT `1.34–3.29`.
-- Preserve the `/api/odds` response contract: `gptOdds` and `tennisAbstractOdds`.
+- Current `/api/odds` response contract: `{ odds: { TA: [a,b], GPT: [a,b] } }`.
 
 ## ATP Tennis
 
@@ -203,9 +205,9 @@ This is a deduplicated list from the current codebase.
 - `database/schema.sql` is now a dump of the current MariaDB schema and currently includes:
   - tables: `events`, `log`, `matches`, `players`, `settings`
   - view: `flatly`
-  - helper SQL functions: `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`, `PLAYER_LOOKUP`
+  - helper SQL functions: `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`, `PLAYER_LOOKUP`, `WIN_PROBABILITY_TA`, `WIN_PROBABILITY_GPT`
   - stored procedures: `PLAYER_ODDS`, `PLAYER_SEARCH`
-  - `PLAYER_WIN_FACTOR` is the canonical TA-calibrated GPT odds model; the older factor-specific ELO/form/rating/ranking/HTH functions and `PLAYER_STATS` procedure were removed
+  - `WIN_PROBABILITY_TA` and `WIN_PROBABILITY_GPT` are the canonical probability models; the older `PLAYER_WIN_FACTOR`, factor-specific functions, and `PLAYER_STATS` procedure were removed
   - no legacy `sp_update*` stored procedures
 
 ## MariaDB Prerequisites

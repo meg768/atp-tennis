@@ -1,8 +1,7 @@
 const Api = require('./api');
-const ApiTennisAbstractOdds = require('./api-tennis-abstract-odds.js');
 
 class ApiOdds extends Api {
-	async fetchGPTOdds(playerA, playerB, surface) {
+	async fetchOdds(playerA, playerB, surface) {
 		let rows = await this.mysql.query({
 			sql: 'CALL PLAYER_ODDS(?, ?, ?)',
 			format: [playerA, playerB, surface || null]
@@ -14,7 +13,16 @@ class ApiOdds extends Api {
 			throw new Error('Could not calculate odds.');
 		}
 
-		return rows.map(row => row.odds);
+		const odds = {
+			TA: rows.map(row => Number(row.TA)),
+			GPT: rows.map(row => Number(row.GPT))
+		};
+
+		if ([...odds.TA, ...odds.GPT].some(value => !Number.isFinite(value))) {
+			throw new Error('Could not calculate odds.');
+		}
+
+		return odds;
 	}
 
 	async fetch(options = null) {
@@ -31,18 +39,8 @@ class ApiOdds extends Api {
 			throw new Error('playerA and playerB must be different.');
 		}
 
-		const tennisAbstractApi = new ApiTennisAbstractOdds({
-			mysql: this.mysql,
-			log: this.log
-		});
-		const [gptOdds, tennisAbstract] = await Promise.all([
-			this.fetchGPTOdds(playerA, playerB, surface),
-			tennisAbstractApi.fetch({ playerA, playerB, surface })
-		]);
-
 		return {
-			gptOdds,
-			tennisAbstractOdds: tennisAbstract.odds
+			odds: await this.fetchOdds(playerA, playerB, surface)
 		};
 	}
 

@@ -119,8 +119,10 @@ class ApiMetaEndpoints extends Api {
 					response: {
 						shape: 'object',
 						fields: {
-							gptOdds: 'array[number, number]',
-							tennisAbstractOdds: 'array[number, number]'
+							odds: {
+								TA: 'array[number, number]',
+								GPT: 'array[number, number]'
+							}
 						}
 					}
 				},
@@ -134,8 +136,10 @@ class ApiMetaEndpoints extends Api {
 						shape: 'array',
 						fields: {
 							key: 'string',
-							gptOdds: 'array[number, number]|null',
-							tennisAbstractOdds: 'array[number, number]|null',
+							odds: {
+								TA: 'array[number, number]|null',
+								GPT: 'array[number, number]|null'
+							},
 							error: 'string|null'
 						}
 					}
