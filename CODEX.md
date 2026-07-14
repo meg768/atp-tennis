@@ -6,6 +6,10 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-14: All five MariaDB functions and both procedures embedded in `database/schema.sql` now have persisted body documentation where appropriate. Existing detailed blocks were retained; `PLAYER_WIN_FACTOR` and the previously undocumented `PLAYER_ODDS` received comprehensive documentation. Routine definitions are applied with the MariaDB client's `--comments` option so the blocks survive in live `SHOW CREATE` output and subsequent dumps.
+
+- 2026-07-14: Live MariaDB routine `PLAYER_WIN_FACTOR` now contains a detailed documentation block inside its body, covering purpose, inputs, output, surface-neutral fallback, all six surface-model factors with coefficients/scales, missing-data behavior, intercept, and logistic conversion. The MariaDB client must be invoked with `--comments` when recreating documented routines; otherwise it strips body comments before sending the definition. `database/schema.sql` was regenerated from live and restore-tested with the comment intact.
+
 - 2026-07-14: The duplicate `database/functions/` and `database/procedures/` trees were removed after the live schema dump was restore-tested. `database/schema.sql` is now the only repo-managed source of truth for all MariaDB structure, including routines.
 
 - 2026-07-14: `database/schema.sql` was regenerated directly from the live `atp` database on `pi-sql` with `mysqldump --no-data --routines --triggers --events --databases atp`. The standalone dump contains 5 tables, 1 view, 5 functions, and 2 procedures and no application data. It was successfully restored into and verified against a temporary `atp_schema_verify` database, which was then dropped. README files now document that `schema.sql` alone is sufficient for structure bootstrap.

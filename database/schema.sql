@@ -538,6 +538,53 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `PLAYER_WIN_FACTOR`(playerID VARCHAR(
 ) RETURNS double
     DETERMINISTIC
 BEGIN
+    /*
+    PLAYER_WIN_FACTOR(playerID, opponentID, surface)
+
+    Purpose
+    - Return the modelled fair win probability for playerID against opponentID.
+    - This is the canonical TA-calibrated GPT probability model used by
+      PLAYER_ODDS. It returns probability only; PLAYER_ODDS converts the result
+      to decimal odds and applies the pricing margin.
+
+    Input
+    - playerID, opponentID:
+      ATP player id or free-text player name resolved through PLAYER_LOOKUP.
+    - surface:
+      Hard, Clay, or Grass (case-insensitive). NULL, empty, or another value
+      selects the surface-neutral fallback.
+
+    Output
+    - Probability for playerID in the range 0.005 to 0.995.
+    - NULL when either player cannot be resolved or both inputs resolve to the
+      same player.
+
+    Surface-neutral fallback
+    - Uses pure overall Tennis Abstract Elo with the standard Elo expectation
+      formula and no additional factors.
+
+    Surface model
+    - Overall Tennis Abstract Elo difference:
+      coefficient 0.308259581872, scale 0.480841409542.
+    - Surface Tennis Abstract Elo difference:
+      coefficient 0.271303033199, scale 0.453431590526.
+    - ATP ranking ratio (log transformed):
+      coefficient 0.226042701631, scale 1.032929982385.
+    - Career win-rate difference on the selected surface:
+      coefficient 0.067860094189, scale 0.218879304230.
+    - Win-rate difference over each player's latest 12 completed main-tour
+      matches (Grand Slam, Masters, ATP-500, ATP-250):
+      coefficient 0.066165906183, scale 0.253832178694.
+    - Win-rate difference over the latest 365 days:
+      coefficient 0.031416125989, scale 0.211008586769.
+
+    Missing data and calculation
+    - Missing Elo defaults to 1500.
+    - Missing form samples default to a neutral 0.5 win rate.
+    - Ranking contributes zero unless both rankings are positive.
+    - The weighted score includes intercept 0.0000253868667645 and is converted
+      to probability with the logistic function.
+    */
 
     DECLARE v_player_id VARCHAR(32) DEFAULT NULL;
     DECLARE v_opponent_id VARCHAR(32) DEFAULT NULL;
@@ -721,6 +768,42 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `PLAYER_ODDS`(
     IN surface VARCHAR(50)
 )
 BEGIN
+    /*
+    PLAYER_ODDS(playerA, playerB, surface)
+
+    Purpose
+    - Return priced decimal odds for two players in the requested matchup.
+    - Resolve both inputs through PLAYER_LOOKUP and delegate the fair win
+      probability to PLAYER_WIN_FACTOR, the canonical probability model.
+
+    Input
+    - playerA, playerB:
+      ATP player id or free-text player name.
+    - surface:
+      Hard, Clay, or Grass (case-insensitive). NULL, empty, or another value
+      uses PLAYER_WIN_FACTOR's surface-neutral fallback.
+
+    Output columns
+    - player: resolved players.id.
+    - name: resolved player name.
+    - odds: decimal odds rounded to two decimals.
+    - Two rows in input order: playerA first, playerB second.
+
+    Pricing
+    - factorA is the fair probability returned by PLAYER_WIN_FACTOR.
+    - factorB is 1 - factorA.
+    - Both probabilities are multiplied by 1.05 before conversion with 1 / p,
+      producing a combined implied probability of 1.05 (5 percent margin).
+
+    Validation and empty results
+    - Returns an empty result set when either player cannot be resolved, both
+      inputs resolve to the same player, or the model returns an invalid
+      probability.
+
+    Example usage
+    - CALL PLAYER_ODDS('S0AG', 'A0E2', 'Hard');
+    - CALL PLAYER_ODDS('Sinner', 'Alcaraz', NULL);
+    */
 
 
     DECLARE resolvedPlayerA VARCHAR(32) DEFAULT NULL;
