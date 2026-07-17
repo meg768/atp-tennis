@@ -163,6 +163,14 @@ class ApiMetaEndpoints extends Api {
 					response: {
 						shape: 'array'
 					}
+				},
+				'/api/log': {
+					method: 'DELETE',
+					description: 'Deletes every row from the operational import log.',
+					response: {
+						shape: 'object',
+						fields: { deletedRows: 'number' }
+					}
 				}
 			}
 		};

@@ -73,6 +73,13 @@ class Module extends Command {
 			});
 		});
 
+		api.delete('/log', (req, res) => {
+			this.execute(req, res, async () => {
+				const result = await this.mysql.query('DELETE FROM log');
+				return { deletedRows: result.affectedRows ?? 0 };
+			});
+		});
+
 		app.get('/api/ping', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Api = require('../src/api-ping.js');
