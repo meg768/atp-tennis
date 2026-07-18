@@ -120,22 +120,36 @@ class Module extends Command {
 		});
 
 		app.get('/api/player/:id/headshot', async (request, response) => {
-			const id = String(request.params.id || '').trim().replace(/[^a-z0-9]/gi, '').toLowerCase();
+			const id = String(request.params.id || '').trim().replace(/[^a-z0-9]/gi, '').toUpperCase();
 			if (!id) {
 				return response.status(400).json({ error: 'Player id is required.' });
 			}
 
 			try {
-				const upstream = await fetch(`https://www.atptour.com/-/media/alias/player-headshot/${id}`, {
-					headers: { 'User-Agent': 'Mozilla/5.0 Safari/605.1.15', Accept: 'image/*' }
+				const rows = await this.mysql.query({
+					sql: 'SELECT name FROM players WHERE id = ? LIMIT 1',
+					format: [id]
 				});
-				if (!upstream.ok) {
-					return response.status(upstream.status).json({ error: 'Player headshot is not available.' });
-				}
+				const name = rows[0]?.name;
+				if (!name) return response.status(404).json({ error: 'Player not found.' });
 
-				response.type(upstream.headers.get('content-type') || 'image/jpeg');
+				const summaryURL = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name.replaceAll(' ', '_'))}`;
+				const summaryResponse = await fetch(summaryURL, {
+					headers: { 'User-Agent': 'MatchPoint/1.0 (tennis.egelberg.se)', Accept: 'application/json' }
+				});
+				if (!summaryResponse.ok) return response.status(404).json({ error: 'Player headshot is not available.' });
+				const summary = await summaryResponse.json();
+				const imageURL = summary.originalimage?.source || summary.thumbnail?.source;
+				if (!imageURL) return response.status(404).json({ error: 'Player headshot is not available.' });
+
+				const imageResponse = await fetch(imageURL, {
+					headers: { 'User-Agent': 'MatchPoint/1.0 (tennis.egelberg.se)', Accept: 'image/*' }
+				});
+				if (!imageResponse.ok) return response.status(502).json({ error: 'Player headshot could not be fetched.' });
+
+				response.type(imageResponse.headers.get('content-type') || 'image/jpeg');
 				response.setHeader('Cache-Control', 'public, max-age=86400');
-				return response.status(200).send(Buffer.from(await upstream.arrayBuffer()));
+				return response.status(200).send(Buffer.from(await imageResponse.arrayBuffer()));
 			} catch (error) {
 				return response.status(502).json({ error: error.message });
 			}
