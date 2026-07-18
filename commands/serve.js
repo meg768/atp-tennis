@@ -119,6 +119,28 @@ class Module extends Command {
 			return response.sendFile(flagPath);
 		});
 
+		app.get('/api/player/:id/headshot', async (request, response) => {
+			const id = String(request.params.id || '').trim().replace(/[^a-z0-9]/gi, '').toLowerCase();
+			if (!id) {
+				return response.status(400).json({ error: 'Player id is required.' });
+			}
+
+			try {
+				const upstream = await fetch(`https://www.atptour.com/-/media/alias/player-headshot/${id}`, {
+					headers: { 'User-Agent': 'Mozilla/5.0 Safari/605.1.15', Accept: 'image/*' }
+				});
+				if (!upstream.ok) {
+					return response.status(upstream.status).json({ error: 'Player headshot is not available.' });
+				}
+
+				response.type(upstream.headers.get('content-type') || 'image/jpeg');
+				response.setHeader('Cache-Control', 'public, max-age=86400');
+				return response.status(200).send(Buffer.from(await upstream.arrayBuffer()));
+			} catch (error) {
+				return response.status(502).json({ error: error.message });
+			}
+		});
+
 		app.get('/api/meta/endpoints', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Api = require('../src/api-meta-endpoints.js');

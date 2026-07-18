@@ -6,6 +6,13 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-18: Added `GET /api/player/:id/headshot` as the backend-owned image
+  boundary for Match Point. The endpoint validates the player id, proxies the
+  ATP image response, and adds a one-day public cache header. ATP currently
+  answers 403 for tested headshots, so clients retain their missing-image
+  fallback until the upstream behavior is resolved. This local endpoint change
+  has not yet been deployed.
+
 - 2026-07-17: Added the narrow `DELETE /api/log` maintenance endpoint. It clears only the operational `log` table and reports `deletedRows`, allowing Vitel to clear logs without weakening the read-only guarantees of `POST /api/query`.
 
 - 2026-07-14: Odds ownership moved completely into MariaDB. `WIN_PROBABILITY_TA` implements pure overall/surface Tennis Abstract Elo, `WIN_PROBABILITY_GPT` implements the weighted model, and `PLAYER_ODDS` applies the shared 5% margin and returns columns `TA` and `GPT`. The old `PLAYER_WIN_FACTOR` and JavaScript TA calculator were removed. API responses now use `{ odds: { TA, GPT } }`, allowing future models such as `MEG` without more top-level response fields.
