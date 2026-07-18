@@ -1,7 +1,7 @@
 let cache = null;
 let cacheAt = 0;
 let cacheKey = null;
-const cacheTime = 30 * 1000;
+const cacheTime = 5 * 1000;
 const DEFAULT_ATP_MATCHES_URL =
 	'https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json';
 const DEFAULT_TENNIS_MATCHES_URL =

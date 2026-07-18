@@ -6,6 +6,12 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-19: Reduced the normalized Oddset feed cache from 30 seconds to five
+  seconds. Match Point now polls adaptively: five minutes when the next start
+  is distant, one minute inside 15 minutes, and ten seconds inside two minutes,
+  after scheduled start, or while a match is live. Upcoming rows are used only
+  as an internal wake-up schedule and remain hidden in the live-only UI.
+
 - 2026-07-18: Added `GET /api/live/insight` as the first Match Point live
   commentator contract. The initial supported trigger is `tiebreak`; given two
   player ids/names it calculates real tiebreak-set wins, losses, percentage,
