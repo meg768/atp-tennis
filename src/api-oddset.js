@@ -69,7 +69,15 @@ class ApiOddset extends Api {
 			return raw;
 		}
 
-		const rows = await this.attachPlayerIds(raw);
+		const requestedStates = String(this.getRequestOptions().states || '')
+			.split(',')
+			.map(state => state.trim().toUpperCase())
+			.filter(Boolean);
+		const filtered = requestedStates.length === 0 ? raw : raw.filter(row =>
+			(requestedStates.includes('STARTED') && row.state === 'live') ||
+			(requestedStates.includes('NOT_STARTED') && row.state === 'upcoming')
+		);
+		const rows = await this.attachPlayerIds(filtered);
 
 		return rows.map(row => ({
 			id: row.id,

@@ -12,6 +12,11 @@ When updating project memory, architecture notes, operational details, prioritie
   and last-ten form from MariaDB over the previous 24 months. It was verified
   locally with `TE51`/`C0JP`. Unsupported triggers fail explicitly rather than
   returning invented commentary.
+- 2026-07-18: Fixed `/api/oddset?states=...`; the API layer previously ignored
+  the requested state after the Oddset merger and returned both live and
+  upcoming rows. `STARTED` now returns only normalized `live` rows and
+  `NOT_STARTED` only `upcoming` rows. Match Point also retains a defensive
+  client-side live filter.
 
 - 2026-07-18: Added `GET /api/player/:id/workspace` for Match Point's native
   drill-down flow. It returns one compact player profile and the 24 most recent
