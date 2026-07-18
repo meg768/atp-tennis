@@ -12,10 +12,12 @@ When updating project memory, architecture notes, operational details, prioritie
   without sending SQL. The endpoint was verified locally against MariaDB with
   `S0AG` before deployment.
 
-- 2026-07-18: `GET /api/player/:id/headshot` is the backend-owned image boundary
-  for Match Point. ATP's former alias URL began returning Cloudflare 403, so the
-  endpoint now resolves the database player name through Wikipedia's summary
-  API and proxies its original/thumbnail image with a one-day public cache.
+- 2026-07-18: Added `GET /api/player/:id/headshot` as the backend-owned image
+  boundary for Match Point. The endpoint validates the player id, proxies the
+  ATP image response, and adds a one-day public cache header. ATP currently
+  answers 403 for tested headshots, so clients retain their missing-image
+  fallback until the upstream behavior is resolved. This local endpoint change
+  has not yet been deployed.
 
 - 2026-07-17: Added the narrow `DELETE /api/log` maintenance endpoint. It clears only the operational `log` table and reports `deletedRows`, allowing Vitel to clear logs without weakening the read-only guarantees of `POST /api/query`.
 
