@@ -205,6 +205,14 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/api/live/insight', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let Api = require('../src/api-live-insight.js');
+				let api = new Api({ request, response, mysql: this.mysql, log: this.log });
+				return await api.run();
+			});
+		});
+
 		app.post('/api/odds/matches', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Api = require('../src/api-odds-matches.js');

@@ -6,6 +6,13 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-18: Added `GET /api/live/insight` as the first Match Point live
+  commentator contract. The initial supported trigger is `tiebreak`; given two
+  player ids/names it calculates real tiebreak-set wins, losses, percentage,
+  and last-ten form from MariaDB over the previous 24 months. It was verified
+  locally with `TE51`/`C0JP`. Unsupported triggers fail explicitly rather than
+  returning invented commentary.
+
 - 2026-07-18: Added `GET /api/player/:id/workspace` for Match Point's native
   drill-down flow. It returns one compact player profile and the 24 most recent
   matches, with opponent ids so the Mac client can navigate player-to-player
