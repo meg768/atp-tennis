@@ -181,6 +181,14 @@ class Module extends Command {
 			});
 		});
 
+		app.get('/api/player/:id/workspace', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let Api = require('../src/api-player-workspace.js');
+				let api = new Api({ request, response, mysql: this.mysql, log: this.log });
+				return await api.run();
+			});
+		});
+
 		app.get('/api/oddset', async (request, response) => {
 			return this.execute(request, response, async () => {
 				let Api = require('../src/api-oddset.js');

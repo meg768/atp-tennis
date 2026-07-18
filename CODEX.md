@@ -6,6 +6,12 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-18: Added `GET /api/player/:id/workspace` for Match Point's native
+  drill-down flow. It returns one compact player profile and the 24 most recent
+  matches, with opponent ids so the Mac client can navigate player-to-player
+  without sending SQL. The endpoint was verified locally against MariaDB with
+  `S0AG` before deployment.
+
 - 2026-07-18: Added `GET /api/player/:id/headshot` as the backend-owned image
   boundary for Match Point. The endpoint validates the player id, proxies the
   ATP image response, and adds a one-day public cache header. ATP currently
