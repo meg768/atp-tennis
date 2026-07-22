@@ -1,13 +1,12 @@
 {
-  "timestamp": "2026-07-22T16:32:36.394Z",
+  "timestamp": "2026-07-22T18:06:14.511Z",
   "source": "TA",
   "status": "complete",
   "events": [
     {
       "id": "2026-319",
       "tour": "ATP",
-      "slug": "Kitzbuhel",
-      "name": "ATP Kitzbuhel",
+      "name": "Kitzbuhel",
       "status": "active",
       "sourceUrl": "https://www.tennisabstract.com/current/2026ATPKitzbuhel.html",
       "date": "2026-07-20",
@@ -217,8 +216,7 @@
     {
       "id": "2026-7290",
       "tour": "ATP",
-      "slug": "Estoril",
-      "name": "ATP Estoril",
+      "name": "Estoril",
       "status": "active",
       "sourceUrl": "https://www.tennisabstract.com/current/2026ATPEstoril.html",
       "date": "2026-07-20",

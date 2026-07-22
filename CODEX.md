@@ -6,6 +6,10 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-22: The `GET /api/events/current` event contract no longer exposes
+  `slug`. Its former value is now the canonical `name` (for example,
+  `Kitzbuhel`), replacing the Tennis Abstract display title `ATP Kitzbuhel`.
+
 - 2026-07-22: Added `GET /api/events/current`. It discovers current ATP main
   draws from Tennis Abstract, enriches tournaments from MariaDB `events`,
   resolves player ids through `PLAYER_LOOKUP()`, sorts seeded players first,

@@ -123,6 +123,9 @@ curl -X POST http://127.0.0.1:3004/api/query \
   -d '{"sql":"SELECT 1"}'
 ```
 
+Each event returned by `/api/events/current` uses its Tennis Abstract URL name
+as `name` (for example, `Kitzbuhel`) and does not expose a separate `slug`.
+
 ### `/api/player/rankings` Query Parameters
 - `top`: positive integer, defaults to `100`
 

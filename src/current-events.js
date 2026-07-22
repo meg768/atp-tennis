@@ -49,7 +49,7 @@ function findCurrentAtpTournaments(html) {
 				year: Number(year),
 				tour: 'ATP',
 				slug,
-				name: `ATP ${slug.replace(/([a-z])([A-Z])/g, '$1 $2')}`,
+				name: slug,
 				status: 'active',
 				sourceUrl
 			});
@@ -84,6 +84,7 @@ async function addEventIds(tournaments, mysql) {
 		const event = rows.find(row => String(row.id).startsWith(`${tournament.year}-`) && normalize(row.name) === slug);
 		const output = { ...tournament };
 		delete output.year;
+		delete output.slug;
 
 		return {
 			...output,
@@ -136,11 +137,6 @@ function extractMainDraw(html) {
 	}
 
 	return [...players.values()];
-}
-
-function extractPageName(html, fallback) {
-	const match = html.match(/<title>\s*Tennis Abstract:\s*\d{4}\s+(ATP\s+.*?)\s+(?:Results|Forecast)/i);
-	return decodeHtml(match?.[1] || fallback);
 }
 
 async function addAtpIds(tournaments, mysql) {
@@ -242,7 +238,6 @@ async function getCurrentEvents({ mysql }) {
 
 			return {
 				...tournament,
-				name: extractPageName(html, tournament.name),
 				players: extractMainDraw(html)
 			};
 		})
