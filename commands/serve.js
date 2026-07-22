@@ -228,6 +228,14 @@ class Module extends Command {
 				return await api.run();
 			});
 		});
+
+		app.get('/api/events/current', async (request, response) => {
+			return this.execute(request, response, async () => {
+				let Api = require('../src/api-events-current.js');
+				let api = new Api({ request, response, mysql: this.mysql, log: this.log });
+				return await api.run();
+			});
+		});
 /*
 		app.get('/api/atp', async (request, response) => {
 			return this.execute(request, response, async () => {

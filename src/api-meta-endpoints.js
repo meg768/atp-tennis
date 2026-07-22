@@ -154,6 +154,20 @@ class ApiMetaEndpoints extends Api {
 						}
 					}
 				},
+				'/api/events/current': {
+					method: 'GET',
+					description: 'Current ATP main draws from Tennis Abstract, enriched with local event and player ids.',
+					response: {
+						shape: 'object',
+						fields: {
+							timestamp: 'string (ISO datetime)',
+							source: '"TA"',
+							status: '"complete"',
+							events: 'array',
+							errors: 'array'
+						}
+					}
+				},
 				'/api/query': {
 					method: 'POST',
 					body: {

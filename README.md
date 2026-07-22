@@ -94,6 +94,7 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/odds`
 - `POST /api/odds/matches`
 - `GET /api/events/calendar`
+- `GET /api/events/current`
 - `POST /api/query`
 
 `/api/ping` returns both `message` and backend `version`, which makes it useful for quick deploy verification.
@@ -116,6 +117,7 @@ curl "http://127.0.0.1:3004/api/oddset?raw=1"
 curl "http://127.0.0.1:3004/api/odds?playerA=S0AG&playerB=A0E2"
 curl "http://127.0.0.1:3004/api/odds?playerA=Jannik%20Sinner&playerB=Alexander%20Bublik&surface=Hard"
 curl http://127.0.0.1:3004/api/events/calendar
+curl http://127.0.0.1:3004/api/events/current
 curl -X POST http://127.0.0.1:3004/api/query \
   -H "Content-Type: application/json" \
   -d '{"sql":"SELECT 1"}'

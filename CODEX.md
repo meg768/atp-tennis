@@ -6,6 +6,13 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-22: Added `GET /api/events/current`. It discovers current ATP main
+  draws from Tennis Abstract, enriches tournaments from MariaDB `events`,
+  resolves player ids through `PLAYER_LOOKUP()`, sorts seeded players first,
+  and returns the shared `{ timestamp, source: "TA", status, events, errors }`
+  contract. `sandbox/tournaments.js` now writes the same backend-owned payload
+  to `sandbox/output/tournaments.json` instead of owning duplicate logic.
+
 - 2026-07-19: Reduced the normalized Oddset feed cache from 30 seconds to five
   seconds. Match Point now polls adaptively: five minutes when the next start
   is distant, one minute inside 15 minutes, and ten seconds inside two minutes,
