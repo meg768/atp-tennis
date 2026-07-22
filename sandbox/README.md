@@ -2,6 +2,21 @@
 
 Quick test area for fetch modules.
 
+## Generate `tournaments.json`
+
+```bash
+node sandbox/tournaments.js
+```
+
+Fetches Tennis Abstract's home page using ordinary HTTP, discovers its current
+ATP tournament pages, extracts each main-draw player list, and writes the result
+to `sandbox/output/tournaments.json`. Each tournament is linked to the matching
+MariaDB `events.id` for the same year and normalized name, and receives the
+database's date, location, type, surface, and URL. Each player is supplemented
+with `id` through the local MariaDB function `PLAYER_LOOKUP()`; unmatched
+events or players get `null`. It does not launch or require a browser, but it
+requires database access configured in the repository's `.env` file.
+
 ## Test `fetch-calendar`
 
 ```bash
