@@ -6,6 +6,14 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-07-22: Tennis Abstract is the explicit source of truth for current
+  tournament draws, results, upcoming matchups, and tournament forecasts. Do
+  not revive ATP Tour JSON as an alternative source. The preferred next
+  extension of `GET /api/events/current` is to normalize more information from
+  the already-fetched TA tournament page, especially each player's round and
+  title probabilities, upcoming matchups, and completed-match status. Keep all
+  TA HTML knowledge inside this backend contract; clients must not scrape TA.
+
 - 2026-07-22: The `GET /api/events/current` event contract no longer exposes
   `slug`. Its former value is now the canonical `name` (for example,
   `Kitzbuhel`), replacing the Tennis Abstract display title `ATP Kitzbuhel`.
