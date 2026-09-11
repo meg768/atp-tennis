@@ -4,6 +4,7 @@
     "description": "",
     "main": "atp.js",
     "scripts": {
+        "test": "node --test",
         "git-backup": "branch=$(git branch --show-current) && if [ -n \"$(git status --short)\" ]; then git add -A && git commit -m 'backup'; fi && git push origin \"$branch\" && git push --force origin HEAD:refs/heads/backup/$branch",
         "git-commit": "git add -A && git commit -m '-' && git push",
         "git-delete-backup": "branch=$(git branch --show-current) && git push origin --delete \"backup/$branch\" && git fetch origin --prune",

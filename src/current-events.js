@@ -1,5 +1,13 @@
 const HOME_URL = 'https://www.tennisabstract.com/';
 const REQUEST_TIMEOUT_MS = 30000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+const GRAND_SLAM_NAMES = {
+	AustralianOpen: 'Australian Open',
+	RolandGarros: 'Roland Garros',
+	FrenchOpen: 'Roland Garros',
+	Wimbledon: 'Wimbledon',
+	USOpen: 'US Open'
+};
 
 function decodeHtml(value) {
 	return String(value || '')
@@ -36,30 +44,73 @@ async function fetchText(url) {
 }
 
 function findCurrentAtpTournaments(html) {
-	const pattern = /href=["'](https:\/\/www\.tennisabstract\.com\/current\/(\d{4})ATP([^"']+)\.html)["']/gi;
 	const tournaments = new Map();
-	let match;
+	const patterns = [
+		{
+			pattern: /href=["'](https:\/\/www\.tennisabstract\.com\/current\/(\d{4})ATP([^"']+)\.html)["']/gi,
+			parse: match => ({
+				year: Number(match[2]),
+				slug: match[3],
+				name: match[3],
+				sourceType: 'atp'
+			})
+		},
+		{
+			pattern: /href=["'](https:\/\/www\.tennisabstract\.com\/current\/(\d{4})(AustralianOpen|RolandGarros|FrenchOpen|Wimbledon|USOpen)MenForecast\.html)["']/gi,
+			parse: match => ({
+				year: Number(match[2]),
+				slug: match[3],
+				name: GRAND_SLAM_NAMES[match[3]],
+				sourceType: 'grand-slam'
+			})
+		}
+	];
 
-	while ((match = pattern.exec(html)) !== null) {
-		const [, sourceUrl, year, slug] = match;
+	for (const { pattern, parse } of patterns) {
+		let match;
 
-		if (!tournaments.has(sourceUrl)) {
-			tournaments.set(sourceUrl, {
-				id: null,
-				year: Number(year),
-				tour: 'ATP',
-				slug,
-				name: slug,
-				status: 'active',
-				sourceUrl
-			});
+		while ((match = pattern.exec(html)) !== null) {
+			const sourceUrl = match[1];
+
+			if (!tournaments.has(sourceUrl)) {
+				tournaments.set(sourceUrl, {
+					id: null,
+					...parse(match),
+					tour: 'ATP',
+					status: 'active',
+					sourceUrl
+				});
+			}
 		}
 	}
 
 	return [...tournaments.values()];
 }
 
+function filterCurrentGrandSlams(tournaments, now = new Date()) {
+	const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+
+	return tournaments.filter(tournament => {
+		if (tournament.sourceType !== 'grand-slam') {
+			return true;
+		}
+
+		if (!tournament.date) {
+			return false;
+		}
+
+		const start = Date.parse(`${tournament.date}T00:00:00Z`);
+		const daysSinceStart = (today - start) / DAY_MS;
+
+		return daysSinceStart >= -7 && daysSinceStart <= 15;
+	});
+}
+
 async function addEventIds(tournaments, mysql) {
+	if (tournaments.length === 0) {
+		return [];
+	}
+
 	const years = [...new Set(tournaments.map(tournament => tournament.year))];
 	const placeholders = years.map(() => '?').join(', ');
 	const rows = await mysql.query({
@@ -114,10 +165,15 @@ function extractMainDraw(html) {
 	}
 
 	if (!drawHtml) {
+		const table = html.match(/<table[^>]*>\s*<tr><td>Player<\/td>[\s\S]*?<\/table>/i);
+		drawHtml = table?.[0] || null;
+	}
+
+	if (!drawHtml) {
 		throw new Error('Could not find a main-draw forecast in the Tennis Abstract page.');
 	}
 
-	const playerPattern = /(?:\(([^)]+)\))?<a\s+href=["']https?:\/\/www\.tennisabstract\.com\/cgi-bin\/player\.cgi\?p=(\d+)\/[^"']+["'][^>]*>([^<]+)<\/a>\s*\(([A-Z]{3})\)/gi;
+	const playerPattern = /(?:\(([^)]+)\))?\s*<a\s+href=["']https?:\/\/www\.tennisabstract\.com\/cgi-bin\/player\.cgi\?p=([^\/"'&]+)(?:\/[^"']*)?["'][^>]*>([^<]+)<\/a>\s*\(([A-Z]{3})\)/gi;
 	const players = new Map();
 	let match;
 
@@ -136,10 +192,18 @@ function extractMainDraw(html) {
 		}
 	}
 
+	if (players.size === 0) {
+		throw new Error('The main-draw forecast did not contain any readable players.');
+	}
+
 	return [...players.values()];
 }
 
 async function addAtpIds(tournaments, mysql) {
+	if (tournaments.length === 0) {
+		return [];
+	}
+
 	const names = [...new Set(tournaments.flatMap(tournament => tournament.players.map(player => player.name)))];
 	const sql = names.map(() => 'SELECT ? AS name, PLAYER_LOOKUP(?) AS id').join('\nUNION ALL\n');
 	const format = names.flatMap(name => [name, name]);
@@ -215,9 +279,20 @@ async function addAtpIds(tournaments, mysql) {
 
 		const event = { ...tournament };
 		delete event.players;
+		delete event.sourceType;
 
 		return { ...event, players };
 	});
+}
+
+function createPayload(events = [], errors = []) {
+	return {
+		timestamp: new Date().toISOString(),
+		source: 'TA',
+		status: errors.length === 0 ? 'complete' : events.length > 0 ? 'partial' : 'error',
+		events,
+		errors
+	};
 }
 
 async function getCurrentEvents({ mysql }) {
@@ -226,35 +301,56 @@ async function getCurrentEvents({ mysql }) {
 	}
 
 	const homeHtml = await fetchText(HOME_URL);
-	const current = findCurrentAtpTournaments(homeHtml);
+	let current = findCurrentAtpTournaments(homeHtml);
 
 	if (current.length === 0) {
-		throw new Error('No current ATP tournaments were found on Tennis Abstract.');
+		return createPayload();
 	}
 
-	let tournaments = await Promise.all(
-		current.map(async tournament => {
-			const html = await fetchText(tournament.sourceUrl);
+	current = await addEventIds(current, mysql);
+	current = filterCurrentGrandSlams(current);
 
-			return {
-				...tournament,
-				players: extractMainDraw(html)
-			};
+	if (current.length === 0) {
+		return createPayload();
+	}
+
+	const results = await Promise.all(
+		current.map(async tournament => {
+			try {
+				const html = await fetchText(tournament.sourceUrl);
+
+				return {
+					event: {
+						...tournament,
+						players: extractMainDraw(html)
+					}
+				};
+			} catch (error) {
+				return {
+					error: {
+						name: tournament.name,
+						sourceUrl: tournament.sourceUrl,
+						message: error.message
+					}
+				};
+			}
 		})
 	);
+	const errors = results.flatMap(result => (result.error ? [result.error] : []));
+	let tournaments = results.flatMap(result => (result.event ? [result.event] : []));
 
-	tournaments = await addEventIds(tournaments, mysql);
+	if (tournaments.length === 0 && errors.length > 0) {
+		throw new Error(`Could not parse any current Tennis Abstract tournaments: ${errors.map(error => error.message).join('; ')}`);
+	}
+
 	tournaments = await addAtpIds(tournaments, mysql);
 
-	const payload = {
-		timestamp: new Date().toISOString(),
-		source: 'TA',
-		status: 'complete',
-		events: tournaments,
-		errors: []
-	};
-
-	return payload;
+	return createPayload(tournaments, errors);
 }
 
-module.exports = { getCurrentEvents };
+module.exports = {
+	extractMainDraw,
+	filterCurrentGrandSlams,
+	findCurrentAtpTournaments,
+	getCurrentEvents
+};
