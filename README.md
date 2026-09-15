@@ -90,6 +90,8 @@ Endpoints (from `commands/serve.js`):
 - `GET /api/player/rankings`
 - `GET /api/player/search`
 - `GET /api/player/lookup`
+- `GET /api/player/:id/headshot`
+  Returns a locally stored PNG from `headshots/`, or 404 when it is missing.
 - `GET /api/oddset`
 - `GET /api/odds`
 - `POST /api/odds/matches`
@@ -112,6 +114,7 @@ curl http://127.0.0.1:3004/api/player/rankings
 curl "http://127.0.0.1:3004/api/player/rankings?top=25"
 curl "http://127.0.0.1:3004/api/player/search?term=Borg"
 curl "http://127.0.0.1:3004/api/player/lookup?query=Borg"
+curl http://127.0.0.1:3004/api/player/S0AG/headshot --output S0AG.png
 curl "http://127.0.0.1:3004/api/oddset"
 curl "http://127.0.0.1:3004/api/oddset?raw=1"
 curl "http://127.0.0.1:3004/api/odds?playerA=S0AG&playerB=A0E2"

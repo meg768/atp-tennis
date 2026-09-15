@@ -81,6 +81,16 @@ class ApiMetaEndpoints extends Api {
 						example: [{ id: 'RH16' }]
 					}
 				},
+				'/api/player/:id/headshot': {
+					method: 'GET',
+					params: {
+						id: 'string, required, ATP player id such as S0AG'
+					},
+					description: 'Returns a locally stored ATP player headshot, or 404 when the asset is missing.',
+					response: {
+						shape: 'raw png'
+					}
+				},
 				'/api/oddset': {
 					method: 'GET',
 					query: {

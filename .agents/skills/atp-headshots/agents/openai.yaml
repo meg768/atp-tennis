@@ -1,0 +1,4 @@
+interface:
+  display_name: "ATP Headshots"
+  short_description: "Hämta ATP-headshots via Codex-browsern"
+  default_prompt: "Använd $atp-headshots för att uppdatera headshots för topp 20."

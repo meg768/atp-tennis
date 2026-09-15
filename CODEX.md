@@ -6,6 +6,16 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-09-15: Official ATP player images are maintained as static
+  `headshots/<ATP-ID>.png` assets. The current database top 100 has been fetched
+  at 300 x 300. Use the repo skill `$atp-headshots` to extend the set: it selects
+  current ranked players from MariaDB, skips files already present, and exports
+  only missing images through Codex's in-app browser. Replacing existing files
+  requires an explicit refresh request. `GET /api/player/:id/headshot` serves
+  these local PNG files, and Vitel uses that backend URL for every player
+  headshot. Do not revive the failed Playwright/direct-HTTP approach; ATP's
+  Cloudflare protection challenges or rejects it.
+
 - 2026-07-22: Tennis Abstract is the explicit source of truth for current
   tournament draws, results, upcoming matchups, and tournament forecasts. Do
   not revive ATP Tour JSON as an alternative source. The preferred next
@@ -50,11 +60,9 @@ When updating project memory, architecture notes, operational details, prioritie
   `S0AG` before deployment.
 
 - 2026-07-18: Added `GET /api/player/:id/headshot` as the backend-owned image
-  boundary for Match Point. The endpoint validates the player id, proxies the
-  ATP image response, and adds a one-day public cache header. ATP currently
-  answers 403 for tested headshots, so clients retain their missing-image
-  fallback until the upstream behavior is resolved. This local endpoint change
-  has not yet been deployed.
+  boundary for Match Point. It initially proxied ATP Tour, but ATP answered 403.
+  On 2026-09-15 it was changed to serve the repository's static
+  `headshots/<ATP-ID>.png` files with a one-day public cache header.
 
 - 2026-07-17: Added the narrow `DELETE /api/log` maintenance endpoint. It clears only the operational `log` table and reports `deletedRows`, allowing Vitel to clear logs without weakening the read-only guarantees of `POST /api/query`.
 
