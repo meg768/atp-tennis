@@ -7,12 +7,14 @@ When updating project memory, architecture notes, operational details, prioritie
 ## Current Handoff — 2026-07-12
 
 - 2026-09-15: Official ATP player images are maintained as static
-  `headshots/<ATP-ID>.png` assets. The current database top 100 has been fetched
-  at 300 x 300. Use the repo skill `$atp-headshots` to extend the set: it selects
-  current ranked players from MariaDB, skips files already present, and exports
-  only missing images through Codex's in-app browser. Replacing existing files
-  requires an explicit refresh request. `GET /api/player/:id/headshot` serves
-  these local PNG files, and Vitel uses that backend URL for every player
+  `headshots/<ATP-ID>.png` assets. The current database top 100 and every player
+  whose recorded career-high ranking is 20 or better have been fetched: 375
+  files in total, including 44 historical profiles for which ATP returns its
+  generic silhouette. Use the repo skill `$atp-headshots` to extend the set: it
+  selects current ranked players from MariaDB, skips files already present, and
+  exports only missing images through Codex's in-app browser. Replacing existing
+  files requires an explicit refresh request. `GET /api/player/:id/headshot`
+  serves these local PNG files, and Vitel uses that backend URL for every player
   headshot. Do not revive the failed Playwright/direct-HTTP approach; ATP's
   Cloudflare protection challenges or rejects it.
 
