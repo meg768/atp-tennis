@@ -15,9 +15,9 @@ Run:
 node .agents/skills/atp-headshots/scripts/list-top-players.js <count>
 ```
 
-This read-only script selects the current ranking rows from MariaDB, checks `headshots/`, and returns only players whose `<ATP-ID>.png` file is missing. If `selectedCount` is zero, make no browser requests and report that all requested headshots already exist.
+This read-only script selects players from MariaDB by their stored `rank`, checks `headshots/`, and returns only players whose `<ATP-ID>.png` file is missing. If `selectedCount` is zero, make no browser requests and report that all requested headshots already exist.
 
-Only when the user explicitly asks to replace or refresh existing images, append `--refresh` to return every selected player. `points IS NOT NULL` is intentional: old player rows can retain a stale `rank` after an import, while current ranking rows have points.
+Only when the user explicitly asks to replace or refresh existing images, append `--refresh` to return every selected player. Selection requires `rank IS NOT NULL` and sorts by `rank` ascending, then ATP ID. Do not filter by `points`: players outside the normal import ranking subset may have a stored rank without points.
 
 ## Fetch images
 

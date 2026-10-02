@@ -33,10 +33,10 @@ async function main() {
 		await mysql.connect();
 		players = await mysql.query({
 			sql: `
-				SELECT id, name, \`rank\`, points
+				SELECT id, name, \`rank\`
 				FROM players
-				WHERE \`rank\` IS NOT NULL AND points IS NOT NULL
-				ORDER BY \`rank\` ASC, points DESC, id ASC
+				WHERE \`rank\` IS NOT NULL
+				ORDER BY \`rank\` ASC, id ASC
 				LIMIT ?
 			`,
 			format: [count]
@@ -46,7 +46,7 @@ async function main() {
 	}
 
 	if (players.length !== count) {
-		throw new Error(`Database returned ${players.length} current ranked players; expected ${count}.`);
+		throw new Error(`Database returned ${players.length} ranked players; expected ${count}.`);
 	}
 
 	const headshotsDirectory = path.join(repositoryRoot, 'headshots');

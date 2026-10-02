@@ -6,6 +6,12 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-10-02: Extended local headshots to all top 200 players selected by stored
+  `rank`; 465 PNG assets in total. Added 90 images across this session, of which
+  13 match ATP's generic silhouette. Headshot selection no longer filters by
+  `points`. After completing requested changes, the expected delivery flow is
+  commit + push, pull on `pi-kato`, restart `atp-service`, and verify the API.
+
 - 2026-09-15: Official ATP player images are maintained as static
   `headshots/<ATP-ID>.png` assets. The current database top 100 and every player
   whose recorded career-high ranking is 20 or better have been fetched: 375
