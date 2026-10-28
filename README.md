@@ -81,7 +81,7 @@ source's home/away orientation even when outcomes arrive in the opposite order.
 The API's merged feed, cache and ATP-player lookup are not involved.
 
 Only the nine columns in `odds` are written: `id` (Svenska Spel event id), `date`
-(UTC match date), `tournament`, `player`, `opponent`, `player_odds`, `opponent_odds`,
+(UTC match date), `tournament`, `player`, `opponent`, `player_oddset`, `opponent_oddset`,
 `player_ta`, and `opponent_ta`.
 Subsequent pre-match runs update the same primary-key row. Live events, unknown or
 past start times, closed markets and events absent from the response leave stored

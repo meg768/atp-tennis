@@ -85,12 +85,12 @@ CREATE TABLE `odds` (
   `tournament` varchar(255) DEFAULT NULL,
   `player` varchar(255) DEFAULT NULL,
   `opponent` varchar(255) DEFAULT NULL,
-  `player_odds` decimal(12,3) DEFAULT NULL,
-  `opponent_odds` decimal(12,3) DEFAULT NULL,
+  `player_oddset` decimal(12,3) DEFAULT NULL,
+  `opponent_oddset` decimal(12,3) DEFAULT NULL,
   `player_ta` decimal(12,2) DEFAULT NULL,
   `opponent_ta` decimal(12,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `odds_valid_prices` CHECK (`player_odds` > 0 and `opponent_odds` > 0),
+  CONSTRAINT `odds_valid_prices` CHECK (`player_oddset` > 0 and `opponent_oddset` > 0),
   CONSTRAINT `odds_valid_ta_prices` CHECK (
     (`player_ta` IS NULL AND `opponent_ta` IS NULL)
     OR (`player_ta` IS NOT NULL AND `opponent_ta` IS NOT NULL

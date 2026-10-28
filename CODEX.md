@@ -6,6 +6,11 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-10-29: Magnus renamed saved Svenska Spel prices to `player_oddset` /
+  `opponent_oddset`; TA stays `player_ta` / `opponent_ta`. Both collectors,
+  current schemas and tests use these names. Migration 012 in ATP Tennis Odds
+  renames only the bookmaker columns, preserving all data and validation.
+
 - 2026-10-29: Magnus shortened the TA columns to `player_ta` / `opponent_ta`.
   Both collectors, tests and schemas use these names. Migration 011 in ATP Tennis
   Odds renames the live columns while preserving all prices and the pair constraint.
@@ -693,6 +698,10 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-10-29 00:40 CET
+- Renamed saved bookmaker prices to `player_oddset` / `opponent_oddset` in `src/collect-odds.js`, `database/schema.sql`, collector tests and documentation.
+- Migration 012 in ATP Tennis Odds preserves stored values, NULLs and price validation. All 21 Node and 24 Python tests passed, including MariaDB integration; the migration was verified on a temporary table.
 
 ### 2026-10-29 00:36 CET
 - Renamed TA columns to `player_ta` / `opponent_ta` in the collector, schema, tests and documentation, matching Magnus's requested names.
