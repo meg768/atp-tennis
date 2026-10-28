@@ -6,6 +6,32 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-10-29: Magnus authorized check-in, deployment to `pi-kato`, service
+  restart, and an hourly PM2 process `atp-odds`. Its reproducible definition is
+  `ecosystem.odds.config.js`: `atp.js odds`, cwd set to the checkout, cron
+  `0 * * * *`, `autorestart: false`, `TZ=Europe/Stockholm`. Run under root's PM2
+  and persist with `pm2 save`. A successful one-shot job is stopped with exit
+  code 0 between hourly runs; do not enable autorestart for this job.
+
+- 2026-10-28: Magnus renamed the four `odds` columns to `player`, `opponent`,
+  `player_odds`, and `opponent_odds`. The live table, this repo's collector,
+  bootstrap schema, tests, and ATP Tennis Odds' Python collector now use these
+  names. The rename preserved every row and price; both real collectors ran
+  successfully. All 17 Node tests, including MariaDB integration, passed.
+
+- 2026-10-28: Added `node atp.js odds`, a one-shot Node collector equivalent to
+  ATP Tennis Odds' Python collector. `src/collect-odds.js` uses the existing Oddset
+  primary ATP URL and MySQL adapter, strictly accepts open `NOT_STARTED` prices
+  with a future start, and writes only the seven columns in `odds`. No AI,
+  Python, ATP identity resolution, model calculation or raw-feed logging is used.
+  Node collectors acquire a MariaDB advisory lock before fetching; writes are
+  transactional, failures return a nonzero exit code, and the request times out
+  after 20 seconds. `database/schema.sql` now includes the existing live `odds`
+  definition. Unit tests and an opt-in MariaDB temporary-table test verify price
+  orientation, pre-match filtering, unique rows, rollback, and lock cleanup.
+  A real `node atp.js odds` run succeeded. The subsequent 2026-10-29 handoff
+  defines the authorized hourly PM2 deployment.
+
 - 2026-10-02: Extended local headshots to all top 200 players selected by stored
   `rank`; 465 PNG assets in total. Added 90 images across this session, of which
   13 match ATP's generic silhouette. Headshot selection no longer filters by
@@ -271,7 +297,7 @@ This is a deduplicated list from the current codebase.
 - Legacy `import` no longer calls `sp_update()`; surface factors are now updated in app code via `src/update-surface-factors.js`
 - Legacy `import` ELO now reads directly from `matches` + `events` and does not depend on the `flatly` view
 - `database/schema.sql` is now a dump of the current MariaDB schema and currently includes:
-  - tables: `events`, `log`, `matches`, `players`, `settings`
+  - tables: `events`, `log`, `matches`, `odds`, `players`, `settings`
   - view: `flatly`
   - helper SQL functions: `NUMBER_OF_GAMES`, `NUMBER_OF_SETS`, `NUMBER_OF_TIE_BREAKS`, `PLAYER_LOOKUP`, `WIN_PROBABILITY_TA`, `WIN_PROBABILITY_GPT`
   - stored procedures: `PLAYER_ODDS`, `PLAYER_SEARCH`
@@ -307,6 +333,7 @@ For fresh dev/prod environments:
 - Primary production concern is keeping the import pipeline stable
 - Production API runs on `pi-kato` under root PM2 as `atp-service` from `/home/pi/atp-tennis` with args `serve`.
 - Production import is scheduled under root PM2 as `atp-import` with cron `0 6 * * *` and args `import`; it is normally stopped between scheduled runs.
+- The odds collection job is root PM2 `atp-odds`, with args `odds`, cron `0 * * * *`, and `autorestart: false`. Definition: `ecosystem.odds.config.js`. The server timezone is `Europe/Stockholm`.
 - `tennis.egelberg.se` serves the `vitel` frontend and reverse-proxies `/api` to `http://localhost:3004/api`, so backend API compatibility directly affects the public tennis site.
 - Database is MariaDB database `atp` on `pi-sql`.
 
@@ -647,6 +674,22 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-10-29 00:15 CET
+- Added `ecosystem.odds.config.js` for root PM2 process `atp-odds`: one immediate `odds` run and then every full hour, with automatic restarts disabled and Swedish timezone.
+- Magnus authorized check-in, push, pull on `pi-kato`, service restart, and saving the PM2 schedule. All 17 tests and configuration validation passed before deployment.
+- Affected files: `ecosystem.odds.config.js`, `README.md`, `CODEX.md`, together with the previously prepared odds collector, schema, CLI registration and tests.
+
+### 2026-10-28 23:29 CET
+- Renamed the `odds` columns to `player`, `opponent`, `player_odds`, and `opponent_odds` in the live database and both Node/Python collectors. Existing values were preserved and both collectors were run successfully.
+- Updated Node collector, bootstrap schema, tests and documentation. All 17 Node tests and the Python project's 21 tests passed.
+- Commit: not committed.
+
+### 2026-10-28 23:17 CET
+- Added the one-shot `odds` CLI command for direct Svenska Spel pre-match collection in Node, with transactional updates and a cross-process MariaDB collection lock.
+- Added the live `odds` table structure to the bootstrap schema and verified it using a temporary MariaDB table. All 17 existing/new tests passed across the unit and opt-in integration runs; the real CLI run succeeded.
+- Affected files: `atp.js`, `commands/odds.js`, `src/collect-odds.js`, `test/collect-odds.test.js`, `database/schema.sql`, `database/README.md`, `README.md`, `CODEX.md`.
+- Commit: not committed.
 
 ### 2026-03-18 23:20 CET
 - Added npm script `git-delete-backup` for removing the remote backup branch when a fallback point is no longer needed.

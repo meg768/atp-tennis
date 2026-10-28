@@ -12,6 +12,7 @@ The `database/` folder is the source of truth for the MariaDB objects used by th
 
 Defines the MariaDB objects used by the app, including:
 - core tables such as `events`, `matches`, `players`, `log`, and `settings`
+- the seven-column `odds` table used by `node atp.js odds`, keyed by Svenska Spel event id
 - the `flatly` view
 - all required functions and procedures
 
@@ -27,6 +28,7 @@ model in `WIN_PROBABILITY_GPT`.
 
 - A fresh database structure can be created by applying `schema.sql`; no other SQL files are required for bootstrap.
 - The application expects the required tables, view, helper functions, and any required procedures to already exist.
+- The `odds` table definition was copied from live `SHOW CREATE TABLE odds` and restore-tested as a session-local temporary table. The collector never creates or alters database structure.
 - The import pipeline updates data in these objects, but it does not create the schema for you.
 
 ## Notes

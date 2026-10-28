@@ -76,6 +76,21 @@ CREATE TABLE `matches` (
   KEY `events` (`event`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `odds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `odds` (
+  `id` bigint(20) unsigned NOT NULL COMMENT 'Svenska Spel event ID; one updatable row per event',
+  `date` date DEFAULT NULL COMMENT 'UTC: preliminary start at observation time',
+  `tournament` varchar(255) DEFAULT NULL,
+  `player` varchar(255) DEFAULT NULL,
+  `opponent` varchar(255) DEFAULT NULL,
+  `player_odds` decimal(12,3) DEFAULT NULL,
+  `opponent_odds` decimal(12,3) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `odds_valid_prices` CHECK (`player_odds` > 0 and `opponent_odds` > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Latest known Svenska Spel data per unique event; id is provider event ID; times UTC';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `players`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;

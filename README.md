@@ -46,6 +46,7 @@ node atp.js --help
 
 Available commands (from `atp.js`):
 - `import [options]` - Full import pipeline (rankings -> activity -> scores -> players -> stats -> Tennis Abstract ELO -> surface factors).
+- `odds` - Save current Svenska Spel pre-match odds to MariaDB, then exit.
 - `serve [options]` - Start local API server.
 
 ### Common Command Examples
@@ -53,6 +54,7 @@ Available commands (from `atp.js`):
 ```bash
 node atp.js import --top 100 --since 2025
 node atp.js import --elo-only
+node atp.js odds
 node atp.js serve
 ```
 
@@ -64,6 +66,51 @@ with current overall, Hard, Clay, and Grass ratings from Tennis Abstract. The
 report is downloaded and parsed before the database is changed. The database
 update is transactional: all existing ELO values are first set to `NULL`, then
 matched players are populated. Players absent from the report remain `NULL`.
+
+### Pre-match Odds Collection
+
+Run `node atp.js odds` once per desired collection cycle. It needs no AI or Python;
+it uses this project's existing `MYSQL_*` configuration and can be scheduled by
+cron or PM2.
+
+The command fetches the primary Svenska Spel ATP `matches.json` feed directly,
+matching the collection rules from the ATP Tennis Odds Python project. It requires
+`NOT_STARTED`, a future start time, and a nonsuspended match-winner market with two
+open, valid outcomes. Each price is matched by participant name, preserving the
+source's home/away orientation even when outcomes arrive in the opposite order.
+The API's merged feed, cache and ATP-player lookup are not involved.
+
+Only the seven columns in `odds` are written: `id` (Svenska Spel event id), `date`
+(UTC match date), `tournament`, `player`, `opponent`, `player_odds`, and `opponent_odds`.
+Subsequent pre-match runs update the same primary-key row. Live events, unknown or
+past start times, closed markets and events absent from the response leave stored
+prices untouched. No table is created by the command and no raw-feed log is saved.
+
+All prices from a run are saved in one transaction. A MariaDB advisory lock skips
+overlapping Node collectors before they fetch prices. HTTP/JSON/database errors
+fail explicitly with a nonzero exit code; the HTTP request has a 20-second timeout.
+
+Collection frequency determines how close the last captured pre-match quote is to
+match start. These are not guaranteed closing prices.
+
+Production uses root's PM2 process `atp-odds` on `pi-kato`, configured by
+`ecosystem.odds.config.js`. It runs `odds` once immediately when started and then
+every hour at minute 00, in the server's `Europe/Stockholm` timezone. Automatic
+restarts are disabled so a finished run waits for the next scheduled hour.
+`stopped` with exit code 0 is therefore the expected state between runs.
+
+After deploying the repository, install or update only this job and persist it:
+
+```bash
+sudo pm2 startOrRestart ecosystem.odds.config.js --only atp-odds
+sudo pm2 save
+```
+
+Database integration tests use a session-local temporary `odds` table:
+
+```bash
+ATP_ODDS_INTEGRATION=1 node --test test/collect-odds.test.js
+```
 
 ## Helper Scripts
 
