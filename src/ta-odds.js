@@ -9,16 +9,16 @@ SELECT
 FROM probability`;
 
 async function getTaOdds(mysql, row) {
-	const missing = { player_id: null, opponent_id: null, player_ta: null, opponent_ta: null };
+	const missing = { player: null, opponent: null, player_ta: null, opponent_ta: null };
 	const [identity] = await mysql.query({
 		sql: `SELECT
-			(SELECT CASE WHEN COUNT(*)=1 THEN NULLIF(MIN(id),'') END FROM players WHERE id=? OR name=?) AS player_id,
-			(SELECT CASE WHEN COUNT(*)=1 THEN NULLIF(MIN(id),'') END FROM players WHERE id=? OR name=?) AS opponent_id`,
+			(SELECT CASE WHEN COUNT(*)=1 THEN NULLIF(MIN(id),'') END FROM players WHERE id=? OR name=?) AS player,
+			(SELECT CASE WHEN COUNT(*)=1 THEN NULLIF(MIN(id),'') END FROM players WHERE id=? OR name=?) AS opponent`,
 		format: [row.player_name, row.player_name, row.opponent_name, row.opponent_name]
 	});
-	missing.player_id = identity?.player_id ?? null;
-	missing.opponent_id = identity?.opponent_id ?? null;
-	if (!missing.player_id || !missing.opponent_id || missing.player_id === missing.opponent_id) return missing;
+	missing.player = identity?.player ?? null;
+	missing.opponent = identity?.opponent ?? null;
+	if (!missing.player || !missing.opponent || missing.player === missing.opponent) return missing;
 	const aliases = { wien: 'Vienna', rom: 'Rome', 'paris masters': 'Paris' };
 	const tournament = String(row.tournament || '').trim();
 	if (!tournament) return missing;
@@ -33,7 +33,7 @@ async function getTaOdds(mysql, row) {
 	if (!['Hard', 'Clay', 'Grass'].includes(event.surface)) return missing;
 	const [priced] = await mysql.query({
 		sql: TA_ODDS_SQL,
-		format: [missing.player_id, missing.opponent_id, event.surface]
+		format: [missing.player, missing.opponent, event.surface]
 	});
 	if (priced?.player_ta == null || priced?.opponent_ta == null) return missing;
 	const pair = [Number(priced.player_ta), Number(priced.opponent_ta)];

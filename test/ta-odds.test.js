@@ -3,7 +3,7 @@ const test = require('node:test');
 const getTaOdds = require('../src/ta-odds');
 
 const row = { date: '2026-10-29', tournament: 'Wien', player_name: 'Alice', opponent_name: 'Bob' };
-const identity = { player_id: 'TEST_A', opponent_id: 'TEST_B' };
+const identity = { player: 'TEST_A', opponent: 'TEST_B' };
 const withoutTa = { ...identity, player_ta: null, opponent_ta: null };
 
 test('TA uses the verified tournament surface and keeps player/opponent order', async () => {
@@ -47,9 +47,9 @@ test('database failures propagate rather than being reported as missing Elo', as
 
 
 test('partial identities are saved independently and cannot produce TA prices', async () => {
-	for (const ids of [{ player_id: null, opponent_id: 'TEST_B' },
-		{ player_id: 'TEST_A', opponent_id: null }, { player_id: null, opponent_id: null },
-		{ player_id: 'TEST_A', opponent_id: 'TEST_A' }]) {
+	for (const ids of [{ player: null, opponent: 'TEST_B' },
+		{ player: 'TEST_A', opponent: null }, { player: null, opponent: null },
+		{ player: 'TEST_A', opponent: 'TEST_A' }]) {
 		let calls = 0;
 		const mysql = { async query() { calls++; return [ids]; } };
 		assert.deepEqual(await getTaOdds(mysql, row), { ...ids, player_ta: null, opponent_ta: null });

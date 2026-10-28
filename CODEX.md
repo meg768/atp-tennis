@@ -6,6 +6,12 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-10-29: Saved ATP identifiers now use `player` / `opponent` in `odds`,
+  while display names stay `player_name` / `opponent_name`. Magnus requested
+  this rename from `player_id` / `opponent_id`. Both collectors, tests, current
+  schemas and docs use these names. Migration 015 in ATP Tennis Odds preserves
+  all values and indexes; identity resolution and pricing are unchanged.
+
 - 2026-10-29: Magnus renamed the odds name columns to `player_name` /
   `opponent_name`. Both collectors, tests, current schemas and documentation
   use these names. Migration 014 in ATP Tennis Odds preserves every stored
@@ -712,6 +718,10 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-10-29 00:54 CET
+- Renamed stored ATP-id columns to `player` / `opponent` in `src/collect-odds.js`, `src/ta-odds.js`, `database/schema.sql`, tests and documentation. Display names stay `player_name` / `opponent_name`.
+- Migration 015 in ATP Tennis Odds preserves all values and indexes. All 22 Node and 25 Python tests passed, including MariaDB integration; the migration was verified on a temporary table.
 
 ### 2026-10-29 00:52 CET
 - Renamed stored odds names to `player_name` / `opponent_name` in `src/collect-odds.js`, `src/ta-odds.js`, `database/schema.sql`, tests and documentation.

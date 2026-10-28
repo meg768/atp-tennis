@@ -82,12 +82,12 @@ The API's merged feed and cache are not involved.
 
 Only the eleven columns in `odds` are written: `id` (Svenska Spel event id), `date`
 (UTC match date), `tournament`, `player_name`, `opponent_name`, `player_oddset`, `opponent_oddset`,
-`player_id`, `opponent_id`, `player_ta`, and `opponent_ta`.
+`player`, `opponent`, `player_ta`, and `opponent_ta`.
 Subsequent pre-match runs update the same primary-key row. Live events, unknown or
 past start times, closed markets and events absent from the response leave stored
 prices untouched. No table is created by the command and no raw-feed log is saved.
 
-The nullable `player_id` / `opponent_id` columns reference `players.id` logically
+The nullable `player` / `opponent` columns reference `players.id` logically
 (VARCHAR(32), indexed, no foreign keys). Resolve each source name/id once through
 an exact, unique match; never guess ambiguous names. Save each resolved id even
 when the other identity, Elo or tournament metadata is unavailable. TA uses these
