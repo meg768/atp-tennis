@@ -1,4 +1,5 @@
 const Oddset = require('./oddset');
+const getTaOdds = require('./ta-odds');
 
 function parsePrematchOdds(raw, checkedAt = Date.now()) {
 	if (!raw || !Array.isArray(raw.events) || raw.events.some(item => !item?.event || item.event.id == null)) {
@@ -31,7 +32,9 @@ function parsePrematchOdds(raw, checkedAt = Date.now()) {
 				player: names[0],
 				opponent: names[1],
 				player_odds: decimalOdds(a[0].odds),
-				opponent_odds: decimalOdds(b[0].odds)
+				opponent_odds: decimalOdds(b[0].odds),
+				player_ta_odds: null,
+				opponent_ta_odds: null
 			});
 			break;
 		}
@@ -72,7 +75,10 @@ class CollectOdds {
 			if (rows.length > 0) {
 				await this.mysql.query('START TRANSACTION');
 				try {
-					for (const row of rows) await this.mysql.upsert('odds', row);
+					for (const row of rows) {
+						Object.assign(row, await getTaOdds(this.mysql, row));
+						await this.mysql.upsert('odds', row);
+					}
 					await this.mysql.query('COMMIT');
 				} catch (error) {
 					await this.mysql.query('ROLLBACK');

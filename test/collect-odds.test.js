@@ -26,7 +26,7 @@ function database({ acquired = 1, failWrite = false } = {}) {
 		calls,
 		async query(sql) {
 			calls.push(sql);
-			return sql.includes('GET_LOCK') ? [{ acquired }] : [];
+			return typeof sql === 'string' && sql.includes('GET_LOCK') ? [{ acquired }] : [];
 		},
 		async upsert(table, row) {
 			calls.push({ table, row });
@@ -35,10 +35,11 @@ function database({ acquired = 1, failWrite = false } = {}) {
 	};
 }
 
-test('uses participant names to keep reversed outcomes aligned and stores exactly seven fields', () => {
+test('uses participant names to keep reversed outcomes aligned and stores the quote fields with initially unavailable TA prices', () => {
 	assert.deepEqual(parsePrematchOdds(offering(), checkedAt), [{
 		id: 123, date: '2026-10-29', tournament: 'Wien',
-		player: 'Alice', opponent: 'Bob', player_odds: '1.500', opponent_odds: '2.500'
+		player: 'Alice', opponent: 'Bob', player_odds: '1.500', opponent_odds: '2.500',
+		player_ta_odds: null, opponent_ta_odds: null
 	}]);
 });
 
@@ -96,7 +97,7 @@ test('fetches fresh primary ATP prices and writes only odds in one transaction',
 	assert.deepEqual(await collect.run(), { fetched: 1, updated: 1 });
 	assert.ok(mysql.calls.includes('START TRANSACTION'));
 	assert.ok(mysql.calls.includes('COMMIT'));
-	assert.deepEqual(mysql.calls.filter(call => typeof call === 'object').map(call => call.table), ['odds']);
+	assert.deepEqual(mysql.calls.filter(call => call.table).map(call => call.table), ['odds']);
 	assert.match(mysql.calls.at(-1), /RELEASE_LOCK/);
 });
 
@@ -109,7 +110,7 @@ test('HTTP and invalid JSON failures do not write or reuse an earlier response',
 		const collect = new CollectOdds({ mysql, log() {}, fetchImpl: async () => response });
 		await assert.rejects(collect.run());
 		assert.ok(!mysql.calls.includes('START TRANSACTION'));
-		assert.equal(mysql.calls.filter(call => typeof call === 'object').length, 0);
+		assert.equal(mysql.calls.filter(call => call.table).length, 0);
 		assert.match(mysql.calls.at(-1), /RELEASE_LOCK/);
 	}
 });
@@ -135,7 +136,7 @@ test('an empty offering preserves all previously stored matches', async () => {
 	const collect = new CollectOdds({ mysql, log() {}, fetchImpl: async () => ({ ok: true, json: async () => ({ events: [] }) }) });
 	assert.deepEqual(await collect.run(), { fetched: 0, updated: 0 });
 	assert.ok(!mysql.calls.includes('START TRANSACTION'));
-	assert.equal(mysql.calls.filter(call => typeof call === 'object').length, 0);
+	assert.equal(mysql.calls.filter(call => call.table).length, 0);
 });
 
 test('CLI reports a failed collection, disconnects and sets a nonzero exit code', async t => {
@@ -164,6 +165,13 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.ok(start >= 0);
 		const end = schema.indexOf('\n/*!40101 SET character_set_client', start);
 		await mysql.query(schema.slice(start, end).replace('CREATE TABLE', 'CREATE TEMPORARY TABLE'));
+		for (const table of ['players', 'events']) {
+			const tableStart = schema.indexOf('CREATE TABLE `'+table+'` (');
+			const tableEnd = schema.indexOf('\n/*!40101 SET character_set_client', tableStart);
+			await mysql.query(schema.slice(tableStart, tableEnd).replace('CREATE TABLE', 'CREATE TEMPORARY TABLE'));
+		}
+		await mysql.query("INSERT INTO events(id,date,name,type,surface) VALUES('TEST','2026-10-26','Vienna','ATP-500','Hard')");
+		await mysql.query("INSERT INTO players(id,name,country,rank,active,elo_rank,elo_rank_hard,elo_rank_clay,elo_rank_grass) VALUES('TEST_A','Alice','SE',1,1,1600,1600,1800,1600),('TEST_B','Bob','SE',2,1,1600,1800,1600,1600)");
 		let raw = offering();
 		const collect = new CollectOdds({ mysql, log() {}, now: () => checkedAt, fetchImpl: async () => ({ ok: true, json: async () => raw }) });
 		await collect.run();
@@ -173,10 +181,14 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.equal(rows.length, 1);
 		assert.equal(Number(rows[0].id), 123);
 		assert.equal(Number(rows[0].opponent_odds), 3);
+		assert.equal(Number(rows[0].player_ta_odds), 3.96);
+		assert.equal(Number(rows[0].opponent_ta_odds), 1.25);
+		await mysql.query("UPDATE players SET elo_rank_hard=IF(id='TEST_A',1800,1600)");
 		raw.events[0].event.state = 'STARTED';
 		raw.events[0].betOffers[0].outcomes[0].odds = 9000;
 		await collect.run();
 		assert.equal(Number((await mysql.query('SELECT opponent_odds FROM odds'))[0].opponent_odds), 3);
+		assert.equal(Number((await mysql.query('SELECT player_ta_odds FROM odds'))[0].player_ta_odds), 3.96);
 		raw = offering();
 		raw.events[0].betOffers[0].outcomes[0].odds = 4000;
 		const bad = structuredClone(raw.events[0]);
@@ -187,6 +199,16 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		rows = await mysql.query('SELECT * FROM odds');
 		assert.equal(rows.length, 1);
 		assert.equal(Number(rows[0].opponent_odds), 3);
+		assert.equal(Number(rows[0].player_ta_odds), 3.96);
+		// A new valid bookmaker observation must not retain an older TA quote.
+		await mysql.query("UPDATE players SET elo_rank_hard=NULL WHERE id='TEST_B'");
+		raw = offering();
+		raw.events[0].betOffers[0].outcomes[0].odds = 4100;
+		await collect.run();
+		rows = await mysql.query('SELECT * FROM odds');
+		assert.equal(Number(rows[0].opponent_odds), 4.1);
+		assert.equal(rows[0].player_ta_odds, null);
+		assert.equal(rows[0].opponent_ta_odds, null);
 	} finally {
 		await mysql.disconnect();
 	}

@@ -46,7 +46,7 @@ node atp.js --help
 
 Available commands (from `atp.js`):
 - `import [options]` - Full import pipeline (rankings -> activity -> scores -> players -> stats -> Tennis Abstract ELO -> surface factors).
-- `odds` - Save current Svenska Spel pre-match odds to MariaDB, then exit.
+- `odds` - Save current Svenska Spel and TA pre-match odds together in MariaDB, then exit.
 - `serve [options]` - Start local API server.
 
 ### Common Command Examples
@@ -80,13 +80,24 @@ open, valid outcomes. Each price is matched by participant name, preserving the
 source's home/away orientation even when outcomes arrive in the opposite order.
 The API's merged feed, cache and ATP-player lookup are not involved.
 
-Only the seven columns in `odds` are written: `id` (Svenska Spel event id), `date`
-(UTC match date), `tournament`, `player`, `opponent`, `player_odds`, and `opponent_odds`.
+Only the nine columns in `odds` are written: `id` (Svenska Spel event id), `date`
+(UTC match date), `tournament`, `player`, `opponent`, `player_odds`, `opponent_odds`,
+`player_ta_odds`, and `opponent_ta_odds`.
 Subsequent pre-match runs update the same primary-key row. Live events, unknown or
 past start times, closed markets and events absent from the response leave stored
 prices untouched. No table is created by the command and no raw-feed log is saved.
 
-All prices from a run are saved in one transaction. A MariaDB advisory lock skips
+TA prices use MariaDB's `WIN_PROBABILITY_TA` with the same 5% probability markup,
+clamping and two-decimal rounding as Vitel's TA column. The collector requires
+unique player ids/full names and a unique tournament edition within 20 days before
+to 7 days after the match date. Wien/Vienna, Rom/Rome and Paris Masters/Paris are
+aliases. The edition supplies the verified Hard/Clay/Grass surface; no seasonal
+surface guess or GPT calculation is used. Missing Elo, ambiguous identities or
+editions, unsupported surfaces and Grand Slam/Next Gen Finals produce two NULL TA
+fields while valid bookmaker prices are saved. Fresh bookmaker prices never retain
+an older TA pair. No TA is calculated retroactively for live or historical matches.
+
+Both price pairs from a run are saved in one transaction. A MariaDB advisory lock skips
 overlapping Node collectors before they fetch prices. HTTP/JSON/database errors
 fail explicitly with a nonzero exit code; the HTTP request has a 20-second timeout.
 
@@ -106,10 +117,10 @@ sudo pm2 startOrRestart ecosystem.odds.config.js --only atp-odds
 sudo pm2 save
 ```
 
-Database integration tests use a session-local temporary `odds` table:
+Database integration tests use session-local temporary `odds`, `events` and `players` tables:
 
 ```bash
-ATP_ODDS_INTEGRATION=1 node --test test/collect-odds.test.js
+ATP_ODDS_INTEGRATION=1 npm test
 ```
 
 ## Helper Scripts

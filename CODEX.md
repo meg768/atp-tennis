@@ -6,6 +6,21 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-10-29: Corrected the hourly collector to save contemporaneous TA prices
+  alongside Svenska Spel prices, as Magnus requested. `odds` now has nine columns:
+  the previous seven plus nullable `player_ta_odds` / `opponent_ta_odds` (12,2).
+  `src/ta-odds.js` uses MariaDB `WIN_PROBABILITY_TA` and PLAYER_ODDS' existing 5%
+  probability markup/clamp/rounding, independently of GPT. Require unique exact
+  ids/full names, a unique tournament edition (date -20/+7 days; Wien/Vienna,
+  Rom/Rome, Paris Masters/Paris aliases), and its actual Hard/Clay/Grass surface.
+  Missing/ambiguous inputs, Elo or unsupported Grand Slam/Next Gen format yield
+  two NULL TA fields. Never retain an older TA pair alongside new bookmaker
+  prices. Both pairs are updated atomically before start; live/historical rows
+  are never filled using later ratings. Python now shares the same advisory lock
+  before fetching. Migration 010 in ATP Tennis Odds was applied without historical
+  backfill. All 21 Node and 24 Python tests passed, including MariaDB integration;
+  all 12 current stored TA pairs matched Vitel's existing API/model prices.
+
 - 2026-10-29: Magnus authorized check-in, deployment to `pi-kato`, service
   restart, and an hourly PM2 process `atp-odds`. Its reproducible definition is
   `ecosystem.odds.config.js`: `atp.js odds`, cwd set to the checkout, cron
@@ -22,8 +37,8 @@ When updating project memory, architecture notes, operational details, prioritie
 - 2026-10-28: Added `node atp.js odds`, a one-shot Node collector equivalent to
   ATP Tennis Odds' Python collector. `src/collect-odds.js` uses the existing Oddset
   primary ATP URL and MySQL adapter, strictly accepts open `NOT_STARTED` prices
-  with a future start, and writes only the seven columns in `odds`. No AI,
-  Python, ATP identity resolution, model calculation or raw-feed logging is used.
+  with a future start, and originally wrote seven columns in `odds`. The 2026-10-29 TA correction
+  above adds model prices; no AI, Python or raw-feed logging is used.
   Node collectors acquire a MariaDB advisory lock before fetching; writes are
   transactional, failures return a nonzero exit code, and the request times out
   after 20 seconds. `database/schema.sql` now includes the existing live `odds`
@@ -674,6 +689,10 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-10-29 00:32 CET
+- Persisted TA prices together with Svenska Spel pre-match prices using the canonical MariaDB TA model and Vitel's pricing convention. Missing inputs produce NULL; live matches preserve both stored pairs.
+- Affected files: `src/ta-odds.js`, `src/collect-odds.js`, `database/schema.sql`, tests and documentation. Applied the additive live migration without historical backfill. All 21 Node tests and 24 Python tests passed; 12 live stored TA pairs matched Vitel's model prices.
 
 ### 2026-10-29 00:15 CET
 - Added `ecosystem.odds.config.js` for root PM2 process `atp-odds`: one immediate `odds` run and then every full hour, with automatic restarts disabled and Swedish timezone.

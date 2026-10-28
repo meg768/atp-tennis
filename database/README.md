@@ -12,7 +12,7 @@ The `database/` folder is the source of truth for the MariaDB objects used by th
 
 Defines the MariaDB objects used by the app, including:
 - core tables such as `events`, `matches`, `players`, `log`, and `settings`
-- the seven-column `odds` table used by `node atp.js odds`, keyed by Svenska Spel event id
+- the nine-column `odds` table used by `node atp.js odds`, keyed by Svenska Spel event id, with contemporaneous Svenska Spel and nullable TA price pairs
 - the `flatly` view
 - all required functions and procedures
 
