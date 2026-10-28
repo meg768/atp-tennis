@@ -8,12 +8,12 @@ WITH probability AS (
 	) AS p
 )
 SELECT
-	CASE WHEN p>0 AND p<1 THEN ROUND(1 / LEAST(0.999, GREATEST(0.001, p*1.05)), 2) END AS player_ta_odds,
-	CASE WHEN p>0 AND p<1 THEN ROUND(1 / LEAST(0.999, GREATEST(0.001, (1-p)*1.05)), 2) END AS opponent_ta_odds
+	CASE WHEN p>0 AND p<1 THEN ROUND(1 / LEAST(0.999, GREATEST(0.001, p*1.05)), 2) END AS player_ta,
+	CASE WHEN p>0 AND p<1 THEN ROUND(1 / LEAST(0.999, GREATEST(0.001, (1-p)*1.05)), 2) END AS opponent_ta
 FROM probability`;
 
 async function getTaOdds(mysql, row) {
-	const missing = { player_ta_odds: null, opponent_ta_odds: null };
+	const missing = { player_ta: null, opponent_ta: null };
 	const aliases = { wien: 'Vienna', rom: 'Rome', 'paris masters': 'Paris' };
 	const tournament = String(row.tournament || '').trim();
 	if (!tournament) return missing;
@@ -30,10 +30,10 @@ async function getTaOdds(mysql, row) {
 		sql: TA_ODDS_SQL,
 		format: [row.player, row.player, row.opponent, row.opponent, event.surface]
 	});
-	if (priced?.player_ta_odds == null || priced?.opponent_ta_odds == null) return missing;
-	const pair = [Number(priced.player_ta_odds), Number(priced.opponent_ta_odds)];
+	if (priced?.player_ta == null || priced?.opponent_ta == null) return missing;
+	const pair = [Number(priced.player_ta), Number(priced.opponent_ta)];
 	if (!pair.every(value => Number.isFinite(value) && value >= 1)) return missing;
-	return { player_ta_odds: pair[0].toFixed(2), opponent_ta_odds: pair[1].toFixed(2) };
+	return { player_ta: pair[0].toFixed(2), opponent_ta: pair[1].toFixed(2) };
 }
 
 module.exports = getTaOdds;

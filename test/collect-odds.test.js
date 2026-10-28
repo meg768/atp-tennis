@@ -39,7 +39,7 @@ test('uses participant names to keep reversed outcomes aligned and stores the qu
 	assert.deepEqual(parsePrematchOdds(offering(), checkedAt), [{
 		id: 123, date: '2026-10-29', tournament: 'Wien',
 		player: 'Alice', opponent: 'Bob', player_odds: '1.500', opponent_odds: '2.500',
-		player_ta_odds: null, opponent_ta_odds: null
+		player_ta: null, opponent_ta: null
 	}]);
 });
 
@@ -181,14 +181,14 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.equal(rows.length, 1);
 		assert.equal(Number(rows[0].id), 123);
 		assert.equal(Number(rows[0].opponent_odds), 3);
-		assert.equal(Number(rows[0].player_ta_odds), 3.96);
-		assert.equal(Number(rows[0].opponent_ta_odds), 1.25);
+		assert.equal(Number(rows[0].player_ta), 3.96);
+		assert.equal(Number(rows[0].opponent_ta), 1.25);
 		await mysql.query("UPDATE players SET elo_rank_hard=IF(id='TEST_A',1800,1600)");
 		raw.events[0].event.state = 'STARTED';
 		raw.events[0].betOffers[0].outcomes[0].odds = 9000;
 		await collect.run();
 		assert.equal(Number((await mysql.query('SELECT opponent_odds FROM odds'))[0].opponent_odds), 3);
-		assert.equal(Number((await mysql.query('SELECT player_ta_odds FROM odds'))[0].player_ta_odds), 3.96);
+		assert.equal(Number((await mysql.query('SELECT player_ta FROM odds'))[0].player_ta), 3.96);
 		raw = offering();
 		raw.events[0].betOffers[0].outcomes[0].odds = 4000;
 		const bad = structuredClone(raw.events[0]);
@@ -199,7 +199,7 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		rows = await mysql.query('SELECT * FROM odds');
 		assert.equal(rows.length, 1);
 		assert.equal(Number(rows[0].opponent_odds), 3);
-		assert.equal(Number(rows[0].player_ta_odds), 3.96);
+		assert.equal(Number(rows[0].player_ta), 3.96);
 		// A new valid bookmaker observation must not retain an older TA quote.
 		await mysql.query("UPDATE players SET elo_rank_hard=NULL WHERE id='TEST_B'");
 		raw = offering();
@@ -207,8 +207,8 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		await collect.run();
 		rows = await mysql.query('SELECT * FROM odds');
 		assert.equal(Number(rows[0].opponent_odds), 4.1);
-		assert.equal(rows[0].player_ta_odds, null);
-		assert.equal(rows[0].opponent_ta_odds, null);
+		assert.equal(rows[0].player_ta, null);
+		assert.equal(rows[0].opponent_ta, null);
 	} finally {
 		await mysql.disconnect();
 	}

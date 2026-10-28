@@ -33,8 +33,8 @@ function parsePrematchOdds(raw, checkedAt = Date.now()) {
 				opponent: names[1],
 				player_odds: decimalOdds(a[0].odds),
 				opponent_odds: decimalOdds(b[0].odds),
-				player_ta_odds: null,
-				opponent_ta_odds: null
+				player_ta: null,
+				opponent_ta: null
 			});
 			break;
 		}

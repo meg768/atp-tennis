@@ -82,7 +82,7 @@ The API's merged feed, cache and ATP-player lookup are not involved.
 
 Only the nine columns in `odds` are written: `id` (Svenska Spel event id), `date`
 (UTC match date), `tournament`, `player`, `opponent`, `player_odds`, `opponent_odds`,
-`player_ta_odds`, and `opponent_ta_odds`.
+`player_ta`, and `opponent_ta`.
 Subsequent pre-match runs update the same primary-key row. Live events, unknown or
 past start times, closed markets and events absent from the response leave stored
 prices untouched. No table is created by the command and no raw-feed log is saved.

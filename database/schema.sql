@@ -87,14 +87,14 @@ CREATE TABLE `odds` (
   `opponent` varchar(255) DEFAULT NULL,
   `player_odds` decimal(12,3) DEFAULT NULL,
   `opponent_odds` decimal(12,3) DEFAULT NULL,
-  `player_ta_odds` decimal(12,2) DEFAULT NULL,
-  `opponent_ta_odds` decimal(12,2) DEFAULT NULL,
+  `player_ta` decimal(12,2) DEFAULT NULL,
+  `opponent_ta` decimal(12,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `odds_valid_prices` CHECK (`player_odds` > 0 and `opponent_odds` > 0),
   CONSTRAINT `odds_valid_ta_prices` CHECK (
-    (`player_ta_odds` IS NULL AND `opponent_ta_odds` IS NULL)
-    OR (`player_ta_odds` IS NOT NULL AND `opponent_ta_odds` IS NOT NULL
-        AND `player_ta_odds` >= 1 AND `opponent_ta_odds` >= 1))
+    (`player_ta` IS NULL AND `opponent_ta` IS NULL)
+    OR (`player_ta` IS NOT NULL AND `opponent_ta` IS NOT NULL
+        AND `player_ta` >= 1 AND `opponent_ta` >= 1))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Latest known Svenska Spel data per unique event; id is provider event ID; times UTC';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `players`;

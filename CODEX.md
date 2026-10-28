@@ -6,9 +6,13 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-10-29: Magnus shortened the TA columns to `player_ta` / `opponent_ta`.
+  Both collectors, tests and schemas use these names. Migration 011 in ATP Tennis
+  Odds renames the live columns while preserving all prices and the pair constraint.
+
 - 2026-10-29: Corrected the hourly collector to save contemporaneous TA prices
   alongside Svenska Spel prices, as Magnus requested. `odds` now has nine columns:
-  the previous seven plus nullable `player_ta_odds` / `opponent_ta_odds` (12,2).
+  the previous seven plus nullable `player_ta` / `opponent_ta` (12,2).
   `src/ta-odds.js` uses MariaDB `WIN_PROBABILITY_TA` and PLAYER_ODDS' existing 5%
   probability markup/clamp/rounding, independently of GPT. Require unique exact
   ids/full names, a unique tournament edition (date -20/+7 days; Wien/Vienna,
@@ -689,6 +693,10 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-10-29 00:36 CET
+- Renamed TA columns to `player_ta` / `opponent_ta` in the collector, schema, tests and documentation, matching Magnus's requested names.
+- The additive rename migration in ATP Tennis Odds preserves existing row values and the paired-price constraint. All 21 Node and 24 Python tests passed, including MariaDB integration; the migration was also verified on a temporary table.
 
 ### 2026-10-29 00:32 CET
 - Persisted TA prices together with Svenska Spel pre-match prices using the canonical MariaDB TA model and Vitel's pricing convention. Missing inputs produce NULL; live matches preserve both stored pairs.
