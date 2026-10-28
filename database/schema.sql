@@ -87,9 +87,13 @@ CREATE TABLE `odds` (
   `opponent` varchar(255) DEFAULT NULL,
   `player_oddset` decimal(12,3) DEFAULT NULL,
   `opponent_oddset` decimal(12,3) DEFAULT NULL,
+  `player_id` varchar(32) DEFAULT NULL,
+  `opponent_id` varchar(32) DEFAULT NULL,
   `player_ta` decimal(12,2) DEFAULT NULL,
   `opponent_ta` decimal(12,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `odds_player_id` (`player_id`),
+  KEY `odds_opponent_id` (`opponent_id`),
   CONSTRAINT `odds_valid_prices` CHECK (`player_oddset` > 0 and `opponent_oddset` > 0),
   CONSTRAINT `odds_valid_ta_prices` CHECK (
     (`player_ta` IS NULL AND `opponent_ta` IS NULL)

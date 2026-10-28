@@ -6,6 +6,15 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-10-29: Magnus requested `player_id` / `opponent_id` in `odds` for future
+  joins. The eleven-column schema uses nullable indexed VARCHAR(32) matching
+  `players.id`, without foreign keys. Both collectors resolve exact unique ids/
+  full names once, save each side independently, and use the same ids for TA.
+  Missing/ambiguous identities produce NULL for that side; known ids survive
+  unavailable Elo, opponents or tournament metadata. Migration 013 in ATP Tennis
+  Odds adds and backfills identities without touching any stored price or
+  recalculating historical TA. Normal collection still updates only prematch rows.
+
 - 2026-10-29: Magnus renamed saved Svenska Spel prices to `player_oddset` /
   `opponent_oddset`; TA stays `player_ta` / `opponent_ta`. Both collectors,
   current schemas and tests use these names. Migration 012 in ATP Tennis Odds
@@ -698,6 +707,10 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-10-29 00:49 CET
+- Added indexed `player_id` / `opponent_id` in `database/schema.sql` and saved the same resolved ATP identities used for TA in `src/ta-odds.js` / `src/collect-odds.js`.
+- Updated tests and documentation. All 22 Node and 25 Python tests passed, including MariaDB integration for partial/missing/ambiguous identities and id retention when Elo is absent. Migration 013 backfill was verified using temporary tables without changing any existing price.
 
 ### 2026-10-29 00:40 CET
 - Renamed saved bookmaker prices to `player_oddset` / `opponent_oddset` in `src/collect-odds.js`, `database/schema.sql`, collector tests and documentation.

@@ -39,7 +39,7 @@ test('uses participant names to keep reversed outcomes aligned and stores the qu
 	assert.deepEqual(parsePrematchOdds(offering(), checkedAt), [{
 		id: 123, date: '2026-10-29', tournament: 'Wien',
 		player: 'Alice', opponent: 'Bob', player_oddset: '1.500', opponent_oddset: '2.500',
-		player_ta: null, opponent_ta: null
+		player_id: null, opponent_id: null, player_ta: null, opponent_ta: null
 	}]);
 });
 
@@ -182,6 +182,8 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.equal(Number(rows[0].id), 123);
 		assert.equal(Number(rows[0].opponent_oddset), 3);
 		assert.equal(Number(rows[0].player_ta), 3.96);
+		assert.equal(rows[0].player_id, 'TEST_A');
+		assert.equal(rows[0].opponent_id, 'TEST_B');
 		assert.equal(Number(rows[0].opponent_ta), 1.25);
 		await mysql.query("UPDATE players SET elo_rank_hard=IF(id='TEST_A',1800,1600)");
 		raw.events[0].event.state = 'STARTED';
@@ -200,6 +202,8 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.equal(rows.length, 1);
 		assert.equal(Number(rows[0].opponent_oddset), 3);
 		assert.equal(Number(rows[0].player_ta), 3.96);
+		assert.equal(rows[0].player_id, 'TEST_A');
+		assert.equal(rows[0].opponent_id, 'TEST_B');
 		// A new valid bookmaker observation must not retain an older TA quote.
 		await mysql.query("UPDATE players SET elo_rank_hard=NULL WHERE id='TEST_B'");
 		raw = offering();
@@ -209,6 +213,23 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.equal(Number(rows[0].opponent_oddset), 4.1);
 		assert.equal(rows[0].player_ta, null);
 		assert.equal(rows[0].opponent_ta, null);
+		assert.equal(rows[0].player_id, 'TEST_A');
+		assert.equal(rows[0].opponent_id, 'TEST_B');
+		// Ambiguous names clear only that identity; the other player remains useful.
+		await mysql.query("INSERT INTO players(id,name) VALUES('TEST_A2','Alice')");
+		await collect.run();
+		rows = await mysql.query('SELECT * FROM odds');
+		assert.equal(rows[0].player_id, null);
+		assert.equal(rows[0].opponent_id, 'TEST_B');
+		assert.equal(rows[0].player_ta, null);
+		assert.equal(rows[0].opponent_ta, null);
+		assert.equal(Number(rows[0].opponent_oddset), 4.1);
+		// An unresolved opponent clears its id; it must not retain the prior one.
+		raw.events[0].event.awayName = 'Missing';
+		raw.events[0].betOffers[0].outcomes[0].participant = 'Missing';
+		await collect.run();
+		rows = await mysql.query('SELECT * FROM odds');
+		assert.equal(rows[0].opponent_id, null);
 	} finally {
 		await mysql.disconnect();
 	}
