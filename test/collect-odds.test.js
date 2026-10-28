@@ -38,7 +38,7 @@ function database({ acquired = 1, failWrite = false } = {}) {
 test('uses participant names to keep reversed outcomes aligned and stores the quote fields with initially unavailable TA prices', () => {
 	assert.deepEqual(parsePrematchOdds(offering(), checkedAt), [{
 		id: 123, date: '2026-10-29', tournament: 'Wien',
-		player: 'Alice', opponent: 'Bob', player_oddset: '1.500', opponent_oddset: '2.500',
+		player_name: 'Alice', opponent_name: 'Bob', player_oddset: '1.500', opponent_oddset: '2.500',
 		player_id: null, opponent_id: null, player_ta: null, opponent_ta: null
 	}]);
 });

@@ -14,7 +14,7 @@ async function getTaOdds(mysql, row) {
 		sql: `SELECT
 			(SELECT CASE WHEN COUNT(*)=1 THEN NULLIF(MIN(id),'') END FROM players WHERE id=? OR name=?) AS player_id,
 			(SELECT CASE WHEN COUNT(*)=1 THEN NULLIF(MIN(id),'') END FROM players WHERE id=? OR name=?) AS opponent_id`,
-		format: [row.player, row.player, row.opponent, row.opponent]
+		format: [row.player_name, row.player_name, row.opponent_name, row.opponent_name]
 	});
 	missing.player_id = identity?.player_id ?? null;
 	missing.opponent_id = identity?.opponent_id ?? null;

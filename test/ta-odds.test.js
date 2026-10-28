@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 const getTaOdds = require('../src/ta-odds');
 
-const row = { date: '2026-10-29', tournament: 'Wien', player: 'Alice', opponent: 'Bob' };
+const row = { date: '2026-10-29', tournament: 'Wien', player_name: 'Alice', opponent_name: 'Bob' };
 const identity = { player_id: 'TEST_A', opponent_id: 'TEST_B' };
 const withoutTa = { ...identity, player_ta: null, opponent_ta: null };
 
