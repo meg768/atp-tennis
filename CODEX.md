@@ -6,6 +6,15 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-10-29: Magnus changed the odds date type to DATETIME and requested its
+  rename to `time`. Both collectors now store the full scheduled source start in
+  UTC with second precision; tournament edition lookup still uses its UTC date.
+  Migration 016 preserves existing values. Previously date-only midnight values
+  receive actual clock times only through valid pre-match collection, never from
+  historical backfill. Retain Magnus's live column order: id, time, tournament,
+  player, player_name, opponent, opponent_name, player_oddset, opponent_oddset,
+  player_ta, opponent_ta. The bootstrap odds structure follows this order.
+
 - 2026-10-29: Saved ATP identifiers now use `player` / `opponent` in `odds`,
   while display names stay `player_name` / `opponent_name`. Magnus requested
   this rename from `player_id` / `opponent_id`. Both collectors, tests, current
@@ -718,6 +727,10 @@ Rules:
 - Add new entries at the top.
 - Each entry should include date/time, summary, affected files, and commit hash (when available).
 - History before this section exists in `git log`.
+
+### 2026-10-29 01:12 CET
+- Replaced date-only odds storage with `time` (DATETIME, full planned start in UTC). Updated `src/collect-odds.js`, `src/ta-odds.js`, tests, schema and docs; preserved Magnus's manually chosen column order and DATETIME type.
+- All 22 Node and 26 Python tests passed, including MariaDB storage, UTC offsets, second precision and date boundaries. Migration 016 preserves current values; valid pre-match collection supplies full source start times without historical backfill.
 
 ### 2026-10-29 00:54 CET
 - Renamed stored ATP-id columns to `player` / `opponent` in `src/collect-odds.js`, `src/ta-odds.js`, `database/schema.sql`, tests and documentation. Display names stay `player_name` / `opponent_name`.

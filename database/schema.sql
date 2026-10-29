@@ -81,24 +81,21 @@ DROP TABLE IF EXISTS `odds`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `odds` (
   `id` bigint(20) unsigned NOT NULL COMMENT 'Svenska Spel event ID; one updatable row per event',
-  `date` date DEFAULT NULL COMMENT 'UTC: preliminary start at observation time',
+  `time` datetime DEFAULT NULL COMMENT 'UTC: scheduled match start',
   `tournament` varchar(255) DEFAULT NULL,
+  `player` varchar(32) DEFAULT NULL,
   `player_name` varchar(255) DEFAULT NULL,
+  `opponent` varchar(32) DEFAULT NULL,
   `opponent_name` varchar(255) DEFAULT NULL,
   `player_oddset` decimal(12,3) DEFAULT NULL,
   `opponent_oddset` decimal(12,3) DEFAULT NULL,
-  `player` varchar(32) DEFAULT NULL,
-  `opponent` varchar(32) DEFAULT NULL,
   `player_ta` decimal(12,2) DEFAULT NULL,
   `opponent_ta` decimal(12,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `odds_player_id` (`player`),
   KEY `odds_opponent_id` (`opponent`),
-  CONSTRAINT `odds_valid_prices` CHECK (`player_oddset` > 0 and `opponent_oddset` > 0),
-  CONSTRAINT `odds_valid_ta_prices` CHECK (
-    (`player_ta` IS NULL AND `opponent_ta` IS NULL)
-    OR (`player_ta` IS NOT NULL AND `opponent_ta` IS NOT NULL
-        AND `player_ta` >= 1 AND `opponent_ta` >= 1))
+  CONSTRAINT `odds_valid_ta_prices` CHECK (`player_ta` is null and `opponent_ta` is null or `player_ta` is not null and `opponent_ta` is not null and `player_ta` >= 1 and `opponent_ta` >= 1),
+  CONSTRAINT `odds_valid_prices` CHECK (`player_oddset` > 0 and `opponent_oddset` > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Latest known Svenska Spel data per unique event; id is provider event ID; times UTC';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `players`;

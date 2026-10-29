@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 const getTaOdds = require('../src/ta-odds');
 
-const row = { date: '2026-10-29', tournament: 'Wien', player_name: 'Alice', opponent_name: 'Bob' };
+const row = { time: '2026-10-29 12:00:00', tournament: 'Wien', player_name: 'Alice', opponent_name: 'Bob' };
 const identity = { player: 'TEST_A', opponent: 'TEST_B' };
 const withoutTa = { ...identity, player_ta: null, opponent_ta: null };
 
@@ -14,7 +14,7 @@ test('TA uses the verified tournament surface and keeps player/opponent order', 
 	} };
 	assert.deepEqual(await getTaOdds(mysql, row), { ...identity, player_ta: '1.25', opponent_ta: '3.96' });
 	assert.deepEqual(calls[0].format, ['Alice', 'Alice', 'Bob', 'Bob']);
-	assert.deepEqual(calls[1].format, ['Vienna', row.date, row.date]);
+	assert.deepEqual(calls[1].format, ['Vienna', '2026-10-29', '2026-10-29']);
 	assert.deepEqual(calls[2].format, ['TEST_A', 'TEST_B', 'Clay']);
 });
 

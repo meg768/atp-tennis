@@ -37,16 +37,18 @@ function database({ acquired = 1, failWrite = false } = {}) {
 
 test('uses participant names to keep reversed outcomes aligned and stores the quote fields with initially unavailable TA prices', () => {
 	assert.deepEqual(parsePrematchOdds(offering(), checkedAt), [{
-		id: 123, date: '2026-10-29', tournament: 'Wien',
+		id: 123, time: '2026-10-29 12:00:00', tournament: 'Wien',
 		player_name: 'Alice', opponent_name: 'Bob', player_oddset: '1.500', opponent_oddset: '2.500',
 		player: null, opponent: null, player_ta: null, opponent_ta: null
 	}]);
 });
 
-test('normalizes match dates to UTC without depending on the host timezone', () => {
+test('stores full scheduled UTC time without depending on the host timezone', () => {
 	const raw = offering();
 	raw.events[0].event.start = '2026-10-29T00:30:00+02:00';
-	assert.equal(parsePrematchOdds(raw, checkedAt)[0].date, '2026-10-28');
+	assert.equal(parsePrematchOdds(raw, checkedAt)[0].time, '2026-10-28 22:30:00');
+	raw.events[0].event.start = '2026-10-29T13:30:45.123+01:00';
+	assert.equal(parsePrematchOdds(raw, checkedAt)[0].time, '2026-10-29 12:30:45');
 });
 
 test('skips live, unknown, already started and unverifiable-start events', () => {
@@ -179,6 +181,7 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		await collect.run();
 		let rows = await mysql.query('SELECT * FROM odds');
 		assert.equal(rows.length, 1);
+		assert.equal((await mysql.query("SELECT DATE_FORMAT(time,'%Y-%m-%d %H:%i:%s') AS scheduled FROM odds"))[0].scheduled, '2026-10-29 12:00:00');
 		assert.equal(Number(rows[0].id), 123);
 		assert.equal(Number(rows[0].opponent_oddset), 3);
 		assert.equal(Number(rows[0].player_ta), 3.96);

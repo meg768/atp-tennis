@@ -80,10 +80,12 @@ open, valid outcomes. Each price is matched by participant name, preserving the
 source's home/away orientation even when outcomes arrive in the opposite order.
 The API's merged feed and cache are not involved.
 
-Only the eleven columns in `odds` are written: `id` (Svenska Spel event id), `date`
-(UTC match date), `tournament`, `player_name`, `opponent_name`, `player_oddset`, `opponent_oddset`,
+Only the eleven columns in `odds` are written: `id` (Svenska Spel event id), `time`
+(full scheduled match start, DATETIME in UTC with second precision), `tournament`, `player_name`, `opponent_name`, `player_oddset`, `opponent_oddset`,
 `player`, `opponent`, `player_ta`, and `opponent_ta`.
-Subsequent pre-match runs update the same primary-key row. Live events, unknown or
+The collector normalizes the source timestamp, including timezone offsets, to UTC
+and writes it without dropping the clock time. Subsequent pre-match runs update
+the same primary-key row and its planned start time. Live events, unknown or
 past start times, closed markets and events absent from the response leave stored
 prices untouched. No table is created by the command and no raw-feed log is saved.
 
@@ -97,7 +99,7 @@ pre-match update. Names and original Svenska Spel event ids are retained.
 TA prices use MariaDB's `WIN_PROBABILITY_TA` with the same 5% probability markup,
 clamping and two-decimal rounding as Vitel's TA column. The collector requires
 unique player ids/full names and a unique tournament edition within 20 days before
-to 7 days after the match date. Wien/Vienna, Rom/Rome and Paris Masters/Paris are
+to 7 days after the UTC date of the planned start. Wien/Vienna, Rom/Rome and Paris Masters/Paris are
 aliases. The edition supplies the verified Hard/Clay/Grass surface; no seasonal
 surface guess or GPT calculation is used. Missing Elo, ambiguous identities or
 editions, unsupported surfaces and Grand Slam/Next Gen Finals produce two NULL TA

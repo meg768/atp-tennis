@@ -27,7 +27,7 @@ function parsePrematchOdds(raw, checkedAt = Date.now()) {
 
 			rows.push({
 				id: event.id,
-				date: new Date(start).toISOString().slice(0, 10),
+				time: new Date(start).toISOString().slice(0, 19).replace('T', ' '),
 				tournament: event.group ?? null,
 				player_name: names[0],
 				opponent_name: names[1],

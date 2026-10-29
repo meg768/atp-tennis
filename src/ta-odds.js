@@ -25,7 +25,7 @@ async function getTaOdds(mysql, row) {
 	const events = await mysql.query({
 		sql: `SELECT surface, type FROM events WHERE name=?
 			AND date BETWEEN DATE_SUB(?, INTERVAL 20 DAY) AND DATE_ADD(?, INTERVAL 7 DAY)`,
-		format: [aliases[tournament.toLowerCase()] || tournament, row.date, row.date]
+		format: [aliases[tournament.toLowerCase()] || tournament, row.time.slice(0, 10), row.time.slice(0, 10)]
 	});
 	if (events.length !== 1) return missing;
 	const event = events[0];
