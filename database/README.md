@@ -12,7 +12,7 @@ The `database/` folder is the source of truth for the MariaDB objects used by th
 
 Defines the MariaDB objects used by the app, including:
 - core tables such as `events`, `matches`, `players`, `log`, and `settings`
-- the eleven-column `odds` table used by `node atp.js odds`, keyed by Svenska Spel event id, with nullable, indexed ATP player ids plus contemporaneous Svenska Spel and nullable TA price pairs
+- the twelve-column `odds` table used by `node atp.js odds`, keyed by Svenska Spel event id, with nullable, indexed ATP player ids plus contemporaneous Svenska Spel and nullable TA price pairs
 - the `flatly` view
 - all required functions and procedures
 
@@ -37,3 +37,5 @@ model in `WIN_PROBABILITY_GPT`.
 - `schema.sql` is the complete, standalone repo-managed structure bootstrap.
 - When database logic changes, regenerate and restore-test `schema.sql` so the repo stays in sync with the live database.
 - This folder is for schema-level files, not runtime data dumps.
+
+`bets` ingår nu som oförändrad live-struktur för pappersportföljen. `bets.sql` är en separat strukturreferens; inga raddata versioneras. MATCH_LOOKUP finns också i bootstrap-schemat. Kör aldrig hela bootstrap-dumpen mot befintlig produktion vid verifiering.

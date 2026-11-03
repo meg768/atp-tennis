@@ -1,0 +1,9 @@
+# Sammanslagning 2026-11-03
+
+Gemensamt hem: /Users/magnus/GitHub/atp-tennis, projektnamn ATP Tennis. Git var rent före arbetet. Återställningspunkt: lokal branch restore/atp-consolidation-20261103-204034, som bevarar commit före flytten; inga reset-/force-push-kommandon behövs för normal drift. Ursprungliga tre mappar under iCloud/Mina filer/Codex bevaras, med arkivmarkering och tidigare AGENTS-instruktioner. Automationsinställning före flytt finns i denna sammanslagnings arbetskatalog work/consolidation utanför Git.
+
+Flytt: ATP Tennis/scripts + tester till scripts/ och tests/; ATP Betting/scripts + tester till samma kataloger. Portföljprocedurer ligger i docs/portfolio.md och tracking/README.md. Odds-Node är redan aktiv i commands/, src/, test/; Python-dubbletten är arkiverad. Oberoende MATCH_LOOKUP-tester ligger i tests/test_match_lookup.py och använder befintlig anslutning för tillfälliga testtabeller. Migrationshistoriken 001–018 bevaras i database/migrations. Tidigare CODEX.md är historik i docs/legacy-codex.md, med aktuella instruktioner samlade i AGENTS.md och CONTEXT.md.
+
+Verifiering: portföljstatus exakt lika före/efter; alla 50 bets-rader har samma innehållshash. bets-strukturen återställdes i en sessionslokal tillfällig tabell (36 kolumner). Ingen produktions-DDL, nytt spel, avräkning eller testutskick har körts. Ping behåller samma id, målchatt, status och dagliga 09-schema; endast promptens arbetskatalog/instruktionsreferenser är uppdaterade. Pi-kato behåller /home/pi/atp-tennis, odds varje hel timme och import kl. 06.
+
+Codex projektlistan: använd befintliga ATP Tennis → Edit project → lägg till /Users/magnus/GitHub/atp-tennis → Make primary, ta bort den gamla iCloud-mappen från aktiva mappar. Ta sedan bort projektposterna atp-tennis, ATP Betting och ATP Tennis Odds via respektive meny → Remove, utan att radera mappar eller data. Inga verktyg för att döpa om/ta bort projektposter finns i denna session.

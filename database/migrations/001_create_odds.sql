@@ -1,0 +1,46 @@
+CREATE TABLE odds (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  match_id VARCHAR(50) NULL COMMENT 'Logical reference to matches.id; filled when ATP result is linked',
+  event_id VARCHAR(50) NULL COMMENT 'Logical reference to events.id',
+  player_a_id VARCHAR(32) NULL COMMENT 'Logical reference to players.id; stable odds orientation',
+  player_b_id VARCHAR(32) NULL COMMENT 'Logical reference to players.id; stable odds orientation',
+  player_a_name VARCHAR(100) NOT NULL COMMENT 'Provider name at observation time',
+  player_b_name VARCHAR(100) NOT NULL COMMENT 'Provider name at observation time',
+  tournament VARCHAR(100) NOT NULL,
+  surface VARCHAR(16) NULL,
+  observed_at DATETIME(6) NOT NULL COMMENT 'UTC: actual odds retrieval time',
+  scheduled_start DATETIME(6) NULL COMMENT 'UTC: scheduled start at observation time',
+  match_state VARCHAR(32) NOT NULL COMMENT 'Provider state at observation time, e.g. NOT_STARTED or STARTED',
+  is_prematch TINYINT(1) NOT NULL DEFAULT 0,
+  source VARCHAR(32) NOT NULL DEFAULT 'svenska_spel',
+  source_url TEXT NOT NULL,
+  ss_event_id BIGINT UNSIGNED NOT NULL,
+  ss_offer_id BIGINT UNSIGNED NOT NULL,
+  ss_outcome_a_id BIGINT UNSIGNED NOT NULL,
+  ss_outcome_b_id BIGINT UNSIGNED NOT NULL,
+  ss_odds_a DECIMAL(12,3) NULL,
+  ss_odds_b DECIMAL(12,3) NULL,
+  ta_probability_a DECIMAL(12,10) NULL COMMENT 'Margin-free probability observed before result',
+  ta_probability_b DECIMAL(12,10) NULL,
+  ta_odds_a DECIMAL(12,2) NULL COMMENT 'Existing convention: 1 / clamp(probability * 1.05)',
+  ta_odds_b DECIMAL(12,2) NULL,
+  ta_elo_a INT NULL,
+  ta_elo_b INT NULL,
+  ta_model VARCHAR(64) NOT NULL DEFAULT 'ta_surface_elo_bo3_margin_1.05_v1',
+  ta_status VARCHAR(40) NOT NULL COMMENT 'available, missing_elo, unresolved_identity, unsupported_match_format, unknown_surface',
+  identity_status VARCHAR(24) NOT NULL COMMENT 'verified or unresolved',
+  created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (id),
+  UNIQUE KEY odds_source_observation (source, ss_event_id, ss_offer_id, observed_at),
+  KEY odds_match_time (match_id, observed_at),
+  KEY odds_event_players (event_id, player_a_id, player_b_id),
+  KEY odds_prematch_time (is_prematch, observed_at),
+  CONSTRAINT odds_distinct_players CHECK (player_a_id IS NULL OR player_b_id IS NULL OR player_a_id <> player_b_id),
+  CONSTRAINT odds_valid_probabilities CHECK (
+    (ta_probability_a IS NULL OR ta_probability_a BETWEEN 0 AND 1) AND
+    (ta_probability_b IS NULL OR ta_probability_b BETWEEN 0 AND 1)),
+  CONSTRAINT odds_valid_prices CHECK (
+    (ss_odds_a IS NULL OR ss_odds_a > 1) AND (ss_odds_b IS NULL OR ss_odds_b > 1) AND
+    (ta_odds_a IS NULL OR ta_odds_a >= 1) AND (ta_odds_b IS NULL OR ta_odds_b >= 1))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+COMMENT='Timestamped ATP odds observations; results joined from matches; times in UTC';

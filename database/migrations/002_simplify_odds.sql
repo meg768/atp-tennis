@@ -1,0 +1,26 @@
+-- Apply only while odds is empty. Detailed observations remain in SQLite.
+-- A/B positions stay fixed for every observation of the same provider match.
+ALTER TABLE odds
+  DROP INDEX odds_source_observation,
+  DROP INDEX odds_event_players,
+  DROP CONSTRAINT odds_valid_probabilities,
+  DROP COLUMN event_id,
+  DROP COLUMN tournament,
+  DROP COLUMN surface,
+  DROP COLUMN scheduled_start,
+  DROP COLUMN match_state,
+  DROP COLUMN source,
+  DROP COLUMN source_url,
+  DROP COLUMN ss_offer_id,
+  DROP COLUMN ss_outcome_a_id,
+  DROP COLUMN ss_outcome_b_id,
+  DROP COLUMN ta_probability_a,
+  DROP COLUMN ta_probability_b,
+  DROP COLUMN ta_elo_a,
+  DROP COLUMN ta_elo_b,
+  DROP COLUMN ta_model,
+  DROP COLUMN ta_status,
+  DROP COLUMN identity_status,
+  DROP COLUMN created_at,
+  ADD UNIQUE KEY odds_observation (ss_event_id, observed_at),
+  COMMENT='Svenska Spel and TA odds by fixed player A/B; observed_at in UTC; NULL means unavailable; details in project SQLite';

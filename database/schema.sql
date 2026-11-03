@@ -1127,3 +1127,112 @@ USE `atp`;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Paper portfolio; structure only, never seed or replace live records.
+DROP TABLE IF EXISTS `bets`;
+CREATE TABLE `bets` (
+  `id` varchar(20) NOT NULL,
+  `player` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `player_name` varchar(255) NOT NULL,
+  `opponent` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `opponent_name` varchar(255) NOT NULL,
+  `scheduled_at` datetime(6) DEFAULT NULL COMMENT 'UTC; last verified planned start',
+  `odds` decimal(12,3) DEFAULT NULL,
+  `stake` decimal(12,2) NOT NULL,
+  `status` enum('pending','won','lost','void','review','declined') NOT NULL,
+  `score` varchar(100) DEFAULT NULL COMMENT 'Selected player perspective',
+  `rationale` text NOT NULL,
+  `risk` text NOT NULL,
+  `event` varchar(32) DEFAULT NULL,
+  `tournament` varchar(255) NOT NULL,
+  `surface` varchar(16) DEFAULT NULL,
+  `recommended_at` datetime(6) DEFAULT NULL COMMENT 'UTC; NULL for declined matches',
+  `registered_at` datetime(6) NOT NULL COMMENT 'UTC',
+  `odds_at` datetime(6) DEFAULT NULL COMMENT 'UTC',
+  `ta_odds` decimal(12,3) DEFAULT NULL,
+  `ta_probability` decimal(12,10) DEFAULT NULL,
+  `gpt_probability` decimal(12,10) DEFAULT NULL,
+  `gpt_minimum_odds` decimal(12,3) DEFAULT NULL,
+  `selection_method` text NOT NULL,
+  `sources` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`sources`)),
+  `match_status` varchar(32) DEFAULT NULL,
+  `winner` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `payout` decimal(12,2) DEFAULT NULL,
+  `net` decimal(12,2) DEFAULT NULL,
+  `checked_at` datetime(6) DEFAULT NULL COMMENT 'UTC; saved verification time',
+  `verification_source` text DEFAULT NULL,
+  `verification_match_id` varchar(128) DEFAULT NULL,
+  `verification_note` text DEFAULT NULL,
+  `history` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`history`)),
+  `retrospectives` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`retrospectives`)),
+  `details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`details`)),
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`data`)),
+  PRIMARY KEY (`id`),
+  KEY `idx_player` (`player`),
+  KEY `idx_opponent` (`opponent`),
+  KEY `idx_status` (`status`),
+  CONSTRAINT `chk_declined_without_stake` CHECK (`status` <> 'declined' or `stake` = 0 and `payout` is null and `net` is null and `recommended_at` is null)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Betting history, canonical documents and archived attachments';
+
+DROP FUNCTION IF EXISTS MATCH_LOOKUP;
+DELIMITER $$
+CREATE FUNCTION MATCH_LOOKUP(
+  p_date DATE,
+  p_tournament VARCHAR(255),
+  p_player_a VARCHAR(255),
+  p_player_b VARCHAR(255)
+) RETURNS VARCHAR(50)
+NOT DETERMINISTIC
+READS SQL DATA
+SQL SECURITY INVOKER
+COMMENT 'Unique ATP match by tournament edition and player pair; missing or ambiguous returns NULL'
+BEGIN
+  DECLARE v_count INT DEFAULT 0;
+  DECLARE v_player_a VARCHAR(50);
+  DECLARE v_player_b VARCHAR(50);
+  DECLARE v_event VARCHAR(50);
+  DECLARE v_match VARCHAR(50);
+  DECLARE v_tournament VARCHAR(255);
+
+  IF p_date IS NULL OR NULLIF(TRIM(p_tournament), '') IS NULL
+     OR NULLIF(TRIM(p_player_a), '') IS NULL
+     OR NULLIF(TRIM(p_player_b), '') IS NULL THEN
+    RETURN NULL;
+  END IF;
+
+  -- Exact IDs or full names under the database's case/accent-insensitive collation.
+  -- Do not use PLAYER_LOOKUP's fuzzy ranking to resolve ambiguous identities.
+  SELECT COUNT(*), MIN(id) INTO v_count, v_player_a
+  FROM players WHERE id = TRIM(p_player_a) OR name = TRIM(p_player_a);
+  IF v_count <> 1 THEN RETURN NULL; END IF;
+
+  SELECT COUNT(*), MIN(id) INTO v_count, v_player_b
+  FROM players WHERE id = TRIM(p_player_b) OR name = TRIM(p_player_b);
+  IF v_count <> 1 OR v_player_a = v_player_b THEN RETURN NULL; END IF;
+
+  SET v_tournament = CASE LOWER(TRIM(p_tournament))
+    WHEN 'wien' THEN 'Vienna'
+    WHEN 'rom' THEN 'Rome'
+    WHEN 'paris masters' THEN 'Paris'
+    ELSE TRIM(p_tournament)
+  END;
+
+  -- events.date is the edition start, not the match date. Allow qualifying
+  -- up to seven days before it and matches up to twenty days after it.
+  SELECT COUNT(*), MIN(id) INTO v_count, v_event
+  FROM events
+  WHERE (id = TRIM(p_tournament) OR name = v_tournament)
+    AND date BETWEEN DATE_SUB(p_date, INTERVAL 20 DAY)
+                 AND DATE_ADD(p_date, INTERVAL 7 DAY);
+  IF v_count <> 1 THEN RETURN NULL; END IF;
+
+  SELECT COUNT(*), MIN(id) INTO v_count, v_match
+  FROM matches
+  WHERE event = v_event AND (
+    (winner = v_player_a AND loser = v_player_b)
+    OR (winner = v_player_b AND loser = v_player_a)
+  );
+  IF v_count = 1 THEN RETURN v_match; END IF;
+  RETURN NULL;
+END$$
+DELIMITER ;

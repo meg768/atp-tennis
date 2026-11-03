@@ -42,3 +42,16 @@ node_modules
 .node_repl_history
 .env
 AUTHOR.md
+
+# Local analysis evidence, generated assets and Python caches
+analysis/
+work/
+.venv/
+__pycache__/
+*.py[cod]
+tracking/*.json
+tracking/*.jsonl
+tracking/checks/
+tracking/notifications/
+.env.*
+!.env.example

@@ -1,5 +1,20 @@
 # ATP Tennis
 
+Ett gemensamt projekt för tennisanalys, oddsinsamling, backtesting, pappersportfölj och drift. Öppna /Users/magnus/GitHub/atp-tennis som enda lokala tennisprojekt i Codex. Läs AGENTS.md och CONTEXT.md.
+
+| Arbete | Ingång |
+| --- | --- |
+| Tennisanalys | docs/analysis.md, scripts/build_top10_comparison.py |
+| Oddsinsamling | node atp.js odds; befintligt timjobb på pi-kato |
+| Backtesting | docs/backtesting.md; endast läsning av odds/resultat |
+| Portföljstatus utan ändringar/utskick | python3 scripts/portfolio_status.py --json |
+| Auktoriserat portfölj-ping | docs/portfolio.md och tracking/README.md |
+| Schema och drift | database/README.md och befintliga instruktioner nedan |
+
+Python använder ~/.local/share/codex/atp-tennis/venv/bin/python. Kör `npm test` och `<skillens-python> -m unittest discover -s tests -v`. Analysartefakter i analysis/ är lokala och ignoreras av Git. Gamla iCloud-projektmappar är arkiv; skapa inte nya jobb där. Ingen analys eller backtest registrerar bets eller skickar mejl automatiskt.
+
+## Backend
+
 Node.js (CommonJS) app that imports ATP data into MariaDB, updates player metrics (stats + ELO), and exposes a local API for live and ranking data.
 
 ## What It Does
