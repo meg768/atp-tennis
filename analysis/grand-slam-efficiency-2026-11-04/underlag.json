@@ -1,0 +1,155 @@
+{
+  "source": "ATP MariaDB via repository read-only atp-tennis skill",
+  "checked_at": "2026-11-04T00:01:59.930925+01:00",
+  "population": "All players, active and retired; all surfaces; Grand Slam main draws in database",
+  "status_filter": "Completed only; qualifying, Aborted and Walkover excluded",
+  "minimum_matches": 100,
+  "calculation": "wins/(wins+losses)",
+  "sort": "unrounded win percentage descending, matches descending, ATP ID",
+  "query": "WITH eligible AS (\n SELECT m.winner,m.loser FROM matches m JOIN events e ON e.id=m.event\n WHERE e.type=%s AND m.status=%s AND m.round IN ('R128','R64','R32','R16','QF','SF','F')\n), outcomes AS (\n SELECT winner AS player_id,1 AS win,0 AS loss FROM eligible\n UNION ALL SELECT loser AS player_id,0 AS win,1 AS loss FROM eligible\n)\nSELECT p.id,p.name,SUM(o.win) AS wins,SUM(o.loss) AS losses,COUNT(*) AS matches,\n ROUND(100.0*SUM(o.win)/COUNT(*),2) AS win_pct\nFROM outcomes o JOIN players p ON p.id=o.player_id\nGROUP BY p.id,p.name HAVING COUNT(*) >= %s\nORDER BY SUM(o.win)/COUNT(*) DESC,COUNT(*) DESC,p.id LIMIT 15",
+  "params": [
+    "Grand Slam",
+    "Completed",
+    100
+  ],
+  "coverage": [
+    {
+      "rows": [
+        {
+          "earliest_event_start": "1968-01-19",
+          "latest_event_start": "2026-08-31",
+          "editions": 235,
+          "included_matches": 27580
+        }
+      ],
+      "rowcount": 1
+    }
+  ],
+  "results": [
+    {
+      "rows": [
+        {
+          "id": "B058",
+          "name": "Bjorn Borg",
+          "wins": "141",
+          "losses": "15",
+          "matches": 156,
+          "win_pct": "90.38"
+        },
+        {
+          "id": "D643",
+          "name": "Novak Djokovic",
+          "wins": "395",
+          "losses": "52",
+          "matches": 447,
+          "win_pct": "88.37"
+        },
+        {
+          "id": "N409",
+          "name": "Rafael Nadal",
+          "wins": "304",
+          "losses": "41",
+          "matches": 345,
+          "win_pct": "88.12"
+        },
+        {
+          "id": "A0E2",
+          "name": "Carlos Alcaraz",
+          "wins": "90",
+          "losses": "13",
+          "matches": 103,
+          "win_pct": "87.38"
+        },
+        {
+          "id": "F324",
+          "name": "Roger Federer",
+          "wins": "362",
+          "losses": "60",
+          "matches": 422,
+          "win_pct": "85.78"
+        },
+        {
+          "id": "S402",
+          "name": "Pete Sampras",
+          "wins": "201",
+          "losses": "38",
+          "matches": 239,
+          "win_pct": "84.10"
+        },
+        {
+          "id": "R075",
+          "name": "Ken Rosewall",
+          "wins": "92",
+          "losses": "19",
+          "matches": 111,
+          "win_pct": "82.88"
+        },
+        {
+          "id": "C044",
+          "name": "Jimmy Connors",
+          "wins": "231",
+          "losses": "48",
+          "matches": 279,
+          "win_pct": "82.80"
+        },
+        {
+          "id": "L018",
+          "name": "Ivan Lendl",
+          "wins": "221",
+          "losses": "46",
+          "matches": 267,
+          "win_pct": "82.77"
+        },
+        {
+          "id": "S0AG",
+          "name": "Jannik Sinner",
+          "wins": "98",
+          "losses": "21",
+          "matches": 119,
+          "win_pct": "82.35"
+        },
+        {
+          "id": "N044",
+          "name": "John Newcombe",
+          "wins": "93",
+          "losses": "21",
+          "matches": 114,
+          "win_pct": "81.58"
+        },
+        {
+          "id": "M047",
+          "name": "John McEnroe",
+          "wins": "166",
+          "losses": "38",
+          "matches": 204,
+          "win_pct": "81.37"
+        },
+        {
+          "id": "B028",
+          "name": "Boris Becker",
+          "wins": "161",
+          "losses": "38",
+          "matches": 199,
+          "win_pct": "80.90"
+        },
+        {
+          "id": "A092",
+          "name": "Andre Agassi",
+          "wins": "216",
+          "losses": "53",
+          "matches": 269,
+          "win_pct": "80.30"
+        },
+        {
+          "id": "E004",
+          "name": "Stefan Edberg",
+          "wins": "177",
+          "losses": "46",
+          "matches": 223,
+          "win_pct": "79.37"
+        }
+      ],
+      "rowcount": 15
+    }
+  ]
+}

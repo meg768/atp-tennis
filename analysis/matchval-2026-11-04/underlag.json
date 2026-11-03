@@ -1,0 +1,1760 @@
+{
+  "checked_at": "2026-11-03T23:48:07.018152+01:00",
+  "source": "https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true",
+  "surface": "Hard",
+  "rows": [
+    {
+      "event": {
+        "id": 1029731986,
+        "name": "Quentin Halys - Frances Tiafoe",
+        "nameDelimiter": "-",
+        "englishName": "Quentin Halys - Frances Tiafoe",
+        "homeName": "Quentin Halys",
+        "awayName": "Frances Tiafoe",
+        "start": "2026-11-04T10:00:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 43,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712403562,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029731986,
+        "outcomes": [
+          {
+            "id": 4401981121,
+            "label": "Quentin Halys",
+            "englishLabel": "Quentin Halys",
+            "odds": 2180,
+            "participant": "Quentin Halys",
+            "type": "OT_ONE",
+            "betOfferId": 2712403562,
+            "changedDate": "2026-11-03T21:50:57Z",
+            "participantId": 1001455087,
+            "oddsFractional": "59/50",
+            "oddsAmerican": "118",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4401981122,
+            "label": "Frances Tiafoe",
+            "englishLabel": "Frances Tiafoe",
+            "odds": 1680,
+            "participant": "Frances Tiafoe",
+            "type": "OT_TWO",
+            "betOfferId": 2712403562,
+            "changedDate": "2026-11-03T21:50:57Z",
+            "participantId": 1001927586,
+            "oddsFractional": "4/6",
+            "oddsAmerican": "-148",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 0,
+      "a_id": "HB64",
+      "a_name": "Quentin Halys",
+      "a_rank": 46,
+      "a_elo": 1722,
+      "b_id": "TD51",
+      "b_name": "Frances Tiafoe",
+      "b_rank": 8,
+      "b_elo": 1890,
+      "p": 0.27546175715746396,
+      "a_odds": 2.18,
+      "b_odds": 1.68,
+      "a_ev": -0.3994933693967285,
+      "b_ev": 0.21722424797546047
+    },
+    {
+      "event": {
+        "id": 1029731987,
+        "name": "Mattia Bellucci - Arthur Rinderknech",
+        "nameDelimiter": "-",
+        "englishName": "Mattia Bellucci - Arthur Rinderknech",
+        "homeName": "Mattia Bellucci",
+        "awayName": "Arthur Rinderknech",
+        "start": "2026-11-04T10:00:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 43,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712405838,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029731987,
+        "outcomes": [
+          {
+            "id": 4401936277,
+            "label": "Mattia Bellucci",
+            "englishLabel": "Mattia Bellucci",
+            "odds": 1750,
+            "participant": "Mattia Bellucci",
+            "type": "OT_ONE",
+            "betOfferId": 2712405838,
+            "changedDate": "2026-11-03T12:56:05Z",
+            "participantId": 1004881953,
+            "oddsFractional": "3/4",
+            "oddsAmerican": "-134",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4401936278,
+            "label": "Arthur Rinderknech",
+            "englishLabel": "Arthur Rinderknech",
+            "odds": 2070,
+            "participant": "Arthur Rinderknech",
+            "type": "OT_TWO",
+            "betOfferId": 2712405838,
+            "changedDate": "2026-11-03T12:56:05Z",
+            "participantId": 1001488175,
+            "oddsFractional": "21/20",
+            "oddsAmerican": "107",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 1,
+      "a_id": "B0GG",
+      "a_name": "Mattia Bellucci",
+      "a_rank": 66,
+      "a_elo": 1665,
+      "b_id": "RC91",
+      "b_name": "Arthur Rinderknech",
+      "b_rank": 68,
+      "b_elo": 1718,
+      "p": 0.4243130476235704,
+      "a_odds": 1.75,
+      "b_odds": 2.07,
+      "a_ev": -0.2574521666587518,
+      "b_ev": 0.19167199141920932
+    },
+    {
+      "event": {
+        "id": 1029734848,
+        "name": "Luca Van Assche - Learner Tien",
+        "nameDelimiter": "-",
+        "englishName": "Luca Van Assche - Learner Tien",
+        "homeName": "Luca Van Assche",
+        "awayName": "Learner Tien",
+        "start": "2026-11-04T11:10:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 43,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712570496,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029734848,
+        "outcomes": [
+          {
+            "id": 4402318787,
+            "label": "Luca Van Assche",
+            "englishLabel": "Luca Van Assche",
+            "odds": 2800,
+            "participant": "Luca Van Assche",
+            "type": "OT_ONE",
+            "betOfferId": 2712570496,
+            "changedDate": "2026-11-03T19:06:04Z",
+            "participantId": 1005932893,
+            "oddsFractional": "9/5",
+            "oddsAmerican": "180",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4402318788,
+            "label": "Learner Tien",
+            "englishLabel": "Learner Tien",
+            "odds": 1440,
+            "participant": "Learner Tien",
+            "type": "OT_TWO",
+            "betOfferId": 2712570496,
+            "changedDate": "2026-11-03T19:06:04Z",
+            "participantId": 1028223053,
+            "oddsFractional": "11/25",
+            "oddsAmerican": "-230",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 2,
+      "a_id": "V0DZ",
+      "a_name": "Luca Van Assche",
+      "a_rank": 47,
+      "a_elo": 1716,
+      "b_id": "T0HA",
+      "b_name": "Learner Tien",
+      "b_rank": 19,
+      "b_elo": 1871,
+      "p": 0.29064536940123664,
+      "a_odds": 2.8,
+      "b_odds": 1.44,
+      "a_ev": -0.18619296567653743,
+      "b_ev": 0.0214706680622192
+    },
+    {
+      "event": {
+        "id": 1029734846,
+        "name": "Tommy Paul - Daniel Merida Aguilar",
+        "nameDelimiter": "-",
+        "englishName": "Tommy Paul - Daniel Merida Aguilar",
+        "homeName": "Tommy Paul",
+        "awayName": "Daniel Merida Aguilar",
+        "start": "2026-11-04T11:30:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 42,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712541651,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029734846,
+        "outcomes": [
+          {
+            "id": 4402340893,
+            "label": "Tommy Paul",
+            "englishLabel": "Tommy Paul",
+            "odds": 1270,
+            "participant": "Tommy Paul",
+            "type": "OT_ONE",
+            "betOfferId": 2712541651,
+            "changedDate": "2026-11-03T19:20:04Z",
+            "participantId": 1000686110,
+            "oddsFractional": "27/100",
+            "oddsAmerican": "-375",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4402340894,
+            "label": "Daniel Merida Aguilar",
+            "englishLabel": "Daniel Merida Aguilar",
+            "odds": 3800,
+            "participant": "Daniel Merida Aguilar",
+            "type": "OT_TWO",
+            "betOfferId": 2712541651,
+            "changedDate": "2026-11-03T19:20:04Z",
+            "participantId": 1006086461,
+            "oddsFractional": "14/5",
+            "oddsAmerican": "280",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 3,
+      "a_id": "PL56",
+      "a_name": "Tommy Paul",
+      "a_rank": 14,
+      "a_elo": 1895,
+      "b_id": "M0N7",
+      "b_name": "Daniel Merida",
+      "b_rank": 42,
+      "b_elo": null,
+      "p": null,
+      "a_odds": 1.27,
+      "b_odds": 3.8,
+      "a_ev": null,
+      "b_ev": null
+    },
+    {
+      "event": {
+        "id": 1029719944,
+        "name": "Ignacio Buse - Daniil Medvedev",
+        "nameDelimiter": "-",
+        "englishName": "Ignacio Buse - Daniil Medvedev",
+        "homeName": "Ignacio Buse",
+        "awayName": "Daniil Medvedev",
+        "start": "2026-11-04T12:20:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 40,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712025030,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029719944,
+        "outcomes": [
+          {
+            "id": 4400655619,
+            "label": "Ignacio Buse",
+            "englishLabel": "Ignacio Buse",
+            "odds": 5500,
+            "participant": "Ignacio Buse",
+            "type": "OT_ONE",
+            "betOfferId": 2712025030,
+            "changedDate": "2026-11-03T21:08:44Z",
+            "participantId": 1005616247,
+            "oddsFractional": "9/2",
+            "oddsAmerican": "450",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4400655620,
+            "label": "Daniil Medvedev",
+            "englishLabel": "Daniil Medvedev",
+            "odds": 1150,
+            "participant": "Daniil Medvedev",
+            "type": "OT_TWO",
+            "betOfferId": 2712025030,
+            "changedDate": "2026-11-03T21:08:44Z",
+            "participantId": 1002170460,
+            "oddsFractional": "1/7",
+            "oddsAmerican": "-670",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 4,
+      "a_id": "B0ID",
+      "a_name": "Ignacio Buse",
+      "a_rank": 33,
+      "a_elo": 1670,
+      "b_id": "MM58",
+      "b_name": "Daniil Medvedev",
+      "b_rank": 5,
+      "b_elo": 1976,
+      "p": 0.14660537788811823,
+      "a_odds": 5.5,
+      "b_odds": 1.15,
+      "a_ev": -0.19367042161534975,
+      "b_ev": -0.01859618457133605
+    },
+    {
+      "event": {
+        "id": 1029720102,
+        "name": "Alexander Zverev - Lorenzo Musetti",
+        "nameDelimiter": "-",
+        "englishName": "Alexander Zverev - Lorenzo Musetti",
+        "homeName": "Alexander Zverev",
+        "awayName": "Lorenzo Musetti",
+        "start": "2026-11-04T12:30:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 42,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712015200,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029720102,
+        "outcomes": [
+          {
+            "id": 4400687913,
+            "label": "Alexander Zverev",
+            "englishLabel": "Alexander Zverev",
+            "odds": 1380,
+            "participant": "Alexander Zverev",
+            "type": "OT_ONE",
+            "betOfferId": 2712015200,
+            "changedDate": "2026-11-03T08:37:11Z",
+            "participantId": 1001214598,
+            "oddsFractional": "4/11",
+            "oddsAmerican": "-265",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4400687914,
+            "label": "Lorenzo Musetti",
+            "englishLabel": "Lorenzo Musetti",
+            "odds": 3050,
+            "participant": "Lorenzo Musetti",
+            "type": "OT_TWO",
+            "betOfferId": 2712015200,
+            "changedDate": "2026-11-03T08:37:11Z",
+            "participantId": 1004110380,
+            "oddsFractional": "41/20",
+            "oddsAmerican": "205",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 5,
+      "a_id": "Z355",
+      "a_name": "Alexander Zverev",
+      "a_rank": 1,
+      "a_elo": 2044,
+      "b_id": "M0EJ",
+      "b_name": "Lorenzo Musetti",
+      "b_rank": 24,
+      "b_elo": 1835,
+      "p": 0.7690759234333929,
+      "a_odds": 1.38,
+      "b_odds": 3.05,
+      "a_ev": 0.061324774338082255,
+      "b_ev": -0.2956815664718485
+    },
+    {
+      "event": {
+        "id": 1029732677,
+        "name": "Tomas Martin Etcheverry - Alex De Minaur",
+        "nameDelimiter": "-",
+        "englishName": "Tomas Martin Etcheverry - Alex De Minaur",
+        "homeName": "Tomas Martin Etcheverry",
+        "awayName": "Alex De Minaur",
+        "start": "2026-11-04T12:40:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 40,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712451386,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029732677,
+        "outcomes": [
+          {
+            "id": 4402100982,
+            "label": "Tomas Martin Etcheverry",
+            "englishLabel": "Tomas Martin Etcheverry",
+            "odds": 4100,
+            "participant": "Tomas Martin Etcheverry",
+            "type": "OT_ONE",
+            "betOfferId": 2712451386,
+            "changedDate": "2026-11-03T21:17:18Z",
+            "participantId": 1002238515,
+            "oddsFractional": "3/1",
+            "oddsAmerican": "310",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4402100983,
+            "label": "Alex De Minaur",
+            "englishLabel": "Alex De Minaur",
+            "odds": 1240,
+            "participant": "Alex De Minaur",
+            "type": "OT_TWO",
+            "betOfferId": 2712451386,
+            "changedDate": "2026-11-03T21:17:18Z",
+            "participantId": 1002743867,
+            "oddsFractional": "6/25",
+            "oddsAmerican": "-420",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 6,
+      "a_id": "EA24",
+      "a_name": "Tomas Martin Etcheverry",
+      "a_rank": 31,
+      "a_elo": 1672,
+      "b_id": "DH58",
+      "b_name": "Alex de Minaur",
+      "b_rank": 9,
+      "b_elo": 1972,
+      "p": 0.15097955721132328,
+      "a_odds": 4.1,
+      "b_odds": 1.24,
+      "a_ev": -0.3809838154335746,
+      "b_ev": 0.05278534905795906
+    },
+    {
+      "event": {
+        "id": 1029734948,
+        "name": "Novak Djokovic - Rinky Hijikata",
+        "nameDelimiter": "-",
+        "englishName": "Novak Djokovic - Rinky Hijikata",
+        "homeName": "Novak Djokovic",
+        "awayName": "Rinky Hijikata",
+        "start": "2026-11-04T13:40:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 40,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712547490,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029734948,
+        "outcomes": [
+          {
+            "id": 4402332831,
+            "label": "Novak Djokovic",
+            "englishLabel": "Novak Djokovic",
+            "odds": 1270,
+            "participant": "Novak Djokovic",
+            "type": "OT_ONE",
+            "betOfferId": 2712547490,
+            "changedDate": "2026-11-03T21:10:06Z",
+            "participantId": 1000054310,
+            "oddsFractional": "27/100",
+            "oddsAmerican": "-375",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4402332832,
+            "label": "Rinky Hijikata",
+            "englishLabel": "Rinky Hijikata",
+            "odds": 3750,
+            "participant": "Rinky Hijikata",
+            "type": "OT_TWO",
+            "betOfferId": 2712547490,
+            "changedDate": "2026-11-03T21:10:06Z",
+            "participantId": 1003656609,
+            "oddsFractional": "11/4",
+            "oddsAmerican": "275",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 7,
+      "a_id": "D643",
+      "a_name": "Novak Djokovic",
+      "a_rank": 11,
+      "a_elo": 2005,
+      "b_id": "H0BH",
+      "b_name": "Rinky Hijikata",
+      "b_rank": 83,
+      "b_elo": 1667,
+      "p": 0.8749753069983639,
+      "a_odds": 1.27,
+      "b_odds": 3.75,
+      "a_ev": 0.11121863988792224,
+      "b_ev": -0.5311574012438647
+    },
+    {
+      "event": {
+        "id": 1029735700,
+        "name": "Alex Molcan - Taylor Fritz",
+        "nameDelimiter": "-",
+        "englishName": "Alex Molcan - Taylor Fritz",
+        "homeName": "Alex Molcan",
+        "awayName": "Taylor Fritz",
+        "start": "2026-11-04T13:50:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 33,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712616471,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029735700,
+        "outcomes": [
+          {
+            "id": 4402463655,
+            "label": "Alex Molcan",
+            "englishLabel": "Alex Molcan",
+            "odds": 4200,
+            "participant": "Alex Molcan",
+            "type": "OT_ONE",
+            "betOfferId": 2712616471,
+            "changedDate": "2026-11-03T20:40:12Z",
+            "participantId": 1002009303,
+            "oddsFractional": "16/5",
+            "oddsAmerican": "320",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4402463656,
+            "label": "Taylor Fritz",
+            "englishLabel": "Taylor Fritz",
+            "odds": 1230,
+            "participant": "Taylor Fritz",
+            "type": "OT_TWO",
+            "betOfferId": 2712616471,
+            "changedDate": "2026-11-03T20:40:12Z",
+            "participantId": 1001919703,
+            "oddsFractional": "2/9",
+            "oddsAmerican": "-435",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 8,
+      "a_id": "MV14",
+      "a_name": "Alex Molcan",
+      "a_rank": 78,
+      "a_elo": 1685,
+      "b_id": "FB98",
+      "b_name": "Taylor Fritz",
+      "b_rank": 12,
+      "b_elo": 1882,
+      "p": 0.24341940570494724,
+      "a_odds": 4.2,
+      "b_odds": 1.23,
+      "a_ev": 0.022361503960778517,
+      "b_ev": -0.06940586901708512
+    },
+    {
+      "event": {
+        "id": 1029732789,
+        "name": "Nuno Borges - Karen Khachanov",
+        "nameDelimiter": "-",
+        "englishName": "Nuno Borges - Karen Khachanov",
+        "homeName": "Nuno Borges",
+        "awayName": "Karen Khachanov",
+        "start": "2026-11-04T14:30:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 35,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712481375,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029732789,
+        "outcomes": [
+          {
+            "id": 4402122067,
+            "label": "Karen Khachanov",
+            "englishLabel": "Karen Khachanov",
+            "odds": 1460,
+            "participant": "Karen Khachanov",
+            "type": "OT_TWO",
+            "betOfferId": 2712481375,
+            "changedDate": "2026-11-03T15:36:30Z",
+            "participantId": 1001498734,
+            "oddsFractional": "4/9",
+            "oddsAmerican": "-220",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          },
+          {
+            "id": 4402122068,
+            "label": "Nuno Borges",
+            "englishLabel": "Nuno Borges",
+            "odds": 2700,
+            "participant": "Nuno Borges",
+            "type": "OT_ONE",
+            "betOfferId": 2712481375,
+            "changedDate": "2026-11-03T15:36:30Z",
+            "participantId": 1001937715,
+            "oddsFractional": "17/10",
+            "oddsAmerican": "170",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 9,
+      "a_id": "BT72",
+      "a_name": "Nuno Borges",
+      "a_rank": 49,
+      "a_elo": 1775,
+      "b_id": "KE29",
+      "b_name": "Karen Khachanov",
+      "b_rank": 25,
+      "b_elo": 1812,
+      "p": 0.4469531048305375,
+      "a_odds": 2.7,
+      "b_odds": 1.46,
+      "a_ev": 0.2067733830424514,
+      "b_ev": -0.19255153305258477
+    },
+    {
+      "event": {
+        "id": 1029734847,
+        "name": "Matteo Berrettini - Ugo Humbert",
+        "nameDelimiter": "-",
+        "englishName": "Matteo Berrettini - Ugo Humbert",
+        "homeName": "Matteo Berrettini",
+        "awayName": "Ugo Humbert",
+        "start": "2026-11-04T15:40:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 17,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712552411,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029734847,
+        "outcomes": [
+          {
+            "id": 4402286188,
+            "label": "Matteo Berrettini",
+            "englishLabel": "Matteo Berrettini",
+            "odds": 2060,
+            "participant": "Matteo Berrettini",
+            "type": "OT_ONE",
+            "betOfferId": 2712552411,
+            "changedDate": "2026-11-03T18:23:41Z",
+            "participantId": 1001697031,
+            "oddsFractional": "21/20",
+            "oddsAmerican": "106",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4402286189,
+            "label": "Ugo Humbert",
+            "englishLabel": "Ugo Humbert",
+            "odds": 1760,
+            "participant": "Ugo Humbert",
+            "type": "OT_TWO",
+            "betOfferId": 2712552411,
+            "changedDate": "2026-11-03T18:23:41Z",
+            "participantId": 1002405558,
+            "oddsFractional": "3/4",
+            "oddsAmerican": "-132",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 10,
+      "a_id": "BK40",
+      "a_name": "Matteo Berrettini",
+      "a_rank": 43,
+      "a_elo": 1778,
+      "b_id": "HH26",
+      "b_name": "Ugo Humbert",
+      "b_rank": 38,
+      "b_elo": 1778,
+      "p": 0.5,
+      "a_odds": 2.06,
+      "b_odds": 1.76,
+      "a_ev": 0.030000000000000027,
+      "b_ev": -0.12
+    },
+    {
+      "event": {
+        "id": 1029735701,
+        "name": "Alex Michelsen - Carlos Alcaraz",
+        "nameDelimiter": "-",
+        "englishName": "Alex Michelsen - Carlos Alcaraz",
+        "homeName": "Alex Michelsen",
+        "awayName": "Carlos Alcaraz",
+        "start": "2026-11-04T18:00:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 39,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712601697,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029735701,
+        "outcomes": [
+          {
+            "id": 4402479892,
+            "label": "Alex Michelsen",
+            "englishLabel": "Alex Michelsen",
+            "odds": 5600,
+            "participant": "Alex Michelsen",
+            "type": "OT_ONE",
+            "betOfferId": 2712601697,
+            "changedDate": "2026-11-03T21:11:49Z",
+            "participantId": 1007376354,
+            "oddsFractional": "23/5",
+            "oddsAmerican": "460",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4402479893,
+            "label": "Carlos Alcaraz",
+            "englishLabel": "Carlos Alcaraz",
+            "odds": 1150,
+            "participant": "Carlos Alcaraz",
+            "type": "OT_TWO",
+            "betOfferId": 2712601697,
+            "changedDate": "2026-11-03T21:11:49Z",
+            "participantId": 1006148145,
+            "oddsFractional": "1/7",
+            "oddsAmerican": "-670",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 11,
+      "a_id": "M0QI",
+      "a_name": "Alex Michelsen",
+      "a_rank": 35,
+      "a_elo": 1840,
+      "b_id": "A0E2",
+      "b_name": "Carlos Alcaraz",
+      "b_rank": 3,
+      "b_elo": 2120,
+      "p": 0.1663375308165619,
+      "a_odds": 5.6,
+      "b_odds": 1.15,
+      "a_ev": -0.06850982742725331,
+      "b_ev": -0.04128816043904626
+    },
+    {
+      "event": {
+        "id": 1029723600,
+        "name": "Arthur Fils - Tomas Machac",
+        "nameDelimiter": "-",
+        "englishName": "Arthur Fils - Tomas Machac",
+        "homeName": "Arthur Fils",
+        "awayName": "Tomas Machac",
+        "start": "2026-11-04T19:30:00Z",
+        "group": "Paris",
+        "groupId": 2000052267,
+        "path": [
+          {
+            "id": 1000093193,
+            "name": "Tennis",
+            "englishName": "Tennis",
+            "termKey": "tennis"
+          },
+          {
+            "id": 1000093324,
+            "name": "ATP",
+            "englishName": "ATP",
+            "termKey": "atp"
+          },
+          {
+            "id": 2000052267,
+            "name": "Paris",
+            "englishName": "Paris",
+            "termKey": "paris"
+          }
+        ],
+        "nonLiveBoCount": 44,
+        "sport": "TENNIS",
+        "tags": [
+          "STREAMED_WEB",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "STREAMED_MOBILE",
+          "MATCH"
+        ],
+        "state": "NOT_STARTED"
+      },
+      "offer": {
+        "id": 2712279294,
+        "criterion": {
+          "id": 1001159551,
+          "label": "Matchodds",
+          "englishLabel": "Match Odds",
+          "order": [
+            1
+          ]
+        },
+        "betOfferType": {
+          "id": 2,
+          "name": "Match",
+          "englishName": "Match"
+        },
+        "eventId": 1029723600,
+        "outcomes": [
+          {
+            "id": 4401549821,
+            "label": "Arthur Fils",
+            "englishLabel": "Arthur Fils",
+            "odds": 1490,
+            "participant": "Arthur Fils",
+            "type": "OT_ONE",
+            "betOfferId": 2712279294,
+            "changedDate": "2026-11-03T08:36:46Z",
+            "participantId": 1006066600,
+            "oddsFractional": "12/25",
+            "oddsAmerican": "-205",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 0
+          },
+          {
+            "id": 4401549822,
+            "label": "Tomas Machac",
+            "englishLabel": "Tomas Machac",
+            "odds": 2600,
+            "participant": "Tomas Machac",
+            "type": "OT_TWO",
+            "betOfferId": 2712279294,
+            "changedDate": "2026-11-03T08:36:46Z",
+            "participantId": 1003673577,
+            "oddsFractional": "8/5",
+            "oddsAmerican": "160",
+            "status": "OPEN",
+            "cashOutStatus": "ENABLED",
+            "displayOrder": 1
+          }
+        ],
+        "tags": [
+          "OFFERED_PREMATCH",
+          "OFFERED_LIVE",
+          "BET_BUILDER",
+          "MAIN"
+        ],
+        "sortOrder": 1,
+        "cashOutStatus": "ENABLED"
+      },
+      "idx": 12,
+      "a_id": "F0F1",
+      "a_name": "Arthur Fils",
+      "a_rank": 7,
+      "a_elo": 1943,
+      "b_id": "M0FH",
+      "b_name": "Tomas Machac",
+      "b_rank": 69,
+      "b_elo": 1751,
+      "p": 0.7512407935337106,
+      "a_odds": 1.49,
+      "b_odds": 2.6,
+      "a_ev": 0.11934878236522883,
+      "b_ev": -0.3532260631876477
+    }
+  ],
+  "population": "13 NOT_STARTED Paris matches scheduled 2026-11-04 Europe/Stockholm, open Match Odds; 12 with complete database hard-court Elo",
+  "calculation": "WIN_PROBABILITY_TA on Hard; fair odds=1/p; project TA odds=round(1/clamp(p*1.05,.001,.999),2); model EV=p*offered_odds-1",
+  "sort": "descending model EV, both players assessed",
+  "ranked_players": [
+    {
+      "id": "TD51",
+      "name": "Frances Tiafoe",
+      "opponent": "Quentin Halys",
+      "probability": 0.724538242842536,
+      "odds": 1.68,
+      "fair_odds": 1.3801893963205614,
+      "ta_odds": 1.31,
+      "ev": 0.21722424797546047
+    },
+    {
+      "id": "BT72",
+      "name": "Nuno Borges",
+      "opponent": "Karen Khachanov",
+      "probability": 0.4469531048305375,
+      "odds": 2.7,
+      "fair_odds": 2.2373711899353523,
+      "ta_odds": 2.13,
+      "ev": 0.2067733830424514
+    },
+    {
+      "id": "RC91",
+      "name": "Arthur Rinderknech",
+      "opponent": "Mattia Bellucci",
+      "probability": 0.5756869523764296,
+      "odds": 2.07,
+      "fair_odds": 1.7370551753379342,
+      "ta_odds": 1.65,
+      "ev": 0.19167199141920932
+    },
+    {
+      "id": "F0F1",
+      "name": "Arthur Fils",
+      "opponent": "Tomas Machac",
+      "probability": 0.7512407935337106,
+      "odds": 1.49,
+      "fair_odds": 1.3311311214825912,
+      "ta_odds": 1.27,
+      "ev": 0.11934878236522883
+    },
+    {
+      "id": "D643",
+      "name": "Novak Djokovic",
+      "opponent": "Rinky Hijikata",
+      "probability": 0.8749753069983639,
+      "odds": 1.27,
+      "fair_odds": 1.1428893958511104,
+      "ta_odds": 1.09,
+      "ev": 0.11121863988792224
+    },
+    {
+      "id": "Z355",
+      "name": "Alexander Zverev",
+      "opponent": "Lorenzo Musetti",
+      "probability": 0.7690759234333929,
+      "odds": 1.38,
+      "fair_odds": 1.3002617420861267,
+      "ta_odds": 1.24,
+      "ev": 0.061324774338082255
+    },
+    {
+      "id": "DH58",
+      "name": "Alex de Minaur",
+      "opponent": "Tomas Martin Etcheverry",
+      "probability": 0.8490204427886767,
+      "odds": 1.24,
+      "fair_odds": 1.1778279410038923,
+      "ta_odds": 1.12,
+      "ev": 0.05278534905795906
+    },
+    {
+      "id": "BK40",
+      "name": "Matteo Berrettini",
+      "opponent": "Ugo Humbert",
+      "probability": 0.5,
+      "odds": 2.06,
+      "fair_odds": 2.0,
+      "ta_odds": 1.9,
+      "ev": 0.030000000000000027
+    },
+    {
+      "id": "MV14",
+      "name": "Alex Molcan",
+      "opponent": "Taylor Fritz",
+      "probability": 0.24341940570494724,
+      "odds": 4.2,
+      "fair_odds": 4.108135902739475,
+      "ta_odds": 3.91,
+      "ev": 0.022361503960778517
+    },
+    {
+      "id": "T0HA",
+      "name": "Learner Tien",
+      "opponent": "Luca Van Assche",
+      "probability": 0.7093546305987634,
+      "odds": 1.44,
+      "fair_odds": 1.4097321098135414,
+      "ta_odds": 1.34,
+      "ev": 0.0214706680622192
+    },
+    {
+      "id": "MM58",
+      "name": "Daniil Medvedev",
+      "opponent": "Ignacio Buse",
+      "probability": 0.8533946221118818,
+      "odds": 1.15,
+      "fair_odds": 1.1717908387157587,
+      "ta_odds": 1.12,
+      "ev": -0.01859618457133605
+    },
+    {
+      "id": "A0E2",
+      "name": "Carlos Alcaraz",
+      "opponent": "Alex Michelsen",
+      "probability": 0.8336624691834381,
+      "odds": 1.15,
+      "fair_odds": 1.199526231496888,
+      "ta_odds": 1.14,
+      "ev": -0.04128816043904626
+    },
+    {
+      "id": "M0QI",
+      "name": "Alex Michelsen",
+      "opponent": "Carlos Alcaraz",
+      "probability": 0.1663375308165619,
+      "odds": 5.6,
+      "fair_odds": 6.011872336272722,
+      "ta_odds": 5.73,
+      "ev": -0.06850982742725331
+    },
+    {
+      "id": "FB98",
+      "name": "Taylor Fritz",
+      "opponent": "Alex Molcan",
+      "probability": 0.7565805942950528,
+      "odds": 1.23,
+      "fair_odds": 1.32173625326956,
+      "ta_odds": 1.26,
+      "ev": -0.06940586901708512
+    },
+    {
+      "id": "HH26",
+      "name": "Ugo Humbert",
+      "opponent": "Matteo Berrettini",
+      "probability": 0.5,
+      "odds": 1.76,
+      "fair_odds": 2.0,
+      "ta_odds": 1.9,
+      "ev": -0.12
+    },
+    {
+      "id": "V0DZ",
+      "name": "Luca Van Assche",
+      "opponent": "Learner Tien",
+      "probability": 0.29064536940123664,
+      "odds": 2.8,
+      "fair_odds": 3.440619068041981,
+      "ta_odds": 3.28,
+      "ev": -0.18619296567653743
+    },
+    {
+      "id": "KE29",
+      "name": "Karen Khachanov",
+      "opponent": "Nuno Borges",
+      "probability": 0.5530468951694625,
+      "odds": 1.46,
+      "fair_odds": 1.8081649291125372,
+      "ta_odds": 1.72,
+      "ev": -0.19255153305258477
+    },
+    {
+      "id": "B0ID",
+      "name": "Ignacio Buse",
+      "opponent": "Daniil Medvedev",
+      "probability": 0.14660537788811823,
+      "odds": 5.5,
+      "fair_odds": 6.821032177708714,
+      "ta_odds": 6.5,
+      "ev": -0.19367042161534975
+    },
+    {
+      "id": "B0GG",
+      "name": "Mattia Bellucci",
+      "opponent": "Arthur Rinderknech",
+      "probability": 0.4243130476235704,
+      "odds": 1.75,
+      "fair_odds": 2.3567505302998617,
+      "ta_odds": 2.24,
+      "ev": -0.2574521666587518
+    },
+    {
+      "id": "M0EJ",
+      "name": "Lorenzo Musetti",
+      "opponent": "Alexander Zverev",
+      "probability": 0.23092407656660707,
+      "odds": 3.05,
+      "fair_odds": 4.3304276230874645,
+      "ta_odds": 4.12,
+      "ev": -0.2956815664718485
+    },
+    {
+      "id": "M0FH",
+      "name": "Tomas Machac",
+      "opponent": "Arthur Fils",
+      "probability": 0.24875920646628935,
+      "odds": 2.6,
+      "fair_odds": 4.019951720402015,
+      "ta_odds": 3.83,
+      "ev": -0.3532260631876477
+    },
+    {
+      "id": "EA24",
+      "name": "Tomas Martin Etcheverry",
+      "opponent": "Alex de Minaur",
+      "probability": 0.15097955721132328,
+      "odds": 4.1,
+      "fair_odds": 6.623413251903492,
+      "ta_odds": 6.31,
+      "ev": -0.3809838154335746
+    },
+    {
+      "id": "HB64",
+      "name": "Quentin Halys",
+      "opponent": "Frances Tiafoe",
+      "probability": 0.27546175715746396,
+      "odds": 2.18,
+      "fair_odds": 3.6302679918953817,
+      "ta_odds": 3.46,
+      "ev": -0.3994933693967285
+    },
+    {
+      "id": "H0BH",
+      "name": "Rinky Hijikata",
+      "opponent": "Novak Djokovic",
+      "probability": 0.1250246930016361,
+      "odds": 3.75,
+      "fair_odds": 7.998419960022727,
+      "ta_odds": 7.62,
+      "ev": -0.5311574012438647
+    }
+  ]
+}

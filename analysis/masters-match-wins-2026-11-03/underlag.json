@@ -1,0 +1,133 @@
+{
+  "source": "ATP MariaDB via repository atp-tennis read-only skill",
+  "checked_at": "2026-11-03T23:59:11.724803+01:00",
+  "population": "Singles main draws of events.type=Masters, all players including retired, all surfaces",
+  "status_filter": "Completed only; excludes Aborted, Walkover, qualification",
+  "calculation": "COUNT(*) per matches.winner ATP ID",
+  "sort": "wins descending, name then ATP ID",
+  "query": "SELECT p.id,p.name,COUNT(*) AS wins FROM matches m JOIN events e ON e.id=m.event JOIN players p ON p.id=m.winner WHERE e.type=%s AND m.status=%s AND m.round IN ('R128','R64','R32','R16','QF','SF','F') GROUP BY p.id,p.name ORDER BY wins DESC,p.name,p.id LIMIT 20",
+  "params": [
+    "Masters",
+    "Completed"
+  ],
+  "coverage": [
+    {
+      "rows": [
+        {
+          "earliest_event_start": "1990-03-05",
+          "latest_event_start": "2026-11-02",
+          "editions": 325,
+          "included_matches": 20131
+        }
+      ],
+      "rowcount": 1
+    }
+  ],
+  "results": [
+    {
+      "rows": [
+        {
+          "id": "D643",
+          "name": "Novak Djokovic",
+          "wins": 410
+        },
+        {
+          "id": "N409",
+          "name": "Rafael Nadal",
+          "wins": 403
+        },
+        {
+          "id": "F324",
+          "name": "Roger Federer",
+          "wins": 372
+        },
+        {
+          "id": "MC10",
+          "name": "Andy Murray",
+          "wins": 223
+        },
+        {
+          "id": "A092",
+          "name": "Andre Agassi",
+          "wins": 206
+        },
+        {
+          "id": "S402",
+          "name": "Pete Sampras",
+          "wins": 189
+        },
+        {
+          "id": "F401",
+          "name": "David Ferrer",
+          "wins": 187
+        },
+        {
+          "id": "BA47",
+          "name": "Tomas Berdych",
+          "wins": 187
+        },
+        {
+          "id": "Z355",
+          "name": "Alexander Zverev",
+          "wins": 182
+        },
+        {
+          "id": "W367",
+          "name": "Stan Wawrinka",
+          "wins": 163
+        },
+        {
+          "id": "R485",
+          "name": "Andy Roddick",
+          "wins": 155
+        },
+        {
+          "id": "D875",
+          "name": "Grigor Dimitrov",
+          "wins": 152
+        },
+        {
+          "id": "I186",
+          "name": "John Isner",
+          "wins": 145
+        },
+        {
+          "id": "MC65",
+          "name": "Gael Monfils",
+          "wins": 143
+        },
+        {
+          "id": "H355",
+          "name": "Tommy Haas",
+          "wins": 141
+        },
+        {
+          "id": "G628",
+          "name": "Richard Gasquet",
+          "wins": 139
+        },
+        {
+          "id": "C274",
+          "name": "Michael Chang",
+          "wins": 136
+        },
+        {
+          "id": "MM58",
+          "name": "Daniil Medvedev",
+          "wins": 135
+        },
+        {
+          "id": "M605",
+          "name": "Carlos Moya",
+          "wins": 133
+        },
+        {
+          "id": "C977",
+          "name": "Marin Cilic",
+          "wins": 133
+        }
+      ],
+      "rowcount": 20
+    }
+  ]
+}

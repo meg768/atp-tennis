@@ -44,3 +44,6 @@
 - TA-varianten väljer lägst historiskt sparat TA-odds men använder Oddsets erbjudna pris för insats/avräkning, utan EV-filter. Saknad TA hoppas över; lika Oddset-priser hindrar inte ett entydigt TA-val. Rapport: ta-target-profit-report.md i samma backtestmapp.
 - Nästa backtestvariant prövar båda spelarna och väljer endast strikt TA < samma spelares Svenska Spel-pris, oavsett favoritstatus. Behåller målet 100 kr nettovinst vid vinst; sparat i ta-price-filter-report.md i samma analysmapp.
 - TA < Svenska Spel har även körts med fast 100 kr per match och identiska spelarval: ta-price-filter-flat-report.md. De olika insatsmodellerna sparas separat så att tidigare simuleringar bevaras.
+
+## Körmaskin för dagligt ping – 2026-11-03
+- Det dagliga portfölj-pinget kl. 09.00 Europe/Stockholm ska köras på Mac mini. Magnus visade en skärmbild där Mac mini rapporterar aktiv automation och verifierad åtkomst. MacBook Airs motsvarande automation (atp-ping-var-sj-tte-timme) är nu pausad och statusen verifierad lokalt, så den inte kör parallellt. Manuella ping kan fortsatt göras från projektet.

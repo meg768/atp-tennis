@@ -1,0 +1,182 @@
+{
+  "source": "ATP MariaDB via repository read-only atp-tennis skill",
+  "checked_at": "2026-11-04T00:01:20.463909+01:00",
+  "population": "All players, active and retired; all surfaces; Masters main draws since 1990 in database",
+  "status_filter": "Completed only; qualifying, Aborted and Walkover excluded",
+  "minimum_matches": 100,
+  "calculation": "wins/(wins+losses); one appearance per eligible match per player",
+  "sort": "unrounded win percentage descending, matches descending, ATP ID",
+  "query": "WITH eligible AS (\n SELECT m.winner,m.loser FROM matches m JOIN events e ON e.id=m.event\n WHERE e.type=%s AND m.status=%s AND m.round IN ('R128','R64','R32','R16','QF','SF','F')\n), outcomes AS (\n SELECT winner AS player_id,1 AS win,0 AS loss FROM eligible\n UNION ALL SELECT loser AS player_id,0 AS win,1 AS loss FROM eligible\n)\nSELECT p.id,p.name,SUM(o.win) AS wins,SUM(o.loss) AS losses,COUNT(*) AS matches,\n ROUND(100.0*SUM(o.win)/COUNT(*),2) AS win_pct\nFROM outcomes o JOIN players p ON p.id=o.player_id\nGROUP BY p.id,p.name HAVING COUNT(*) >= %s\nORDER BY SUM(o.win)/COUNT(*) DESC,COUNT(*) DESC,p.id LIMIT 20",
+  "params": [
+    "Masters",
+    "Completed",
+    100
+  ],
+  "results": [
+    {
+      "rows": [
+        {
+          "id": "N409",
+          "name": "Rafael Nadal",
+          "wins": "403",
+          "losses": "87",
+          "matches": 490,
+          "win_pct": "82.24"
+        },
+        {
+          "id": "S0AG",
+          "name": "Jannik Sinner",
+          "wins": "120",
+          "losses": "26",
+          "matches": 146,
+          "win_pct": "82.19"
+        },
+        {
+          "id": "D643",
+          "name": "Novak Djokovic",
+          "wins": "410",
+          "losses": "97",
+          "matches": 507,
+          "win_pct": "80.87"
+        },
+        {
+          "id": "F324",
+          "name": "Roger Federer",
+          "wins": "372",
+          "losses": "108",
+          "matches": 480,
+          "win_pct": "77.50"
+        },
+        {
+          "id": "A0E2",
+          "name": "Carlos Alcaraz",
+          "wins": "92",
+          "losses": "27",
+          "matches": 119,
+          "win_pct": "77.31"
+        },
+        {
+          "id": "A092",
+          "name": "Andre Agassi",
+          "wins": "206",
+          "losses": "72",
+          "matches": 278,
+          "win_pct": "74.10"
+        },
+        {
+          "id": "S402",
+          "name": "Pete Sampras",
+          "wins": "189",
+          "losses": "69",
+          "matches": 258,
+          "win_pct": "73.26"
+        },
+        {
+          "id": "E004",
+          "name": "Stefan Edberg",
+          "wins": "104",
+          "losses": "42",
+          "matches": 146,
+          "win_pct": "71.23"
+        },
+        {
+          "id": "R485",
+          "name": "Andy Roddick",
+          "wins": "155",
+          "losses": "65",
+          "matches": 220,
+          "win_pct": "70.45"
+        },
+        {
+          "id": "M099",
+          "name": "Thomas Muster",
+          "wins": "100",
+          "losses": "42",
+          "matches": 142,
+          "win_pct": "70.42"
+        },
+        {
+          "id": "R286",
+          "name": "Marcelo Rios",
+          "wins": "101",
+          "losses": "43",
+          "matches": 144,
+          "win_pct": "70.14"
+        },
+        {
+          "id": "Z355",
+          "name": "Alexander Zverev",
+          "wins": "182",
+          "losses": "78",
+          "matches": 260,
+          "win_pct": "70.00"
+        },
+        {
+          "id": "B028",
+          "name": "Boris Becker",
+          "wins": "96",
+          "losses": "42",
+          "matches": 138,
+          "win_pct": "69.57"
+        },
+        {
+          "id": "MC10",
+          "name": "Andy Murray",
+          "wins": "223",
+          "losses": "99",
+          "matches": 322,
+          "win_pct": "69.25"
+        },
+        {
+          "id": "MM58",
+          "name": "Daniil Medvedev",
+          "wins": "135",
+          "losses": "65",
+          "matches": 200,
+          "win_pct": "67.50"
+        },
+        {
+          "id": "C243",
+          "name": "Jim Courier",
+          "wins": "129",
+          "losses": "65",
+          "matches": 194,
+          "win_pct": "66.49"
+        },
+        {
+          "id": "D683",
+          "name": "Juan Martin del Potro",
+          "wins": "103",
+          "losses": "52",
+          "matches": 155,
+          "win_pct": "66.45"
+        },
+        {
+          "id": "R975",
+          "name": "Milos Raonic",
+          "wins": "124",
+          "losses": "64",
+          "matches": 188,
+          "win_pct": "65.96"
+        },
+        {
+          "id": "S351",
+          "name": "Michael Stich",
+          "wins": "65",
+          "losses": "36",
+          "matches": 101,
+          "win_pct": "64.36"
+        },
+        {
+          "id": "K293",
+          "name": "Gustavo Kuerten",
+          "wins": "108",
+          "losses": "61",
+          "matches": 169,
+          "win_pct": "63.91"
+        }
+      ],
+      "rowcount": 20
+    }
+  ]
+}
