@@ -1,6 +1,6 @@
 # ATP Tennis
 
-Detta är Magnus enda aktiva tennisprojekt: tennisanalys, oddsinsamling, backtesting, pappersportfölj och drift. Läs CONTEXT.md före arbete. AGENTS.md är gemensamma instruktioner; README.md är ingång och docs/ beskriver arbetsflöden. Historiska instruktioner i arkiv eller docs/legacy-codex.md ersätter inte dessa. Spara korta daterade hållbara beslut i CONTEXT.md. Svenska, KISS, fokuserade ändringar och relevanta tester gäller.
+Detta är Magnus gemensamma kodprojekt för tennisanalys, oddsinsamling, backtesting och pappersportföljverktyg. Portfölj-ping och dess schemaläggning hör till det separata lokala projektet /Users/magnus/atp-ping på Mac mini; skapa eller aktivera ingen ping-schemaläggning här. Läs CONTEXT.md före arbete. AGENTS.md är gemensamma instruktioner; README.md är ingång och docs/ beskriver arbetsflöden. Historiska instruktioner i arkiv eller docs/legacy-codex.md ersätter inte dessa. Spara korta daterade hållbara beslut i CONTEXT.md. Svenska, KISS, fokuserade ändringar och relevanta tester gäller.
 
 ## Välj arbetsflöde
 - Vanlig tennisanalys är läsning. Registrera inga bets, avräkningar, notifieringar eller ping som bieffekt. Följ docs/analysis.md.

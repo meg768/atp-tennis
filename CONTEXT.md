@@ -1,5 +1,14 @@
 # Projektkontext
 
+## Separat ping-projekt på Mac mini – 2026-11-04
+- Automationens instruktioner ska vara läsbar svenska med åäö och tydliga stycken.
+- Före varje manuellt eller schemalagt ping på Mac mini krävs lyckad `git -C /Users/magnus/GitHub/atp-tennis pull --ff-only`. Läs om uppdaterade instruktioner efter pull. Vid fel stoppas pinget före bokföring/utskick; ingen automatisk stash, reset eller konfliktlösning och ingen körning med gammal kod.
+- Magnus vill köra portfölj-ping och hantera dess schemaläggning i ett separat lokalt projekt på Mac mini. ATP Tennis här är fortsatt hem för gemensam kod, analys och backtesting; ingen ping-schemaläggning ska skapas eller aktiveras här. Detta är ett uttryckligt undantag från det tidigare beslutet om ett enda aktivt projekt.
+- Behåll befintlig daglig tid 09.00 Europe/Stockholm och samma bets-bokföring och ping-rutin. Återanvänd befintliga verktyg utan en andra oddsinsamlare. Vid flytt ska den gamla Mac mini-automationen flyttas eller pausas så att endast en är aktiv.
+- Projektmappen `/Users/magnus/atp-ping` är skapad och registrerad som lokala Codex-projektet `atp ping` på Mac Mini 2026, med egna instruktioner och länkar till huvudrepots scripts, docs, tracking och .agents. Befintlig heartbeat `atp-ping-var-sj-tte-timme` är ACTIVE med oförändrad daglig tid 09.00. Dess befintliga målchatt `01a16aca-092b-77b0-9ccf-7ab6b7b519df` har flyttats till ping-projektet och prompten anger den separata arbetsmappen. Ingen extra automation skapad.
+- Statusläsning från båda projektmapparna gav identisk portföljkontrollkod `6171efac4fb5dd17`. Ingen pingkörning, bokföring eller notifiering gjordes vid installationen.
+- Chatten körs på MacBook Air och dess befintliga ping-automation är verifierat PAUSED. SSH till Mac Mini 2026 fungerar som `magnus@mac-mini-2026.local`, verifierat 2026-11-04 med befintlig nyckel och känd värdnyckel. Registrering och automationsändring gjordes via skärmdelning i Mac minis Codex-app.
+
 ## GitHub-lagring – 2026-11-03
 - Magnus vill lagra projektmaterialet på GitHub och har uttryckligen godkänt att analys- och pappersportföljhistorik publiceras i det offentliga meg768/atp-tennis. Detta ersätter äldre instruktioner om att analysis/ inte ska versionshanteras.
 - Relevanta skills källkod finns nu i .agents/skills/. Aktiva analys-/portföljverktyg använder repots atp-tennis-skill. Analysunderlag/bilder ligger i analysis/ och läsande daterade exporter av players/events/matches/odds/bets i data/snapshots/. Exporterna är historiska kopior; den löpande driften och bokföringen använder fortfarande MariaDB.

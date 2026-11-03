@@ -38,7 +38,9 @@ Följ urvalsmetod och mejlformat nedan. Daglig körning är fortsatt kl. 09.00
 Europe/Stockholm. Stoppa vid databasfel; använd ingen lokal reserv.
 Portföljdata läses alltid från bets; AGENTS.md styr arbetssätt och CONTEXT.md innehåller projektbeslut.
 
-Pappersportföljen är ett arbetsflöde i det gemensamma ATP Tennis-projektet.
+Portfölj-ping och dess schemaläggning hanteras från det separata lokala projektet `/Users/magnus/atp-ping` på Mac mini. Gemensam kod och denna pingrutin ligger kvar i ATP Tennis och återanvänds därifrån. Skapa eller aktivera ingen ping-schemaläggning i huvudprojektet.
+
+Före varje manuellt eller schemalagt ping på Mac mini måste `git -C /Users/magnus/GitHub/atp-tennis pull --ff-only` lyckas. Läs därefter om de uppdaterade projektinstruktionerna och börja med portföljstatus. Vid Git-/nätverksfel, konflikt eller divergerad gren avbryts pinget före bokföring och utskick. Fortsätt inte med gammal kod och kör ingen automatisk stash, reset eller konfliktlösning.
 
 ## Samma bokföring på båda Macarna
 
