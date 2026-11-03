@@ -37,3 +37,10 @@
 
 - Verifiering efter flytt: 66 Python-tester och 24 Node-tester passerar, inklusive befintlig MATCH_LOOKUP i sessionens tillfälliga tabeller. bets återställdes separat som tillfällig tabell med 36 kolumner; 50 riktiga bets-rader och portföljstatus är oförändrade.
 - Den flyttade bildrenderaren är också provkörd från repot med Pillow 13 i ignorerad lokal .venv. Historiska top10-underlag har kopierats till Git-ignorerade analysis/; originalen i iCloud är orörda.
+
+## Backtest – 2026-11-03
+- Första favoritsimuleringen finns i analysis/backtest-favorites-2026-11-03/: 100 kr på den lägre av de två sparade Oddset-priserna. Endast entydigt kopplade Completed-matcher avräknas; lika odds, avbrott och saknade resultat särredovisas. Detta är analys och skriver aldrig till bets.
+- Alternativ simulering i samma analysmapp: Magnus bad om insats 100/(odds−1), för att vinna 100 kr netto per vunnen match. Gäller endast backtestet; portföljens ordinarie 100 kr-insats ändras inte.
+- TA-varianten väljer lägst historiskt sparat TA-odds men använder Oddsets erbjudna pris för insats/avräkning, utan EV-filter. Saknad TA hoppas över; lika Oddset-priser hindrar inte ett entydigt TA-val. Rapport: ta-target-profit-report.md i samma backtestmapp.
+- Nästa backtestvariant prövar båda spelarna och väljer endast strikt TA < samma spelares Svenska Spel-pris, oavsett favoritstatus. Behåller målet 100 kr nettovinst vid vinst; sparat i ta-price-filter-report.md i samma analysmapp.
+- TA < Svenska Spel har även körts med fast 100 kr per match och identiska spelarval: ta-price-filter-flat-report.md. De olika insatsmodellerna sparas separat så att tidigare simuleringar bevaras.

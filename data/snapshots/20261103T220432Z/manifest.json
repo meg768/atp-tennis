@@ -1,0 +1,38 @@
+{
+  "created_at_utc": "20261103T220432Z",
+  "source": "ATP/MariaDB",
+  "format": "gzip JSON Lines; dates and decimals are strings",
+  "purpose": "Historical export only; never a live portfolio fallback",
+  "tables": {
+    "players": {
+      "rows": 18547,
+      "file": "players.jsonl.gz",
+      "bytes": 909573,
+      "sha256": "3bb351a8884c615f24299e88d89ea5a6703d43a6f510295ad8979e17f50a2179"
+    },
+    "events": {
+      "rows": 13837,
+      "file": "events.jsonl.gz",
+      "bytes": 271733,
+      "sha256": "ca24e3f3c0127792efef4d6ef1693fa8869fc3d609ea2996dcccf84449939e30"
+    },
+    "matches": {
+      "rows": 471251,
+      "file": "matches.jsonl.gz",
+      "bytes": 12028643,
+      "sha256": "e075f3ac743284f1469b82ab5f109ce9ceed157b60c05e82b751cac268f49ae6"
+    },
+    "odds": {
+      "rows": 68,
+      "file": "odds.jsonl.gz",
+      "bytes": 2919,
+      "sha256": "b2adc73fde2cdd26fad40a1ab5b82f53e78ea7bf2597fe970d313165fc4377e9"
+    },
+    "bets": {
+      "rows": 60,
+      "file": "bets.jsonl.gz",
+      "bytes": 1327662,
+      "sha256": "bbb7d3a19f64e574f3140a33dcf4c36597008c466869be839da8d6a0127add4d"
+    }
+  }
+}

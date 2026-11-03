@@ -1,0 +1,58 @@
+{
+  "calculated_at_utc": "2026-11-03T21:25:05.462119+00:00",
+  "rule": "Stake = 100/(decimal odds-1); target net profit 100 SEK per won bet",
+  "rounding": "Each stake and payout rounded to nearest ore, half up",
+  "source": "Same 34 matches and saved prices as the flat 100 SEK simulation",
+  "completed": {
+    "matches": 34,
+    "wins": 25,
+    "losses": 9,
+    "stake_sek": "11105.82",
+    "payout_sek": "11083.04",
+    "net_sek": "-22.78",
+    "roi_pct": "-0.21"
+  },
+  "per_event": {
+    "Basel": {
+      "matches": 12,
+      "wins": 6,
+      "losses": 6,
+      "stake_sek": "3377.49",
+      "payout_sek": "2295.98",
+      "net_sek": "-1081.51",
+      "roi_pct": "-32.02"
+    },
+    "Paris": {
+      "matches": 10,
+      "wins": 9,
+      "losses": 1,
+      "stake_sek": "2292.99",
+      "payout_sek": "2915.21",
+      "net_sek": "622.22",
+      "roi_pct": "27.14"
+    },
+    "Wien": {
+      "matches": 12,
+      "wins": 10,
+      "losses": 2,
+      "stake_sek": "5435.34",
+      "payout_sek": "5871.85",
+      "net_sek": "436.51",
+      "roi_pct": "8.03"
+    }
+  },
+  "min_stake_sek": "129.87",
+  "max_stake_sek": "1111.11",
+  "excluded": {
+    "excluded_status_Aborted": 3,
+    "equal_prices_no_favorite": 1,
+    "no_matched_database_result": 30
+  },
+  "limitations": [
+    "Last stored valid prematch prices; observation time unavailable.",
+    "Completed matches only. Aborted/walkover excluded, not treated as losses or refunds.",
+    "Missing imported result does not mean the match is unplayed.",
+    "Equal prices skipped because no unique favorite exists.",
+    "No writes to bets or notifications."
+  ]
+}

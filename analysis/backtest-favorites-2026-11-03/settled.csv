@@ -1,0 +1,35 @@
+odds_id,scheduled_at,event,player,opponent,match_id,favorite,odds,result,score,stake_sek,payout_sek,net_sek
+1029650580,2026-10-29 11:05:00,Basel,Valentin Vacherot,Rafael Jodar,2026-328-MS013-R16-J0DZ-VA25,Rafael Jodar,1.350,lost,7-6(4) 2-6 7-6(5),100,0.00,-100.00
+1029650402,2026-10-29 12:30:00,Wien,Tommy Paul,Luciano Darderi,2026-337-MS014-R16-D0FJ-PL56,Tommy Paul,1.260,won,6-1 6-1,100,126.00,26.00
+1029663338,2026-10-29 12:30:00,Wien,Cameron Norrie,Daniil Medvedev,2026-337-MS013-R16-MM58-N771,Daniil Medvedev,1.200,won,4-6 6-3 7-6(1),100,120.00,20.00
+1029652758,2026-10-29 13:10:00,Basel,Alex Michelsen,Arthur Fils,2026-328-MS015-R16-F0F1-M0QI,Arthur Fils,1.430,won,4-6 6-3 7-6(5),100,143.00,43.00
+1029665583,2026-10-29 15:10:00,Wien,Nikoloz Basilashvili,Carlos Alcaraz,2026-337-MS015-R16-A0E2-BG23,Carlos Alcaraz,1.090,won,6-1 7-6(11),100,109.00,9.00
+1029654568,2026-10-29 16:05:00,Basel,Daniel Altmaier,Jiri Lehecka,2026-328-MS009-R16-AE14-L0BV,Jiri Lehecka,1.180,won,7-5 6-4,100,118.00,18.00
+1029664907,2026-10-29 16:05:00,Wien,Arthur Fery,Lorenzo Musetti,2026-337-MS009-R16-F0DM-M0EJ,Lorenzo Musetti,1.350,lost,6-4 5-7 6-4,100,0.00,-100.00
+1029666412,2026-10-29 16:10:00,Basel,Taylor Fritz,Denis Shapovalov,2026-328-MS014-R16-FB98-SU55,Taylor Fritz,1.440,won,6-4 6-3,100,144.00,44.00
+1029664490,2026-10-29 17:10:00,Wien,Alexander Zverev,Tallon Griekspoor,2026-337-MS008-R16-GJ37-Z355,Alexander Zverev,1.270,won,6-4 7-5,100,127.00,27.00
+1029665454,2026-10-29 18:20:00,Basel,Novak Djokovic,Jan-Lennard Struff,2026-328-MS010-R16-D643-SL28,Novak Djokovic,1.260,lost,6-7(4) 7-5 7-6(5),100,0.00,-100.00
+1029653435,2026-10-29 21:10:00,Basel,Ben Shelton,Jerome Kym,2026-328-MS008-R16-K0EP-S0S1,Ben Shelton,1.290,lost,6-3 6-7(4) 7-6(1),100,0.00,-100.00
+1029676800,2026-10-30 12:30:00,Wien,Adrian Mannarino,Daniil Medvedev,2026-337-MS006-QF-ME82-MM58,Daniil Medvedev,1.250,won,6-2 6-3,100,125.00,25.00
+1029674364,2026-10-30 13:05:00,Basel,Holger Rune,Valentin Vacherot,2026-328-MS006-QF-R0DG-VA25,Holger Rune,1.650,lost,6-3 3-6 6-3,100,0.00,-100.00
+1029676799,2026-10-30 14:05:00,Wien,Tommy Paul,Carlos Alcaraz,2026-337-MS007-QF-A0E2-PL56,Carlos Alcaraz,1.290,won,6-4 7-6(2),100,129.00,29.00
+1029677503,2026-10-30 16:30:00,Wien,Alexander Zverev,Arthur Fery,2026-337-MS004-QF-F0DM-Z355,Alexander Zverev,1.130,won,6-0 6-2,100,113.00,13.00
+1029679880,2026-10-30 17:05:00,Basel,Jerome Kym,Jiri Lehecka,2026-328-MS004-QF-K0EP-L0BV,Jiri Lehecka,1.300,won,6-4 6-2,100,130.00,30.00
+1029678091,2026-10-30 18:10:00,Basel,Jan-Lennard Struff,Nuno Borges,2026-328-MS005-QF-BT72-SL28,Jan-Lennard Struff,1.770,won,6-2 6-3,100,177.00,77.00
+1029677953,2026-10-30 19:05:00,Wien,Matteo Berrettini,Alex De Minaur,2026-337-MS005-QF-BK40-DH58,Alex De Minaur,1.420,won,7-6(4) 6-2,100,142.00,42.00
+1029688474,2026-10-31 14:05:00,Basel,Valentin Vacherot,Taylor Fritz,2026-328-MS003-SF-FB98-VA25,Taylor Fritz,1.320,lost,7-6(5) 6-3,100,0.00,-100.00
+1029688475,2026-10-31 14:05:00,Wien,Daniil Medvedev,Carlos Alcaraz,2026-337-MS003-SF-A0E2-MM58,Carlos Alcaraz,1.440,won,6-4 7-6(2),100,144.00,44.00
+1029689857,2026-10-31 15:30:00,Wien,Alexander Zverev,Alex De Minaur,2026-337-MS002-SF-DH58-Z355,Alexander Zverev,1.360,lost,6-4 1-6 7-6(4),100,0.00,-100.00
+1029689417,2026-10-31 16:05:00,Basel,Jiri Lehecka,Jan-Lennard Struff,2026-328-MS002-SF-L0BV-SL28,Jiri Lehecka,1.460,won,3-6 7-5 6-4,100,146.00,46.00
+1029701445,2026-11-01 13:05:00,Wien,Alex De Minaur,Carlos Alcaraz,2026-337-MS001-F-A0E2-DH58,Carlos Alcaraz,1.190,won,6-1 6-4,100,119.00,19.00
+1029700809,2026-11-01 14:30:00,Basel,Jiri Lehecka,Valentin Vacherot,2026-328-MS001-F-L0BV-VA25,Jiri Lehecka,1.500,lost,2-6 6-3 6-3,100,0.00,-100.00
+1029688966,2026-11-02 10:05:00,Paris,Ignacio Buse,Zizou Bergs,2026-352-MS054-R64-B0ID-BU13,Zizou Bergs,1.360,lost,6-2 6-4,100,0.00,-100.00
+1029711403,2026-11-02 10:05:00,Paris,Luciano Darderi,Rinky Hijikata,2026-352-MS037-R64-D0FJ-H0BH,Rinky Hijikata,1.730,won,6-2 6-2,100,173.00,73.00
+1029688979,2026-11-02 11:10:00,Paris,Luca Van Assche,Mariano Navone,2026-352-MS034-R64-N0BS-V0DZ,Luca Van Assche,1.630,won,6-3 7-5,100,163.00,63.00
+1029688969,2026-11-02 12:10:00,Paris,Alejandro Tabilo,Rafael Jodar,2026-352-MS051-R64-J0DZ-TE30,Rafael Jodar,1.210,won,6-2 6-3,100,121.00,21.00
+1029688985,2026-11-02 13:10:00,Paris,Cameron Norrie,Matteo Arnaldi,2026-352-MS041-R64-A0FC-N771,Cameron Norrie,1.380,won,6-4 1-6 6-3,100,138.00,38.00
+1029711395,2026-11-02 13:15:00,Paris,Casper Ruud,Juan Manuel Cerundolo,2026-352-MS050-R64-C0C8-RH16,Casper Ruud,1.360,won,6-3 6-2,100,136.00,36.00
+1029711394,2026-11-02 15:05:00,Paris,Kyrian Jacquet,Tomas Machac,2026-352-MS057-R64-J0AZ-M0FH,Tomas Machac,1.490,won,7-6(7) 6-1,100,149.00,49.00
+1029711396,2026-11-02 15:05:00,Paris,Mattia Bellucci,Lorenzo Sonego,2026-352-MS042-R64-B0GG-SU87,Mattia Bellucci,1.620,won,6-4 6-3,100,162.00,62.00
+1029711399,2026-11-02 17:10:00,Paris,Alex Molcan,Titouan Droguet,2026-352-MS058-R64-D0DW-MV14,Alex Molcan,1.730,won,4-6 6-4 6-4,100,173.00,73.00
+1029688970,2026-11-02 20:10:00,Paris,Ugo Humbert,Botic van de Zandschulp,2026-352-MS061-R64-HH26-V812,Ugo Humbert,1.500,won,7-6(5) 6-7(9) 6-3,100,150.00,50.00

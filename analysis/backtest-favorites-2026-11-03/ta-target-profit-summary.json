@@ -1,0 +1,95 @@
+{
+  "calculated_at_utc": "2026-11-03T21:27:37.823525+00:00",
+  "selection": "Lower stored TA price; actual return and stake use selected player Oddset price",
+  "staking": "100/(Oddset odds-1); stake and payout rounded half up to ore",
+  "source": "Same 68-row captured database snapshot as previous simulations",
+  "completed": {
+    "matches": 34,
+    "wins": 21,
+    "losses": 13,
+    "stake_sek": "10800.81",
+    "payout_sek": "10079.19",
+    "net_sek": "-721.62",
+    "roi_pct": "-6.68"
+  },
+  "excluded": {
+    "excluded_status_Aborted": 3,
+    "missing_or_invalid_stored_ta": 1,
+    "no_matched_database_result": 30
+  },
+  "per_event": {
+    "Basel": {
+      "matches": 11,
+      "wins": 5,
+      "losses": 6,
+      "stake_sek": "3189.01",
+      "payout_sek": "2066.11",
+      "net_sek": "-1122.90",
+      "roi_pct": "-35.21"
+    },
+    "Paris": {
+      "matches": 11,
+      "wins": 6,
+      "losses": 5,
+      "stake_sek": "2176.46",
+      "payout_sek": "2141.23",
+      "net_sek": "-35.23",
+      "roi_pct": "-1.62"
+    },
+    "Wien": {
+      "matches": 12,
+      "wins": 10,
+      "losses": 2,
+      "stake_sek": "5435.34",
+      "payout_sek": "5871.85",
+      "net_sek": "436.51",
+      "roi_pct": "8.03"
+    }
+  },
+  "changed_selections": [
+    {
+      "odds_id": 1029678091,
+      "event": "Basel",
+      "oddset_favorite": "Jan-Lennard Struff",
+      "ta_favorite": "Nuno Borges",
+      "oddset_result": "won",
+      "ta_result": "lost"
+    },
+    {
+      "odds_id": 1029711403,
+      "event": "Paris",
+      "oddset_favorite": "Rinky Hijikata",
+      "ta_favorite": "Luciano Darderi",
+      "oddset_result": "won",
+      "ta_result": "lost"
+    },
+    {
+      "odds_id": 1029711399,
+      "event": "Paris",
+      "oddset_favorite": "Alex Molcan",
+      "ta_favorite": "Titouan Droguet",
+      "oddset_result": "won",
+      "ta_result": "lost"
+    },
+    {
+      "odds_id": 1029688970,
+      "event": "Paris",
+      "oddset_favorite": "Ugo Humbert",
+      "ta_favorite": "Botic van de Zandschulp",
+      "oddset_result": "won",
+      "ta_result": "lost"
+    }
+  ],
+  "added_vs_previous": [
+    1029688984
+  ],
+  "omitted_vs_previous": [
+    "1029674364"
+  ],
+  "limitations": [
+    "Stored historical TA values only; no recalculation with newer ratings.",
+    "Completed, unambiguous matches only; no paper portfolio writes.",
+    "No value/EV filter: always choose the lower TA price when available.",
+    "Last valid stored prematch prices; exact observation time unavailable."
+  ]
+}

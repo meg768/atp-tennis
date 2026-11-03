@@ -1,0 +1,36 @@
+odds_id,scheduled_at,event,player,opponent,match_id,reason
+1029654866,2026-10-29 19:10:00,Wien,Flavio Cobolli,Matteo Berrettini,2026-337-MS010-R16-BK40-C0E9,excluded_status_Aborted
+1029674364,2026-10-30 13:05:00,Basel,Holger Rune,Valentin Vacherot,2026-328-MS006-QF-R0DG-VA25,missing_or_invalid_prices
+1029677054,2026-10-30 15:10:00,Basel,Taylor Fritz,Arthur Fils,2026-328-MS007-QF-F0F1-FB98,excluded_status_Aborted
+1029688475,2026-10-31 14:05:00,Wien,Daniil Medvedev,Carlos Alcaraz,2026-337-MS003-SF-A0E2-MM58,no_ta_below_oddset
+1029688980,2026-11-02 12:20:00,Paris,Daniel Merida Aguilar,Alexander Blockx,,no_matched_database_result
+1029719414,2026-11-02 13:10:00,Paris,Daniel Merida Aguilar,Sebastian Baez,,no_matched_database_result
+1029688965,2026-11-02 18:05:00,Paris,Denis Shapovalov,Karen Khachanov,2026-352-MS053-R64-KE29-SU55,excluded_status_Aborted
+1029688967,2026-11-03 10:05:00,Paris,Quentin Halys,Arthur Fery,,no_matched_database_result
+1029688977,2026-11-03 10:05:00,Paris,Arthur Rinderknech,Francisco Cerundolo,,no_matched_database_result
+1029688983,2026-11-03 10:05:00,Paris,Andrey Rublev,Tomas Martin Etcheverry,,no_matched_database_result
+1029688964,2026-11-03 11:10:00,Paris,Alejandro Davidovich Fokina,Moise Kouame,,no_matched_database_result
+1029688981,2026-11-03 11:10:00,Paris,Stefanos Tsitsipas,Learner Tien,,no_matched_database_result
+1029731065,2026-11-03 11:10:00,Paris,Adolfo Daniel Vallejo,Learner Tien,,no_matched_database_result
+1029731060,2026-11-03 12:05:00,Paris,Nuno Borges,Moise Kouame,,no_matched_database_result
+1029688968,2026-11-03 13:10:00,Paris,Brandon Nakashima,Matteo Berrettini,,no_matched_database_result
+1029688982,2026-11-03 13:10:00,Paris,Novak Djokovic,Valentin Vacherot,,no_matched_database_result
+1029688978,2026-11-03 14:10:00,Paris,Tommy Paul,Holger Rune,,no_matched_database_result
+1029688963,2026-11-03 15:10:00,Paris,Alex Michelsen,Jiri Lehecka,,no_matched_database_result
+1029711398,2026-11-03 16:10:00,Paris,Benjamin Bonzi,Taylor Fritz,,no_matched_database_result
+1029698316,2026-11-03 18:10:00,Paris,Jan-Lennard Struff,Arthur Gea,,no_matched_database_result
+1029722733,2026-11-03 18:10:00,Paris,Ben Shelton,Cameron Norrie,,no_matched_database_result
+1029722232,2026-11-03 19:30:00,Paris,Casper Ruud,Rafael Jodar,,no_matched_database_result
+1029731986,2026-11-04 10:00:00,Paris,Quentin Halys,Frances Tiafoe,,no_matched_database_result
+1029731987,2026-11-04 10:00:00,Paris,Mattia Bellucci,Arthur Rinderknech,,no_matched_database_result
+1029734848,2026-11-04 11:10:00,Paris,Luca Van Assche,Learner Tien,,no_matched_database_result
+1029734846,2026-11-04 11:30:00,Paris,Tommy Paul,Daniel Merida Aguilar,,no_matched_database_result
+1029719944,2026-11-04 12:20:00,Paris,Ignacio Buse,Daniil Medvedev,,no_matched_database_result
+1029720102,2026-11-04 12:30:00,Paris,Alexander Zverev,Lorenzo Musetti,,no_matched_database_result
+1029732677,2026-11-04 12:40:00,Paris,Tomas Martin Etcheverry,Alex De Minaur,,no_matched_database_result
+1029734948,2026-11-04 13:40:00,Paris,Novak Djokovic,Rinky Hijikata,,no_matched_database_result
+1029735700,2026-11-04 13:50:00,Paris,Alex Molcan,Taylor Fritz,,no_matched_database_result
+1029732789,2026-11-04 14:30:00,Paris,Nuno Borges,Karen Khachanov,,no_matched_database_result
+1029734847,2026-11-04 15:40:00,Paris,Matteo Berrettini,Ugo Humbert,,no_matched_database_result
+1029735701,2026-11-04 18:00:00,Paris,Alex Michelsen,Carlos Alcaraz,,no_matched_database_result
+1029723600,2026-11-04 19:30:00,Paris,Arthur Fils,Tomas Machac,,no_matched_database_result

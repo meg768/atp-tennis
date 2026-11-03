@@ -1,0 +1,56 @@
+{
+  "calculated_at_utc": "2026-11-03T21:30:09.354160+00:00",
+  "selection": "Test both players; bet only where stored TA odds are strictly lower than own Oddset price. Equal prices excluded.",
+  "staking": "100/(Oddset odds-1), aiming for 100 SEK net profit per winning bet; nearest ore half up",
+  "source": "Same 68-row historical snapshot as previous simulations",
+  "completed": {
+    "matches": 33,
+    "wins": 15,
+    "losses": 18,
+    "stake_sek": "6725.77",
+    "payout_sek": "6343.28",
+    "net_sek": "-382.49",
+    "roi_pct": "-5.69"
+  },
+  "distinct_settled_matches": 33,
+  "excluded": {
+    "excluded_status_Aborted": 3,
+    "missing_or_invalid_prices": 1,
+    "no_ta_below_oddset": 1,
+    "no_matched_database_result": 30
+  },
+  "per_event": {
+    "Basel": {
+      "matches": 11,
+      "wins": 5,
+      "losses": 6,
+      "stake_sek": "2330.79",
+      "payout_sek": "1693.40",
+      "net_sek": "-637.39",
+      "roi_pct": "-27.35"
+    },
+    "Paris": {
+      "matches": 11,
+      "wins": 2,
+      "losses": 9,
+      "stake_sek": "978.69",
+      "payout_sek": "524.29",
+      "net_sek": "-454.40",
+      "roi_pct": "-46.43"
+    },
+    "Wien": {
+      "matches": 11,
+      "wins": 8,
+      "losses": 3,
+      "stake_sek": "3416.29",
+      "payout_sek": "4125.59",
+      "net_sek": "709.30",
+      "roi_pct": "20.76"
+    }
+  },
+  "limitations": [
+    "TA prices already include the existing 5% probability markup; this price filter does not establish positive model EV.",
+    "Stored historical TA and valid prematch Oddset prices; no new ratings or live prices.",
+    "Completed, unambiguous matches only. No portfolio writes or notifications."
+  ]
+}

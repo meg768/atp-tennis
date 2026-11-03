@@ -1,0 +1,63 @@
+{
+  "calculated_at_utc": "2026-11-03T21:17:05.188788+00:00",
+  "scope": "All currently stored ATP odds; lower Svenska Spel/Oddset price; flat 100 SEK",
+  "odds_rows": 68,
+  "completed": {
+    "matches": 34,
+    "wins": 25,
+    "losses": 9,
+    "stake_sek": "3400.00",
+    "payout_sek": "3477.00",
+    "net_sek": "77.00",
+    "roi_pct": "2.26",
+    "hit_rate_pct": "73.53"
+  },
+  "excluded": {
+    "excluded_status_Aborted": 3,
+    "equal_prices_no_favorite": 1,
+    "no_matched_database_result": 30
+  },
+  "per_event": {
+    "Basel": {
+      "matches": 12,
+      "wins": 6,
+      "losses": 6,
+      "stake_sek": "1200.00",
+      "payout_sek": "858.00",
+      "net_sek": "-342.00",
+      "roi_pct": "-28.50",
+      "hit_rate_pct": "50.00"
+    },
+    "Paris": {
+      "matches": 10,
+      "wins": 9,
+      "losses": 1,
+      "stake_sek": "1000.00",
+      "payout_sek": "1365.00",
+      "net_sek": "365.00",
+      "roi_pct": "36.50",
+      "hit_rate_pct": "90.00"
+    },
+    "Wien": {
+      "matches": 12,
+      "wins": 10,
+      "losses": 2,
+      "stake_sek": "1200.00",
+      "payout_sek": "1254.00",
+      "net_sek": "54.00",
+      "roi_pct": "4.50",
+      "hit_rate_pct": "83.33"
+    }
+  },
+  "dates": [
+    "2026-10-29 11:05:00",
+    "2026-11-02 20:10:00"
+  ],
+  "limitations": [
+    "Last stored valid prematch prices; observation time unavailable.",
+    "Completed matches only. Aborted/walkover excluded, not treated as losses or refunds.",
+    "Missing imported result does not mean the match is unplayed.",
+    "Equal prices skipped because no unique favorite exists.",
+    "No writes to bets or notifications."
+  ]
+}
