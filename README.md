@@ -80,9 +80,9 @@ open, valid outcomes. Each price is matched by participant name, preserving the
 source's home/away orientation even when outcomes arrive in the opposite order.
 The API's merged feed and cache are not involved.
 
-Only the eleven columns in `odds` are written: `id` (Svenska Spel event id), `time`
-(full scheduled match start, DATETIME in UTC with second precision), `tournament`, `player_name`, `opponent_name`, `player_oddset`, `opponent_oddset`,
-`player`, `opponent`, `player_ta`, and `opponent_ta`.
+Only the twelve columns in `odds` are written: `id` (Svenska Spel event id), `time`
+(full scheduled match start, DATETIME in UTC with second precision), `event_name`, `player_name`, `opponent_name`, `player_oddset`, `opponent_oddset`,
+`player`, `opponent`, `player_ta`, `opponent_ta`, and `event`.
 The collector normalizes the source timestamp, including timezone offsets, to UTC
 and writes it without dropping the clock time. Subsequent pre-match runs update
 the same primary-key row and its planned start time. Live events, unknown or
@@ -305,3 +305,20 @@ Reference docs:
 
 ## Collaboration
 - Shared project memory and Codex instructions live in `CODEX.md`.
+
+
+### Turneringskoppling – 2026-11-03
+
+`odds.event` (indexerad VARCHAR(20)) kopplar till `events.id`, som `matches.event`. `event_name` behåller Svenska Spels namn för uppslag. Samma entydiga namn/alias och datumfönster som för TA används. Kopplingen sparas även om spelare, Elo eller TA-format saknas; saknad/tvetydig upplaga ger NULL. Migration 017 kompletterar endast metadata och bevarar alla priser. Ingen främmande nyckel införs, i linje med spelarkopplingarna.
+
+```sql
+SELECT o.*, e.name, e.surface FROM odds o LEFT JOIN events e ON e.id = o.event;
+```
+
+Migration 018 (`database/migrations/018_rename_event_name.sql`) byter `odds.tournament` till `odds.event_name`. Namnbytet är kört i databasen och båda Node-insamlarfilerna är driftsatta på pi-kato, med uppdaterad oddsinsamling. API-flödets fält `tournament` är oförändrat.
+
+### Fördröjd ATP-import – 2026-11-03
+
+ATP-events och matcher importeras per dygn. Odds kan sparas innan upplagan eller spelarna finns i databasen. Vid varje lyckad insamling kompletteras därför saknade `event`, `player` och `opponent` på redan sparade rader, även efter matchstart och när matchen lämnat Svenska Spels flöde. Samma entydiga namn/id, alias och datumfönster som vid prematch används; tvetydiga träffar lämnas NULL. Befintliga kopplingar, namn, tider och alla priser bevaras. TA räknas aldrig retroaktivt. Ingen ATP-turnering, spelare eller match skapas av kompletteringen.
+
+Kompletteringen ingår i insamlarens befintliga transaktion och databaslås. Ett giltigt tomt flöde kompletterar också metadata; hämtfel gör inga skrivningar. Node använder `database/reconcile-odds.sql`; Python använder samma SQL i `reconcile_odds.sql`. Funktionen är driftsatt på pi-kato och verifierad med MariaDB-integrationstester samt verklig insamling.

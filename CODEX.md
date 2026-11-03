@@ -6,6 +6,8 @@ When updating project memory, architecture notes, operational details, prioritie
 
 ## Current Handoff — 2026-07-12
 
+- 2026-11-03: All odds changes are deployed and verified on pi-kato. `odds.event` references `events.id` logically; `tournament` is renamed `event_name`. Both Node/Python collectors reconcile only missing event/player/opponent links after successful feeds (including empty feeds and past matches), inside the collection lock/transaction. Never change known links or historical source data/prices, and never calculate historical TA. Daily-import lag, exact-unique identity rules and edition aliases/date window apply. 53 tests pass (24 Node, 29 Python including MariaDB). Both real collectors succeeded on 12 prematches; all 38 played-match odds rows were unchanged. PM2 hourly schedule is saved and the job exits 0. Migrations 017/018 are already applied; copies are versioned in database/migrations. Current details and schema order are in CONTEXT.md.
+
 - 2026-10-29: Magnus changed the odds date type to DATETIME and requested its
   rename to `time`. Both collectors now store the full scheduled source start in
   UTC with second precision; tournament edition lookup still uses its UTC date.

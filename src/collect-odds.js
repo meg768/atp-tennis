@@ -1,5 +1,6 @@
 const Oddset = require('./oddset');
 const getTaOdds = require('./ta-odds');
+const reconcileOdds = require('./reconcile-odds');
 
 function parsePrematchOdds(raw, checkedAt = Date.now()) {
 	if (!raw || !Array.isArray(raw.events) || raw.events.some(item => !item?.event || item.event.id == null)) {
@@ -28,7 +29,7 @@ function parsePrematchOdds(raw, checkedAt = Date.now()) {
 			rows.push({
 				id: event.id,
 				time: new Date(start).toISOString().slice(0, 19).replace('T', ' '),
-				tournament: event.group ?? null,
+				event_name: event.group ?? null,
 				player_name: names[0],
 				opponent_name: names[1],
 				player_oddset: decimalOdds(a[0].odds),
@@ -36,7 +37,8 @@ function parsePrematchOdds(raw, checkedAt = Date.now()) {
 				player: null,
 				opponent: null,
 				player_ta: null,
-				opponent_ta: null
+				opponent_ta: null,
+				event: null
 			});
 			break;
 		}
@@ -74,18 +76,18 @@ class CollectOdds {
 			const raw = await response.json();
 			const rows = parsePrematchOdds(raw, this.now());
 
-			if (rows.length > 0) {
-				await this.mysql.query('START TRANSACTION');
-				try {
-					for (const row of rows) {
-						Object.assign(row, await getTaOdds(this.mysql, row));
-						await this.mysql.upsert('odds', row);
-					}
-					await this.mysql.query('COMMIT');
-				} catch (error) {
-					await this.mysql.query('ROLLBACK');
-					throw error;
+			await this.mysql.query('START TRANSACTION');
+			try {
+				for (const row of rows) {
+					Object.assign(row, await getTaOdds(this.mysql, row));
+					await this.mysql.upsert('odds', row);
 				}
+				// The daily import may arrive after a match has left the source feed.
+				await reconcileOdds(this.mysql);
+				await this.mysql.query('COMMIT');
+			} catch (error) {
+				await this.mysql.query('ROLLBACK');
+				throw error;
 			}
 
 			await this.log(`Saved pre-match odds for ${rows.length} of ${raw.events.length} Svenska Spel events.`);

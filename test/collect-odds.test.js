@@ -37,9 +37,9 @@ function database({ acquired = 1, failWrite = false } = {}) {
 
 test('uses participant names to keep reversed outcomes aligned and stores the quote fields with initially unavailable TA prices', () => {
 	assert.deepEqual(parsePrematchOdds(offering(), checkedAt), [{
-		id: 123, time: '2026-10-29 12:00:00', tournament: 'Wien',
+		id: 123, time: '2026-10-29 12:00:00', event_name: 'Wien',
 		player_name: 'Alice', opponent_name: 'Bob', player_oddset: '1.500', opponent_oddset: '2.500',
-		player: null, opponent: null, player_ta: null, opponent_ta: null
+		player: null, opponent: null, player_ta: null, opponent_ta: null, event: null
 	}]);
 });
 
@@ -133,11 +133,12 @@ test('an overlapping Node collector skips before fetching or writing', async () 
 	assert.equal(mysql.calls.length, 1);
 });
 
-test('an empty offering preserves all previously stored matches', async () => {
+test('an empty offering reconciles missing identities without writing new quotes', async () => {
 	const mysql = database();
 	const collect = new CollectOdds({ mysql, log() {}, fetchImpl: async () => ({ ok: true, json: async () => ({ events: [] }) }) });
 	assert.deepEqual(await collect.run(), { fetched: 0, updated: 0 });
-	assert.ok(!mysql.calls.includes('START TRANSACTION'));
+	assert.ok(mysql.calls.includes('START TRANSACTION'));
+	assert.ok(mysql.calls.some(call => typeof call === 'string' && call.includes('UPDATE odds o SET')));
 	assert.equal(mysql.calls.filter(call => call.table).length, 0);
 });
 
@@ -185,6 +186,7 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.equal(Number(rows[0].id), 123);
 		assert.equal(Number(rows[0].opponent_oddset), 3);
 		assert.equal(Number(rows[0].player_ta), 3.96);
+		assert.equal(rows[0].event, 'TEST');
 		assert.equal(rows[0].player, 'TEST_A');
 		assert.equal(rows[0].opponent, 'TEST_B');
 		assert.equal(Number(rows[0].opponent_ta), 1.25);
@@ -205,6 +207,7 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.equal(rows.length, 1);
 		assert.equal(Number(rows[0].opponent_oddset), 3);
 		assert.equal(Number(rows[0].player_ta), 3.96);
+		assert.equal(rows[0].event, 'TEST');
 		assert.equal(rows[0].player, 'TEST_A');
 		assert.equal(rows[0].opponent, 'TEST_B');
 		// A new valid bookmaker observation must not retain an older TA quote.
@@ -216,6 +219,7 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		assert.equal(Number(rows[0].opponent_oddset), 4.1);
 		assert.equal(rows[0].player_ta, null);
 		assert.equal(rows[0].opponent_ta, null);
+		assert.equal(rows[0].event, 'TEST');
 		assert.equal(rows[0].player, 'TEST_A');
 		assert.equal(rows[0].opponent, 'TEST_B');
 		// Ambiguous names clear only that identity; the other player remains useful.
@@ -233,6 +237,64 @@ test('MariaDB preserves one row per event, ignores live quotes and rolls back fa
 		await collect.run();
 		rows = await mysql.query('SELECT * FROM odds');
 		assert.equal(rows[0].opponent, null);
+	} finally {
+		await mysql.disconnect();
+	}
+});
+
+
+test('a failed metadata reconciliation rolls back the collected quotes', async () => {
+	const mysql = database();
+	const query = mysql.query.bind(mysql);
+	mysql.query = async sql => {
+		if (typeof sql === 'string' && sql.includes('UPDATE odds o SET')) throw new Error('Reconciliation failed');
+		return query(sql);
+	};
+	const collect = new CollectOdds({ mysql, log() {}, now: () => checkedAt,
+		fetchImpl: async () => ({ ok: true, json: async () => offering() }) });
+	await assert.rejects(collect.run(), /Reconciliation failed/);
+	assert.ok(mysql.calls.includes('ROLLBACK'));
+	assert.ok(!mysql.calls.includes('COMMIT'));
+	assert.match(mysql.calls.at(-1), /RELEASE_LOCK/);
+});
+
+test('daily import reconciles past matches absent from the feed without changing prices', { skip: process.env.ATP_ODDS_INTEGRATION !== '1' }, async () => {
+	require('dotenv').config();
+	const fs = require('node:fs');
+	const path = require('node:path');
+	const mysql = require('../src/mysql');
+	await mysql.connect();
+	try {
+		const schema = fs.readFileSync(path.join(__dirname, '../database/schema.sql'), 'utf8');
+		for (const table of ['odds', 'players', 'events']) {
+			const start = schema.indexOf('CREATE TABLE `'+table+'` (');
+			const end = schema.indexOf('\n/*!40101 SET character_set_client', start);
+			await mysql.query(schema.slice(start, end).replace('CREATE TABLE', 'CREATE TEMPORARY TABLE'));
+		}
+		let raw = offering();
+		const collect = new CollectOdds({ mysql, log() {}, now: () => checkedAt,
+			fetchImpl: async () => ({ ok: true, json: async () => raw }) });
+		await collect.run();
+		const [before] = await mysql.query('SELECT * FROM odds');
+		assert.equal(before.event, null);
+		assert.equal(before.player, null);
+		await mysql.query("INSERT INTO events(id,date,name,type,surface) VALUES('TEST','2026-10-26','Vienna','ATP-500','Hard'),('OLD','2025-10-26','Vienna','ATP-500','Hard')");
+		await mysql.query("INSERT INTO players(id,name) VALUES('TEST_A','Alice'),('TEST_B','Bob')");
+		raw = { events: [] };
+		collect.now = () => Date.parse('2026-10-30T12:00:00Z');
+		await collect.run();
+		const [after] = await mysql.query('SELECT * FROM odds');
+		assert.deepEqual({ ...after }, { ...before, event: 'TEST', player: 'TEST_A', opponent: 'TEST_B' });
+		// Later ambiguities must not replace known links.
+		await mysql.query("INSERT INTO events(id,date,name) VALUES('DUP','2026-10-27','Vienna')");
+		await mysql.query("INSERT INTO players(id,name) VALUES('DUP_A','Alice')");
+		await collect.run();
+		assert.deepEqual((await mysql.query('SELECT * FROM odds'))[0], after);
+		// Missing links remain unresolved when multiple candidates exist.
+		await mysql.query('UPDATE odds SET event=NULL, player=NULL, player_ta=1.2, opponent_ta=3.4');
+		const [ambiguous] = await mysql.query('SELECT * FROM odds');
+		await collect.run();
+		assert.deepEqual((await mysql.query('SELECT * FROM odds'))[0], ambiguous);
 	} finally {
 		await mysql.disconnect();
 	}

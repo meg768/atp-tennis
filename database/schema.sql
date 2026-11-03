@@ -82,18 +82,20 @@ DROP TABLE IF EXISTS `odds`;
 CREATE TABLE `odds` (
   `id` bigint(20) unsigned NOT NULL COMMENT 'Svenska Spel event ID; one updatable row per event',
   `time` datetime DEFAULT NULL COMMENT 'UTC: scheduled match start',
-  `tournament` varchar(255) DEFAULT NULL,
+  `event` varchar(20) DEFAULT NULL COMMENT 'ATP tournament edition; events.id',
+  `event_name` varchar(255) DEFAULT NULL,
   `player` varchar(32) DEFAULT NULL,
   `player_name` varchar(255) DEFAULT NULL,
+  `player_oddset` decimal(12,3) DEFAULT NULL,
+  `player_ta` decimal(12,2) DEFAULT NULL,
   `opponent` varchar(32) DEFAULT NULL,
   `opponent_name` varchar(255) DEFAULT NULL,
-  `player_oddset` decimal(12,3) DEFAULT NULL,
   `opponent_oddset` decimal(12,3) DEFAULT NULL,
-  `player_ta` decimal(12,2) DEFAULT NULL,
   `opponent_ta` decimal(12,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `odds_player_id` (`player`),
   KEY `odds_opponent_id` (`opponent`),
+  KEY `odds_event` (`event`),
   CONSTRAINT `odds_valid_ta_prices` CHECK (`player_ta` is null and `opponent_ta` is null or `player_ta` is not null and `opponent_ta` is not null and `player_ta` >= 1 and `opponent_ta` >= 1),
   CONSTRAINT `odds_valid_prices` CHECK (`player_oddset` > 0 and `opponent_oddset` > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Latest known Svenska Spel data per unique event; id is provider event ID; times UTC';
