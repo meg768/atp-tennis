@@ -1,5 +1,7 @@
 # ATP Tennis Betting
 
+GitHub-lagring 2026-11-03: daterade läsande kopior av godkänd analys- och pappersportföljhistorik får versionshanteras i data/snapshots/ och analysis/. Produktionsbokföring läses och skrivs fortsatt endast genom bets. Detta är ingen lokal reservdatakälla och medför inga nya spel eller utskick.
+
 ## Grundlagring från 31 oktober 2026 – gäller framför äldre filhänvisningar
 
 Endast `bets` lagrar bettingdata. De vanliga kolumnerna ger spel, odds,
@@ -107,7 +109,7 @@ Arbetsgång:
    direkt före bokföring och före svaret. Ange uttagstid,
    källor och databegränsningar. Spara oddsunderlag och beräkningar vid analys.
 
-Historik och modellvärden läses direkt från databasen. Hämta kompletterande
+Aktuell historik och modellvärden läses direkt från databasen. Hämta kompletterande
 turneringskalender och lottningar direkt från ATP, arrangören eller Tennis
 Abstract. Saknas verifierade aktuella odds eller matchstatus ska detta
 redovisas; ge inga nya tips baserade på gamla priser.
@@ -177,7 +179,7 @@ utskick beskrivs i `tracking/README.md`.
 Databasanslutning, Svenska Spel-flöde, Python-beroenden och lokal konfiguration
 hanteras av den gemensamma skillen `atp-tennis`.
 Hitta den installerade skillens katalog via den aktuella skillförteckningen;
-`~/.agents/skills/atp-tennis` kan vara en länk till den. Läs dess `SKILL.md`
+Projektets versionshanterade kopia finns i `.agents/skills/atp-tennis`. Läs dess `SKILL.md`
 och relevanta referenser före användning. Python-miljön finns lokalt på varje
 Mac i `~/.local/share/codex/atp-tennis/venv` och databasuppgifterna i
 `~/.config/atp-tennis/.env`, enligt skillens aktuella instruktioner.
@@ -186,14 +188,14 @@ Projektet har ingen egen anslutningskod, `.env` eller Python-miljö.
 Läs en SQL-fråga från standard input eller en fil med skillens Python:
 
 ```sh
-echo 'SELECT 1 AS connection_ok;' | ~/.local/share/codex/atp-tennis/venv/bin/python ~/.agents/skills/atp-tennis/scripts/database.py
-~/.local/share/codex/atp-tennis/venv/bin/python ~/.agents/skills/atp-tennis/scripts/database.py query.sql
+echo 'SELECT 1 AS connection_ok;' | ~/.local/share/codex/atp-tennis/venv/bin/python .agents/skills/atp-tennis/scripts/database.py
+~/.local/share/codex/atp-tennis/venv/bin/python .agents/skills/atp-tennis/scripts/database.py query.sql
 ```
 
 Hämta aktuellt oddsunderlag utan webbläsare:
 
 ```sh
-~/.local/share/codex/atp-tennis/venv/bin/python ~/.agents/skills/atp-tennis/scripts/svenskaspel.py
+~/.local/share/codex/atp-tennis/venv/bin/python .agents/skills/atp-tennis/scripts/svenskaspel.py
 ```
 
 Skillens databasverktyg använder en lästransaktion. Vid saknad skill eller

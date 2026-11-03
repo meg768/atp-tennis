@@ -1,0 +1,669 @@
+{
+  "checked_at": "2026-11-03T22:01:33.128089+01:00",
+  "event": [
+    {
+      "id": "2026-352",
+      "date": "2026-11-02",
+      "name": "Paris",
+      "type": "Masters",
+      "surface": "Hard"
+    }
+  ],
+  "rows": [
+    {
+      "id": 1029731986,
+      "start": "2026-11-04T10:00:00Z",
+      "names": [
+        "Quentin Halys",
+        "Frances Tiafoe"
+      ],
+      "ids": [
+        "HB64",
+        "TD51"
+      ],
+      "prices": [
+        2.1,
+        1.73
+      ],
+      "p": [
+        0.27546175715746396,
+        0.724538242842536
+      ],
+      "profiles": [
+        [
+          {
+            "id": "HB64",
+            "name": "Quentin Halys",
+            "rank": 46,
+            "elo_rank_hard": 1722,
+            "elo_rank": 1784,
+            "age": 30,
+            "country": "FRA"
+          }
+        ],
+        [
+          {
+            "id": "TD51",
+            "name": "Frances Tiafoe",
+            "rank": 8,
+            "elo_rank_hard": 1890,
+            "elo_rank": 1938,
+            "age": 28,
+            "country": "USA"
+          }
+        ]
+      ],
+      "ta": [
+        3.46,
+        1.31
+      ],
+      "model_ev": [
+        -42.2,
+        25.3
+      ]
+    },
+    {
+      "id": 1029731987,
+      "start": "2026-11-04T10:00:00Z",
+      "names": [
+        "Mattia Bellucci",
+        "Arthur Rinderknech"
+      ],
+      "ids": [
+        "B0GG",
+        "RC91"
+      ],
+      "prices": [
+        1.75,
+        2.07
+      ],
+      "p": [
+        0.4243130476235704,
+        0.5756869523764296
+      ],
+      "profiles": [
+        [
+          {
+            "id": "B0GG",
+            "name": "Mattia Bellucci",
+            "rank": 66,
+            "elo_rank_hard": 1665,
+            "elo_rank": 1710,
+            "age": 25,
+            "country": "ITA"
+          }
+        ],
+        [
+          {
+            "id": "RC91",
+            "name": "Arthur Rinderknech",
+            "rank": 68,
+            "elo_rank_hard": 1718,
+            "elo_rank": 1754,
+            "age": 31,
+            "country": "FRA"
+          }
+        ]
+      ],
+      "ta": [
+        2.24,
+        1.65
+      ],
+      "model_ev": [
+        -25.7,
+        19.2
+      ]
+    },
+    {
+      "id": 1029734848,
+      "start": "2026-11-04T11:10:00Z",
+      "names": [
+        "Luca Van Assche",
+        "Learner Tien"
+      ],
+      "ids": [
+        "V0DZ",
+        "T0HA"
+      ],
+      "prices": [
+        2.8,
+        1.44
+      ],
+      "p": [
+        0.29064536940123664,
+        0.7093546305987634
+      ],
+      "profiles": [
+        [
+          {
+            "id": "V0DZ",
+            "name": "Luca Van Assche",
+            "rank": 47,
+            "elo_rank_hard": 1716,
+            "elo_rank": 1762,
+            "age": 22,
+            "country": "FRA"
+          }
+        ],
+        [
+          {
+            "id": "T0HA",
+            "name": "Learner Tien",
+            "rank": 19,
+            "elo_rank_hard": 1871,
+            "elo_rank": 1913,
+            "age": 20,
+            "country": "USA"
+          }
+        ]
+      ],
+      "ta": [
+        3.28,
+        1.34
+      ],
+      "model_ev": [
+        -18.6,
+        2.1
+      ]
+    },
+    {
+      "id": 1029734846,
+      "start": "2026-11-04T11:30:00Z",
+      "names": [
+        "Tommy Paul",
+        "Daniel Merida Aguilar"
+      ],
+      "ids": [
+        "PL56",
+        null
+      ],
+      "prices": [
+        1.27,
+        3.8
+      ],
+      "p": null,
+      "profiles": [
+        [
+          {
+            "id": "PL56",
+            "name": "Tommy Paul",
+            "rank": 14,
+            "elo_rank_hard": 1895,
+            "elo_rank": 1955,
+            "age": 29,
+            "country": "USA"
+          }
+        ],
+        []
+      ]
+    },
+    {
+      "id": 1029719944,
+      "start": "2026-11-04T12:20:00Z",
+      "names": [
+        "Ignacio Buse",
+        "Daniil Medvedev"
+      ],
+      "ids": [
+        "B0ID",
+        "MM58"
+      ],
+      "prices": [
+        5.4,
+        1.15
+      ],
+      "p": [
+        0.14660537788811823,
+        0.8533946221118818
+      ],
+      "profiles": [
+        [
+          {
+            "id": "B0ID",
+            "name": "Ignacio Buse",
+            "rank": 33,
+            "elo_rank_hard": 1670,
+            "elo_rank": 1757,
+            "age": 22,
+            "country": "PER"
+          }
+        ],
+        [
+          {
+            "id": "MM58",
+            "name": "Daniil Medvedev",
+            "rank": 5,
+            "elo_rank_hard": 1976,
+            "elo_rank": 2003,
+            "age": 30,
+            "country": "RUS"
+          }
+        ]
+      ],
+      "ta": [
+        6.5,
+        1.12
+      ],
+      "model_ev": [
+        -20.8,
+        -1.9
+      ]
+    },
+    {
+      "id": 1029720102,
+      "start": "2026-11-04T12:30:00Z",
+      "names": [
+        "Alexander Zverev",
+        "Lorenzo Musetti"
+      ],
+      "ids": [
+        "Z355",
+        "M0EJ"
+      ],
+      "prices": [
+        1.38,
+        3.05
+      ],
+      "p": [
+        0.7690759234333929,
+        0.23092407656660707
+      ],
+      "profiles": [
+        [
+          {
+            "id": "Z355",
+            "name": "Alexander Zverev",
+            "rank": 1,
+            "elo_rank_hard": 2044,
+            "elo_rank": 2102,
+            "age": 29,
+            "country": "GER"
+          }
+        ],
+        [
+          {
+            "id": "M0EJ",
+            "name": "Lorenzo Musetti",
+            "rank": 24,
+            "elo_rank_hard": 1835,
+            "elo_rank": 1896,
+            "age": 24,
+            "country": "ITA"
+          }
+        ]
+      ],
+      "ta": [
+        1.24,
+        4.12
+      ],
+      "model_ev": [
+        6.1,
+        -29.6
+      ]
+    },
+    {
+      "id": 1029732677,
+      "start": "2026-11-04T12:40:00Z",
+      "names": [
+        "Tomas Martin Etcheverry",
+        "Alex De Minaur"
+      ],
+      "ids": [
+        "EA24",
+        "DH58"
+      ],
+      "prices": [
+        4.35,
+        1.21
+      ],
+      "p": [
+        0.15097955721132328,
+        0.8490204427886767
+      ],
+      "profiles": [
+        [
+          {
+            "id": "EA24",
+            "name": "Tomas Martin Etcheverry",
+            "rank": 31,
+            "elo_rank_hard": 1672,
+            "elo_rank": 1731,
+            "age": 27,
+            "country": "ARG"
+          }
+        ],
+        [
+          {
+            "id": "DH58",
+            "name": "Alex de Minaur",
+            "rank": 9,
+            "elo_rank_hard": 1972,
+            "elo_rank": 2007,
+            "age": 27,
+            "country": "AUS"
+          }
+        ]
+      ],
+      "ta": [
+        6.31,
+        1.12
+      ],
+      "model_ev": [
+        -34.3,
+        2.7
+      ]
+    },
+    {
+      "id": 1029734948,
+      "start": "2026-11-04T13:40:00Z",
+      "names": [
+        "Novak Djokovic",
+        "Rinky Hijikata"
+      ],
+      "ids": [
+        "D643",
+        "H0BH"
+      ],
+      "prices": [
+        1.26,
+        3.8
+      ],
+      "p": [
+        0.8749753069983639,
+        0.1250246930016361
+      ],
+      "profiles": [
+        [
+          {
+            "id": "D643",
+            "name": "Novak Djokovic",
+            "rank": 11,
+            "elo_rank_hard": 2005,
+            "elo_rank": 2054,
+            "age": 39,
+            "country": "SRB"
+          }
+        ],
+        [
+          {
+            "id": "H0BH",
+            "name": "Rinky Hijikata",
+            "rank": 83,
+            "elo_rank_hard": 1667,
+            "elo_rank": 1717,
+            "age": 25,
+            "country": "AUS"
+          }
+        ]
+      ],
+      "ta": [
+        1.09,
+        7.62
+      ],
+      "model_ev": [
+        10.2,
+        -52.5
+      ]
+    },
+    {
+      "id": 1029735700,
+      "start": "2026-11-04T13:50:00Z",
+      "names": [
+        "Alex Molcan",
+        "Taylor Fritz"
+      ],
+      "ids": [
+        "MV14",
+        "FB98"
+      ],
+      "prices": [
+        4.2,
+        1.23
+      ],
+      "p": [
+        0.24341940570494724,
+        0.7565805942950528
+      ],
+      "profiles": [
+        [
+          {
+            "id": "MV14",
+            "name": "Alex Molcan",
+            "rank": 78,
+            "elo_rank_hard": 1685,
+            "elo_rank": 1761,
+            "age": 28,
+            "country": "SVK"
+          }
+        ],
+        [
+          {
+            "id": "FB98",
+            "name": "Taylor Fritz",
+            "rank": 12,
+            "elo_rank_hard": 1882,
+            "elo_rank": 1946,
+            "age": 29,
+            "country": "USA"
+          }
+        ]
+      ],
+      "ta": [
+        3.91,
+        1.26
+      ],
+      "model_ev": [
+        2.2,
+        -6.9
+      ]
+    },
+    {
+      "id": 1029732789,
+      "start": "2026-11-04T14:30:00Z",
+      "names": [
+        "Nuno Borges",
+        "Karen Khachanov"
+      ],
+      "ids": [
+        "BT72",
+        "KE29"
+      ],
+      "prices": [
+        2.7,
+        1.46
+      ],
+      "p": [
+        0.4469531048305375,
+        0.5530468951694625
+      ],
+      "profiles": [
+        [
+          {
+            "id": "BT72",
+            "name": "Nuno Borges",
+            "rank": 49,
+            "elo_rank_hard": 1775,
+            "elo_rank": 1823,
+            "age": 29,
+            "country": "POR"
+          }
+        ],
+        [
+          {
+            "id": "KE29",
+            "name": "Karen Khachanov",
+            "rank": 25,
+            "elo_rank_hard": 1812,
+            "elo_rank": 1859,
+            "age": 30,
+            "country": "RUS"
+          }
+        ]
+      ],
+      "ta": [
+        2.13,
+        1.72
+      ],
+      "model_ev": [
+        20.7,
+        -19.3
+      ]
+    },
+    {
+      "id": 1029734847,
+      "start": "2026-11-04T15:40:00Z",
+      "names": [
+        "Matteo Berrettini",
+        "Ugo Humbert"
+      ],
+      "ids": [
+        "BK40",
+        "HH26"
+      ],
+      "prices": [
+        2.06,
+        1.76
+      ],
+      "p": [
+        0.5,
+        0.5
+      ],
+      "profiles": [
+        [
+          {
+            "id": "BK40",
+            "name": "Matteo Berrettini",
+            "rank": 43,
+            "elo_rank_hard": 1778,
+            "elo_rank": 1824,
+            "age": 30,
+            "country": "ITA"
+          }
+        ],
+        [
+          {
+            "id": "HH26",
+            "name": "Ugo Humbert",
+            "rank": 38,
+            "elo_rank_hard": 1778,
+            "elo_rank": 1804,
+            "age": 28,
+            "country": "FRA"
+          }
+        ]
+      ],
+      "ta": [
+        1.9,
+        1.9
+      ],
+      "model_ev": [
+        3.0,
+        -12.0
+      ]
+    },
+    {
+      "id": 1029735701,
+      "start": "2026-11-04T18:00:00Z",
+      "names": [
+        "Alex Michelsen",
+        "Carlos Alcaraz"
+      ],
+      "ids": [
+        "M0QI",
+        "A0E2"
+      ],
+      "prices": [
+        5.6,
+        1.14
+      ],
+      "p": [
+        0.1663375308165619,
+        0.8336624691834381
+      ],
+      "profiles": [
+        [
+          {
+            "id": "M0QI",
+            "name": "Alex Michelsen",
+            "rank": 35,
+            "elo_rank_hard": 1840,
+            "elo_rank": 1867,
+            "age": 22,
+            "country": "USA"
+          }
+        ],
+        [
+          {
+            "id": "A0E2",
+            "name": "Carlos Alcaraz",
+            "rank": 3,
+            "elo_rank_hard": 2120,
+            "elo_rank": 2176,
+            "age": 23,
+            "country": "ESP"
+          }
+        ]
+      ],
+      "ta": [
+        5.73,
+        1.14
+      ],
+      "model_ev": [
+        -6.9,
+        -5.0
+      ]
+    },
+    {
+      "id": 1029723600,
+      "start": "2026-11-04T19:30:00Z",
+      "names": [
+        "Arthur Fils",
+        "Tomas Machac"
+      ],
+      "ids": [
+        "F0F1",
+        "M0FH"
+      ],
+      "prices": [
+        1.49,
+        2.6
+      ],
+      "p": [
+        0.7512407935337106,
+        0.24875920646628935
+      ],
+      "profiles": [
+        [
+          {
+            "id": "F0F1",
+            "name": "Arthur Fils",
+            "rank": 7,
+            "elo_rank_hard": 1943,
+            "elo_rank": 2001,
+            "age": 22,
+            "country": "FRA"
+          }
+        ],
+        [
+          {
+            "id": "M0FH",
+            "name": "Tomas Machac",
+            "rank": 69,
+            "elo_rank_hard": 1751,
+            "elo_rank": 1793,
+            "age": 26,
+            "country": "CZE"
+          }
+        ]
+      ],
+      "ta": [
+        1.27,
+        3.83
+      ],
+      "model_ev": [
+        11.9,
+        -35.3
+      ]
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+[
+  {
+    "name": "John Newcombe",
+    "wins": 21,
+    "losses": 29,
+    "estimated_top10": 19,
+    "unknown": 502,
+    "cup_top10": 3
+  },
+  {
+    "name": "Ilie Nastase",
+    "wins": 50,
+    "losses": 70,
+    "estimated_top10": 32,
+    "unknown": 575,
+    "cup_top10": 4
+  },
+  {
+    "name": "Jimmy Connors",
+    "wins": 132,
+    "losses": 111,
+    "estimated_top10": 37,
+    "unknown": 254,
+    "cup_top10": 4
+  },
+  {
+    "name": "Bjorn Borg",
+    "wins": 119,
+    "losses": 47,
+    "estimated_top10": 30,
+    "unknown": 107,
+    "cup_top10": 3
+  },
+  {
+    "name": "John McEnroe",
+    "wins": 129,
+    "losses": 94,
+    "estimated_top10": 39,
+    "unknown": 28,
+    "cup_top10": 15
+  },
+  {
+    "name": "Ivan Lendl",
+    "wins": 166,
+    "losses": 92,
+    "estimated_top10": 44,
+    "unknown": 46,
+    "cup_top10": 8
+  },
+  {
+    "name": "Mats Wilander",
+    "wins": 60,
+    "losses": 66,
+    "estimated_top10": 26,
+    "unknown": 35,
+    "cup_top10": 12
+  },
+  {
+    "name": "Stefan Edberg",
+    "wins": 97,
+    "losses": 112,
+    "estimated_top10": 44,
+    "unknown": 5,
+    "cup_top10": 10
+  },
+  {
+    "name": "Boris Becker",
+    "wins": 118,
+    "losses": 65,
+    "estimated_top10": 46,
+    "unknown": 1,
+    "cup_top10": 7
+  },
+  {
+    "name": "Thomas Muster",
+    "wins": 37,
+    "losses": 51,
+    "estimated_top10": 17,
+    "unknown": 8,
+    "cup_top10": 6
+  },
+  {
+    "name": "Andre Agassi",
+    "wins": 110,
+    "losses": 90,
+    "estimated_top10": 46,
+    "unknown": 1,
+    "cup_top10": 8
+  },
+  {
+    "name": "Jim Courier",
+    "wins": 52,
+    "losses": 73,
+    "estimated_top10": 18,
+    "unknown": 1,
+    "cup_top10": 5
+  },
+  {
+    "name": "Pete Sampras",
+    "wins": 121,
+    "losses": 70,
+    "estimated_top10": 55,
+    "unknown": 1,
+    "cup_top10": 5
+  },
+  {
+    "name": "Patrick Rafter",
+    "wins": 34,
+    "losses": 49,
+    "estimated_top10": 12,
+    "unknown": 2,
+    "cup_top10": 5
+  },
+  {
+    "name": "Yevgeny Kafelnikov",
+    "wins": 46,
+    "losses": 67,
+    "estimated_top10": 35,
+    "unknown": 0,
+    "cup_top10": 7
+  },
+  {
+    "name": "Marcelo Rios",
+    "wins": 22,
+    "losses": 39,
+    "estimated_top10": 3,
+    "unknown": 0,
+    "cup_top10": 0
+  },
+  {
+    "name": "Gustavo Kuerten",
+    "wins": 38,
+    "losses": 36,
+    "estimated_top10": 14,
+    "unknown": 5,
+    "cup_top10": 5
+  },
+  {
+    "name": "Carlos Moya",
+    "wins": 43,
+    "losses": 60,
+    "estimated_top10": 22,
+    "unknown": 3,
+    "cup_top10": 1
+  },
+  {
+    "name": "Lleyton Hewitt",
+    "wins": 65,
+    "losses": 72,
+    "estimated_top10": 26,
+    "unknown": 1,
+    "cup_top10": 7
+  },
+  {
+    "name": "Marat Safin",
+    "wins": 50,
+    "losses": 49,
+    "estimated_top10": 19,
+    "unknown": 1,
+    "cup_top10": 7
+  },
+  {
+    "name": "Roger Federer",
+    "wins": 221,
+    "losses": 123,
+    "estimated_top10": 16,
+    "unknown": 0,
+    "cup_top10": 4
+  },
+  {
+    "name": "Juan Carlos Ferrero",
+    "wins": 41,
+    "losses": 61,
+    "estimated_top10": 13,
+    "unknown": 1,
+    "cup_top10": 3
+  },
+  {
+    "name": "Andy Roddick",
+    "wins": 37,
+    "losses": 73,
+    "estimated_top10": 14,
+    "unknown": 1,
+    "cup_top10": 5
+  },
+  {
+    "name": "Rafael Nadal",
+    "wins": 186,
+    "losses": 104,
+    "estimated_top10": 5,
+    "unknown": 1,
+    "cup_top10": 5
+  },
+  {
+    "name": "Andy Murray",
+    "wins": 105,
+    "losses": 96,
+    "estimated_top10": 1,
+    "unknown": 2,
+    "cup_top10": 1
+  },
+  {
+    "name": "Novak Djokovic",
+    "wins": 266,
+    "losses": 122,
+    "estimated_top10": 9,
+    "unknown": 5,
+    "cup_top10": 8
+  },
+  {
+    "name": "Daniil Medvedev",
+    "wins": 48,
+    "losses": 54,
+    "estimated_top10": 1,
+    "unknown": 3,
+    "cup_top10": 1
+  },
+  {
+    "name": "Jannik Sinner",
+    "wins": 69,
+    "losses": 37,
+    "estimated_top10": 2,
+    "unknown": 3,
+    "cup_top10": 2
+  },
+  {
+    "name": "Carlos Alcaraz",
+    "wins": 56,
+    "losses": 27,
+    "estimated_top10": 2,
+    "unknown": 0,
+    "cup_top10": 4
+  }
+]

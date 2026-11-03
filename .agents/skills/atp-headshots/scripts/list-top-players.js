@@ -2,8 +2,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const { createRequire } = require('node:module');
 
-const repositoryRoot = path.resolve(__dirname, '../../../..');
+const repositoryRoot = process.cwd();
 const args = process.argv.slice(2);
 const refresh = args.includes('--refresh');
 const unknownOptions = args.filter(argument => argument.startsWith('--') && argument !== '--refresh');
@@ -20,7 +21,14 @@ if (!Number.isInteger(count) || count < 1 || count > 500) {
 	process.exit(1);
 }
 
-require('dotenv').config({ path: path.join(repositoryRoot, '.env') });
+if (!fs.existsSync(path.join(repositoryRoot, 'src/mysql.js')) ||
+	!fs.existsSync(path.join(repositoryRoot, 'package.json'))) {
+	console.error('Run this script from the atp-tennis repository root.');
+	process.exit(1);
+}
+
+const repositoryRequire = createRequire(path.join(repositoryRoot, 'package.json'));
+repositoryRequire('dotenv').config({ path: path.join(repositoryRoot, '.env') });
 
 const mysql = require(path.join(repositoryRoot, 'src/mysql'));
 mysql.log = () => {};

@@ -1,0 +1,276 @@
+{
+  "retrieved": "2026-10-21T18:25:16.737071+02:00",
+  "source": "https://tennis.egelberg.se/api/oddset",
+  "feed": [
+    {
+      "id": 1029568936,
+      "start": "2026-10-21T15:15:00Z",
+      "tournament": "Lyon",
+      "state": "live",
+      "score": "6-4 3-2 [15-0]",
+      "serve": "player",
+      "playerA": {
+        "name": "Corentin Moutet",
+        "odds": 1.04,
+        "id": "MW02"
+      },
+      "playerB": {
+        "name": "Felix Balshaw",
+        "odds": 10,
+        "id": "B0WL"
+      }
+    },
+    {
+      "id": 1029545826,
+      "start": "2026-10-21T16:08:00Z",
+      "tournament": "Bryssel",
+      "state": "live",
+      "score": "1-3 [0-30]",
+      "serve": "opponent",
+      "playerA": {
+        "name": "David Goffin",
+        "odds": 4.5,
+        "id": "GB88"
+      },
+      "playerB": {
+        "name": "Remy Bertola",
+        "odds": 1.19,
+        "id": "BU70"
+      }
+    },
+    {
+      "id": 1029567299,
+      "start": "2026-10-21T17:10:00Z",
+      "tournament": "Bryssel",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Gauthier Onclin",
+        "odds": 3.4,
+        "id": "O0A2"
+      },
+      "playerB": {
+        "name": "Jan-Lennard Struff",
+        "odds": 1.32,
+        "id": "SL28"
+      }
+    },
+    {
+      "id": 1029569950,
+      "start": "2026-10-21T18:10:00Z",
+      "tournament": "Lyon",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Benjamin Bonzi",
+        "odds": 3.1,
+        "id": "BM95"
+      },
+      "playerB": {
+        "name": "Tommy Paul",
+        "odds": 1.37,
+        "id": "PL56"
+      }
+    },
+    {
+      "id": 1029577117,
+      "start": "2026-10-22T06:30:00Z",
+      "tournament": "Almaty",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Terence Atmane",
+        "odds": 2.04,
+        "id": "A0GC"
+      },
+      "playerB": {
+        "name": "Mattia Bellucci",
+        "odds": 1.77,
+        "id": "B0GG"
+      }
+    },
+    {
+      "id": 1029577805,
+      "start": "2026-10-22T08:00:00Z",
+      "tournament": "Almaty",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Tomas Machac",
+        "odds": 3.05,
+        "id": "M0FH"
+      },
+      "playerB": {
+        "name": "Karen Khachanov",
+        "odds": 1.38,
+        "id": "KE29"
+      }
+    },
+    {
+      "id": 1029564574,
+      "start": "2026-10-22T09:10:00Z",
+      "tournament": "Almaty",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Daniil Medvedev",
+        "odds": 1.07,
+        "id": "MM58"
+      },
+      "playerB": {
+        "name": "Sho Shimabukuro",
+        "odds": 8.5,
+        "id": "SY67"
+      }
+    },
+    {
+      "id": 1029569496,
+      "start": "2026-10-22T11:20:00Z",
+      "tournament": "Lyon",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Borna Gojo",
+        "odds": 1.72,
+        "id": "GH92"
+      },
+      "playerB": {
+        "name": "Daniel Altmaier",
+        "odds": 2.12,
+        "id": "AE14"
+      }
+    },
+    {
+      "id": 1029570747,
+      "start": "2026-10-22T11:30:00Z",
+      "tournament": "Bryssel",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Raphael Collignon",
+        "odds": 3.65,
+        "id": "C0JP"
+      },
+      "playerB": {
+        "name": "Jiri Lehecka",
+        "odds": 1.29,
+        "id": "L0BV"
+      }
+    },
+    {
+      "id": 1029570407,
+      "start": "2026-10-22T12:00:00Z",
+      "tournament": "Lyon",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Valentin Vacherot",
+        "odds": 1.63,
+        "id": "VA25"
+      },
+      "playerB": {
+        "name": "Luca Van Assche",
+        "odds": 2.28,
+        "id": "V0DZ"
+      }
+    },
+    {
+      "id": 1029566159,
+      "start": "2026-10-22T13:10:00Z",
+      "tournament": "Lyon",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Pierre-Hugues Herbert",
+        "odds": 5.1,
+        "id": "H996"
+      },
+      "playerB": {
+        "name": "Taylor Fritz",
+        "odds": 1.17,
+        "id": "FB98"
+      }
+    },
+    {
+      "id": 1029567104,
+      "start": "2026-10-22T14:30:00Z",
+      "tournament": "Almaty",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Alexander Bublik",
+        "odds": 1.32,
+        "id": "BK92"
+      },
+      "playerB": {
+        "name": "Fabian Marozsan",
+        "odds": 3.35,
+        "id": "M0CI"
+      }
+    },
+    {
+      "id": 1029578794,
+      "start": "2026-10-22T15:00:00Z",
+      "tournament": "Bryssel",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Damir Dzumhur",
+        "odds": 3.8,
+        "id": "D923"
+      },
+      "playerB": {
+        "name": "Zizou Bergs",
+        "odds": 1.26,
+        "id": "BU13"
+      }
+    },
+    {
+      "id": 1029571655,
+      "start": "2026-10-22T18:10:00Z",
+      "tournament": "Lyon",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Kyrian Jacquet",
+        "odds": 2.55,
+        "id": "J0AZ"
+      },
+      "playerB": {
+        "name": "Brandon Nakashima",
+        "odds": 1.5,
+        "id": "N0AE"
+      }
+    },
+    {
+      "id": 1029578799,
+      "start": "2026-10-23T06:30:00Z",
+      "tournament": "Almaty",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Nikoloz Basilashvili",
+        "odds": 1.68,
+        "id": "BG23"
+      },
+      "playerB": {
+        "name": "Adrian Mannarino",
+        "odds": 2.17,
+        "id": "ME82"
+      }
+    }
+  ]
+}

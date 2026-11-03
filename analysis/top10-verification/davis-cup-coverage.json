@@ -1,0 +1,205 @@
+[
+  {
+    "name": "Andre Agassi",
+    "davis_matches": 36,
+    "wins": 30,
+    "losses": 6,
+    "missing_opponent_rank": 36
+  },
+  {
+    "name": "Andy Murray",
+    "davis_matches": 36,
+    "wins": 33,
+    "losses": 3,
+    "missing_opponent_rank": 36
+  },
+  {
+    "name": "Andy Roddick",
+    "davis_matches": 45,
+    "wins": 33,
+    "losses": 12,
+    "missing_opponent_rank": 45
+  },
+  {
+    "name": "Bjorn Borg",
+    "davis_matches": 40,
+    "wins": 37,
+    "losses": 3,
+    "missing_opponent_rank": 40
+  },
+  {
+    "name": "Boris Becker",
+    "davis_matches": 41,
+    "wins": 38,
+    "losses": 3,
+    "missing_opponent_rank": 41
+  },
+  {
+    "name": "Carlos Alcaraz",
+    "davis_matches": 6,
+    "wins": 5,
+    "losses": 1,
+    "missing_opponent_rank": 6
+  },
+  {
+    "name": "Carlos Moya",
+    "davis_matches": 27,
+    "wins": 20,
+    "losses": 7,
+    "missing_opponent_rank": 27
+  },
+  {
+    "name": "Daniil Medvedev",
+    "davis_matches": 10,
+    "wins": 8,
+    "losses": 2,
+    "missing_opponent_rank": 10
+  },
+  {
+    "name": "Gustavo Kuerten",
+    "davis_matches": 32,
+    "wins": 21,
+    "losses": 11,
+    "missing_opponent_rank": 32
+  },
+  {
+    "name": "Ilie Nastase",
+    "davis_matches": 90,
+    "wins": 72,
+    "losses": 18,
+    "missing_opponent_rank": 90
+  },
+  {
+    "name": "Ivan Lendl",
+    "davis_matches": 29,
+    "wins": 18,
+    "losses": 11,
+    "missing_opponent_rank": 29
+  },
+  {
+    "name": "Jannik Sinner",
+    "davis_matches": 13,
+    "wins": 12,
+    "losses": 1,
+    "missing_opponent_rank": 13
+  },
+  {
+    "name": "Jim Courier",
+    "davis_matches": 26,
+    "wins": 16,
+    "losses": 10,
+    "missing_opponent_rank": 26
+  },
+  {
+    "name": "Jimmy Connors",
+    "davis_matches": 13,
+    "wins": 10,
+    "losses": 3,
+    "missing_opponent_rank": 13
+  },
+  {
+    "name": "John McEnroe",
+    "davis_matches": 49,
+    "wins": 41,
+    "losses": 8,
+    "missing_opponent_rank": 49
+  },
+  {
+    "name": "John Newcombe",
+    "davis_matches": 16,
+    "wins": 12,
+    "losses": 4,
+    "missing_opponent_rank": 16
+  },
+  {
+    "name": "Juan Carlos Ferrero",
+    "davis_matches": 24,
+    "wins": 18,
+    "losses": 6,
+    "missing_opponent_rank": 24
+  },
+  {
+    "name": "Lleyton Hewitt",
+    "davis_matches": 56,
+    "wins": 42,
+    "losses": 14,
+    "missing_opponent_rank": 56
+  },
+  {
+    "name": "Marat Safin",
+    "davis_matches": 36,
+    "wins": 21,
+    "losses": 15,
+    "missing_opponent_rank": 36
+  },
+  {
+    "name": "Marcelo Rios",
+    "davis_matches": 35,
+    "wins": 25,
+    "losses": 10,
+    "missing_opponent_rank": 35
+  },
+  {
+    "name": "Mats Wilander",
+    "davis_matches": 52,
+    "wins": 36,
+    "losses": 16,
+    "missing_opponent_rank": 52
+  },
+  {
+    "name": "Novak Djokovic",
+    "davis_matches": 49,
+    "wins": 41,
+    "losses": 8,
+    "missing_opponent_rank": 49
+  },
+  {
+    "name": "Patrick Rafter",
+    "davis_matches": 28,
+    "wins": 18,
+    "losses": 10,
+    "missing_opponent_rank": 28
+  },
+  {
+    "name": "Pete Sampras",
+    "davis_matches": 23,
+    "wins": 15,
+    "losses": 8,
+    "missing_opponent_rank": 23
+  },
+  {
+    "name": "Rafael Nadal",
+    "davis_matches": 31,
+    "wins": 29,
+    "losses": 2,
+    "missing_opponent_rank": 31
+  },
+  {
+    "name": "Roger Federer",
+    "davis_matches": 48,
+    "wins": 40,
+    "losses": 8,
+    "missing_opponent_rank": 48
+  },
+  {
+    "name": "Stefan Edberg",
+    "davis_matches": 50,
+    "wins": 35,
+    "losses": 15,
+    "missing_opponent_rank": 50
+  },
+  {
+    "name": "Thomas Muster",
+    "davis_matches": 44,
+    "wins": 36,
+    "losses": 8,
+    "missing_opponent_rank": 44
+  },
+  {
+    "name": "Yevgeny Kafelnikov",
+    "davis_matches": 47,
+    "wins": 31,
+    "losses": 16,
+    "missing_opponent_rank": 47
+  }
+]

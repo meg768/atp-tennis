@@ -58,7 +58,7 @@ class DirectorySource:
 
 
 def connect():
-    skill = Path(os.environ.get('ATP_TENNIS_SKILL_DIR', str(Path.home()/'.agents/skills/atp-tennis')))
+    skill = Path(os.environ.get('ATP_TENNIS_SKILL_DIR', str(ROOT/'.agents/skills/atp-tennis')))
     spec = importlib.util.spec_from_file_location('atp_database', skill/'scripts/database.py')
     database = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(database)

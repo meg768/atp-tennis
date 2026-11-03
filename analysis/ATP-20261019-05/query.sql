@@ -1,0 +1,1 @@
+SELECT id,name,birthdate,highest_rank,career_titles,career_wins,career_losses FROM players WHERE country='DEN' ORDER BY CASE WHEN highest_rank>0 THEN highest_rank ELSE 99999 END

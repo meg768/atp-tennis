@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-11-03T22:04:30.708470+01:00",
+  "scope": "13 Paris singles fixtures on 2026-11-04 in Svenska Spel feed",
+  "basis": "Database TA hardcourt Elo and recent played main-tour event matches, includes qualifying and retirements; official current news. Own probabilities are subjective estimates, not calibrated model outputs.",
+  "picks": [
+    {
+      "player": "Frances Tiafoe",
+      "opponent": "Quentin Halys",
+      "start_swedish": "2026-11-04T11:00:00+01:00",
+      "odds": 1.73,
+      "min_odds": 1.65,
+      "own_probability": 0.64,
+      "reason": "Hardcourt strength and TA gap, discounted for recent modest form, Halys serve and home crowd."
+    },
+    {
+      "player": "Nuno Borges",
+      "opponent": "Karen Khachanov",
+      "start_swedish": "2026-11-04T15:30:00+01:00",
+      "odds": 2.7,
+      "min_odds": 2.55,
+      "own_probability": 0.41,
+      "reason": "Price needs only 37 percent at 2.70; TA higher. Discount for qualifying loss and modest recent record; Kouame win alone is weak evidence."
+    }
+  ],
+  "passes": {
+    "Fils": "Recent retirement; fitness uncertainty despite own reported readiness.",
+    "Rinderknech": "Abdominal injury return and today retirement win; Bellucci has three wins on site.",
+    "Djokovic": "2h35 match today and 1.26 too short after fitness/rest discount.",
+    "Zverev": "Small model margin at 1.38; Musetti has strong recent indoor results.",
+    "Paul": "Merida resolved to M0N7, Daniel Merida; no hardcourt Elo available."
+  },
+  "portfolio_writes": false
+}

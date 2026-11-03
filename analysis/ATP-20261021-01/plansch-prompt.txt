@@ -1,0 +1,52 @@
+Edit the supplied Swedish tennis poster into an updated, final poster for 21 October 2026 using current verified odds. Preserve its sophisticated dark forest-green and ivory magazine design, restrained tennis-ball yellow accents, atmospheric indoor court and ball, portrait composition, generous margins, elegant serif title, three ranked cards and prominent price hierarchy. Keep layout crisp and highly readable. No invented player portraits, logos, casino imagery or promises of profit.
+
+Exact title: "Dagens spelval"
+Date: "Onsdag 21 oktober 2026 • ATP-singel"
+Subtitle: "Mitt val: Cerundolo som singel"
+Small context: "Tre prioriterade matchvinnare • odds kontrollerade 01.15"
+
+Main card:
+"1"
+"Förstaval"
+"Francisco Cerundolo"
+"mot Martin Damm"
+"Bryssel • preliminärt 11.30"
+"Svenska Spel"
+"1,53"
+"TA inkl. 5 %: 1,25*"
+"Oddsgap: +22,4 %"
+"Ranking 21 mot 107 och tydlig Elofördel. Damms seger över Hanfmann är motargumentet."
+
+Second card:
+"2"
+"Luciano Darderi"
+"mot James Duckworth"
+"Almaty • preliminärt 08.30"
+"Svenska Spel: 1,78"
+"TA inkl. 5 %: 1,49"
+"Oddsgap: +19,5 %"
+"Högre hardcourt-Elo ger modellstöd. Duckworth har redan slagit Kecmanovic här."
+
+Third card:
+"3"
+"Jacob Fearnley"
+"mot Clément Chidekh"
+"Bryssel • preliminärt 13.50"
+"Svenska Spel: 1,91"
+"TA inkl. 5 %: 1,63"
+"Oddsgap: +17,2 %"
+"Fearnley slog Gaston 6–3, 6–0. Chidekh slog van de Zandschulp 6–1, 6–4. Osäkrast i trion."
+
+Compact caution strip:
+"Jag avstår"
+"Goffin och Wawrinka: svag form. Moutet: handledshistorik och över tre timmars match den 20 oktober."
+
+Footer in readable small type:
+"Källa och urval: 15 ATP-matcher i Oddset-flödet; tre bedömda spelval."
+"Odds: Svenska Spel via tennis.egelberg.se/api/oddset • 21 oktober 2026 kl. 01.15, svensk tid."
+"TA: hardcourt, PLAYER_ODDS med befintligt 5-procentpåslag. Inget extra påslag."
+"* Damm saknar Elo lokalt: kompletterat från tennisabstract.com, med samma 5-procentpåslag."
+"Resultatkontroll: TennisActu, 20 oktober. Oddsgap = (Svenska Spel / TA − 1) × 100."
+"Oddsgap är en prisskillnad, inte förväntad avkastning. Tider är preliminära. Odds kan ändras."
+
+Constraints: Correct numeric mapping is essential: SS 1,53 and TA 1,25 for Cerundolo; SS 1,78 and TA 1,49 for Darderi; SS 1,91 and TA 1,63 for Fearnley. All TA prices ALREADY include the standard 5% probability markup. Do not use margin-free prices, do not adjust to each match's bookmaker overround, and do not add a second margin. Ranking is subjective and must remain Cerundolo, Darderi, Fearnley. Preserve Swedish accents, decimal commas and all facts. You may slightly adjust card heights and text wrapping for spacious legibility. No all-caps headings. Deliver the finished flat poster, not a photographed mockup.

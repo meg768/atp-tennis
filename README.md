@@ -11,7 +11,7 @@ Ett gemensamt projekt för tennisanalys, oddsinsamling, backtesting, pappersport
 | Auktoriserat portfölj-ping | docs/portfolio.md och tracking/README.md |
 | Schema och drift | database/README.md och befintliga instruktioner nedan |
 
-Python använder ~/.local/share/codex/atp-tennis/venv/bin/python. Kör `npm test` och `<skillens-python> -m unittest discover -s tests -v`. Analysartefakter i analysis/ är lokala och ignoreras av Git. Gamla iCloud-projektmappar är arkiv; skapa inte nya jobb där. Ingen analys eller backtest registrerar bets eller skickar mejl automatiskt.
+Python använder ~/.local/share/codex/atp-tennis/venv/bin/python. Kör `npm test` och `<skillens-python> -m unittest discover -s tests -v`. Analysartefakter i analysis/ versionshanteras. Daterade dataexporter finns i data/snapshots/ och skills källkod i .agents/skills/. De gamla iCloud-projektmapparna har avvecklats; historiskt material som finns här bevaras. Ingen analys eller backtest registrerar bets eller skickar mejl automatiskt.
 
 ## Backend
 

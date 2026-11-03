@@ -1,5 +1,7 @@
 # Portföljrutiner
 
+GitHub-lagring 2026-11-03: daterade läsande kopior av godkänd analys- och pappersportföljhistorik får versionshanteras i data/snapshots/ och analysis/. Produktionsbokföring läses och skrivs fortsatt endast genom bets. Detta är ingen lokal reservdatakälla och medför inga nya spel eller utskick.
+
 Den aktuella grundlagringen nedan har företräde framför äldre filhänvisningar: tracking/*.json är databasnycklar, inga lokala produktionsfiler. Rapportmaterial och bildprompter lagras aldrig i bets. Historiska råarkiv får inte återanvändas som nya priser. Vanlig analys och backtesting startar aldrig ping eller utskick.
 
 # Uppföljning av rekommenderade spel

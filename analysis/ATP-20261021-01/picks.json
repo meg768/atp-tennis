@@ -1,0 +1,119 @@
+{
+  "retrieved": "2026-10-21T01:15:05.614437+02:00",
+  "date": "2026-10-21",
+  "surface": "Hard",
+  "scope": "15 ATP singles in Oddset feed, 14 TA-comparable with external Damm supplement; three subjective selections, not largest-gap ranking",
+  "picks": [
+    {
+      "player": "C0AU",
+      "opponent": "D0DT",
+      "match": {
+        "id": 1029554823,
+        "start": "2026-10-21T09:30:00Z",
+        "tournament": "Bryssel",
+        "state": "upcoming",
+        "score": null,
+        "serve": null,
+        "playerA": {
+          "name": "Martin Damm",
+          "odds": 2.5,
+          "id": "D0DT"
+        },
+        "playerB": {
+          "name": "Francisco Cerundolo",
+          "odds": 1.53,
+          "id": "C0AU"
+        }
+      },
+      "TA": 1.25,
+      "SS": 1.53,
+      "price_gap_pct": 22.4,
+      "method": "External TA hElo Cerundolo1839.9 Damm1635.9, 2026-10-19, priced with same 5% markup; local Damm Elo missing",
+      "procedure_rows": []
+    },
+    {
+      "player": "D0FJ",
+      "opponent": "D994",
+      "match": {
+        "id": 1029551541,
+        "start": "2026-10-21T06:30:00Z",
+        "tournament": "Almaty",
+        "state": "upcoming",
+        "score": null,
+        "serve": null,
+        "playerA": {
+          "name": "James Duckworth",
+          "odds": 2.02,
+          "id": "D994"
+        },
+        "playerB": {
+          "name": "Luciano Darderi",
+          "odds": 1.78,
+          "id": "D0FJ"
+        }
+      },
+      "TA": 1.49,
+      "SS": 1.78,
+      "price_gap_pct": 19.5,
+      "method": "PLAYER_ODDS, Hard, existing 5% markup",
+      "procedure_rows": [
+        {
+          "player": "D0FJ",
+          "name": "Luciano Darderi",
+          "TA": 1.49,
+          "GPT": 1.49
+        },
+        {
+          "player": "D994",
+          "name": "James Duckworth",
+          "TA": 2.64,
+          "GPT": 2.65
+        }
+      ]
+    },
+    {
+      "player": "F0BY",
+      "opponent": "C0BH",
+      "match": {
+        "id": 1029569213,
+        "start": "2026-10-21T11:50:00Z",
+        "tournament": "Bryssel",
+        "state": "upcoming",
+        "score": null,
+        "serve": null,
+        "playerA": {
+          "name": "Clement Chidekh",
+          "odds": 1.89,
+          "id": "C0BH"
+        },
+        "playerB": {
+          "name": "Jacob Fearnley",
+          "odds": 1.91,
+          "id": "F0BY"
+        }
+      },
+      "TA": 1.63,
+      "SS": 1.91,
+      "price_gap_pct": 17.2,
+      "method": "PLAYER_ODDS, Hard, existing 5% markup",
+      "procedure_rows": [
+        {
+          "player": "F0BY",
+          "name": "Jacob Fearnley",
+          "TA": 1.63,
+          "GPT": 1.61
+        },
+        {
+          "player": "C0BH",
+          "name": "Clement Chidekh",
+          "TA": 2.3,
+          "GPT": 2.33
+        }
+      ]
+    }
+  ],
+  "external_sources": {
+    "TA": "https://tennisabstract.com/reports/atp_elo_ratings.html",
+    "Brussels_results": "https://www.tennisactu.net/news-atp-bruxelles-hugo-gaston-coince-d-entree-contre-jacob-fearnley-127725.html"
+  }
+}

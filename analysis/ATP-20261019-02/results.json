@@ -1,0 +1,47 @@
+{
+  "source": "https://tennis-db.com/seasons-and-rankings?view=race",
+  "standings_date": "2026-10-12",
+  "retrieved_date": "2026-10-19",
+  "rows": [
+    {
+      "name": "Alexander Zverev",
+      "race_points": 8850
+    },
+    {
+      "name": "Jannik Sinner",
+      "race_points": 7950
+    },
+    {
+      "name": "Carlos Alcaraz",
+      "race_points": 4600
+    },
+    {
+      "name": "Ben Shelton",
+      "race_points": 4480
+    },
+    {
+      "name": "Flavio Cobolli",
+      "race_points": 3540
+    },
+    {
+      "name": "Frances Tiafoe",
+      "race_points": 3380
+    },
+    {
+      "name": "Arthur Fils",
+      "race_points": 3325
+    },
+    {
+      "name": "Daniil Medvedev",
+      "race_points": 3120
+    },
+    {
+      "name": "Novak Djokovic",
+      "race_points": 2840
+    },
+    {
+      "name": "Alex de Minaur",
+      "race_points": 2780
+    }
+  ]
+}

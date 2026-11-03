@@ -1,0 +1,560 @@
+[
+  {
+    "id": "R0DG",
+    "name": "Holger Rune",
+    "birthdate": "2003-04-29",
+    "highest_rank": 4,
+    "career_titles": 5,
+    "career_wins": 177,
+    "career_losses": 109
+  },
+  {
+    "id": "C328",
+    "name": "Kenneth Carlsen",
+    "birthdate": "1973-04-17",
+    "highest_rank": 41,
+    "career_titles": 3,
+    "career_wins": 266,
+    "career_losses": 288
+  },
+  {
+    "id": "P491",
+    "name": "Kristian Pless",
+    "birthdate": "1981-02-09",
+    "highest_rank": 65,
+    "career_titles": 0,
+    "career_wins": 55,
+    "career_losses": 86
+  },
+  {
+    "id": "F206",
+    "name": "Frederik Fetterlein",
+    "birthdate": "1970-07-11",
+    "highest_rank": 75,
+    "career_titles": 0,
+    "career_wins": 41,
+    "career_losses": 69
+  },
+  {
+    "id": "U011",
+    "name": "Torben Ulrich",
+    "birthdate": "1928-10-04",
+    "highest_rank": 96,
+    "career_titles": 0,
+    "career_wins": 75,
+    "career_losses": 131
+  },
+  {
+    "id": "T010",
+    "name": "Michael Tauson",
+    "birthdate": "1966-06-25",
+    "highest_rank": 101,
+    "career_titles": 0,
+    "career_wins": 27,
+    "career_losses": 26
+  },
+  {
+    "id": "M0K4",
+    "name": "Elmer Moller",
+    "birthdate": "2003-07-09",
+    "highest_rank": 102,
+    "career_titles": 0,
+    "career_wins": 12,
+    "career_losses": 15
+  },
+  {
+    "id": "H09N",
+    "name": "August Holmgren",
+    "birthdate": "1998-04-22",
+    "highest_rank": 141,
+    "career_titles": 0,
+    "career_wins": 9,
+    "career_losses": 7
+  },
+  {
+    "id": "C226",
+    "name": "Tom Christensen",
+    "birthdate": "1949-09-13",
+    "highest_rank": 146,
+    "career_titles": 0,
+    "career_wins": 6,
+    "career_losses": 11
+  },
+  {
+    "id": "TC12",
+    "name": "Mikael Torpegaard",
+    "birthdate": "1994-05-08",
+    "highest_rank": 166,
+    "career_titles": 0,
+    "career_wins": 5,
+    "career_losses": 7
+  },
+  {
+    "id": "L327",
+    "name": "Thomas Larsen",
+    "birthdate": "1975-07-15",
+    "highest_rank": 170,
+    "career_titles": 0,
+    "career_wins": 2,
+    "career_losses": 8
+  },
+  {
+    "id": "N390",
+    "name": "Frederik Nielsen",
+    "birthdate": "1983-08-27",
+    "highest_rank": 190,
+    "career_titles": 0,
+    "career_wins": 28,
+    "career_losses": 33
+  },
+  {
+    "id": "E039",
+    "name": "Lars Elvstrom",
+    "birthdate": "1949-08-18",
+    "highest_rank": 218,
+    "career_titles": 0,
+    "career_wins": 9,
+    "career_losses": 20
+  },
+  {
+    "id": "B019",
+    "name": "Peter Bastiansen",
+    "birthdate": "1962-05-03",
+    "highest_rank": 224,
+    "career_titles": 0,
+    "career_wins": 10,
+    "career_losses": 13
+  },
+  {
+    "id": "C034",
+    "name": "Morten Christensen",
+    "birthdate": "1965-06-15",
+    "highest_rank": 250,
+    "career_titles": 0,
+    "career_wins": 7,
+    "career_losses": 18
+  },
+  {
+    "id": "O0BI",
+    "name": "Carl Emil Overbeck",
+    "birthdate": "2001-08-11",
+    "highest_rank": 289,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "M090",
+    "name": "Michael Mortensen",
+    "birthdate": "1961-03-12",
+    "highest_rank": 301,
+    "career_titles": 0,
+    "career_wins": 3,
+    "career_losses": 9
+  },
+  {
+    "id": "L273",
+    "name": "Patrik Langvardt",
+    "birthdate": "1971-12-06",
+    "highest_rank": 338,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 6
+  },
+  {
+    "id": "PB29",
+    "name": "Martin Pedersen",
+    "birthdate": "1987-06-15",
+    "highest_rank": 344,
+    "career_titles": 0,
+    "career_wins": 13,
+    "career_losses": 14
+  },
+  {
+    "id": "P386",
+    "name": "Jonathan Printzlau",
+    "birthdate": "1976-10-07",
+    "highest_rank": 407,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 3
+  },
+  {
+    "id": "S426",
+    "name": "Thomas Soerensen",
+    "birthdate": null,
+    "highest_rank": 410,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "L164",
+    "name": "John Larsen",
+    "birthdate": null,
+    "highest_rank": 438,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "A241",
+    "name": "Thomas Andersen",
+    "birthdate": null,
+    "highest_rank": 489,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 1
+  },
+  {
+    "id": "F141",
+    "name": "Peter Flintsoe",
+    "birthdate": null,
+    "highest_rank": 493,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 1
+  },
+  {
+    "id": "SY00",
+    "name": "Christian Sigsgaard",
+    "birthdate": "1997-03-14",
+    "highest_rank": 501,
+    "career_titles": 0,
+    "career_wins": 3,
+    "career_losses": 6
+  },
+  {
+    "id": "N415",
+    "name": "Rasmus Norby",
+    "birthdate": "1982-09-10",
+    "highest_rank": 538,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 3
+  },
+  {
+    "id": "B185",
+    "name": "Nick Bendtsen",
+    "birthdate": "1968-04-10",
+    "highest_rank": 609,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "I411",
+    "name": "Johannes Ingildsen",
+    "birthdate": "1997-07-01",
+    "highest_rank": 638,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 2
+  },
+  {
+    "id": "D093",
+    "name": "Steen Dannisgard",
+    "birthdate": null,
+    "highest_rank": 669,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "P0IN",
+    "name": "Oskar Brostrom Poulsen",
+    "birthdate": "2002-01-15",
+    "highest_rank": 722,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "C299",
+    "name": "Christian Camradt",
+    "birthdate": null,
+    "highest_rank": 755,
+    "career_titles": 0,
+    "career_wins": 2,
+    "career_losses": 1
+  },
+  {
+    "id": "MC31",
+    "name": "Jacob Melskens",
+    "birthdate": "1985-03-20",
+    "highest_rank": 773,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "H0CE",
+    "name": "Philip Hjorth",
+    "birthdate": "1999-03-04",
+    "highest_rank": 808,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 1
+  },
+  {
+    "id": "K846",
+    "name": "Thomas Kromann",
+    "birthdate": "1987-06-01",
+    "highest_rank": 855,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 3
+  },
+  {
+    "id": "G469",
+    "name": "Mads Gottlieb",
+    "birthdate": "1980-01-08",
+    "highest_rank": 897,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 1
+  },
+  {
+    "id": "K179",
+    "name": "Phillip Kjaer",
+    "birthdate": null,
+    "highest_rank": 911,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "HH01",
+    "name": "Benjamin Hannestad",
+    "birthdate": "1997-02-14",
+    "highest_rank": 919,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 2
+  },
+  {
+    "id": "H460",
+    "name": "Carl Hagman",
+    "birthdate": "1980-04-05",
+    "highest_rank": 926,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "HA37",
+    "name": "Soren Hess-Olesen",
+    "birthdate": "1991-01-09",
+    "highest_rank": 937,
+    "career_titles": 0,
+    "career_wins": 2,
+    "career_losses": 3
+  },
+  {
+    "id": "O453",
+    "name": "Philip Orno",
+    "birthdate": "1986-12-09",
+    "highest_rank": 1056,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "W569",
+    "name": "Soren Wedege",
+    "birthdate": "1989-09-07",
+    "highest_rank": 1068,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 1
+  },
+  {
+    "id": "B697",
+    "name": "Bob Borella",
+    "birthdate": "1980-06-27",
+    "highest_rank": 1143,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 1
+  },
+  {
+    "id": "J137",
+    "name": "Bernward Juric",
+    "birthdate": null,
+    "highest_rank": 1175,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "KB34",
+    "name": "Christoffer Konigsfeldt",
+    "birthdate": "1989-07-12",
+    "highest_rank": 1286,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 2
+  },
+  {
+    "id": "MG96",
+    "name": "Rasmus Moller",
+    "birthdate": "1988-12-28",
+    "highest_rank": 1364,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "HA38",
+    "name": "Esben Hess-Olesen",
+    "birthdate": null,
+    "highest_rank": 1461,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "E796",
+    "name": "Mads Engsted",
+    "birthdate": "1993-01-12",
+    "highest_rank": 1607,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "B0MH",
+    "name": "Richard Biagiotti",
+    "birthdate": "2003-10-05",
+    "highest_rank": 1700,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "BP19",
+    "name": "Andreas Bjerrehus",
+    "birthdate": "1992-06-04",
+    "highest_rank": 1702,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 2
+  },
+  {
+    "id": "N0BB",
+    "name": "Knud-Erik Nielsen",
+    "birthdate": "1942-04-06",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 4
+  },
+  {
+    "id": "L0FJ",
+    "name": "Peter Lund",
+    "birthdate": "1941-03-14",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 1
+  },
+  {
+    "id": "U016",
+    "name": "Jorgen Ulrich",
+    "birthdate": "1935-08-21",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 12,
+    "career_losses": 25
+  },
+  {
+    "id": "V0K6",
+    "name": "Niels Van Der Sijs",
+    "birthdate": "2006-11-03",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "L118",
+    "name": "Jan Leschly",
+    "birthdate": "1940-09-11",
+    "highest_rank": null,
+    "career_titles": 2,
+    "career_wins": 62,
+    "career_losses": 35
+  },
+  {
+    "id": "HC29",
+    "name": "Carl-Edvard Hedelund",
+    "birthdate": "1941-03-14",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 2,
+    "career_losses": 7
+  },
+  {
+    "id": "SQ46",
+    "name": "Michael Strabo",
+    "birthdate": "1975-11-06",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "SH58",
+    "name": "Joakim Simonsen",
+    "birthdate": "1987-05-04",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "R0K5",
+    "name": "Kasper Rud",
+    "birthdate": "1947-08-07",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 2
+  },
+  {
+    "id": "L751",
+    "name": "Mik Ledvonova",
+    "birthdate": null,
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 1,
+    "career_losses": 1
+  },
+  {
+    "id": "C0OQ",
+    "name": "Finn Christensen",
+    "birthdate": "1956-04-13",
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 1
+  },
+  {
+    "id": "MI80",
+    "name": "Christoffer Madsen",
+    "birthdate": null,
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  },
+  {
+    "id": "W625",
+    "name": "Rune Winkler",
+    "birthdate": null,
+    "highest_rank": null,
+    "career_titles": 0,
+    "career_wins": 0,
+    "career_losses": 0
+  }
+]

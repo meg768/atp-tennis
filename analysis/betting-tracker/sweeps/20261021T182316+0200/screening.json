@@ -1,0 +1,128 @@
+[
+  {
+    "match": {
+      "id": 1029567299,
+      "start": "2026-10-21T17:10:00Z",
+      "tournament": "Bryssel",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Gauthier Onclin",
+        "odds": 3.4,
+        "id": "O0A2"
+      },
+      "playerB": {
+        "name": "Jan-Lennard Struff",
+        "odds": 1.32,
+        "id": "SL28"
+      }
+    },
+    "surface": "Hard",
+    "model_odds": [
+      {
+        "player": "O0A2",
+        "name": "Gauthier Onclin",
+        "TA": 4.49,
+        "GPT": 3.67
+      },
+      {
+        "player": "SL28",
+        "name": "Jan-Lennard Struff",
+        "TA": 1.21,
+        "GPT": 1.29
+      }
+    ],
+    "probabilities": {
+      "p_ta_a": 0.2120732319225979,
+      "p_gpt_a": 0.2593742254673952
+    },
+    "sides": [
+      {
+        "player": "Gauthier Onclin",
+        "id": "O0A2",
+        "SS": 3.4,
+        "TA": 4.49,
+        "GPT": 3.67,
+        "p_ta": 0.2120732319225979,
+        "p_gpt": 0.2593742254673952,
+        "ta_ev_pct": -27.895101146316726,
+        "gpt_ev_pct": -11.812763341085642
+      },
+      {
+        "player": "Jan-Lennard Struff",
+        "id": "SL28",
+        "SS": 1.32,
+        "TA": 1.21,
+        "GPT": 1.29,
+        "p_ta": 0.7879267680774021,
+        "p_gpt": 0.7406257745326048,
+        "ta_ev_pct": 4.006333386217098,
+        "gpt_ev_pct": -2.2373977616961582
+      }
+    ]
+  },
+  {
+    "match": {
+      "id": 1029569950,
+      "start": "2026-10-21T18:10:00Z",
+      "tournament": "Lyon",
+      "state": "upcoming",
+      "score": null,
+      "serve": null,
+      "playerA": {
+        "name": "Benjamin Bonzi",
+        "odds": 3.1,
+        "id": "BM95"
+      },
+      "playerB": {
+        "name": "Tommy Paul",
+        "odds": 1.37,
+        "id": "PL56"
+      }
+    },
+    "surface": "Hard",
+    "model_odds": [
+      {
+        "player": "BM95",
+        "name": "Benjamin Bonzi",
+        "TA": 3.9,
+        "GPT": 3.82
+      },
+      {
+        "player": "PL56",
+        "name": "Tommy Paul",
+        "TA": 1.26,
+        "GPT": 1.27
+      }
+    ],
+    "probabilities": {
+      "p_ta_a": 0.24448111792880314,
+      "p_gpt_a": 0.2491271935354672
+    },
+    "sides": [
+      {
+        "player": "Benjamin Bonzi",
+        "id": "BM95",
+        "SS": 3.1,
+        "TA": 3.9,
+        "GPT": 3.82,
+        "p_ta": 0.24448111792880314,
+        "p_gpt": 0.2491271935354672,
+        "ta_ev_pct": -24.210853442071024,
+        "gpt_ev_pct": -22.770570004005165
+      },
+      {
+        "player": "Tommy Paul",
+        "id": "PL56",
+        "SS": 1.37,
+        "TA": 1.26,
+        "GPT": 1.27,
+        "p_ta": 0.7555188820711969,
+        "p_gpt": 0.7508728064645328,
+        "ta_ev_pct": 3.506086843753975,
+        "gpt_ev_pct": 2.869574485641002
+      }
+    ]
+  }
+]

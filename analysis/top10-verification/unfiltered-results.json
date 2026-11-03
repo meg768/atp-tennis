@@ -1,0 +1,205 @@
+[
+  {
+    "name": "Andre Agassi",
+    "recorded_matches": 1166,
+    "wins": 85,
+    "losses": 71,
+    "missing_rank": 79
+  },
+  {
+    "name": "Carlos Alcaraz",
+    "recorded_matches": 445,
+    "wins": 55,
+    "losses": 26,
+    "missing_rank": 9
+  },
+  {
+    "name": "Boris Becker",
+    "recorded_matches": 942,
+    "wins": 80,
+    "losses": 60,
+    "missing_rank": 94
+  },
+  {
+    "name": "Bjorn Borg",
+    "recorded_matches": 805,
+    "wins": 95,
+    "losses": 42,
+    "missing_rank": 257
+  },
+  {
+    "name": "Jimmy Connors",
+    "recorded_matches": 1584,
+    "wins": 113,
+    "losses": 99,
+    "missing_rank": 441
+  },
+  {
+    "name": "Jim Courier",
+    "recorded_matches": 757,
+    "wins": 45,
+    "losses": 62,
+    "missing_rank": 50
+  },
+  {
+    "name": "Novak Djokovic",
+    "recorded_matches": 1469,
+    "wins": 265,
+    "losses": 119,
+    "missing_rank": 56
+  },
+  {
+    "name": "Stefan Edberg",
+    "recorded_matches": 1074,
+    "wins": 74,
+    "losses": 92,
+    "missing_rank": 121
+  },
+  {
+    "name": "Juan Carlos Ferrero",
+    "recorded_matches": 773,
+    "wins": 35,
+    "losses": 54,
+    "missing_rank": 38
+  },
+  {
+    "name": "Roger Federer",
+    "recorded_matches": 1568,
+    "wins": 209,
+    "losses": 125,
+    "missing_rank": 68
+  },
+  {
+    "name": "Lleyton Hewitt",
+    "recorded_matches": 901,
+    "wins": 48,
+    "losses": 65,
+    "missing_rank": 91
+  },
+  {
+    "name": "Yevgeny Kafelnikov",
+    "recorded_matches": 943,
+    "wins": 32,
+    "losses": 47,
+    "missing_rank": 92
+  },
+  {
+    "name": "Gustavo Kuerten",
+    "recorded_matches": 652,
+    "wins": 31,
+    "losses": 29,
+    "missing_rank": 50
+  },
+  {
+    "name": "Ivan Lendl",
+    "recorded_matches": 1321,
+    "wins": 137,
+    "losses": 80,
+    "missing_rank": 202
+  },
+  {
+    "name": "John McEnroe",
+    "recorded_matches": 1090,
+    "wins": 109,
+    "losses": 77,
+    "missing_rank": 208
+  },
+  {
+    "name": "Thomas Muster",
+    "recorded_matches": 986,
+    "wins": 32,
+    "losses": 41,
+    "missing_rank": 62
+  },
+  {
+    "name": "Carlos Moya",
+    "recorded_matches": 941,
+    "wins": 32,
+    "losses": 49,
+    "missing_rank": 58
+  },
+  {
+    "name": "Andy Murray",
+    "recorded_matches": 1083,
+    "wins": 106,
+    "losses": 99,
+    "missing_rank": 38
+  },
+  {
+    "name": "Daniil Medvedev",
+    "recorded_matches": 772,
+    "wins": 48,
+    "losses": 53,
+    "missing_rank": 18
+  },
+  {
+    "name": "Ilie Nastase",
+    "recorded_matches": 1277,
+    "wins": 34,
+    "losses": 55,
+    "missing_rank": 765
+  },
+  {
+    "name": "John Newcombe",
+    "recorded_matches": 801,
+    "wins": 13,
+    "losses": 18,
+    "missing_rank": 568
+  },
+  {
+    "name": "Rafael Nadal",
+    "recorded_matches": 1364,
+    "wins": 182,
+    "losses": 106,
+    "missing_rank": 31
+  },
+  {
+    "name": "Patrick Rafter",
+    "recorded_matches": 616,
+    "wins": 29,
+    "losses": 42,
+    "missing_rank": 48
+  },
+  {
+    "name": "Marcelo Rios",
+    "recorded_matches": 634,
+    "wins": 22,
+    "losses": 37,
+    "missing_rank": 42
+  },
+  {
+    "name": "Andy Roddick",
+    "recorded_matches": 856,
+    "wins": 32,
+    "losses": 64,
+    "missing_rank": 59
+  },
+  {
+    "name": "Jannik Sinner",
+    "recorded_matches": 518,
+    "wins": 67,
+    "losses": 37,
+    "missing_rank": 16
+  },
+  {
+    "name": "Pete Sampras",
+    "recorded_matches": 1000,
+    "wins": 88,
+    "losses": 50,
+    "missing_rank": 93
+  },
+  {
+    "name": "Marat Safin",
+    "recorded_matches": 729,
+    "wins": 41,
+    "losses": 39,
+    "missing_rank": 63
+  },
+  {
+    "name": "Mats Wilander",
+    "recorded_matches": 809,
+    "wins": 51,
+    "losses": 50,
+    "missing_rank": 148
+  }
+]

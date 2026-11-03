@@ -12,8 +12,13 @@ Maintain the repository's static `headshots/<ATP-ID>.png` files. Work from the `
 Run:
 
 ```bash
-node .agents/skills/atp-headshots/scripts/list-top-players.js <count>
+node "<skill>/scripts/list-top-players.js" <count>
 ```
+
+Replace `<skill>` with this shared skill's absolute directory. Run from the
+local `atp-tennis` repository root; the script loads that project's dependencies,
+`.env`, and `headshots/` from the working directory, independently of the skill's
+iCloud location. Install the project dependencies locally if missing.
 
 This read-only script selects players from MariaDB by their stored `rank`, checks `headshots/`, and returns only players whose `<ATP-ID>.png` file is missing. If `selectedCount` is zero, make no browser requests and report that all requested headshots already exist.
 

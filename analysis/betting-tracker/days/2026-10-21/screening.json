@@ -1,0 +1,160 @@
+{
+  "retrieved": "2026-10-21T18:25:16.737071+02:00",
+  "scope": "Två ospelade ATP-herrsingelmatcher den 21 oktober, svensk tid. Två live-matcher och morgondagens matcher exkluderas.",
+  "strategy_version": 1,
+  "models_snapshot": "analysis/betting-tracker/sweeps/20261021T182316+0200/screening.json",
+  "form_snapshot": "analysis/betting-tracker/sweeps/20261021T182316+0200/recent.json",
+  "matches": [
+    {
+      "match": {
+        "id": 1029567299,
+        "start": "2026-10-21T17:10:00Z",
+        "tournament": "Bryssel",
+        "state": "upcoming",
+        "score": null,
+        "serve": null,
+        "playerA": {
+          "name": "Gauthier Onclin",
+          "odds": 3.4,
+          "id": "O0A2"
+        },
+        "playerB": {
+          "name": "Jan-Lennard Struff",
+          "odds": 1.32,
+          "id": "SL28"
+        }
+      },
+      "surface": "Hard",
+      "model_odds": [
+        {
+          "player": "O0A2",
+          "name": "Gauthier Onclin",
+          "TA": 4.49,
+          "GPT": 3.67
+        },
+        {
+          "player": "SL28",
+          "name": "Jan-Lennard Struff",
+          "TA": 1.21,
+          "GPT": 1.29
+        }
+      ],
+      "probabilities": {
+        "p_ta_a": 0.2120732319225979,
+        "p_gpt_a": 0.2593742254673952
+      },
+      "sides": [
+        {
+          "player": "Gauthier Onclin",
+          "id": "O0A2",
+          "SS": 3.4,
+          "TA": 4.49,
+          "GPT": 3.67,
+          "p_ta": 0.2120732319225979,
+          "p_gpt": 0.2593742254673952,
+          "ta_ev_pct": -27.895101146316726,
+          "gpt_ev_pct": -11.812763341085642
+        },
+        {
+          "player": "Jan-Lennard Struff",
+          "id": "SL28",
+          "SS": 1.32,
+          "TA": 1.21,
+          "GPT": 1.29,
+          "p_ta": 0.7879267680774021,
+          "p_gpt": 0.7406257745326048,
+          "ta_ev_pct": 4.006333386217098,
+          "gpt_ev_pct": -2.2373977616961582
+        }
+      ]
+    },
+    {
+      "match": {
+        "id": 1029569950,
+        "start": "2026-10-21T18:10:00Z",
+        "tournament": "Lyon",
+        "state": "upcoming",
+        "score": null,
+        "serve": null,
+        "playerA": {
+          "name": "Benjamin Bonzi",
+          "odds": 3.1,
+          "id": "BM95"
+        },
+        "playerB": {
+          "name": "Tommy Paul",
+          "odds": 1.37,
+          "id": "PL56"
+        }
+      },
+      "surface": "Hard",
+      "model_odds": [
+        {
+          "player": "BM95",
+          "name": "Benjamin Bonzi",
+          "TA": 3.9,
+          "GPT": 3.82
+        },
+        {
+          "player": "PL56",
+          "name": "Tommy Paul",
+          "TA": 1.26,
+          "GPT": 1.27
+        }
+      ],
+      "probabilities": {
+        "p_ta_a": 0.24448111792880314,
+        "p_gpt_a": 0.2491271935354672
+      },
+      "sides": [
+        {
+          "player": "Benjamin Bonzi",
+          "id": "BM95",
+          "SS": 3.1,
+          "TA": 3.9,
+          "GPT": 3.82,
+          "p_ta": 0.24448111792880314,
+          "p_gpt": 0.2491271935354672,
+          "ta_ev_pct": -24.210853442071024,
+          "gpt_ev_pct": -22.770570004005165
+        },
+        {
+          "player": "Tommy Paul",
+          "id": "PL56",
+          "SS": 1.37,
+          "TA": 1.26,
+          "GPT": 1.27,
+          "p_ta": 0.7555188820711969,
+          "p_gpt": 0.7508728064645328,
+          "ta_ev_pct": 3.506086843753975,
+          "gpt_ev_pct": 2.869574485641002
+        }
+      ]
+    }
+  ],
+  "selected": [
+    "PL56"
+  ],
+  "rejections": [
+    {
+      "player_id": "SL28",
+      "reason": "TA-EV +4,01 %, men GPT-EV -2,24 % vid 1,32. För tunt och motstridigt stöd; tidigare bedömningsgräns 1,40 bibehålls."
+    },
+    {
+      "player_id": "O0A2",
+      "reason": "Negativ TA- och GPT-EV."
+    },
+    {
+      "player_id": "BM95",
+      "reason": "Negativ TA- och GPT-EV."
+    }
+  ],
+  "sources": [
+    {
+      "source": "https://www.tennisactu.net/info-atp-lyon-benjamin-bonzi-je-n-etais-pas-sur-de-rentrer-sur-le-court-127731.html",
+      "published": "2026-10-20",
+      "fact": "Bonzi uppgav sjukdom i två dagar och magbesvär inför vinsten mot Norrie; detta fastställer inte hans hälsotillstånd vid dagens match.",
+      "retrieved_via": "article HTML downloaded directly"
+    }
+  ]
+}

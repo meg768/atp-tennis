@@ -1,0 +1,31 @@
+| # | Efter vinster | V–F | % | Efter vinstprocent | V–F | % |
+|---:|---|---:|---:|---|---:|---:|
+| 1 | Djokovic | 269–124 | 68,4 | Borg | 119–49 | 70,8 |
+| 2 | Federer | 223–127 | 63,7 | Djokovic | 269–124 | 68,4 |
+| 3 | Nadal | 187–106 | 63,8 | Alcaraz | 56–27 | 67,5 |
+| 4 | Lendl | 170–92 | 64,9 | Sinner | 69–37 | 65,1 |
+| 5 | Connors | 132–117 | 53,0 | Lendl | 170–92 | 64,9 |
+| 6 | McEnroe | 131–94 | 58,2 | Becker | 119–67 | 64,0 |
+| 7 | Sampras | 121–72 | 62,7 | Nadal | 187–106 | 63,8 |
+| 8 | Borg | 119–49 | 70,8 | Federer | 223–127 | 63,7 |
+| 9 | Becker | 119–67 | 64,0 | Sampras | 121–72 | 62,7 |
+| 10 | Agassi | 111–91 | 55,0 | McEnroe | 131–94 | 58,2 |
+| 11 | Murray | 107–99 | 51,9 | Agassi | 111–91 | 55,0 |
+| 12 | Edberg | 97–113 | 46,2 | Connors | 132–117 | 53,0 |
+| 13 | Sinner | 69–37 | 65,1 | Murray | 107–99 | 51,9 |
+| 14 | Hewitt | 67–72 | 48,2 | Kuerten | 38–36 | 51,4 |
+| 15 | Wilander | 61–66 | 48,0 | Safin | 50–49 | 50,5 |
+| 16 | Alcaraz | 56–27 | 67,5 | Hewitt | 67–72 | 48,2 |
+| 17 | Courier | 52–73 | 41,6 | Wilander | 61–66 | 48,0 |
+| 18 | Nastase | 51–70 | 42,1 | Medvedev | 48–54 | 47,1 |
+| 19 | Safin | 50–49 | 50,5 | Edberg | 97–113 | 46,2 |
+| 20 | Medvedev | 48–54 | 47,1 | Muster | 38–52 | 42,2 |
+| 21 | Kafelnikov | 47–67 | 41,2 | Nastase | 51–70 | 42,1 |
+| 22 | Moya | 43–60 | 41,7 | Newcombe | 21–29 | 42,0 |
+| 23 | Ferrero | 41–61 | 40,2 | Moya | 43–60 | 41,7 |
+| 24 | Kuerten | 38–36 | 51,4 | Courier | 52–73 | 41,6 |
+| 25 | Muster | 38–52 | 42,2 | Kafelnikov | 47–67 | 41,2 |
+| 26 | Roddick | 37–73 | 33,6 | Rafter | 34–49 | 41,0 |
+| 27 | Rafter | 34–49 | 41,0 | Ferrero | 41–61 | 40,2 |
+| 28 | Rios | 22–40 | 35,5 | Rios | 22–40 | 35,5 |
+| 29 | Newcombe | 21–29 | 42,0 | Roddick | 37–73 | 33,6 |

@@ -43,8 +43,7 @@ node_modules
 .env
 AUTHOR.md
 
-# Local analysis evidence, generated assets and Python caches
-analysis/
+# Private runtime state and Python caches
 work/
 .venv/
 __pycache__/
@@ -55,3 +54,8 @@ tracking/checks/
 tracking/notifications/
 .env.*
 !.env.example
+
+# Third-party web pages are referenced by URL, not redistributed as full mirrors.
+analysis/**/*.html
+analysis/**/.DS_Store
+analysis/**/bonzi-source-text.txt

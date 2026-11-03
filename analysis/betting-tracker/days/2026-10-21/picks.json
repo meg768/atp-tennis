@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "strategy_version": 1,
+  "selection_date": "2026-10-21",
+  "selected_at": "2026-10-21T18:25:16.737071+02:00",
+  "timezone": "Europe/Stockholm",
+  "run_type": "manual_initial_sweep",
+  "picks": [
+    {
+      "pick_id": "2026-10-21-1029569950-PL56",
+      "oddset_match_id": 1029569950,
+      "event_id": "2026-496",
+      "tournament": "Lyon",
+      "surface": "Hard",
+      "scheduled_start": "2026-10-21T18:10:00Z",
+      "player_id": "PL56",
+      "player_name": "Tommy Paul",
+      "opponent_id": "BM95",
+      "opponent_name": "Benjamin Bonzi",
+      "ss_odds": 1.37,
+      "ta_odds": 1.26,
+      "gpt_odds": 1.27,
+      "ta_probability": 0.7555188820711969,
+      "gpt_probability": 0.7508728064645328,
+      "stake_sek": 100,
+      "rationale": "Liten positiv modell-EV i båda modellerna vid 1,37 (TA +3,51 %, GPT +2,87 %). Paul rankad 15, Bonzi 100. Paul kvartsfinal i Shanghai; Bonzi vann senaste matchen mot Norrie i tre set. Extern uppgift om Bonzis sjukdom/magbesvär är en riskfaktor för motståndaren, men bevisar inte dagsformen. Försiktigt val; inga starka spelvärden bland dagens två återstående matcher.",
+      "sources": [
+        {
+          "type": "database",
+          "routines": [
+            "PLAYER_ODDS",
+            "WIN_PROBABILITY_TA",
+            "WIN_PROBABILITY_GPT"
+          ],
+          "retrieved": "2026-10-21T18:25:16.737071+02:00",
+          "snapshot": "analysis/betting-tracker/sweeps/20261021T182316+0200/screening.json"
+        },
+        {
+          "type": "bookmaker_feed",
+          "url": "https://tennis.egelberg.se/api/oddset",
+          "retrieved": "2026-10-21T18:25:16.737071+02:00",
+          "snapshot": "odds-snapshot-20261021T182516+0200.json"
+        },
+        {
+          "source": "https://www.tennisactu.net/info-atp-lyon-benjamin-bonzi-je-n-etais-pas-sur-de-rentrer-sur-le-court-127731.html",
+          "published": "2026-10-20",
+          "fact": "Bonzi uppgav sjukdom i två dagar och magbesvär inför vinsten mot Norrie; detta fastställer inte hans hälsotillstånd vid dagens match.",
+          "retrieved_via": "article HTML downloaded directly"
+        }
+      ]
+    }
+  ],
+  "note": "Manuell start på Magnus begäran 21 oktober. Första ordinarie körningen är 22 oktober kl. 07. Äldre chattips och hypotetiska resultat ingår inte."
+}

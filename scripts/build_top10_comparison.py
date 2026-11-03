@@ -6,10 +6,10 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import sys
 
-sys.path.insert(0, str(Path.home() / '.agents/skills/atp-tennis/scripts'))
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / '.agents/skills/atp-tennis/scripts'))
 from database import execute
 
-ROOT = Path(__file__).resolve().parents[1]
 FOLDER = ROOT / 'analysis/top10-comparison-direct'
 
 

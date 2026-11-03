@@ -1,5 +1,12 @@
 # Projektkontext
 
+## GitHub-lagring – 2026-11-03
+- Magnus vill lagra projektmaterialet på GitHub och har uttryckligen godkänt att analys- och pappersportföljhistorik publiceras i det offentliga meg768/atp-tennis. Detta ersätter äldre instruktioner om att analysis/ inte ska versionshanteras.
+- Relevanta skills källkod finns nu i .agents/skills/. Aktiva analys-/portföljverktyg använder repots atp-tennis-skill. Analysunderlag/bilder ligger i analysis/ och läsande daterade exporter av players/events/matches/odds/bets i data/snapshots/. Exporterna är historiska kopior; den löpande driften och bokföringen använder fortfarande MariaDB.
+- Hemligheter, anslutningsinställningar, installerade beroenden, virtuella miljöer, loggar och fullständiga speglingar av externa nyhetssidor versionshanteras inte. Källänkar och egna sammanfattningar ersätter nyhetsspeglarnas HTML i Git.
+- Magnus har efter sammanslagningen själv raderat de gamla iCloud-projektmapparna. Kvarvarande historiskt underlag i huvudrepot bevaras; referenser till originalarkiv längre ned är historiska och betyder inte att de fortfarande finns.
+
+
 ## Sammanslagning – 2026-11-03
 - Magnus vill ha ett enda aktivt lokalt Codex-projekt, ATP Tennis, med /Users/magnus/GitHub/atp-tennis som hem för kod, verktyg och instruktioner. Tidigare ATP Tennis, ATP Betting och ATP Tennis Odds i iCloud bevaras som arkiv.
 - Aktiva Python-analys- och portföljverktyg är samlade i scripts/, tester i tests/. Befintlig Node-struktur och pi-kato-sökväg /home/pi/atp-tennis bevaras. Node valdes efter jämförelse med Python-insamlaren: samma prematchfilter, TA-prissättning, lås och metadataregler; Node är redan ordinarie timjobb. Ingen andra insamlare aktiveras.

@@ -1,0 +1,1 @@
+SELECT p.id,p.name,e.type,e.name tournament,e.date FROM matches m JOIN events e ON e.id=m.event JOIN players p ON p.id=m.winner WHERE m.round='F' AND m.status IN ('Completed','Aborted','Walkover') AND e.date BETWEEN '2026-01-01' AND '2026-10-19' AND e.type IN ('ATP-250','ATP-500','Masters','Grand Slam','World Championship') ORDER BY e.date
