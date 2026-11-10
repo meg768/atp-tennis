@@ -1,0 +1,760 @@
+{
+  "checked_at": "2026-11-04T23:50:18.737589+01:00",
+  "source": "https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true",
+  "response": {
+    "events": [
+      {
+        "event": {
+          "id": 1029745805,
+          "name": "Tommy Paul - Quentin Halys",
+          "nameDelimiter": "-",
+          "englishName": "Tommy Paul - Quentin Halys",
+          "homeName": "Tommy Paul",
+          "awayName": "Quentin Halys",
+          "start": "2026-11-05T10:00:00Z",
+          "group": "Paris",
+          "groupId": 2000052267,
+          "path": [
+            {
+              "id": 1000093193,
+              "name": "Tennis",
+              "englishName": "Tennis",
+              "termKey": "tennis"
+            },
+            {
+              "id": 1000093324,
+              "name": "ATP",
+              "englishName": "ATP",
+              "termKey": "atp"
+            },
+            {
+              "id": 2000052267,
+              "name": "Paris",
+              "englishName": "Paris",
+              "termKey": "paris"
+            }
+          ],
+          "nonLiveBoCount": 42,
+          "sport": "TENNIS",
+          "tags": [
+            "STREAMED_WEB",
+            "OFFERED_LIVE",
+            "BET_BUILDER",
+            "STREAMED_MOBILE",
+            "MATCH"
+          ],
+          "state": "NOT_STARTED"
+        },
+        "betOffers": [
+          {
+            "id": 2712908121,
+            "criterion": {
+              "id": 1001159551,
+              "label": "Matchodds",
+              "englishLabel": "Match Odds",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 2,
+              "name": "Match",
+              "englishName": "Match"
+            },
+            "eventId": 1029745805,
+            "outcomes": [
+              {
+                "id": 4403455582,
+                "label": "Tommy Paul",
+                "englishLabel": "Tommy Paul",
+                "odds": 1290,
+                "participant": "Tommy Paul",
+                "type": "OT_ONE",
+                "betOfferId": 2712908121,
+                "changedDate": "2026-11-04T17:27:24Z",
+                "participantId": 1000686110,
+                "oddsFractional": "2/7",
+                "oddsAmerican": "-345",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403455583,
+                "label": "Quentin Halys",
+                "englishLabel": "Quentin Halys",
+                "odds": 3600,
+                "participant": "Quentin Halys",
+                "type": "OT_TWO",
+                "betOfferId": 2712908121,
+                "changedDate": "2026-11-04T17:27:24Z",
+                "participantId": 1001455087,
+                "oddsFractional": "13/5",
+                "oddsAmerican": "260",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "BET_BUILDER",
+              "MAIN"
+            ],
+            "sortOrder": 1,
+            "cashOutStatus": "ENABLED"
+          },
+          {
+            "id": 2712881853,
+            "criterion": {
+              "id": 1001427539,
+              "label": "Game handicap",
+              "englishLabel": "Game Handicap",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 1,
+              "name": "Handicap",
+              "englishName": "Handicap"
+            },
+            "eventId": 1029745805,
+            "outcomes": [
+              {
+                "id": 4403499472,
+                "label": "Tommy Paul",
+                "englishLabel": "Tommy Paul",
+                "odds": 1520,
+                "line": -2500,
+                "participant": "Tommy Paul",
+                "type": "OT_ONE",
+                "betOfferId": 2712881853,
+                "changedDate": "2026-11-04T17:27:24Z",
+                "participantId": 1000686110,
+                "oddsFractional": "13/25",
+                "oddsAmerican": "-195",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403499473,
+                "label": "Quentin Halys",
+                "englishLabel": "Quentin Halys",
+                "odds": 2450,
+                "line": 2500,
+                "participant": "Quentin Halys",
+                "type": "OT_TWO",
+                "betOfferId": 2712881853,
+                "changedDate": "2026-11-04T17:27:24Z",
+                "participantId": 1001455087,
+                "oddsFractional": "29/20",
+                "oddsAmerican": "145",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "MAIN_LINE",
+              "BET_BUILDER"
+            ],
+            "sortOrder": 2,
+            "cashOutStatus": "ENABLED"
+          },
+          {
+            "id": 2712931424,
+            "criterion": {
+              "id": 1001159891,
+              "label": "Antal game",
+              "englishLabel": "Total Games",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 6,
+              "name": "Över/Under",
+              "englishName": "Over/Under"
+            },
+            "eventId": 1029745805,
+            "outcomes": [
+              {
+                "id": 4403461550,
+                "label": "Över",
+                "englishLabel": "Over",
+                "odds": 1910,
+                "line": 22500,
+                "type": "OT_OVER",
+                "betOfferId": 2712931424,
+                "changedDate": "2026-11-04T17:27:24Z",
+                "oddsFractional": "10/11",
+                "oddsAmerican": "-110",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403461551,
+                "label": "Under",
+                "englishLabel": "Under",
+                "odds": 1840,
+                "line": 22500,
+                "type": "OT_UNDER",
+                "betOfferId": 2712931424,
+                "changedDate": "2026-11-04T17:27:24Z",
+                "oddsFractional": "5/6",
+                "oddsAmerican": "-120",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "MAIN_LINE",
+              "BET_BUILDER"
+            ],
+            "sortOrder": 3,
+            "cashOutStatus": "ENABLED"
+          }
+        ]
+      },
+      {
+        "event": {
+          "id": 1029745867,
+          "name": "Ben Shelton - Arthur Rinderknech",
+          "nameDelimiter": "-",
+          "englishName": "Ben Shelton - Arthur Rinderknech",
+          "homeName": "Ben Shelton",
+          "awayName": "Arthur Rinderknech",
+          "start": "2026-11-05T11:10:00Z",
+          "group": "Paris",
+          "groupId": 2000052267,
+          "path": [
+            {
+              "id": 1000093193,
+              "name": "Tennis",
+              "englishName": "Tennis",
+              "termKey": "tennis"
+            },
+            {
+              "id": 1000093324,
+              "name": "ATP",
+              "englishName": "ATP",
+              "termKey": "atp"
+            },
+            {
+              "id": 2000052267,
+              "name": "Paris",
+              "englishName": "Paris",
+              "termKey": "paris"
+            }
+          ],
+          "nonLiveBoCount": 41,
+          "sport": "TENNIS",
+          "tags": [
+            "STREAMED_WEB",
+            "OFFERED_LIVE",
+            "BET_BUILDER",
+            "STREAMED_MOBILE",
+            "MATCH"
+          ],
+          "state": "NOT_STARTED"
+        },
+        "betOffers": [
+          {
+            "id": 2712923178,
+            "criterion": {
+              "id": 1001159551,
+              "label": "Matchodds",
+              "englishLabel": "Match Odds",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 2,
+              "name": "Match",
+              "englishName": "Match"
+            },
+            "eventId": 1029745867,
+            "outcomes": [
+              {
+                "id": 4403480574,
+                "label": "Ben Shelton",
+                "englishLabel": "Ben Shelton",
+                "odds": 1300,
+                "participant": "Ben Shelton",
+                "type": "OT_ONE",
+                "betOfferId": 2712923178,
+                "changedDate": "2026-11-04T14:31:02Z",
+                "participantId": 1007679586,
+                "oddsFractional": "3/10",
+                "oddsAmerican": "-335",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403480575,
+                "label": "Arthur Rinderknech",
+                "englishLabel": "Arthur Rinderknech",
+                "odds": 3500,
+                "participant": "Arthur Rinderknech",
+                "type": "OT_TWO",
+                "betOfferId": 2712923178,
+                "changedDate": "2026-11-04T14:31:02Z",
+                "participantId": 1001488175,
+                "oddsFractional": "5/2",
+                "oddsAmerican": "250",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "BET_BUILDER",
+              "MAIN"
+            ],
+            "sortOrder": 1,
+            "cashOutStatus": "ENABLED"
+          },
+          {
+            "id": 2712923180,
+            "criterion": {
+              "id": 1001427539,
+              "label": "Game handicap",
+              "englishLabel": "Game Handicap",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 1,
+              "name": "Handicap",
+              "englishName": "Handicap"
+            },
+            "eventId": 1029745867,
+            "outcomes": [
+              {
+                "id": 4403480581,
+                "label": "Ben Shelton",
+                "englishLabel": "Ben Shelton",
+                "odds": 1610,
+                "line": -2500,
+                "participant": "Ben Shelton",
+                "type": "OT_ONE",
+                "betOfferId": 2712923180,
+                "changedDate": "2026-11-04T19:59:36Z",
+                "participantId": 1007679586,
+                "oddsFractional": "3/5",
+                "oddsAmerican": "-165",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403480580,
+                "label": "Arthur Rinderknech",
+                "englishLabel": "Arthur Rinderknech",
+                "odds": 2230,
+                "line": 2500,
+                "participant": "Arthur Rinderknech",
+                "type": "OT_TWO",
+                "betOfferId": 2712923180,
+                "changedDate": "2026-11-04T19:59:36Z",
+                "participantId": 1001488175,
+                "oddsFractional": "6/5",
+                "oddsAmerican": "123",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "MAIN_LINE",
+              "BET_BUILDER"
+            ],
+            "sortOrder": 2,
+            "cashOutStatus": "ENABLED"
+          },
+          {
+            "id": 2712900062,
+            "criterion": {
+              "id": 1001159891,
+              "label": "Antal game",
+              "englishLabel": "Total Games",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 6,
+              "name": "Över/Under",
+              "englishName": "Over/Under"
+            },
+            "eventId": 1029745867,
+            "outcomes": [
+              {
+                "id": 4403496704,
+                "label": "Över",
+                "englishLabel": "Over",
+                "odds": 1920,
+                "line": 23500,
+                "type": "OT_OVER",
+                "betOfferId": 2712900062,
+                "changedDate": "2026-11-04T19:59:36Z",
+                "oddsFractional": "10/11",
+                "oddsAmerican": "-109",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403496705,
+                "label": "Under",
+                "englishLabel": "Under",
+                "odds": 1830,
+                "line": 23500,
+                "type": "OT_UNDER",
+                "betOfferId": 2712900062,
+                "changedDate": "2026-11-04T19:59:36Z",
+                "oddsFractional": "41/50",
+                "oddsAmerican": "-121",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "MAIN_LINE",
+              "BET_BUILDER"
+            ],
+            "sortOrder": 3,
+            "cashOutStatus": "ENABLED"
+          }
+        ]
+      },
+      {
+        "event": {
+          "id": 1029748262,
+          "name": "Lorenzo Musetti - Luca Van Assche",
+          "nameDelimiter": "-",
+          "englishName": "Lorenzo Musetti - Luca Van Assche",
+          "homeName": "Lorenzo Musetti",
+          "awayName": "Luca Van Assche",
+          "start": "2026-11-05T12:20:00Z",
+          "group": "Paris",
+          "groupId": 2000052267,
+          "path": [
+            {
+              "id": 1000093193,
+              "name": "Tennis",
+              "englishName": "Tennis",
+              "termKey": "tennis"
+            },
+            {
+              "id": 1000093324,
+              "name": "ATP",
+              "englishName": "ATP",
+              "termKey": "atp"
+            },
+            {
+              "id": 2000052267,
+              "name": "Paris",
+              "englishName": "Paris",
+              "termKey": "paris"
+            }
+          ],
+          "nonLiveBoCount": 42,
+          "sport": "TENNIS",
+          "tags": [
+            "STREAMED_WEB",
+            "OFFERED_LIVE",
+            "BET_BUILDER",
+            "STREAMED_MOBILE",
+            "MATCH"
+          ],
+          "state": "NOT_STARTED"
+        },
+        "betOffers": [
+          {
+            "id": 2712924167,
+            "criterion": {
+              "id": 1001159551,
+              "label": "Matchodds",
+              "englishLabel": "Match Odds",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 2,
+              "name": "Match",
+              "englishName": "Match"
+            },
+            "eventId": 1029748262,
+            "outcomes": [
+              {
+                "id": 4403532405,
+                "label": "Lorenzo Musetti",
+                "englishLabel": "Lorenzo Musetti",
+                "odds": 1380,
+                "participant": "Lorenzo Musetti",
+                "type": "OT_ONE",
+                "betOfferId": 2712924167,
+                "changedDate": "2026-11-04T20:09:45Z",
+                "participantId": 1004110380,
+                "oddsFractional": "4/11",
+                "oddsAmerican": "-265",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403532406,
+                "label": "Luca Van Assche",
+                "englishLabel": "Luca Van Assche",
+                "odds": 3050,
+                "participant": "Luca Van Assche",
+                "type": "OT_TWO",
+                "betOfferId": 2712924167,
+                "changedDate": "2026-11-04T20:09:45Z",
+                "participantId": 1005932893,
+                "oddsFractional": "41/20",
+                "oddsAmerican": "205",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "BET_BUILDER",
+              "MAIN"
+            ],
+            "sortOrder": 1,
+            "cashOutStatus": "ENABLED"
+          },
+          {
+            "id": 2712921315,
+            "criterion": {
+              "id": 1001427539,
+              "label": "Game handicap",
+              "englishLabel": "Game Handicap",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 1,
+              "name": "Handicap",
+              "englishName": "Handicap"
+            },
+            "eventId": 1029748262,
+            "outcomes": [
+              {
+                "id": 4403564581,
+                "label": "Lorenzo Musetti",
+                "englishLabel": "Lorenzo Musetti",
+                "odds": 1560,
+                "line": -2500,
+                "participant": "Lorenzo Musetti",
+                "type": "OT_ONE",
+                "betOfferId": 2712921315,
+                "changedDate": "2026-11-04T20:09:45Z",
+                "participantId": 1004110380,
+                "oddsFractional": "11/20",
+                "oddsAmerican": "-180",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403564580,
+                "label": "Luca Van Assche",
+                "englishLabel": "Luca Van Assche",
+                "odds": 2330,
+                "line": 2500,
+                "participant": "Luca Van Assche",
+                "type": "OT_TWO",
+                "betOfferId": 2712921315,
+                "changedDate": "2026-11-04T20:09:45Z",
+                "participantId": 1005932893,
+                "oddsFractional": "13/10",
+                "oddsAmerican": "133",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "MAIN_LINE",
+              "BET_BUILDER"
+            ],
+            "sortOrder": 2,
+            "cashOutStatus": "ENABLED"
+          },
+          {
+            "id": 2712921326,
+            "criterion": {
+              "id": 1001159891,
+              "label": "Antal game",
+              "englishLabel": "Total Games",
+              "order": [
+                1
+              ]
+            },
+            "betOfferType": {
+              "id": 6,
+              "name": "Över/Under",
+              "englishName": "Over/Under"
+            },
+            "eventId": 1029748262,
+            "outcomes": [
+              {
+                "id": 4403564608,
+                "label": "Över",
+                "englishLabel": "Over",
+                "odds": 1720,
+                "line": 21500,
+                "type": "OT_OVER",
+                "betOfferId": 2712921326,
+                "changedDate": "2026-11-04T20:09:45Z",
+                "oddsFractional": "7/10",
+                "oddsAmerican": "-139",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 0
+              },
+              {
+                "id": 4403564609,
+                "label": "Under",
+                "englishLabel": "Under",
+                "odds": 2060,
+                "line": 21500,
+                "type": "OT_UNDER",
+                "betOfferId": 2712921326,
+                "changedDate": "2026-11-04T20:09:45Z",
+                "oddsFractional": "21/20",
+                "oddsAmerican": "106",
+                "status": "OPEN",
+                "cashOutStatus": "ENABLED",
+                "displayOrder": 1
+              }
+            ],
+            "tags": [
+              "OFFERED_PREMATCH",
+              "OFFERED_LIVE",
+              "MAIN_LINE",
+              "BET_BUILDER"
+            ],
+            "sortOrder": 3,
+            "cashOutStatus": "ENABLED"
+          }
+        ]
+      }
+    ],
+    "terms": [
+      {
+        "type": "SPORT",
+        "id": "/tennis",
+        "termKey": "tennis",
+        "localizedName": "Tennis",
+        "parentId": "/",
+        "englishName": "Tennis"
+      },
+      {
+        "type": "REGION",
+        "id": "/tennis/atp",
+        "termKey": "atp",
+        "localizedName": "ATP",
+        "parentId": "/tennis",
+        "englishName": "ATP"
+      },
+      {
+        "type": "ATTRIBUTE",
+        "id": "/matches",
+        "termKey": "matches",
+        "localizedName": "matches",
+        "parentId": "",
+        "englishName": "matches"
+      }
+    ],
+    "activeTermIds": [
+      "/tennis/atp",
+      "/matches"
+    ],
+    "soonMode": "HOURLY",
+    "categoryGroups": [
+      {
+        "categoryGroupName": "list_view",
+        "categories": [
+          {
+            "id": 11939,
+            "englishName": "Set Handicap",
+            "localizedName": "Sethandicap"
+          },
+          {
+            "id": 11940,
+            "englishName": "Total Sets",
+            "localizedName": "Antal set"
+          },
+          {
+            "id": 11941,
+            "englishName": "Set",
+            "localizedName": "Set 1"
+          }
+        ]
+      },
+      {
+        "categoryGroupName": "combined_layout",
+        "categories": [
+          {
+            "id": 5924,
+            "englishName": "match",
+            "localizedName": "Match "
+          },
+          {
+            "id": 5925,
+            "englishName": "handicap",
+            "localizedName": "Game handicap"
+          },
+          {
+            "id": 5926,
+            "englishName": "totals",
+            "localizedName": "Antal game"
+          }
+        ],
+        "localizedName": "Match, Gamehandicap & Antal game"
+      }
+    ],
+    "activeCategories": [
+      "5926",
+      "5924",
+      "5925"
+    ],
+    "activeEventTypes": [
+      "matches"
+    ],
+    "eventTypes": [
+      "matches"
+    ],
+    "defaultEventType": "matches"
+  }
+}

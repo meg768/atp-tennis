@@ -1,0 +1,79 @@
+[
+  {
+    "rows": [
+      {
+        "id": "S0S1",
+        "name": "Ben Shelton",
+        "country": "USA",
+        "rank": 4,
+        "elo_rank": 1960,
+        "elo_rank_hard": 1925,
+        "ytd_wins": 41,
+        "ytd_losses": 18,
+        "serve_rating": 90.0,
+        "return_rating": 34.0
+      },
+      {
+        "id": "PL56",
+        "name": "Tommy Paul",
+        "country": "USA",
+        "rank": 14,
+        "elo_rank": 1955,
+        "elo_rank_hard": 1895,
+        "ytd_wins": 46,
+        "ytd_losses": 21,
+        "serve_rating": 60.0,
+        "return_rating": 76.0
+      },
+      {
+        "id": "M0EJ",
+        "name": "Lorenzo Musetti",
+        "country": "ITA",
+        "rank": 24,
+        "elo_rank": 1896,
+        "elo_rank_hard": 1835,
+        "ytd_wins": 26,
+        "ytd_losses": 13,
+        "serve_rating": 53.0,
+        "return_rating": 72.0
+      },
+      {
+        "id": "HB64",
+        "name": "Quentin Halys",
+        "country": "FRA",
+        "rank": 46,
+        "elo_rank": 1784,
+        "elo_rank_hard": 1722,
+        "ytd_wins": 24,
+        "ytd_losses": 22,
+        "serve_rating": 66.0,
+        "return_rating": 39.0
+      },
+      {
+        "id": "V0DZ",
+        "name": "Luca Van Assche",
+        "country": "FRA",
+        "rank": 47,
+        "elo_rank": 1762,
+        "elo_rank_hard": 1716,
+        "ytd_wins": 12,
+        "ytd_losses": 12,
+        "serve_rating": 14.0,
+        "return_rating": 73.0
+      },
+      {
+        "id": "RC91",
+        "name": "Arthur Rinderknech",
+        "country": "FRA",
+        "rank": 68,
+        "elo_rank": 1754,
+        "elo_rank_hard": 1718,
+        "ytd_wins": 18,
+        "ytd_losses": 23,
+        "serve_rating": 74.0,
+        "return_rating": 27.0
+      }
+    ],
+    "rowcount": 6
+  }
+]

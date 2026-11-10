@@ -1,5 +1,30 @@
 # Projektkontext
 
+## Backtest med TA-gräns – 2026-11-10
+- En fast insats på 100 kr när spelarens sparade TA-odds var strikt under 1,80 gav −1 217 kr netto på 70 spel (−17,39 %) med avräkning till sparat Oddset-pris. Urvalet täcker 29 oktober–8 november. Stockholmsraderna saknade sparade TA-odds vid uttaget. [Backtestrapport](analysis/backtest-ta-under-1-80-2026-11-10/rapport.md)
+
+## Driftsättning av spelarporträtt – 2026-11-09
+- `atp-service` läser `headshots/<ATP-ID>.png` vid varje anrop. För en ny bild räcker det att uppdatera körkopian på pi-kato och verifiera bild-API:t. För Leo Borg (`B0JG`) gav API:t HTTP 200 med rätt PNG direkt efter fast-forward, med samma tjänste-PID.
+
+## Daglig matchanalys – 2026-11-08
+- ”Skicka dagens ATP-analys” är aktiv i ChatGPT på Mac mini, lokalt i projektet atp-tennis, varje dag kl. 08.15 Europe/Stockholm. Analysen och Apple Mail körs där. Utskicket använder den separata analyslistan och har en datumspärr. Pi-kato ska inte ingå i arbetsflödet för analysmejlet.
+- Analysjobbet, dess körmiljö och anslutningsfiler togs bort från pi-kato. Den förnyade Codex-sessionen loggades ut. PM2:s driftlista, sparade lista och reservkopia verifierades.
+
+## Gruppformat för analysmejl – 2026-11-08
+- Formulera analysmejl för en grupp läsare. Börja med en neutral rubrik, till exempel ”Dagens analys”, följd av slutsatsen.
+- Använd den lokala mottagarlistan `~/.config/atp-tennis/analysis_email_recipients.json` för beställda analysutskick. Listan är separat från portfölj-pingets mottagare.
+
+## Oddsets matchvinnarregel i tennis – 2026-11-05
+- Svenska Spels spelregler v2.2, avsnitt C.27.2, verifierades för favoritsimuleringen. Minst ett färdigspelat set krävs. Vid avbrott efter det räknas den som går vidare som vinnare. Avbrott före avslutat första set och walkover ger återbetalning i simuleringen. Källa och tillämpning finns i [backtestrapporten](analysis/backtest-favorites-2026-11-05/rapport.md).
+
+## Presentation av matchanalyser – 2026-11-05
+- Börja med en kort slutsats som skiljer bästa oddsvärde från mest sannolik vinnare. Lägg matchdetaljer, modell och källor efteråt, även i beställda analysmejl.
+- Bedömningen för Paris-kvartsfinalerna den 6 november finns i [matchanalysen](analysis/paris-2026-11-06/analys.md).
+
+## Separat körkopia för ping – 2026-11-04
+- Pingprojektets aktuella lokala instruktioner på Mac mini använder `/Users/magnus/atp-ping/runtime`. Före ping körs `/Users/magnus/atp-ping/prepare_runtime.sh` exakt en gång; lyckad fetch krävs före återställning av enbart körkopians spårade filer. Ingen `git clean`. Detta ersätter äldre pull-krav för ping; utvecklingskopian lämnas orörd av ping.
+- Vid manuellt löst Git-blockering säkerhetskopierades Mac minis tre lokalt ändrade instruktionsfiler till `/Users/magnus/atp-ping-backups/20261104T224036`. Motsvarande aktuella beslut fanns på origin; utvecklingskopian uppdaterades därefter med fast-forward och verifierades ren.
+
 ## Separat ping-projekt på Mac mini – 2026-11-04
 - Automationens instruktioner ska vara läsbar svenska med åäö och tydliga stycken.
 - Före varje manuellt eller schemalagt ping på Mac mini krävs lyckad `git -C /Users/magnus/GitHub/atp-tennis pull --ff-only`. Läs om uppdaterade instruktioner efter pull. Vid fel stoppas pinget före bokföring/utskick; ingen automatisk stash, reset eller konfliktlösning och ingen körning med gammal kod.
@@ -53,6 +78,9 @@
 - TA-varianten väljer lägst historiskt sparat TA-odds men använder Oddsets erbjudna pris för insats/avräkning, utan EV-filter. Saknad TA hoppas över; lika Oddset-priser hindrar inte ett entydigt TA-val. Rapport: ta-target-profit-report.md i samma backtestmapp.
 - Nästa backtestvariant prövar båda spelarna och väljer endast strikt TA < samma spelares Svenska Spel-pris, oavsett favoritstatus. Behåller målet 100 kr nettovinst vid vinst; sparat i ta-price-filter-report.md i samma analysmapp.
 - TA < Svenska Spel har även körts med fast 100 kr per match och identiska spelarval: ta-price-filter-flat-report.md. De olika insatsmodellerna sparas separat så att tidigare simuleringar bevaras.
+
+## Portföljsimulering – 2026-11-04
+- Aktuella pappersseriens 20 avgjorda spel har simulerats med insats 100/(låst odds−1), mål 100 kr nettovinst per vinst. Rapport och reproducerbar läsande beräkning finns i `analysis/portfolio-target-profit-2026-11-04/`. Samma bokförda utfall och avbrottsbedömningar används. Detta ändrar inte portföljens ordinarie 100 kr-insats eller historik.
 
 ## Körmaskin för dagligt ping – 2026-11-03
 - Det dagliga portfölj-pinget kl. 09.00 Europe/Stockholm ska köras på Mac mini. Magnus visade en skärmbild där Mac mini rapporterar aktiv automation och verifierad åtkomst. MacBook Airs motsvarande automation (atp-ping-var-sj-tte-timme) är nu pausad och statusen verifierad lokalt, så den inte kör parallellt. Manuella ping kan fortsatt göras från projektet.

@@ -1,0 +1,306 @@
+{
+  "checked_at": "2026-11-08T22:39:10.169482+01:00",
+  "source": "https://eu1.offering-api.kambicdn.com/offering/v2018/svenskaspel/listView/tennis/atp/all/all/matches.json?channel_id=1&client_id=200&lang=sv_SE&market=SE&useCombined=true&useCombinedLive=true",
+  "matches": [
+    {
+      "id": 1029781213,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-09T12:10:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714547586,
+      "outcomes": [
+        {
+          "id": 4408614179,
+          "participant": "Alex Michelsen",
+          "odds": 1300,
+          "status": "OPEN"
+        },
+        {
+          "id": 4408614180,
+          "participant": "Yannick Hanfmann",
+          "odds": 3500,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "M0QI",
+          "H997"
+        ],
+        "p": 0.6686949563073317,
+        "ta1": 1.42,
+        "ta2": 2.87
+      }
+    },
+    {
+      "id": 1029781210,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-09T13:00:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714576018,
+      "outcomes": [
+        {
+          "id": 4408594174,
+          "participant": "James Duckworth",
+          "odds": 3200,
+          "status": "OPEN"
+        },
+        {
+          "id": 4408594175,
+          "participant": "Cameron Norrie",
+          "odds": 1350,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "D994",
+          "N771"
+        ],
+        "p": 0.308763847585237,
+        "ta1": 3.08,
+        "ta2": 1.38
+      }
+    },
+    {
+      "id": 1029795154,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-09T13:20:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714803545,
+      "outcomes": [
+        {
+          "id": 4409382073,
+          "participant": "Tomas Machac",
+          "odds": 1320,
+          "status": "OPEN"
+        },
+        {
+          "id": 4409382072,
+          "participant": "Borna Gojo",
+          "odds": 3350,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "M0FH",
+          "GH92"
+        ],
+        "p": 0.6887735686687132,
+        "ta1": 1.38,
+        "ta2": 3.06
+      }
+    },
+    {
+      "id": 1029781211,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-09T14:10:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714559380,
+      "outcomes": [
+        {
+          "id": 4408631684,
+          "participant": "Adolfo Daniel Vallejo",
+          "odds": 3150,
+          "status": "OPEN"
+        },
+        {
+          "id": 4408631685,
+          "participant": "Ugo Humbert",
+          "odds": 1360,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "V0DP",
+          "HH26"
+        ],
+        "p": 0.34548000561753406,
+        "ta1": 2.76,
+        "ta2": 1.46
+      }
+    },
+    {
+      "id": 1029781215,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-09T18:00:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714565175,
+      "outcomes": [
+        {
+          "id": 4408635337,
+          "participant": "Tomas Martin Etcheverry",
+          "odds": 1260,
+          "status": "OPEN"
+        },
+        {
+          "id": 4408635338,
+          "participant": "Max Dahlin",
+          "odds": 3900,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "EA24",
+          "D0I5"
+        ],
+        "p": null,
+        "ta1": null,
+        "ta2": null
+      }
+    },
+    {
+      "id": 1029795109,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-09T19:10:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714815338,
+      "outcomes": [
+        {
+          "id": 4409400150,
+          "participant": "Leo Borg",
+          "odds": 9000,
+          "status": "OPEN"
+        },
+        {
+          "id": 4409400151,
+          "participant": "Toby Samuel",
+          "odds": 1060,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "B0JG",
+          "S0TM"
+        ],
+        "p": null,
+        "ta1": null,
+        "ta2": null
+      }
+    },
+    {
+      "id": 1029795091,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-10T11:00:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714812976,
+      "outcomes": [
+        {
+          "id": 4409377046,
+          "participant": "Luca Van Assche",
+          "odds": 1600,
+          "status": "OPEN"
+        },
+        {
+          "id": 4409377047,
+          "participant": "Alexander Shevchenko",
+          "odds": 2330,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "V0DZ",
+          "S0H2"
+        ],
+        "p": null,
+        "ta1": null,
+        "ta2": null
+      }
+    },
+    {
+      "id": 1029795092,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-10T11:00:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714826819,
+      "outcomes": [
+        {
+          "id": 4409403124,
+          "participant": "Lorenzo Sonego",
+          "odds": 2120,
+          "status": "OPEN"
+        },
+        {
+          "id": 4409403125,
+          "participant": "Quentin Halys",
+          "odds": 1710,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "SU87",
+          "HB64"
+        ],
+        "p": 0.3950870979920432,
+        "ta1": 2.41,
+        "ta2": 1.57
+      }
+    },
+    {
+      "id": 1029781209,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-10T11:00:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714550039,
+      "outcomes": [
+        {
+          "id": 4408617696,
+          "participant": "Arthur Rinderknech",
+          "odds": 1430,
+          "status": "OPEN"
+        },
+        {
+          "id": 4408617697,
+          "participant": "Miomir Kecmanovic",
+          "odds": 2800,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "RC91",
+          "KI95"
+        ],
+        "p": 0.5980137657693436,
+        "ta1": 1.59,
+        "ta2": 2.37
+      }
+    },
+    {
+      "id": 1029781212,
+      "tournament": "Stockholm Open",
+      "start": "2026-11-10T11:00:00+01:00",
+      "state": "NOT_STARTED",
+      "offer_id": 2714556096,
+      "outcomes": [
+        {
+          "id": 4408603088,
+          "participant": "Holger Rune",
+          "odds": 1680,
+          "status": "OPEN"
+        },
+        {
+          "id": 4408603089,
+          "participant": "Zizou Bergs",
+          "odds": 2180,
+          "status": "OPEN"
+        }
+      ],
+      "ta": {
+        "ids": [
+          "R0DG",
+          "BU13"
+        ],
+        "p": null,
+        "ta1": null,
+        "ta2": null
+      }
+    }
+  ]
+}
