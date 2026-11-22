@@ -14,12 +14,28 @@ test('TA uses the verified tournament surface and keeps player/opponent order', 
 	} };
 	assert.deepEqual(await getTaOdds(mysql, row), { ...identity, player_ta: '1.25', opponent_ta: '3.96', event: 'TEST' });
 	assert.deepEqual(calls[0].format, ['Alice', 'Alice', 'Bob', 'Bob']);
-	assert.deepEqual(calls[1].format, ['Vienna', '2026-10-29', '2026-10-29']);
+	assert.deepEqual(calls[1].format, ['2026-10-29', 'Wien']);
 	assert.deepEqual(calls[2].format, ['TEST_A', 'TEST_B', 'Clay']);
 });
 
+test('TA passes the match date and Svenska Spel name to EVENT_LOOKUP', async () => {
+	const calls = [];
+	const mysql = { async query(query) {
+		calls.push(query);
+		if (calls.length === 1) return [identity];
+		if (calls.length === 2) {
+			assert.match(query.sql, /EVENT_LOOKUP\(\?, \?\)/);
+			assert.deepEqual(query.format, ['2026-11-10', 'Stockholm Open']);
+			return [{ id: '2026-429', surface: 'Hard', type: 'ATP-250' }];
+		}
+		return [{ player_ta: 1.25, opponent_ta: 3.96 }];
+	} };
+	assert.deepEqual(await getTaOdds(mysql, { ...row, time: '2026-11-10 12:00:00', event_name: 'Stockholm Open' }),
+		{ ...identity, player_ta: '1.25', opponent_ta: '3.96', event: '2026-429' });
+});
+
 test('missing or ambiguous tournament and unsupported surface/format leave TA absent', async () => {
-	for (const events of [[], [{ id: 'TEST', surface: 'Hard' }, { id: 'TEST', surface: 'Hard' }],
+	for (const events of [[],
 		[{ id: 'TEST', surface: null, type: 'ATP-500' }], [{ id: 'TEST', surface: 'Carpet', type: 'ATP-500' }],
 		[{ id: 'TEST', surface: 'Hard', type: 'Grand Slam' }], [{ id: 'TEST', surface: 'Hard', type: 'Next Gen Finals' }]]) {
 		let calls = 0;

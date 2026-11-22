@@ -18,16 +18,15 @@ async function getTaOdds(mysql, row) {
 	});
 	missing.player = identity?.player ?? null;
 	missing.opponent = identity?.opponent ?? null;
-	const aliases = { wien: 'Vienna', rom: 'Rome', 'paris masters': 'Paris' };
 	const tournament = String(row.event_name || '').trim();
 	if (!tournament) return missing;
-	const events = await mysql.query({
-		sql: `SELECT id, surface, type FROM events WHERE name=?
-			AND date BETWEEN DATE_SUB(?, INTERVAL 20 DAY) AND DATE_ADD(?, INTERVAL 7 DAY)`,
-		format: [aliases[tournament.toLowerCase()] || tournament, row.time.slice(0, 10), row.time.slice(0, 10)]
+	const [event] = await mysql.query({
+		sql: `SELECT e.id, e.surface, e.type
+			FROM (SELECT EVENT_LOOKUP(?, ?) AS id) AS resolved
+			JOIN events e ON e.id = resolved.id`,
+		format: [row.time.slice(0, 10), tournament]
 	});
-	if (events.length !== 1) return missing;
-	const event = events[0];
+	if (!event) return missing;
 	missing.event = event.id;
 	if (!missing.player || !missing.opponent || missing.player === missing.opponent) return missing;
 	if (['Grand Slam', 'Next Gen Finals'].includes(event.type)) return missing;

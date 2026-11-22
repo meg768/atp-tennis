@@ -272,13 +272,14 @@ test('daily import reconciles past matches absent from the feed without changing
 			await mysql.query(schema.slice(start, end).replace('CREATE TABLE', 'CREATE TEMPORARY TABLE'));
 		}
 		let raw = offering();
+		raw.events[0].event.group = 'Stockholm   Open';
 		const collect = new CollectOdds({ mysql, log() {}, now: () => checkedAt,
 			fetchImpl: async () => ({ ok: true, json: async () => raw }) });
 		await collect.run();
 		const [before] = await mysql.query('SELECT * FROM odds');
 		assert.equal(before.event, null);
 		assert.equal(before.player, null);
-		await mysql.query("INSERT INTO events(id,date,name,type,surface) VALUES('TEST','2026-10-26','Vienna','ATP-500','Hard'),('OLD','2025-10-26','Vienna','ATP-500','Hard')");
+		await mysql.query("INSERT INTO events(id,date,name,type,surface) VALUES('TEST','2026-10-26','Stockholm','ATP-250','Hard'),('OLD','2025-10-26','Stockholm','ATP-250','Hard')");
 		await mysql.query("INSERT INTO players(id,name) VALUES('TEST_A','Alice'),('TEST_B','Bob')");
 		raw = { events: [] };
 		collect.now = () => Date.parse('2026-10-30T12:00:00Z');
@@ -286,7 +287,7 @@ test('daily import reconciles past matches absent from the feed without changing
 		const [after] = await mysql.query('SELECT * FROM odds');
 		assert.deepEqual({ ...after }, { ...before, event: 'TEST', player: 'TEST_A', opponent: 'TEST_B' });
 		// Later ambiguities must not replace known links.
-		await mysql.query("INSERT INTO events(id,date,name) VALUES('DUP','2026-10-27','Vienna')");
+		await mysql.query("INSERT INTO events(id,date,name,type) VALUES('DUP','2026-10-27','Stockholm','Challenger')");
 		await mysql.query("INSERT INTO players(id,name) VALUES('DUP_A','Alice')");
 		await collect.run();
 		assert.deepEqual((await mysql.query('SELECT * FROM odds'))[0], after);
@@ -295,6 +296,11 @@ test('daily import reconciles past matches absent from the feed without changing
 		const [ambiguous] = await mysql.query('SELECT * FROM odds');
 		await collect.run();
 		assert.deepEqual((await mysql.query('SELECT * FROM odds'))[0], ambiguous);
+		// A much earlier Challenger no longer makes the edition ambiguous.
+		await mysql.query("UPDATE events SET date='2026-10-15' WHERE id='DUP'");
+		await collect.run();
+		const [reconciled] = await mysql.query('SELECT * FROM odds');
+		assert.deepEqual({ ...reconciled }, { ...ambiguous, event: 'TEST' });
 	} finally {
 		await mysql.disconnect();
 	}

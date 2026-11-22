@@ -1,5 +1,10 @@
 # Projektkontext
 
+## Turneringens namn i oddsinsamlingen – 2026-11-10
+- `EVENT_LOOKUP(matchdatum, namn)` är skapad i MariaDB och migration 019 är körd. Funktionen använder samma datumfönster som `MATCH_LOOKUP`, prövar exakt namn eller id först och returnerar `NULL` vid oklarhet. Magnus vill att turneringskopplingar hålls utanför `settings`.
+- Migration 020 förfinar flertydiga namnträffar. Då används 10 dagar från start för ATP-250, ATP-500 och Challenger och 14 dagar för övriga. Funktionen väljer en entydig upplaga som har startat. Den bredare gränsen gäller fortsatt när det bara finns en kandidat. `Rom` den 4–5 maj 2026 ger `2026-416`. Verifierat i produktion mot 105 sparade oddsrader.
+- Oddsinsamlaren använder `EVENT_LOOKUP` för `odds.event` både före matchstart och vid komplettering av äldre rader. De två kodfilerna är applicerade direkt i körkopian på pi-kato. Efter en ordinarie körning stämde event-id:t på alla 104 sparade rader med uppslaget, inklusive 20 `Stockholm Open` → `2026-429`.
+
 ## Backtest med TA-gräns – 2026-11-10
 - En fast insats på 100 kr när spelarens sparade TA-odds var strikt under 1,80 gav −1 217 kr netto på 70 spel (−17,39 %) med avräkning till sparat Oddset-pris. Urvalet täcker 29 oktober–8 november. Stockholmsraderna saknade sparade TA-odds vid uttaget. [Backtestrapport](analysis/backtest-ta-under-1-80-2026-11-10/rapport.md)
 

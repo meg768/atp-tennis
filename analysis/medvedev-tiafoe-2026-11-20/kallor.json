@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-11-20T19:36:13+01:00",
+  "timezone": "Europe/Stockholm",
+  "players": {"MM58": "Daniil Medvedev", "TD51": "Frances Tiafoe"},
+  "event": "2026-605",
+  "sources": [
+    {"url": "https://www.nittoatpfinals.com/en/news/alcaraz-cobolli-medvedev-tiafoe-nitto-atp-finals-2026-day-6-preview", "published": "2026-11-19", "purpose": "Matchstart, semifinalvillkor, officiell H2H 6-2, årets två inbördes möten"},
+    {"url": "https://www.nittoatpfinals.com/en/news/cobolli-tiafoe-nitto-atp-finals-2026-wednesday", "published": "2026-11-18", "purpose": "Tiafoes gruppresultat och räddade setbollar"},
+    {"url": "https://www.nittoatpfinals.com/en/news/medvedev-cobolli-nitto-atp-finals-2026-monday", "published": "2026-11-16", "purpose": "Medvedevs gruppresultat, 83 procent vunna förstaservepoäng, snabbt inomhusunderlag"},
+    {"url": "https://www.tennisabstract.com/reports/atp_elo_ratings.html", "last_update": "2026-11-16", "hard_elo": {"Daniil Medvedev": 1960.6, "Frances Tiafoe": 1875.6}}
+  ],
+  "method": {
+    "database": "ATP MariaDB via skillens läsverktyg; uttagstid finns i underlag.json",
+    "population": "Completed; senaste form: event_start >= 2026-10-01; alla importerade singelnivåer och kval. H2H-uttaget omfattar all importerad historik. Aborted/Walkover ingår inte.",
+    "sorting": "Sparat matchunderlag är osorterat. Form jämförs per turneringens startdatum; ingen exakt matchdag härleds från eventdatum.",
+    "h2h_scope": "ATP officiella H2H är 6-2. Databasens extra möte är kvalet i Nice 2015; råuttaget är 6-3 inklusive detta kval.",
+    "probability": "1/(1+10^((1876-1961)/400)); importerad hardcourt-Elo med heltal; ingen extra blandning",
+    "fair_odds": "1/p",
+    "project_ta_odds": "ROUND(1/(p*1.05),2)",
+    "expected_net_return": "p*offered_odds-1; modellvillkorat",
+    "limitation": "Elo den 16 november tar inte hänsyn till senare gruppmatcher, individuellt motståndarmönster eller särskild inomhusrating. Ingen separat fysisk status verifierad."
+  }
+}
